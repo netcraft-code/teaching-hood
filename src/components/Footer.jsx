@@ -1,8 +1,4 @@
-import {
-  FaFacebookF,
-  FaLinkedinIn,
-  FaInstagram,
-} from "react-icons/fa";
+import { FaFacebookF, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import logo from "../assets/icons/logo.svg";
 
 const Footer = () => {
@@ -64,28 +60,43 @@ const Footer = () => {
                   </a>
                 ))}
               </div>
-
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-36">
             {/* CANDIDATES */}
             <div>
-              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">Candidates</h4>
+              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">
+                Candidates
+              </h4>
               <ul className="space-y-3 text-xs">
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Find Jobs</li>
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Create Profile</li>
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Track Application</li>
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Learning Resources</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                  Find Jobs
+                </li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                  Create Profile
+                </li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                  Track Application
+                </li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                  Learning Resources
+                </li>
               </ul>
             </div>
 
             {/* SCHOOLS */}
             <div>
-              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">Schools</h4>
+              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">
+                Schools
+              </h4>
               <ul className="space-y-3 text-xs">
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Post Jobs</li>
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Search Candidates</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                  Post Jobs
+                </li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                  Search Candidates
+                </li>
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Seek Hiring Support
                 </li>
@@ -94,10 +105,16 @@ const Footer = () => {
 
             {/* RECRUITER */}
             <div>
-              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">Recruiter</h4>
+              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">
+                Recruiter
+              </h4>
               <ul className="space-y-3 text-xs">
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Post Jobs</li>
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Search Candidates</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                  Post Jobs
+                </li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                  Search Candidates
+                </li>
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Seek Dedicated Hiring Support
                 </li>
@@ -127,7 +144,12 @@ const Footer = () => {
           </div>
 
           <div className="mt-2 md:mt-0 font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400">
-            Developed by XYZ
+            Crafted By{" "}
+            <a href="https://netcraftglobal.com" target="_blank">
+              NetCraft Global
+            </a>
+            {"  "}
+            ❤️
           </div>
         </div>
       </div>
