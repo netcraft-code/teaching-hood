@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Mail, Eye, EyeOff } from 'lucide-react';
 import logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../api/auth";
 
 // Router State Management
 const routes = {
   HOME: '/',
-  SIGNUP: '/signup'
+  SIGNUP: '/signup',
+  PROFILE: '/profile'
 };
 
 // Sign In Component
@@ -16,6 +18,44 @@ const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleLogin = async () => {
+    setError("");
+
+    if (!email || !password) {
+      setError("Email and password are required");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const payload = {
+        email,
+        password,
+        remember_me: rememberMe,
+      };
+
+      const res = await loginUser(payload);
+      
+      // ✅ token store (adjust key if backend differs)
+      if (res.data?.token) {
+        localStorage.setItem("auth_token", res.data.token);
+      }
+
+      // redirect after success
+      navigate(routes.PROFILE);
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+        "Invalid credentials. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center px-4 py-8">
@@ -90,10 +130,21 @@ const SignInPage = () => {
             <label htmlFor="remember" className="ml-2 text-sm text-gray-700">Remember Me</label>
           </div>
 
+          {error && (
+            <p className="mb-3 text-sm text-red-600 bg-red-50 p-2 rounded">
+              {error}
+            </p>
+          )}
+
           {/* Sign In Button */}
-          <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition mb-4">
-            Sign in
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition mb-4 disabled:opacity-50"
+          >
+            {loading ? "Signing in..." : "Sign in"}
           </button>
+
 
           {/* Sign Up Link */}
           <p className="text-center text-sm text-gray-600">

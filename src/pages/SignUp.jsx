@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Eye, EyeOff } from 'lucide-react';
 import logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../api/auth";
 
 // Router State Management
 const routes = {
@@ -11,7 +12,7 @@ const routes = {
 
 // Sign Up Component
 const SignUpPage = () => {
-  const [userType, setUserType] = useState('teacher');
+  const [userType, setUserType] = useState('1');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,6 +21,63 @@ const SignUpPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleSubmit = async () => {
+    setError("");
+    setSuccess("");
+
+    // Basic validation
+    if (!fullName || !email || !password || !confirmPassword) {
+      setError("All fields are required");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (!agreeTerms) {
+      setError("Please accept terms & conditions");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const payload = {
+        name: fullName,
+        email: email,
+        password: password,
+        password_confirmation: confirmPassword,
+        user_type: userType, // teacher / school / recruiter
+      };
+
+      const res = await registerUser(payload);
+
+      setSuccess("Account created & Login successfully 🎉 Redirecting to Profile...");
+
+      setTimeout(() => {
+        if (res.data?.token) {
+          localStorage.setItem("auth_token", res.data.token);
+        }
+
+        navigate(routes.SIGNIN);
+      }, 1500);
+
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+        "Registration failed. Try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center px-4 py-8">
@@ -48,9 +106,9 @@ const SignUpPage = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">I am a</label>
             <div className="flex gap-2">
               <button
-                onClick={() => setUserType('teacher')}
+                onClick={() => setUserType(1)}
                 className={`flex-1 py-2 px-4 rounded-lg border-2 transition ${
-                  userType === 'teacher' 
+                  userType === 1 
                     ? 'border-blue-600 bg-blue-50 text-blue-600 font-semibold' 
                     : 'border-gray-300 text-gray-600 hover:border-gray-400'
                 }`}
@@ -58,9 +116,9 @@ const SignUpPage = () => {
                 Teacher
               </button>
               <button
-                onClick={() => setUserType('school')}
+                onClick={() => setUserType(2)}
                 className={`flex-1 py-2 px-4 rounded-lg border-2 transition ${
-                  userType === 'school' 
+                  userType === 2 
                     ? 'border-blue-600 bg-blue-50 text-blue-600 font-semibold' 
                     : 'border-gray-300 text-gray-600 hover:border-gray-400'
                 }`}
@@ -68,9 +126,9 @@ const SignUpPage = () => {
                 School
               </button>
               <button
-                onClick={() => setUserType('recruiter')}
+                onClick={() => setUserType(3)}
                 className={`flex-1 py-2 px-4 rounded-lg border-2 transition ${
-                  userType === 'recruiter' 
+                  userType === 3 
                     ? 'border-blue-600 bg-blue-50 text-blue-600 font-semibold' 
                     : 'border-gray-300 text-gray-600 hover:border-gray-400'
                 }`}
@@ -165,10 +223,27 @@ const SignUpPage = () => {
             </label>
           </div>
 
+          {error && (
+            <p className="mb-3 text-sm text-red-600 bg-red-50 p-2 rounded">
+              {error}
+            </p>
+          )}
+
+          {success && (
+            <p className="mb-3 text-sm text-green-600 bg-green-50 p-2 rounded">
+              {success}
+            </p>
+          )}
+
           {/* Create Account Button */}
-          <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition mb-4">
-            Create account
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition mb-4 disabled:opacity-50"
+          >
+            {loading ? "Creating account..." : "Create account"}
           </button>
+
 
           {/* Sign In Link */}
           <p className="text-center text-sm text-gray-600">
