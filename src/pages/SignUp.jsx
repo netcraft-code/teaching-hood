@@ -115,7 +115,7 @@ const SignUpPage = () => {
       const payload = {
         name: fullName,
         email: email,
-        phone_number: phoneNumber,
+        phone: phoneNumber,
         city: city,
         school_name: schoolName,
         password: password,
