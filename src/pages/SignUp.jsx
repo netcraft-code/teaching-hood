@@ -12,8 +12,11 @@ const routes = {
 
 // Sign Up Component
 const SignUpPage = () => {
-  const [userType, setUserType] = useState('1');
+  const [userType, setUserType] = useState(1);
   const [fullName, setFullName] = useState('');
+  const [city, setCity] = useState('');
+  const [schoolName, setSchoolName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -25,12 +28,73 @@ const SignUpPage = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const USER_FORM_CONFIG = {
+    1: { // Teacher
+      nameLabel: "Name",
+      namePlaceholder: "Enter your full name",
+      mobileLabel: "Mobile Number",
+      mobilePlaceholder: "+91 9876543210",
+      emailLabel: "Email Address",
+      emailPlaceholder: "you@example.com",
+      showCity: false,
+      showSchool: false,
+      tabColor: "#28C76F",
+    },
+
+    2: { // School
+      schoolLabel: "School Name",
+      schoolPlaceholder: "Enter school name",
+      nameLabel: "HR Name",
+      namePlaceholder: "Enter HR name",
+      mobileLabel: "Office Mobile Number",
+      mobilePlaceholder: "+91 9876543210",
+      emailLabel: "HR Email",
+      emailPlaceholder: "hr@school.com",
+      cityLabel: "City",
+      cityPlaceholder: "Enter city name",
+      showCity: true,
+      showSchool: true,
+      tabColor: "#FF5E57",
+    },
+
+    3: { // Recruiter
+      nameLabel: "Company Name",
+      namePlaceholder: "Enter company name",
+      mobileLabel: "Company Mobile Number",
+      mobilePlaceholder: "+91 9876543210",
+      emailLabel: "Email Address",
+      emailPlaceholder: "you@company.com",
+      cityLabel: "City",
+      cityPlaceholder: "Enter city name",
+      showCity: true,
+      showSchool: false,
+      tabColor: "#FFC107",
+    },
+  };
+
+  const currentConfig = USER_FORM_CONFIG[userType];
+
+  const getTabStyle = (type) => {
+    const isActive = userType === type;
+    const color = USER_FORM_CONFIG[type].tabColor;
+
+    return {
+      borderColor: isActive ? color : "#E5E7EB",
+      color: isActive ? color : "#6B7280",
+      backgroundColor: isActive ? `${color}0D` : "#FFFFFF", // 5% opacity
+    };
+  };
+
   const handleSubmit = async () => {
     setError("");
     setSuccess("");
 
     // Basic validation
-    if (!fullName || !email || !password || !confirmPassword) {
+    if (
+      (!fullName || !email || !phoneNumber || !password || !confirmPassword)
+      && (userType == 2 || !schoolName || !city)
+      && (userType == 3 || !city)
+    ) {
       setError("All fields are required");
       return;
     }
@@ -51,6 +115,9 @@ const SignUpPage = () => {
       const payload = {
         name: fullName,
         email: email,
+        phone_number: phoneNumber,
+        city: city,
+        school_name: schoolName,
         password: password,
         password_confirmation: confirmPassword,
         user_type: userType, // teacher / school / recruiter
@@ -58,26 +125,39 @@ const SignUpPage = () => {
 
       const res = await registerUser(payload);
 
-      setSuccess("Account created & Login successfully 🎉 Redirecting to Profile...");
+      if (res.data?.errors) {
+        const errorMessages = Object.entries(res.data.errors)
+          .map(([key, values]) => `${key}: ${values.join(", ")}`)
+          .join("\n");
 
-      setTimeout(() => {
-        if (res.data?.token) {
-          localStorage.setItem("auth_token", res.data.token);
-        }
+        setError(errorMessages || "An error occurred");
+      }
 
-        navigate(routes.SIGNIN);
-      }, 1500);
+      if (! res.data?.errors) {
+        setSuccess("Account created & Login successfully 🎉 Redirecting to Profile...");
 
+        setTimeout(() => {
+          if (res.data?.token) {
+            localStorage.setItem("auth_token", res.data.token);
+          }
+
+          navigate(routes.SIGNIN);
+        }, 1500);
+      }
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        "Registration failed. Try again."
-      );
+      let errorMessages = "An error occurred";
+
+      if (err.response?.data?.errors) {
+        errorMessages = Object.entries(err.response.data.errors)
+          .map(([key, values]) => `${key}: ${values.join(", ")}`)
+          .join("\n");
+      }
+
+      setError(errorMessages);
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center px-4 py-8">
@@ -107,60 +187,107 @@ const SignUpPage = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => setUserType(1)}
-                className={`flex-1 py-2 px-4 rounded-lg border-2 transition ${
-                  userType === 1 
-                    ? 'border-blue-600 bg-blue-50 text-blue-600 font-semibold' 
-                    : 'border-gray-300 text-gray-600 hover:border-gray-400'
-                }`}
+                style={getTabStyle(1)}
+                className="flex-1 py-2 px-4 rounded-lg border-2 transition font-semibold"
               >
                 Teacher
               </button>
+
               <button
                 onClick={() => setUserType(2)}
-                className={`flex-1 py-2 px-4 rounded-lg border-2 transition ${
-                  userType === 2 
-                    ? 'border-blue-600 bg-blue-50 text-blue-600 font-semibold' 
-                    : 'border-gray-300 text-gray-600 hover:border-gray-400'
-                }`}
+                style={getTabStyle(2)}
+                className="flex-1 py-2 px-4 rounded-lg border-2 transition font-semibold"
               >
                 School
               </button>
+
               <button
                 onClick={() => setUserType(3)}
-                className={`flex-1 py-2 px-4 rounded-lg border-2 transition ${
-                  userType === 3 
-                    ? 'border-blue-600 bg-blue-50 text-blue-600 font-semibold' 
-                    : 'border-gray-300 text-gray-600 hover:border-gray-400'
-                }`}
+                style={getTabStyle(3)}
+                className="flex-1 py-2 px-4 rounded-lg border-2 transition font-semibold"
               >
                 Recruiter
               </button>
             </div>
           </div>
 
-          {/* Full Name Input */}
+          {/* School Name Input */}
+          {currentConfig.showSchool && (
+            <>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {currentConfig.schoolLabel}
+                </label>
+                <input
+                  type="text"
+                  placeholder={currentConfig.schoolPlaceholder}
+                  value={schoolName}
+                  onChange={(e) => setSchoolName(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                />
+              </div>
+            </>
+          )}
+
+          {/* Name Input */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {currentConfig.nameLabel}
+            </label>
             <input
               type="text"
-              placeholder="Enter your full name"
+              placeholder={currentConfig.namePlaceholder}
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+            />
+          </div>
+
+          {/* City Input */}
+          {currentConfig.showCity && (
+            <>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {currentConfig.cityLabel}
+                </label>
+                <input
+                  type="text"
+                  placeholder={currentConfig.cityPlaceholder}
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                />
+              </div>
+            </>
+          )}
+
+          {/* Mobile Number Input */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {currentConfig.mobileLabel}
+            </label>
+            <input
+              type="text"
+              placeholder={currentConfig.mobilePlaceholder}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg"
             />
           </div>
 
           {/* Email Input */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Email address</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {currentConfig.emailLabel}
+            </label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="email"
-                placeholder="you@example.com"
+                placeholder={currentConfig.emailPlaceholder}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg"
               />
             </div>
           </div>
