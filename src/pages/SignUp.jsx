@@ -3,11 +3,16 @@ import { Mail, Eye, EyeOff } from 'lucide-react';
 import logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
+import authPageBG from "../assets/images/auth-page-bg.png"
 
 // Router State Management
 const routes = {
   HOME: '/',
   SIGNIN: '/signin',
+  PROFILE: '/profile',
+  TERMS: '/terms',
+  PRIVACY: '/privacy',
+  HELP: '/help'
 };
 
 // Sign Up Component
@@ -90,11 +95,17 @@ const SignUpPage = () => {
     setSuccess("");
 
     // Basic validation
-    if (
-      (!fullName || !email || !phoneNumber || !password || !confirmPassword)
-      && (userType == 2 || !schoolName || !city)
-      && (userType == 3 || !city)
-    ) {
+    if (!fullName || !email || !phoneNumber || !password || !confirmPassword) {
+      setError("All fields are required");
+      return;
+    }
+
+    if (userType === 2 && (!schoolName || !city)) {
+      setError("All fields are required");
+      return;
+    }
+
+    if (userType == 3 && !city) {
       setError("All fields are required");
       return;
     }
@@ -125,15 +136,7 @@ const SignUpPage = () => {
 
       const res = await registerUser(payload);
 
-      if (res.data?.errors) {
-        const errorMessages = Object.entries(res.data.errors)
-          .map(([key, values]) => `${key}: ${values.join(", ")}`)
-          .join("\n");
-
-        setError(errorMessages || "An error occurred");
-      }
-
-      if (! res.data?.errors) {
+      if (res.data.status) {
         setSuccess("Account created & Login successfully 🎉 Redirecting to Profile...");
 
         setTimeout(() => {
@@ -141,8 +144,14 @@ const SignUpPage = () => {
             localStorage.setItem("auth_token", res.data.token);
           }
 
-          navigate(routes.SIGNIN);
+          navigate(routes.PROFILE);
         }, 1500);
+      } else {
+        const errorMessages = Object.entries(res.data.errors)
+          .map(([key, values]) => `${key}: ${values.join(", ")}`)
+          .join("\n");
+
+        setError(errorMessages || "An error occurred");
       }
     } catch (err) {
       let errorMessages = "An error occurred";
@@ -160,7 +169,13 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center px-4 py-8">
+    // <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center px-4 py-8">
+    <div
+      className="min-h-screen w-full flex items-center justify-center bg-center bg-no-repeat bg-cover bg-fixed px-4 py-8"
+      style={{
+        backgroundImage: `url(${authPageBG})`,
+      }}
+    >
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -176,7 +191,7 @@ const SignUpPage = () => {
           </div>
           
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Join Teachinghood</h1>
-          <p className="text-gray-600">Connect with schools across India</p>
+          <p className="text-gray-600">Take your career to the next level now</p>
         </div>
 
         {/* Sign Up Form */}
@@ -370,24 +385,23 @@ const SignUpPage = () => {
           >
             {loading ? "Creating account..." : "Create account"}
           </button>
-
-
-          {/* Sign In Link */}
-          <p className="text-center text-sm text-gray-600">
-            Already have an account?{' '}
-            <button onClick={() => navigate(routes.SIGNIN)} className="text-blue-600 font-semibold hover:underline">
-              Sign in
-            </button>
-          </p>
         </div>
 
+        {/* Sign In Link */}
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Already have an account?{' '}
+          <button onClick={() => navigate(routes.SIGNIN)} className="text-blue-600 font-semibold hover:underline">
+            Sign in
+          </button>
+        </p>
+
         {/* Footer Links */}
-        <div className="flex justify-center space-x-4 mt-6 text-sm text-gray-500">
-          <a href="#" className="hover:text-gray-700">Terms</a>
+        <div className="flex justify-center space-x-4 mt-6 text-sm text-gray-600">
+          <button onClick={() => navigate(routes.TERMS)} className="hover:text-blue-600">Terms</button>
           <span>•</span>
-          <a href="#" className="hover:text-gray-700">Privacy</a>
+          <button onClick={() => navigate(routes.PRIVACY)} className="hover:text-blue-600">Privacy</button>
           <span>•</span>
-          <a href="#" className="hover:text-gray-700">Help</a>
+          <button onClick={() => navigate(routes.HELP)} className="hover:text-blue-600">Help</button>
         </div>
       </div>
     </div>
