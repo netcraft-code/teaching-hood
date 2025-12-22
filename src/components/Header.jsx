@@ -40,18 +40,23 @@ const Header = () => {
 
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center space-x-4">
-            <button 
-              onClick={() => navigate(routes.SIGNIN)}
-              className="px-6 py-2 border border-gray-300 rounded-full text-gray-700 hover:border-blue-600 hover:text-blue-600 transition"
-            >
-              Sign In
-            </button>
-            <button 
-              onClick={() => navigate(routes.SIGNUP)}
-              className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
-            >
-              Get Started
-            </button>
+            {!localStorage.getItem("auth_token") ? (
+              <>
+                <button 
+                  onClick={() => navigate(routes.SIGNIN)}
+                  className="px-6 py-2 border border-gray-300 rounded-full text-gray-700 hover:border-blue-600 hover:text-blue-600 transition"
+                >
+                  Sign In
+                </button>
+                <button 
+                  onClick={() => navigate(routes.SIGNUP)}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                >
+                  Get Started
+                </button>
+              </>
+            ) : null}
+            
             <div className="text-right">
               <div className="text-xs text-gray-500">Call Us</div>
               <div className="text-green-500 font-semibold">+1 (514) 312-5678</div>

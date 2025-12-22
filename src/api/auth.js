@@ -2,6 +2,11 @@ import axios from "axios";
 
 const API_BASE_URL = "https://teaching-hood-backend.netcraftglobal.com/api";
 
+export const isAuthenticated = () => {
+  const token = localStorage.getItem("auth_token");
+  return !!token;
+};
+
 export const registerUser = (data) => {
     return axios.post(`${API_BASE_URL}/register`, data, {
         headers: {

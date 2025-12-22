@@ -13,7 +13,6 @@ const HeroSection = () => {
       className="relative py-12 md:py-20 overflow-hidden bg-cover bg-center"
       style={{
         backgroundImage: `
-          linear-gradient(to bottom right, rgba(239,246,255,0.9), rgba(219,234,254,0.9), rgba(207,250,254,0.9)),
           url(${HeroImages.bg})
         `,
       }}
@@ -24,9 +23,8 @@ const HeroSection = () => {
         <div className="absolute -bottom-10 -right-10 w-40 h-40 md:w-64 md:h-64 bg-cyan-200 rounded-full opacity-30 blur-3xl"></div>
       </div>
 
-      {/* Profile Images */}
       {/* Top Left */}
-      <div className="absolute top-20 left-4 md:left-20 w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden shadow-lg hidden sm:block">
+      <div className="absolute top-20 left-24 w-20 h-20 rounded-full overflow-hidden shadow-lg hidden lg:block">
         <img
           src={HeroImages.leftTop}
           className="w-full h-full object-cover"
@@ -35,7 +33,7 @@ const HeroSection = () => {
       </div>
 
       {/* Top Right */}
-      <div className="absolute top-32 md:top-40 right-4 md:right-20 w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden shadow-lg hidden sm:block">
+      <div className="absolute top-32 right-4 w-24 h-24 rounded-full overflow-hidden shadow-lg hidden lg:block">
         <img
           src={HeroImages.rightTop}
           className="w-full h-full object-cover"
@@ -44,16 +42,16 @@ const HeroSection = () => {
       </div>
 
       {/* Bottom Left */}
-      <div className="absolute bottom-20 left-8 md:left-32 w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden shadow-lg hidden sm:block">
+      <div className="absolute bottom-20 left-8 w-24 h-24 rounded-full overflow-hidden shadow-lg hidden lg:block">
         <img
-          src={HeroImages.leftBottom}
+          src={HeroImages.rightBottom}
           className="w-full h-full object-cover"
           alt=""
         />
       </div>
 
       {/* Bottom Right */}
-      <div className="absolute bottom-32 md:bottom-40 right-8 md:right-32 w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden shadow-lg hidden sm:block">
+      <div className="absolute bottom-10 right-24 w-20 h-20 rounded-full overflow-hidden shadow-lg hidden lg:block">
         <img
           src={HeroImages.rightBottom}
           className="w-full h-full object-cover"
@@ -70,9 +68,9 @@ const HeroSection = () => {
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-            <span className="text-gray-800">Hiring</span>{' '}
-            <span className="text-blue-600">Simplified</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl mb-4">
+            <span className="text-white font-bold">Hiring</span>{' '}
+            <span className="text-white">Simplified</span>
           </h1>
 
           {/* Subheading */}
@@ -81,8 +79,8 @@ const HeroSection = () => {
           </p>
 
           {/* Search Form */}
-          <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6 max-w-3xl mx-auto">
-            <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+          <div className="bg-white rounded-2xl shadow-xl p-2 md:p-4 max-w-4xl mx-auto">
+            <div className="flex flex-col md:flex-row gap-1 md:gap-2">
               {/* Subject Input */}
               <div className="flex-1 relative">
                 <Book className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
