@@ -37,13 +37,13 @@ class AuthController extends Controller
 
         $token = $user->createToken('api-token')->plainTextToken;
 
-        return response()->json([
-            'response_code' => 200,
-            'status' => true,
-            'message' => 'successfully regitered',
-            'user' => $user,
-            'token' => $token
-        ]);
+        return response_formatter(
+            DEFAULT_REGISTERED_200,
+            [
+                'user' => $user,
+                'token' => $token
+            ]
+        );
     }
 
     // LOGIN
@@ -57,18 +57,16 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(DEFAULT_INVALID_CREDENTAILS_401);
+            return response_formatter(DEFAULT_INVALID_CREDENTAILS_401);
         }
 
         $token = $user->createToken('api-token')->plainTextToken;
+        $user['token'] = $token;
 
-        return response()->json([
-            'response_code' => 200,
-            'status' => true,
-            'message' => 'successfully logged-in',
-            'user' => $user,
-            'token' => $token
-        ]);
+        return response_formatter(
+            DEFAULT_200,
+            $user
+        );
     }
 
     // USER PROFILE
@@ -82,7 +80,7 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json(DEFAULT_LOGGED_OUT_401);
+        return response_formatter(DEFAULT_LOGGED_OUT_401);
     }
 
     public function sendOTP(Request $request)
@@ -108,7 +106,7 @@ class AuthController extends Controller
         // Send OTP mail
         Mail::to($user->email)->send(new OtpMail($otp));
 
-        return response()->json(DEFAULT_SENT_OTP_200);
+        return response_formatter(DEFAULT_SENT_OTP_200);
     }
 
     public function verifyOTP(Request $request)
@@ -126,12 +124,12 @@ class AuthController extends Controller
 
         // Check OTP expiry
         if (!$user->otp_expires_at || now()->gt($user->otp_expires_at)) {
-            return response()->json(DEFAULT_EXPIRED_400);
+            return response_formatter(DEFAULT_EXPIRED_400);
         }
 
         // Verify OTP
         if (!Hash::check($request->otp, $user->otp)) {
-            return response()->json(DEFAULT_INVALID_401);
+            return response_formatter(DEFAULT_INVALID_401);
         }
 
         // ✅ LOGIN USER
@@ -146,12 +144,13 @@ class AuthController extends Controller
         $user->otp_expires_at = null;
         $user->save();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'OTP verified & logged in successfully',
-            'token' => $token,
-            'user' => $user
-        ], 200);
+        return response_formatter(
+            DEFAULT_VERIFY_OTP_200,
+            [
+                'token' => $token,
+                'user' => $user
+            ]
+        );
     }
     
 }

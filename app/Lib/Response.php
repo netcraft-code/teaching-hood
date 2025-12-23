@@ -1,5 +1,11 @@
 <?php
 
+const DEFAULT_REGISTERED_200 = [
+    'response_code' => 200,
+    'status' => true,
+    'message' => 'successfully registered'
+];
+
 const DEFAULT_200 = [
     'response_code' => 200,
     'status' => true,
@@ -21,7 +27,7 @@ const DEFAULT_NOT_FOUND_404 = [
 const DEFAULT_VERIFY_OTP_200 = [
     'response_code' => 200,
     'status' => true,
-    'message' => 'OTP verified successfully'
+    'message' => 'OTP verified successfully & logged in successfully'
 ];
 
 const DEFAULT_400 = [
