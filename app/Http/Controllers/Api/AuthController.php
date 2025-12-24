@@ -152,5 +152,34 @@ class AuthController extends Controller
             ]
         );
     }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'old_password' => ['required', 'current_password'],
+            'new_password' => ['required', 'string', 'min:8'],
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->old_password, $user->password)) {
+            return response_formatter(DEFAULT_INVALID_CREDENTAILS_401);
+        }
+
+        $user->update([
+            'password'=>$request->new_password
+        ]);
+
+       return response_formatter(
+            array_merge(DEFAULT_REGISTERED_200, [
+                'message' => 'Password reset successfully'
+            ]),
+            [
+                // 'user' => $user
+            ]
+        );
+       
+    }
     
 }
