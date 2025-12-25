@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OtpMail;
+use App\Mail\QueryMessageMail;
 use App\Models\User;
+use App\Models\QueryMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -180,6 +184,47 @@ class AuthController extends Controller
             ]
         );
        
+    }
+
+    public function sendMessage(Request $request)
+    {
+        $validated = $request->validate([
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email|max:255',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // ✅ STORE MESSAGE FIRST
+            $queryMessage = QueryMessage::create($validated);
+
+            // ✅ SEND EMAIL TO ADMIN (recommended)
+            Mail::to(config('mail.from.address'))
+                ->send(new QueryMessageMail($validated));
+
+            DB::commit();
+
+            return response_formatter([
+                'response_code' => 200,
+                'status'        => true,
+                'message'       => 'Message sent successfully'
+            ]);
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            
+            Log::error('Query message failed', [
+                'error' => $e->getMessage(),
+            ]);
+            
+            return response()->json([
+                'status'  => false,
+                'message' => 'Failed to send your message. Please try again later.',
+            ], 500);
+        }
     }
     
 }

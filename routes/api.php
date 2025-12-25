@@ -18,6 +18,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // create job post
    Route::apiResource('job-posts', JobPostController::class);
+
+   Route::post('send-message', [AuthController::class, 'sendMessage']);
 });
 
 
