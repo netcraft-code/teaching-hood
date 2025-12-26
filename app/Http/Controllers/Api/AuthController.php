@@ -175,14 +175,7 @@ class AuthController extends Controller
             'password'=>$request->new_password
         ]);
 
-       return response_formatter(
-            array_merge(DEFAULT_REGISTERED_200, [
-                'message' => 'Password reset successfully'
-            ]),
-            [
-                // 'user' => $user
-            ]
-        );
+       return response_formatter(DEFAULT_PASSWORD_RESET_200);
        
     }
 
@@ -207,11 +200,7 @@ class AuthController extends Controller
 
             DB::commit();
 
-            return response_formatter([
-                'response_code' => 200,
-                'status'        => true,
-                'message'       => 'Message sent successfully'
-            ]);
+            return response_formatter(DEFAULT_MESSAGE_SENT_200);
 
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -219,11 +208,8 @@ class AuthController extends Controller
             Log::error('Query message failed', [
                 'error' => $e->getMessage(),
             ]);
-            
-            return response()->json([
-                'status'  => false,
-                'message' => 'Failed to send your message. Please try again later.',
-            ], 500);
+
+            return response_formatter(DEFAULT_SERVER_ERROR_500);
         }
     }
     

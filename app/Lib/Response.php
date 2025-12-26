@@ -59,3 +59,49 @@ const DEFAULT_LOGGED_OUT_401 = [
     'status' => true,
     'message' => 'Logged out'
 ];
+
+const DEFAULT_MESSAGE_SENT_200 = [
+    'response_code' => 200,
+    'status' => true,
+    'message' => 'Message sent successfully'
+];
+
+const DEFAULT_PASSWORD_RESET_200 = [
+    'response_code' => 200,
+    'status' => true,
+    'message' => 'Password reset successfully'
+];
+
+const DEFAULT_SERVER_ERROR_500 = [
+    'response_code' => 500,
+    'status' => false,
+    'message' => 'Internal server error'
+];
+
+const DEFAULT_VALIDATION_422 = [
+    'response_code' => 422,
+    'status' => false,
+    'message' => 'Validation error'
+];
+
+const DEFAULT_CREATED_201 = [
+    'response_code' => 201,
+    'status' => true,
+    'message' => 'Resource created successfully'
+];
+
+const DEFAULT_UPDATED_200 = [
+    'response_code' => 200,
+    'status' => true,
+    'message' => 'Resource updated successfully'
+];
+
+const DEFAULT_DELETED_200 = [
+    'response_code' => 200,
+    'status' => true,
+    'message' => 'Resource deleted successfully'
+];
+
+
+
+
