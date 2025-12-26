@@ -11,9 +11,35 @@ use Illuminate\Validation\Rule;
 class JobPostController extends Controller
 {
     // 📌 LIST ALL JOB POSTS
-    public function index()
+    public function index(Request $request)
     {
-        $jobs = JobPost::latest()->get();
+        $request->validate([
+            'school_name' => 'nullable|string|max:255',
+            'subject'     => 'nullable|string|max:255',
+            'grade'       => 'nullable|string|max:255',
+            'location'    => 'nullable|string|max:255',
+        ]);
+
+        $jobs = JobPost::query()
+
+            ->when($request->school_name, function ($query) use ($request) {
+                $query->where('school_name', 'like', '%' . $request->school_name . '%');
+            })
+
+            ->when($request->subject, function ($query) use ($request) {
+                $query->where('subject', 'like', '%' . $request->subject . '%');
+            })
+
+            ->when($request->grade, function ($query) use ($request) {
+                $query->where('grade', 'like', '%' . $request->grade . '%');
+            })
+
+            ->when($request->location, function ($query) use ($request) {
+                $query->where('location', 'like', '%' . $request->location . '%');
+            })
+
+            ->latest()
+            ->get();
 
         return response_formatter(
             DEFAULT_200,
