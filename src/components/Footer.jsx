@@ -1,98 +1,111 @@
-import { Facebook, Twitter, Linkedin, Instagram, MapPin, Phone, Mail } from 'lucide-react';
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaLinkedinIn,
+  FaInstagram,
+} from "react-icons/fa";
+import logo from "../assets/images/logo.svg";
 
-// Footer Component
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 pt-12 pb-6">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* Brand Section */}
-          <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-400 rounded-full flex items-center justify-center">
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                  <div className="grid grid-cols-2 gap-0.5">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  </div>
+    <footer className="bg-[#0B1828] text-gray-300">
+      <div className="mx-auto pl-24 pr-24 pb-7 pt-12">
+        {/* MAIN FOOTER */}
+        <div className="mx-auto flex flex-row gap-28 mb-6">
+          <div className="flex flex-row items-center justify-start">
+            {/* BRAND */}
+            <div className="space-y-4">
+              <div className='flex flex-col items-start justify-start'>
+                <div className="flex flex-col items-center justify-center">
+                  <button onClick={() => navigate(routes.HOME)} className="flex items-center justify-center">
+                    <img
+                      src={logo}
+                      alt="Teachinghood Logo"
+                      className="w-9 h-9 object-contain"
+                    />
+                  </button>
+                  
+                  <div className="text-3xl text-white text-center">Teachinghood</div>
                 </div>
               </div>
-              <span className="text-xl font-bold text-white">Teachinghood</span>
-            </div>
-            <p className="text-sm mb-4">On a mission to simplify school hiring in india</p>
-            <div className="space-y-2 text-sm">
-              <p className="flex items-center">
-                <Mail size={16} className="mr-2" />
-                contact@teachinghood.com
+
+              <p className="text-sm text-gray-400 max-w-xs" >
+                On a mission to simplify school hiring in India
               </p>
-              <p className="flex items-center">
-                <Phone size={16} className="mr-2" />
-                +91-9923800424
-              </p>
-              <p className="flex items-center">
-                <MapPin size={16} className="mr-2" />
-                Gurgaon, India
-              </p>
-            </div>
-            <div className="flex space-x-3 mt-4">
-              <a href="#" className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition">
-                <Facebook size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-400 transition">
-                <Twitter size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-700 transition">
-                <Linkedin size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-pink-600 transition">
-                <Instagram size={18} />
-              </a>
+
+              <div className="text-sm space-y-1 text-gray-400">
+                <p>contact@teachinghood.com</p>
+                <p>+91-9923800424</p>
+                <p>Gurgaon, India</p>
+              </div>
+
+              {/* SOCIAL ICONS */}
+              <div className="flex gap-3 pt-2">
+                {[FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram].map(
+                  (Icon, i) => (
+                    <span
+                      key={i}
+                      className="w-9 h-9 rounded-md bg-[#132939] flex items-center justify-center hover:bg-[#1e3a52] transition cursor-pointer"
+                    >
+                      <Icon size={14} />
+                    </span>
+                  )
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Candidates Section */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Candidates</h3>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white transition">Find Jobs</a></li>
-              <li><a href="#" className="hover:text-white transition">Create Profile</a></li>
-              <li><a href="#" className="hover:text-white transition">Track Application</a></li>
-              <li><a href="#" className="hover:text-white transition">Learning Resources</a></li>
-            </ul>
-          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-36">
+            {/* CANDIDATES */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Candidates</h4>
+              <ul className="space-y-3 text-xs">
+                <li className="hover:text-white cursor-pointer">Find Jobs</li>
+                <li className="hover:text-white cursor-pointer">Create Profile</li>
+                <li className="hover:text-white cursor-pointer">Track Application</li>
+                <li className="hover:text-white cursor-pointer">Learning Resources</li>
+              </ul>
+            </div>
 
-          {/* Schools Section */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Schools</h3>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white transition">Post Jobs</a></li>
-              <li><a href="#" className="hover:text-white transition">Search Candidates</a></li>
-              <li><a href="#" className="hover:text-white transition">Seek Hiring Support</a></li>
-            </ul>
-          </div>
+            {/* SCHOOLS */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Schools</h4>
+              <ul className="space-y-3 text-xs">
+                <li className="hover:text-white cursor-pointer">Post Jobs</li>
+                <li className="hover:text-white cursor-pointer">Search Candidates</li>
+                <li className="hover:text-white cursor-pointer">
+                  Seek Hiring Support
+                </li>
+              </ul>
+            </div>
 
-          {/* Recruiter Section */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Recruiter</h3>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white transition">Post Jobs</a></li>
-              <li><a href="#" className="hover:text-white transition">Search Candidates</a></li>
-              <li><a href="#" className="hover:text-white transition">Seek Hiring Support</a></li>
-            </ul>
+            {/* RECRUITER */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Recruiter</h4>
+              <ul className="space-y-3 text-xs">
+                <li className="hover:text-white cursor-pointer">Post Jobs</li>
+                <li className="hover:text-white cursor-pointer">Search Candidates</li>
+                <li className="hover:text-white cursor-pointer">
+                  Seek Hiring Support
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
-          <div className="flex flex-wrap justify-center md:justify-start gap-4 mb-4 md:mb-0">
-            <a href="#" className="hover:text-white transition">About Us</a>
-            <a href="#" className="hover:text-white transition">Contact Us</a>
-            <a href="#" className="hover:text-white transition">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition">Terms of Service</a>
+        {/* DIVIDER */}
+        <div className="mx-auto border-t border-[#1E293B]" />
+
+        {/* BOTTOM BAR */}
+        <div className="mx-auto pt-4 flex flex-col md:flex-row justify-between text-xs text-gray-500">
+          <div className="flex gap-6">
+            <span className="hover:text-white cursor-pointer">About Us</span>
+            <span className="hover:text-white cursor-pointer">Contact Us</span>
+            <span className="hover:text-white cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-white cursor-pointer">Terms of Service</span>
           </div>
-          <div className="text-gray-500">
+
+          <div className="mt-2 md:mt-0">
             Developed by XYZ
           </div>
         </div>

@@ -2,12 +2,22 @@ import axios from "axios";
 
 const API_BASE_URL = "https://teaching-hood-backend.netcraftglobal.com/api";
 
+// Check if user is authenticated
 export const isAuthenticated = () => {
   const token = localStorage.getItem("auth_token");
+
   return !!token;
 };
 
+// Register User
 export const registerUser = (data) => {
+    const token = localStorage.getItem("auth_token");
+
+    // If already logged in, fetch profile instead
+    if (token) {
+        return getProfile();
+    }
+
     return axios.post(`${API_BASE_URL}/register`, data, {
         headers: {
             "Content-Type": "application/json",
@@ -15,8 +25,16 @@ export const registerUser = (data) => {
     });
 };
 
+// Login User
 export const loginUser = async (payload) => {
-  return await axios.post(`${API_BASE_URL}/login`, payload, {
+    const token = localStorage.getItem("auth_token");
+
+    // If already logged in, fetch profile instead
+    if (token) {
+        return getProfile();
+    }
+        
+    return await axios.post(`${API_BASE_URL}/login`, payload, {
         headers: {
             "Content-Type": "application/json",
         },
@@ -41,6 +59,7 @@ export const verifyOTP = async (email, otp) => {
     });
 };
 
+// Get User Profile
 export const getProfile = () => {
     const token = localStorage.getItem("auth_token");
 
@@ -57,6 +76,7 @@ export const getProfile = () => {
     });
 };
 
+// Logout User
 export const logout = () => {
     const token = localStorage.getItem("auth_token");
 

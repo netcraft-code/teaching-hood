@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Eye, EyeOff, Lock } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { loginUser, sendOTP, verifyOTP } from "../api/auth"; // ✅ Import from auth.js
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo.svg";
 import authPageBG from "../assets/images/auth-page-bg.png"
 
 const routes = {
@@ -172,30 +172,31 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center px-4 py-8 bg-center"
+    <div
+      className="min-h-screen w-full flex items-center justify-center bg-no-repeat bg-center py-8 mx-auto"
       style={{
-        backgroundImage: `
-          url(${authPageBG})
-        `,
+        backgroundImage: `url(${authPageBG})`,
+        backgroundSize: "180% 100%",
       }}
     >
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="flex flex-col text-center justify-center mb-8">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <button onClick={() => navigate(routes.HOME)} className="flex items-center justify-center space-x-2 mb-4">
+            <button onClick={() => navigate(routes.HOME)} className="flex items-center justify-center space-x-2 mb-1">
               <img
                 src={logo}
                 alt="Teachinghood Logo"
-                className="w-10 h-10 object-contain"
+                className="h-16 w-auto"
               />
-              <span className="text-xl md:text-2xl font-bold text-blue-600">Teachinghood</span>
             </button>
           </div>
           
-          {/* <h1 className="text-2xl font-bold text-white mb-2">Welcome back</h1> */}
-          <h1 className="text-2xl font-bold text-white mb-2 drop-shadow-lg" style={{ textShadow: '0 4px 6px rgba(0, 0, 0, 0.25)'}}>Welcome back</h1>
-          <p className="text-white" style={{ textShadow: '0 4px 6px rgba(0, 0, 0, 0.25)'}}>Sign in to your Teachinghood account</p>
+          <div className='flex items-center justify-center mx-auto'>
+            <p className="text-xl font-semibold text-center leading-[33px] text-white">
+              Welcome Back
+            </p>
+          </div>
         </div>
 
         {/* Main Form */}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Eye, EyeOff } from 'lucide-react';
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo.svg";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
 import authPageBG from "../assets/images/auth-page-bg.png"
@@ -43,7 +43,8 @@ const SignUpPage = () => {
       emailPlaceholder: "you@example.com",
       showCity: false,
       showSchool: false,
-      tabColor: "#28C76F",
+      tabColor: "#FF5E57",
+      title: "Join Teachinghood to take your career to the next level"
     },
 
     2: { // School
@@ -59,7 +60,8 @@ const SignUpPage = () => {
       cityPlaceholder: "Enter city name",
       showCity: true,
       showSchool: true,
-      tabColor: "#FF5E57",
+      tabColor: "#28C76F",
+      title: "Join Teachinghood to take your career to the next level school"
     },
 
     3: { // Recruiter
@@ -74,6 +76,7 @@ const SignUpPage = () => {
       showCity: true,
       showSchool: false,
       tabColor: "#FFC107",
+      title: "Join Teachinghood to take your career to the next level recruiter"
     },
   };
 
@@ -169,29 +172,31 @@ const SignUpPage = () => {
   };
 
   return (
-    // <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center px-4 py-8">
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-center bg-no-repeat bg-cover bg-fixed px-4 py-8"
+      className="min-h-screen w-full flex items-center justify-center bg-no-repeat bg-center py-8 mx-auto"
       style={{
         backgroundImage: `url(${authPageBG})`,
+        backgroundSize: "180% 100%",
       }}
     >
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="flex flex-col text-center justify-center mb-8">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <button onClick={() => navigate(routes.HOME)} className="flex items-center justify-center space-x-2 mb-4">
+            <button onClick={() => navigate(routes.HOME)} className="flex items-center justify-center space-x-2 mb-1">
               <img
                 src={logo}
                 alt="Teachinghood Logo"
-                className="w-10 h-10 object-contain"
+                className="h-16 w-auto"
               />
-              <span className="text-xl md:text-2xl font-bold text-blue-600">Teachinghood</span>
             </button>
           </div>
           
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Join Teachinghood</h1>
-          <p className="text-gray-600">Take your career to the next level now</p>
+          <div className='flex items-center justify-center mx-auto'>
+            <p className="text-xl font-semibold text-center leading-[33px] text-white">
+              {currentConfig.title}
+            </p>
+          </div>
         </div>
 
         {/* Sign Up Form */}
@@ -258,24 +263,6 @@ const SignUpPage = () => {
             />
           </div>
 
-          {/* City Input */}
-          {currentConfig.showCity && (
-            <>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {currentConfig.cityLabel}
-                </label>
-                <input
-                  type="text"
-                  placeholder={currentConfig.cityPlaceholder}
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                />
-              </div>
-            </>
-          )}
-
           {/* Mobile Number Input */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -306,6 +293,24 @@ const SignUpPage = () => {
               />
             </div>
           </div>
+
+          {/* City Input */}
+          {currentConfig.showCity && (
+            <>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {currentConfig.cityLabel}
+                </label>
+                <input
+                  type="text"
+                  placeholder={currentConfig.cityPlaceholder}
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                />
+              </div>
+            </>
+          )}
 
           {/* Password Input */}
           <div className="mb-4">
@@ -360,8 +365,8 @@ const SignUpPage = () => {
               className="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
             <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
-              I agree to the <a href="#" className="text-blue-600 hover:underline">Terms of Service</a> and{' '}
-              <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
+              I agree to the <a href="#" className="text-blue-500 hover:underline">Terms of Service</a> and{' '}
+              <a href="#" className="text-blue-500 hover:underline">Privacy Policy</a>
             </label>
           </div>
 
@@ -381,7 +386,7 @@ const SignUpPage = () => {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition mb-4 disabled:opacity-50"
+            className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition mb-4 disabled:opacity-50"
           >
             {loading ? "Creating account..." : "Create account"}
           </button>

@@ -1,103 +1,129 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import logo from "../assets/images/logo.png";
+import React, { useState } from "react";
+import { Menu, X, UserCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/images/logo.svg";
 
-// Router State Management
 const routes = {
-  HOME: '/',
-  SIGNIN: '/signin',
-  SIGNUP: '/signup'
+  HOME: "/",
+  SIGNIN: "/signin",
+  SIGNUP: "/signup",
+  PROFILE: "/profile",
 };
 
-// Header Component
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const navigate = useNavigate();
 
+  const isLoggedIn = !!localStorage.getItem("auth_token");
+
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
-      <nav className="container mx-auto px-4 py-4">
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
+      <nav className="container mx-auto px-8 py-4">
         <div className="flex items-center justify-between">
+
           {/* Logo */}
-          <button onClick={() => navigate(routes.HOME)} className="flex items-center space-x-2">
+          <div
+            onClick={() => navigate(routes.HOME)}
+            className="cursor-pointer"
+          >
             <img
               src={logo}
-              alt="Teachinghood Logo"
-              className="w-10 h-10 object-contain"
+              alt="Logo"
+              className="h-10 w-auto"
             />
-            <span className="text-xl md:text-2xl font-bold text-blue-600">Teachinghood</span>
-          </button>
-
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
-            <a href="#home" className="text-gray-700 hover:text-blue-600 transition">Home</a>
-            <a href="#find-job" className="text-gray-700 hover:text-blue-600 transition">Find a Job</a>
-            <a href="#post-job" className="text-gray-700 hover:text-blue-600 transition">Post a Job</a>
-            <a href="#about" className="text-gray-700 hover:text-blue-600 transition">About Us</a>
           </div>
 
-          {/* Desktop Actions */}
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center space-x-8">
+            <a className="nav-link" href="/">Home</a>
+            <a className="nav-link" href="/about">About Us</a>
+            <a className="nav-link" href="/jobs">Jobs</a>
+            <a className="nav-link" href="/contact">Contact</a>
+          </div>
+
+          {/* Right Section */}
           <div className="hidden lg:flex items-center space-x-4">
-            {!localStorage.getItem("auth_token") ? (
+
+            {/* Auth */}
+            {!isLoggedIn ? (
               <>
-                <button 
+                <button
                   onClick={() => navigate(routes.SIGNIN)}
-                  className="px-6 py-2 border border-gray-300 rounded-full text-gray-700 hover:border-blue-600 hover:text-blue-600 transition"
+                  className="px-5 py-2 border rounded-full hover:text-blue-600"
                 >
                   Sign In
                 </button>
-                <button 
+                <button
                   onClick={() => navigate(routes.SIGNUP)}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                  className="px-5 py-2 bg-blue-600 text-white rounded-full"
                 >
-                  Get Started
+                  Sign Up
                 </button>
               </>
-            ) : null}
-            
+            ) : (
+              <button
+                onClick={() => navigate(routes.PROFILE)}
+                className="flex items-center gap-2 hover:text-blue-600"
+              >
+                <UserCircle size={28} />
+              </button>
+            )}
+
+            {/* Call Us */}
             <div className="text-right">
-              <div className="text-xs text-gray-500">Call Us</div>
-              <div className="text-green-500 font-semibold">+1 (514) 312-5678</div>
+              <p className="text-xs text-gray-500">Call Us</p>
+              <p className="text-green-600 font-semibold">
+                +1 (514) 312-5678
+              </p>
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button 
+          {/* Mobile Toggle */}
+          <button
             className="lg:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t pt-4">
-            <div className="flex flex-col space-y-3">
-              <a href="#home" className="text-gray-700 hover:text-blue-600 transition">Home</a>
-              <a href="#find-job" className="text-gray-700 hover:text-blue-600 transition">Find a Job</a>
-              <a href="#post-job" className="text-gray-700 hover:text-blue-600 transition">Post a Job</a>
-              <a href="#about" className="text-gray-700 hover:text-blue-600 transition">About Us</a>
-              <div className="pt-3 border-t space-y-2">
-                <button 
+          <div className="lg:hidden mt-4 space-y-4 border-t pt-4">
+            <a className="block nav-link" href="/">Home</a>
+            <a className="block nav-link" href="/about">About Us</a>
+            <a className="block nav-link" href="/jobs">Jobs</a>
+            <a className="block nav-link" href="/contact">Contact</a>
+
+            {!isLoggedIn ? (
+              <>
+                <button
                   onClick={() => navigate(routes.SIGNIN)}
-                  className="w-full px-6 py-2 border border-gray-300 rounded-full text-gray-700"
+                  className="w-full border py-2 rounded-full"
                 >
                   Sign In
                 </button>
-                <button 
+                <button
                   onClick={() => navigate(routes.SIGNUP)}
-                  className="w-full px-6 py-2 bg-blue-600 text-white rounded-full"
+                  className="w-full bg-blue-600 text-white py-2 rounded-full"
                 >
-                  Get Started
+                  Sign Up
                 </button>
-                <div className="text-center pt-2">
-                  <div className="text-xs text-gray-500">Call Us</div>
-                  <div className="text-green-500 font-semibold">+1 (514) 312-5678</div>
-                </div>
-              </div>
+              </>
+            ) : (
+              <button
+                onClick={() => navigate(routes.PROFILE)}
+                className="w-full flex justify-center items-center gap-2 py-2"
+              >
+                <UserCircle /> Profile
+              </button>
+            )}
+
+            <div className="text-center">
+              <p className="text-xs text-gray-500">Call Us</p>
+              <p className="text-green-600 font-semibold">
+                +1 (514) 312-5678
+              </p>
             </div>
           </div>
         )}
