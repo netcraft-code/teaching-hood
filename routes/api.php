@@ -14,8 +14,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('logout', [AuthController::class, 'logout']);
 
+    Route::post('change-password', [AuthController::class, 'changePassword']);
+
     // create job post
    Route::apiResource('job-posts', JobPostController::class);
+
+   Route::post('send-message', [AuthController::class, 'sendMessage']);
 });
 
 
