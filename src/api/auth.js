@@ -11,13 +11,6 @@ export const isAuthenticated = () => {
 
 // Register User
 export const registerUser = (data) => {
-    const token = localStorage.getItem("auth_token");
-
-    // If already logged in, fetch profile instead
-    if (token) {
-        return getProfile();
-    }
-
     return axios.post(`${API_BASE_URL}/register`, data, {
         headers: {
             "Content-Type": "application/json",
@@ -27,13 +20,6 @@ export const registerUser = (data) => {
 
 // Login User
 export const loginUser = async (payload) => {
-    const token = localStorage.getItem("auth_token");
-
-    // If already logged in, fetch profile instead
-    if (token) {
-        return getProfile();
-    }
-        
     return await axios.post(`${API_BASE_URL}/login`, payload, {
         headers: {
             "Content-Type": "application/json",
@@ -67,7 +53,7 @@ export const getProfile = () => {
         return Promise.reject("No token found");
     }
 
-    return axios.get(`${API_BASE_URL}/me`, {
+    return axios.get(`${API_BASE_URL}/profile`, {
         headers: {
             "Content-Type": "application/json",
             "accept": "application/json",
@@ -89,6 +75,14 @@ export const logout = () => {
             "Content-Type": "application/json",
             "accept": "application/json",
             Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+export const viewProfile = async (id) => {
+  return await axios.get(`${API_BASE_URL}/view-profile/${id}`, {
+        headers: {
+            "Content-Type": "application/json",
         },
     });
 };

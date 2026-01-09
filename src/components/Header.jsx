@@ -29,7 +29,7 @@ const Header = () => {
             <img
               src={logo}
               alt="Logo"
-              className="h-10 w-auto"
+              className="h-11 w-auto w-max-71"
             />
           </div>
 
@@ -39,6 +39,7 @@ const Header = () => {
             <a className="nav-link" href="/about">About Us</a>
             <a className="nav-link" href="/jobs">Jobs</a>
             <a className="nav-link" href="/contact">Contact</a>
+            <a className="nav-link" href="/plan">Plan</a>
           </div>
 
           {/* Right Section */}

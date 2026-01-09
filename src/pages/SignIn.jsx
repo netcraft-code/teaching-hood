@@ -51,9 +51,9 @@ const SignInPage = () => {
     try {
       const payload = { email, password, remember_me: rememberMe };
       const res = await loginUser(payload); // ✅ Using auth.js
-      
+
       if (res.data.status) {
-        localStorage.setItem('auth_token', res.data.token);
+        localStorage.setItem('auth_token', res.data.data.token);
         navigate(routes.PROFILE);
       } else {
         setError(res.data?.message || 'Invalid credentials');
@@ -135,9 +135,9 @@ const SignInPage = () => {
 
     try {
       const res = await verifyOTP(email, otpCode); // ✅ Using auth.js
-      
+
       if (res.data.status) {
-        localStorage.setItem('auth_token', res.data.token);
+        localStorage.setItem('auth_token', res.data.data.token);
         navigate(routes.PROFILE);
       } else {
         setError(res.data?.message || 'Invalid OTP');
@@ -360,6 +360,7 @@ const SignInPage = () => {
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg bg-gray-50"
                   />
                 </div>
+
                 <p className="text-xs text-gray-500 mt-2">
                   We'll send you a 4-digit verification code via email
                 </p>
@@ -399,6 +400,7 @@ const SignInPage = () => {
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   Enter 4-digit code:-
+
                   <label className="text-center text-xs text-gray-500 mt-1 mb-3">
                     Expires in <span className="font-semibold">{formatTime(otpTimer)}</span>
                   </label>
@@ -463,37 +465,8 @@ const SignInPage = () => {
         {/* Security Notice */}
         {(step === 'otp-verify' || step === 'otp-input') && (
           <>
-            <div
-              className="
-                mt-6
-                w-full
-                max-w-[448px]
-                min-h-[54px]
-                bg-[#F1F4FF]
-                border
-                border-t
-                border-t-[#DBEAFE]
-                border-x-transparent
-                border-b-transparent
-                rounded-[14px]
-                px-[17px]
-                py-[12px]
-                flex
-                items-center
-                justify-center
-                opacity-100
-              "
-            >
-              <p
-                className="
-                  text-[14px]
-                  leading-[20px]
-                  font-normal
-                  font-[Arimo]
-                  text-[#364153]
-                  text-center
-                "
-              >
+            <div className=" mt-6 w-full max-w-[448px] min-h-[54px] bg-[#F1F4FF] border border-t border-t-[#DBEAFE] border-x-transparent border-b-transparent rounded-[14px] px-[17px] py-[12px] flex items-center justify-center opacity-100">
+              <p className=" text-[14px] leading-[20px] font-normal font-[Arimo] text-[#364153] text-center">
                 🔒 Secure Login: Your OTP is valid for 10 minutes
               </p>
             </div>
@@ -503,17 +476,22 @@ const SignInPage = () => {
         {/* Sign Up Link */}
         <p className="text-center text-sm text-gray-600 mt-6">
           Don't have an account?{' '}
+
           <button onClick={() => navigate(routes.SIGNUP)} className="text-blue-600 font-semibold hover:underline">
             Sign up
           </button>
         </p>
 
         {/* Footer Links */}
-        <div className="flex justify-center space-x-4 mt-6 text-sm text-gray-600">
+        <div className="flex justify-center space-x-4 mt-6 mb-12 text-sm text-gray-600">
           <button onClick={() => navigate(routes.TERMS)} className="hover:text-blue-600">Terms</button>
+          
           <span>•</span>
+          
           <button onClick={() => navigate(routes.PRIVACY)} className="hover:text-blue-600">Privacy</button>
+          
           <span>•</span>
+          
           <button onClick={() => navigate(routes.HELP)} className="hover:text-blue-600">Help</button>
         </div>
       </div>
