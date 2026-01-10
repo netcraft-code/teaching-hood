@@ -67,16 +67,15 @@ class AuthController extends Controller
         $token = $user->createToken('api-token')->plainTextToken;
         $user['token'] = $token;
 
-        return response_formatter(
-            DEFAULT_200,
-            $user
-        );
+        return response_formatter(DEFAULT_200, $user);
     }
 
     // USER PROFILE
-    public function me(Request $request)
+    public function profile(Request $request)
     {
-        return response()->json($request->user());
+        $data = auth()->user()->load('teacher');
+
+        return response_formatter(DEFAULT_200, $data);
     }
 
     // LOGOUT
@@ -147,14 +146,9 @@ class AuthController extends Controller
         $user->otp = null;
         $user->otp_expires_at = null;
         $user->save();
+        $user['token'] = $token;
 
-        return response_formatter(
-            DEFAULT_VERIFY_OTP_200,
-            [
-                'token' => $token,
-                'user' => $user
-            ]
-        );
+        return response_formatter(DEFAULT_VERIFY_OTP_200, $user);
     }
 
     public function changePassword(Request $request)
@@ -172,11 +166,10 @@ class AuthController extends Controller
         }
 
         $user->update([
-            'password'=>$request->new_password
+            'password' => $request->new_password
         ]);
 
-       return response_formatter(DEFAULT_PASSWORD_RESET_200);
-       
+        return response_formatter(DEFAULT_PASSWORD_RESET_200);
     }
 
     public function sendMessage(Request $request)
@@ -201,10 +194,9 @@ class AuthController extends Controller
             DB::commit();
 
             return response_formatter(DEFAULT_MESSAGE_SENT_200);
-
         } catch (\Throwable $e) {
             DB::rollBack();
-            
+
             Log::error('Query message failed', [
                 'error' => $e->getMessage(),
             ]);
@@ -212,5 +204,11 @@ class AuthController extends Controller
             return response_formatter(DEFAULT_SERVER_ERROR_500);
         }
     }
-    
+
+    public function specificProfile($id)
+    {
+        $user = User::with('teacher')->find($id);
+
+        return response_formatter(DEFAULT_200, $user);
+    }
 }
