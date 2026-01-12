@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\OtpMail;
 use App\Mail\QueryMessageMail;
@@ -10,7 +11,6 @@ use App\Models\QueryMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -73,7 +73,7 @@ class AuthController extends Controller
     // USER PROFILE
     public function profile(Request $request)
     {
-        $data = auth()->user()->load('teacher');
+        $data = auth()->user()->load('additional_info.subjects', 'additional_info.grade_level', 'addresses');
 
         return response_formatter(DEFAULT_200, $data);
     }
@@ -207,7 +207,7 @@ class AuthController extends Controller
 
     public function specificProfile($id)
     {
-        $user = User::with('teacher')->find($id);
+        $user = User::with('additional_info.subjects', 'additional_info.grade_level', 'addresses')->find($id);
 
         return response_formatter(DEFAULT_200, $user);
     }

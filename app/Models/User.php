@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -28,6 +27,10 @@ class User extends Authenticatable
         'otp_expires_at',
         'phone',
         'city',
+        'avatar_url',
+        'banner_image_url',
+        'position',
+        'experience',
     ];
 
     /**
@@ -53,8 +56,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function teacher()
+    public function additional_info()
     {
-        return $this->hasOne(Teacher::class);
+        return $this->hasOne(AdditonalInfo::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasOne(Address::class);
     }
 }

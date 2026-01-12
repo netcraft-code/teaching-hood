@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Teacher extends Model
+class AdditonalInfo extends Model
 {
     protected $fillable = [
         'user_id',
@@ -20,6 +20,8 @@ class Teacher extends Model
         'notice_period',
         'preferred_location',
         'resume',
+        'avatar_url',
+        'banner_image_url'
     ];
 
     protected function casts(): array
@@ -27,6 +29,17 @@ class Teacher extends Model
         return [
             'education' => 'json',
             'experience' => 'json',
+            'preferred_location' => 'json',
         ];
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class);
+    }
+
+    public function grade_level()
+    {
+        return $this->belongsToMany(GradeLevel::class);
     }
 }

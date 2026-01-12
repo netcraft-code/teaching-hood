@@ -1,23 +1,28 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\HelperController;
 use App\Http\Controllers\Api\JobPostController;
-use App\Http\Controllers\Api\TeacherController;
+use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
-Route::post('view-profile/{id}', [AuthController::class, 'specificProfile']);
+Route::get('view-profile/{id}', [AuthController::class, 'specificProfile']);
 
 Route::post('send-otp', [AuthController::class, 'sendOTP']);
 Route::post('verify-otp', [AuthController::class, 'verifyOTP']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('subjects', [TeacherController::class, 'getSubjects']);
-    Route::get('gradelevels', [TeacherController::class, 'getGradeLevel']);
-
     Route::get('profile', [AuthController::class, 'profile']);
-    Route::post('profile/update', [TeacherController::class, 'update']);
+    Route::get('subjects', [HelperController::class, 'getSubjects']);
+    Route::get('gradelevels', [HelperController::class, 'getGradeLevel']);
+
+    Route::get('city', [HelperController::class, 'city']);
+    Route::get('states', [HelperController::class, 'states']);
+    Route::get('countries', [HelperController::class, 'countries']);
+
+    Route::post('profile/update', [ProfileController::class, 'update']);
 
     Route::post('logout', [AuthController::class, 'logout']);
 

@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('additonal_info', function (Blueprint $table) {
+        Schema::create('addresses', function (Blueprint $table) {
             $table->id();
+            $table->string('address')->nullable();
+            $table->string('pincode');
+            $table->string('city');
+            $table->string('state');
+            $table->string('country');
             $table->unsignedBigInteger('user_id');
-            $table->text('about_us')->nullable();
-            $table->text('subject')->nullable();
-            $table->text('grade_level')->nullable();
-            $table->text('experience')->nullable();
-            $table->text('education')->nullable();
-            $table->text('achievement')->nullable();
-            $table->text('certification')->nullable();
 
             $table->foreign('user_id')
                 ->references('id')
@@ -36,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teachers');
+        Schema::dropIfExists('addresses');
     }
 };
