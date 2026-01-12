@@ -79,10 +79,93 @@ export const logout = () => {
     });
 };
 
+// View User Profile by ID
 export const viewProfile = async (id) => {
   return await axios.get(`${API_BASE_URL}/view-profile/${id}`, {
         headers: {
             "Content-Type": "application/json",
+        },
+    });
+};
+
+// Get Subjects List
+export const getSubjects = () => {
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+        return Promise.reject("No token found");
+    }
+
+    return axios.get(`${API_BASE_URL}/subjects`, {
+        headers: {
+            "Content-Type": "application/json",
+            "accept": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+// Get Grade Levels List
+export const getGradeLevels = () => {
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+        return Promise.reject("No token found");
+    }
+
+    return axios.get(`${API_BASE_URL}/gradelevels`, {
+        headers: {
+            "Content-Type": "application/json",
+            "accept": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+// Get States List
+export const getStates = () => {
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+        return Promise.reject("No token found");
+    }
+
+    return axios.get(`${API_BASE_URL}/states`, {
+        headers: {
+            "Content-Type": "application/json",
+            "accept": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+export const getCities = () => {
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+        return Promise.reject("No token found");
+    }
+
+    return axios.get(`${API_BASE_URL}/city`, {
+        headers: {
+            "Content-Type": "application/json",
+            "accept": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+export const updateProfile = (data) => {
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+        return Promise.reject("No token found");
+    }
+
+    return axios.post(`${API_BASE_URL}/profile/update`, data, {
+        headers: {
+            "accept": "application/json",
+            Authorization: `Bearer ${token}`,
         },
     });
 };
