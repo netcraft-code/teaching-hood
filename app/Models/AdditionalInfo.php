@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AdditonalInfo extends Model
+class AdditionalInfo extends Model
 {
     protected $fillable = [
         'user_id',
@@ -16,12 +16,14 @@ class AdditonalInfo extends Model
         'achievement',
         'certification',
         'availability',
-        'expected_salary',
+        // 'expected_salary',
         'notice_period',
-        'preferred_location',
+        // 'preferred_location',
         'resume',
         'avatar_url',
-        'banner_image_url'
+        'banner_image_url',
+        'min_salary',
+        'max_salary'
     ];
 
     protected function casts(): array
@@ -38,7 +40,7 @@ class AdditonalInfo extends Model
         return $this->belongsToMany(Subject::class);
     }
 
-    public function grade_level()
+    public function grade_levels()
     {
         return $this->belongsToMany(GradeLevel::class);
     }

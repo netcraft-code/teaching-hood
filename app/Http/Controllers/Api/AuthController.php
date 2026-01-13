@@ -73,7 +73,7 @@ class AuthController extends Controller
     // USER PROFILE
     public function profile(Request $request)
     {
-        $data = auth()->user()->load('additional_info.subjects', 'additional_info.grade_level', 'addresses');
+        $data = auth()->user()->load('additional_info.grade_levels','additional_info.subjects', 'addresses');
 
         return response_formatter(DEFAULT_200, $data);
     }

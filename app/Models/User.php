@@ -30,7 +30,7 @@ class User extends Authenticatable
         'avatar_url',
         'banner_image_url',
         'position',
-        'experience',
+        'total_experience',
     ];
 
     /**
@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function additional_info()
     {
-        return $this->hasOne(AdditonalInfo::class);
+        return $this->hasOne(AdditionalInfo::class);
     }
 
     public function addresses()
