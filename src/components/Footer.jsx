@@ -9,9 +9,9 @@ import logo from "../assets/images/logo.svg";
 const Footer = () => {
   return (
     <footer className="bg-[#0B1828] text-gray-300">
-      <div className="mx-auto pl-24 pr-24 pb-7 pt-12">
+      <div className="mx-auto px-6 md:px-24 pb-7 pt-12">
         {/* MAIN FOOTER */}
-        <div className="mx-auto flex flex-row gap-28 mb-6">
+        <div className="mx-auto flex flex-col md:flex-row gap-10 md:gap-28 mb-6">
           <div className="flex flex-row items-center justify-start">
             {/* BRAND */}
             <div className="space-y-4">
@@ -25,7 +25,7 @@ const Footer = () => {
                     />
                   </button>
                   
-                  <div className="text-3xl text-white text-center">Teachinghood</div>
+                  <div className="text-2xl md:text-3xl text-white text-center mt-2 md:mt-0">Teachinghood</div>
                 </div>
               </div>
 
@@ -55,7 +55,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-36">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-36">
             {/* CANDIDATES */}
             <div>
               <h4 className="text-white font-semibold mb-4">Candidates</h4>
@@ -97,7 +97,7 @@ const Footer = () => {
         <div className="mx-auto border-t border-[#1E293B]" />
 
         {/* BOTTOM BAR */}
-        <div className="mx-auto pt-4 flex flex-col md:flex-row justify-between text-xs text-gray-500">
+        <div className="mx-auto pt-4 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-2 md:gap-0">
           <div className="flex gap-6">
             <span className="hover:text-white cursor-pointer">About Us</span>
             <span className="hover:text-white cursor-pointer">Contact Us</span>

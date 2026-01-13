@@ -22,6 +22,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
     city: "",
     state: "",
     pincode: "",
+    country: "",
     resume: null,
     additional_info: {
       about_us: "",
@@ -42,7 +43,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
           percentage: ""
         }
       ],
-      experience_details: [
+      experience: [
         {
           position: "",
           school: "",
@@ -86,6 +87,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
           city: profile.addresses.city,
           state: profile.addresses.state,
           pincode: profile.addresses.pincode,
+          country: profile.addresses.country || "India",
           additional_info: {
             about_us: profile.additional_info?.about_us || "",
             subjects: Array.isArray(profile.additional_info?.subjects) 
@@ -116,8 +118,8 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                   }
                 ],
 
-            experience_details: Array.isArray(profile.additional_info?.experience_details)
-              ? profile.additional_info.experience_details
+            experience: Array.isArray(profile.additional_info?.experience)
+              ? profile.additional_info.experience
               : [
                   {
                     position: "",
@@ -215,7 +217,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
     if (!form.additional_info.education[0]?.degree)
       e.education = "Education details required";
 
-    if (!form.additional_info.experience_details[0]?.position)
+    if (!form.additional_info.experience[0]?.position)
       e.experience = "Experience details required";
 
     if (!form.additional_info.preferred_location.length)
@@ -239,6 +241,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
     if (!form.city) e.city = "City required";
     if (!form.state) e.state = "State required";
     if (!form.pincode) e.pincode = "Pincode required";
+    if (!form.country) e.country = "Country required";
 
     setErrors(e);
     console.log(e);
@@ -283,7 +286,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
       });
 
       // EXPERIENCE
-      form.additional_info.experience_details.forEach((exp, i) => {
+      form.additional_info.experience.forEach((exp, i) => {
         fd.append(`experience[${i}][position]`, exp.position);
         fd.append(`experience[${i}][school]`, exp.school);
         fd.append(`experience[${i}][from]`, exp.from);
@@ -313,6 +316,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
       fd.append("city", form.city);
       fd.append("state", form.state);
       fd.append("pincode", form.pincode);
+      fd.append("country", form.country);
 
       fd.append("about_us", form.additional_info.about_us || "");
       fd.append("achievement", form.additional_info.achievement .filter(a => a.trim() !== "") .join(","));
@@ -386,6 +390,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                   placeholder="+1 (555) 000-0000"
                 />
               </Field>
+
               <Field label="Position" required>
                 <input
                   type="text"
@@ -403,7 +408,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                     type="number"
                     name="total_experience"
                     min="0"
-                    className="input flex-1"
+                    className="input"
                     value={form.total_experience}
                     onChange={handleChange}
                   />
@@ -422,6 +427,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                   className="file-input"
                 />
               </Field>
+
               <Field label="Banner Image">
                 <input
                   type="file"
@@ -434,7 +440,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
             </Grid>
           </Section>
 
-          <Section title="Address" icon=""> 
+          <Section title="Address" icon="">
             <Field label="Address" required>
               <textarea
                 className={inputClass(errors.address)}
@@ -445,51 +451,66 @@ const EditProfileModal = ({ open, onClose, profile }) => {
               <ErrorText error={errors.address} />
             </Field>
 
-            <Field label="State" required>
-              <select
-                className={inputClass(errors.state)}
-                value={form.state}
-                onChange={(e) => setForm({ ...form, state: e.target.value })}
-              >
-                <option value="">Select State</option>
-                {states.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-              <ErrorText error={errors.state} />
-            </Field>
+            <Grid>
+              <Field label="Pincode" required>
+                <input
+                  type="text"
+                  maxLength={6}
+                  className={inputClass(errors.pincode)}
+                  value={form.pincode}
+                  onChange={(e) =>
+                    setForm({ ...form, pincode: e.target.value.replace(/\D/g, "") })
+                  }
+                  placeholder="6-digit pincode"
+                />
+                <ErrorText error={errors.pincode} />
+              </Field>
 
-            <Field label="City" required>
-              <select
-                className={inputClass(errors.city)}
-                value={form.city}
-                onChange={(e) => setForm({ ...form, city: e.target.value })}
-              >
-                <option value="">Select City</option>
-                {locations.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-              <ErrorText error={errors.city} />
-            </Field>
+              <Field label="Country" required>
+                <input
+                  type="text"
+                  maxLength={6}
+                  className={inputClass(errors.country)}
+                  value={form.country}
+                  disabled
+                />
+                <ErrorText error={errors.country} />
+              </Field>
+            </Grid>
 
-            <Field label="Pincode" required>
-              <input
-                type="text"
-                maxLength={6}
-                className={inputClass(errors.pincode)}
-                value={form.pincode}
-                onChange={(e) =>
-                  setForm({ ...form, pincode: e.target.value.replace(/\D/g, "") })
-                }
-                placeholder="6-digit pincode"
-              />
-              <ErrorText error={errors.pincode} />
-            </Field>
+            <Grid>
+              <Field label="State" required>
+                <select
+                  className={inputClass(errors.state)}
+                  value={form.state}
+                  onChange={(e) => setForm({ ...form, state: e.target.value })}
+                >
+                  <option value="">Select State</option>
+                  {states.map((s) => (
+                    <option key={s.id} value={s.name}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+                <ErrorText error={errors.state} />
+              </Field>
+
+              <Field label="City" required>
+                <select
+                  className={inputClass(errors.city)}
+                  value={form.city}
+                  onChange={(e) => setForm({ ...form, city: e.target.value })}
+                >
+                  <option value="">Select City</option>
+                  {locations.map((c) => (
+                    <option key={c.id} value={c.name}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                <ErrorText error={errors.city} />
+              </Field>
+            </Grid>
           </Section>
 
           {/* Additional Information */}
@@ -625,7 +646,22 @@ const EditProfileModal = ({ open, onClose, profile }) => {
 
           <Section title="Education" icon="🎓">
             {form.additional_info.education.map((edu, index) => (
-              <div key={index} className="border rounded-xl p-4 space-y-3 bg-gray-50">
+              <div key={index} className="border rounded-xl p-4 space-y-3 bg-gray-50 relative">
+                {form.additional_info.education.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const arr = [...form.additional_info.education];
+                      arr.splice(index, 1);
+                      handleAdditional("education", arr);
+                    }}
+                    className="absolute top-2 right-2 text-red-600 hover:bg-red-100 rounded-full p-1"
+                    aria-label="Remove Education"
+                  >
+                    ✕
+                  </button>
+                )}
+
                 <Grid>
                   <Field label="Degree">
                     <input
@@ -710,8 +746,23 @@ const EditProfileModal = ({ open, onClose, profile }) => {
           </Section>
 
           <Section title="Experience" icon="💼">
-            {form.additional_info.experience_details.map((exp, index) => (
-              <div key={index} className="border rounded-xl p-4 bg-gray-50 space-y-3">
+            {form.additional_info.experience.map((exp, index) => (
+              <div key={index} className="border rounded-xl p-4 bg-gray-50 space-y-3 relative">
+                {/* REMOVE BUTTON */}
+                {form.additional_info.experience.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const arr = [...form.additional_info.experience];
+                      arr.splice(index, 1);
+                      handleAdditional("experience", arr);
+                    }}
+                    className="absolute top-2 right-2 text-red-600 hover:bg-red-100 rounded-full p-1"
+                    aria-label="Remove Experience"
+                  >
+                    ✕
+                  </button>
+                )}
                 
                 <Grid>
                   <Field label="Position">
@@ -719,9 +770,9 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                       className="input"
                       value={exp.position}
                       onChange={(e) => {
-                        const arr = [...form.additional_info.experience_details];
+                        const arr = [...form.additional_info.experience];
                         arr[index].position = e.target.value;
-                        handleAdditional("experience_details", arr);
+                        handleAdditional("experience", arr);
                       }}
                     />
                   </Field>
@@ -731,9 +782,9 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                       className="input"
                       value={exp.school}
                       onChange={(e) => {
-                        const arr = [...form.additional_info.experience_details];
+                        const arr = [...form.additional_info.experience];
                         arr[index].school = e.target.value;
-                        handleAdditional("experience_details", arr);
+                        handleAdditional("experience", arr);
                       }}
                     />
                   </Field>
@@ -746,9 +797,9 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                       className="input"
                       value={exp.from}
                       onChange={(e) => {
-                        const arr = [...form.additional_info.experience_details];
+                        const arr = [...form.additional_info.experience];
                         arr[index].from = e.target.value;
-                        handleAdditional("experience_details", arr);
+                        handleAdditional("experience", arr);
                       }}
                     />
                   </Field>
@@ -759,9 +810,9 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                       className="input"
                       value={exp.to || ""}
                       onChange={(e) => {
-                        const arr = [...form.additional_info.experience_details];
+                        const arr = [...form.additional_info.experience];
                         arr[index].to = e.target.value;
-                        handleAdditional("experience_details", arr);
+                        handleAdditional("experience", arr);
                       }}
                     />
                   </Field>
@@ -772,19 +823,19 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                   label="Key Responsibilities"
                   values={exp.key_responsibilities}
                   onAdd={() => {
-                    const arr = [...form.additional_info.experience_details];
+                    const arr = [...form.additional_info.experience];
                     arr[index].key_responsibilities.push("");
-                    handleAdditional("experience_details", arr);
+                    handleAdditional("experience", arr);
                   }}
                   onChange={(i, v) => {
-                    const arr = [...form.additional_info.experience_details];
+                    const arr = [...form.additional_info.experience];
                     arr[index].key_responsibilities[i] = v;
-                    handleAdditional("experience_details", arr);
+                    handleAdditional("experience", arr);
                   }}
                   onRemove={(i) => {
-                    const arr = [...form.additional_info.experience_details];
+                    const arr = [...form.additional_info.experience];
                     arr[index].key_responsibilities.splice(i, 1);
-                    handleAdditional("experience_details", arr);
+                    handleAdditional("experience", arr);
                   }}
                   placeholder="Responsibility details"
                 />
@@ -792,8 +843,8 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                 <button
                   type="button"
                   onClick={() =>
-                    handleAdditional("experience_details", [
-                      ...form.additional_info.experience_details,
+                    handleAdditional("experience", [
+                      ...form.additional_info.experience,
                       {
                         position: "",
                         school: "",
@@ -811,7 +862,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
             ))}
           </Section>
 
-          <div className="space-y-2">
+          <div className="my-8">
             <label className="label">Preferred Location</label>
 
             {/* Selected Chips */}
@@ -864,8 +915,6 @@ const EditProfileModal = ({ open, onClose, profile }) => {
               </div>
             )}
           </div>
-
-
 
           {/* Resume */}
           <Section title="Resume" icon="📄">

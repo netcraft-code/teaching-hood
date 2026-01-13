@@ -173,7 +173,8 @@ const SignUpPage = () => {
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-no-repeat bg-center py-8 mx-auto"
+      className="min-h-screen w-full flex items-center justify-center bg-no-repeat bg-center py-8 mx-auto bg-cover"
+
       style={{
         backgroundImage: `url(${authPageBG})`,
         backgroundSize: "180% 100%",
@@ -187,20 +188,20 @@ const SignUpPage = () => {
               <img
                 src={logo}
                 alt="Teachinghood Logo"
-                className="h-16 w-auto"
+                className="h-12 sm:h-16 w-auto"
               />
             </button>
           </div>
           
           <div className='flex items-center justify-center mx-auto'>
-            <p className="text-xl font-semibold text-center leading-[33px] text-white">
+            <p className="text-lg sm:text-xl font-semibold text-center leading-[33px] text-white">
               {currentConfig.title}
             </p>
           </div>
         </div>
 
         {/* Sign Up Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8">
           {/* User Type Selection */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">I am a</label>
@@ -208,7 +209,7 @@ const SignUpPage = () => {
               <button
                 onClick={() => setUserType(1)}
                 style={getTabStyle(1)}
-                className="flex-1 py-2 px-4 rounded-lg border-2 transition font-semibold"
+                className="flex-1 py-2 px-2 sm:px-4 rounded-lg border-2 transition font-semibold"
               >
                 Teacher
               </button>
@@ -216,7 +217,7 @@ const SignUpPage = () => {
               <button
                 onClick={() => setUserType(2)}
                 style={getTabStyle(2)}
-                className="flex-1 py-2 px-4 rounded-lg border-2 transition font-semibold"
+                className="flex-1 py-2 px-2 sm:px-4 rounded-lg border-2 transition font-semibold"
               >
                 School
               </button>
@@ -224,7 +225,7 @@ const SignUpPage = () => {
               <button
                 onClick={() => setUserType(3)}
                 style={getTabStyle(3)}
-                className="flex-1 py-2 px-4 rounded-lg border-2 transition font-semibold"
+                className="flex-1 py-2 px-2 sm:px-4 rounded-lg border-2 transition font-semibold"
               >
                 Recruiter
               </button>
@@ -401,7 +402,7 @@ const SignUpPage = () => {
         </p>
 
         {/* Footer Links */}
-        <div className="flex justify-center space-x-4 mt-6 text-sm text-gray-600">
+        <div className="flex flex-wrap justify-center gap-3 mt-6 text-sm text-gray-600">
           <button onClick={() => navigate(routes.TERMS)} className="hover:text-blue-600">Terms</button>
           <span>•</span>
           <button onClick={() => navigate(routes.PRIVACY)} className="hover:text-blue-600">Privacy</button>

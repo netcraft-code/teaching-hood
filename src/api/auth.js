@@ -72,7 +72,6 @@ export const logout = () => {
 
     return axios.post(`${API_BASE_URL}/logout`, {}, {
         headers: {
-            "Content-Type": "application/json",
             "accept": "application/json",
             Authorization: `Bearer ${token}`,
         },

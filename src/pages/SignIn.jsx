@@ -173,7 +173,7 @@ const SignInPage = () => {
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-no-repeat bg-center py-8 mx-auto"
+      className="min-h-screen w-full flex items-center justify-center bg-no-repeat bg-center py-8 mx-auto bg-cover"
       style={{
         backgroundImage: `url(${authPageBG})`,
         backgroundSize: "180% 100%",
@@ -187,20 +187,20 @@ const SignInPage = () => {
               <img
                 src={logo}
                 alt="Teachinghood Logo"
-                className="h-16 w-auto"
+                className="h-12 sm:h-16 w-auto"
               />
             </button>
           </div>
           
           <div className='flex items-center justify-center mx-auto'>
-            <p className="text-xl font-semibold text-center leading-[33px] text-white">
+            <p className="text-lg sm:text-xl font-semibold text-center leading-[33px] text-white">
               Welcome Back
             </p>
           </div>
         </div>
 
         {/* Main Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8">
           {/* Step 1: Choose Login Method */}
           {step === 'choice' && (
             <>
@@ -296,6 +296,11 @@ const SignInPage = () => {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !loading) {
+                        handlePasswordLogin();
+                      }
+                    }}
                     className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <button
@@ -416,7 +421,7 @@ const SignInPage = () => {
                       value={digit}
                       onChange={(e) => handleOtpChange(index, e.target.value)}
                       onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                      className="w-14 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="text-center w-12 h-12 sm:w-14 sm:h-14 text-xl sm:text-2xl font-bold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   ))}
                 </div>
@@ -483,7 +488,7 @@ const SignInPage = () => {
         </p>
 
         {/* Footer Links */}
-        <div className="flex justify-center space-x-4 mt-6 mb-12 text-sm text-gray-600">
+        <div className="flex flex-wrap justify-center gap-3 mt-6 mb-12 text-sm text-gray-600">
           <button onClick={() => navigate(routes.TERMS)} className="hover:text-blue-600">Terms</button>
           
           <span>•</span>

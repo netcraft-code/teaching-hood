@@ -52,6 +52,18 @@ const Profile = () => {
     return FETCH_BANNER_AVATAR[userType][urlType];
   };
 
+  const formateExpectedSalary = (min, max) => {
+    if (!min && !max) return "--"
+    return '₹' + min + ' - ₹' + max + '/month';
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return 'Present';
+    const [year, month] = dateStr.split('-');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${months[parseInt(month) - 1]} ${year}`;
+  };
+
   useEffect(() => {
     if (hasFetched.current) return;
 
@@ -114,8 +126,8 @@ const Profile = () => {
       <ProfileHeader onEdit={() => setEditOpen(true)} profile={profile} />
 
       {/* Existing profile content */}
-      <div className="mx-auto px-28 py-6 mt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="mx-auto px-4 sm:px-8 lg:px-28 py-6 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           {/* LEFT SECTION */}
           <div className="lg:col-span-2 space-y-6">
 
@@ -130,11 +142,11 @@ const Profile = () => {
               <div className="flex items-start gap-4 mx-8 pb-8">
                 <img
                   src={getBannerAvatar(profile.avatar_url, profile.user_type, 'avatarImage')}
-                  className="w-32 h-32 -mt-16"
+                  className="w-24 h-24 sm:w-32 sm:h-32 -mt-16"
                 />
 
                 <div className="flex-1 mt-6">
-                  <h2 className="text-3xl font-semibold mb-2">{profile.name}</h2>
+                  <h2 className="text-xl sm:text-3xl font-semibold mb-2">{profile.name}</h2>
                   <p className="text-m text-gray-500">
                     {profile?.position || 'Position not specified'}
                   </p>
@@ -148,7 +160,7 @@ const Profile = () => {
                     <span className="flex items-center gap-1">
                       <img src={durationIcon} alt="Duration" />
                       
-                      {profile?.additional_info?.experience ? `${profile.additional_info.experience} years experience` : '0 year experience'}
+                      {profile?.total_experience ? `${profile.total_experience} years experience` : '0 year experience'}
                     </span>
                   </div>
                 </div>
@@ -171,7 +183,7 @@ const Profile = () => {
             </div>
 
             {/* TABS */}
-            <div className="bg-white rounded-xl shadow p-2 flex gap-2">
+            <div className="bg-white rounded-xl shadow p-2 flex flex-wrap gap-3 sm:gap-6">
               {["overview", "experience", "education", "jobs"].map((tab) => (
                 <button
                   key={tab}
@@ -179,7 +191,7 @@ const Profile = () => {
                   className={`px-4 py-2 rounded-lg text-sm capitalize transition
                     ${
                       activeTab === tab
-                        ? "bg-blue-600 text-white"
+                        ? "bg-blue-500 text-white"
                         : "text-gray-500 hover:bg-gray-100"
                     }`}
                 >
@@ -192,7 +204,7 @@ const Profile = () => {
             {activeTab === "overview" && (
               <div>
                 {/* ABOUT US */}
-                <div className="bg-white rounded-xl shadow p-6 mb-8">
+                <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
                   <h3 className="flex items-center gap-3 font-semibold mb-5">
                     <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100">
                       <img
@@ -211,7 +223,7 @@ const Profile = () => {
                 </div>
 
                 {/* TEACHING EXPERTISE */}
-                <div className="bg-white rounded-xl shadow p-6 mb-8">
+                <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
                   <h3 className="flex items-center gap-3 font-semibold mb-5">
                     <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100">
                       <img
@@ -246,8 +258,8 @@ const Profile = () => {
                     <p className="text-sm mb-2">Grade Levels</p>
                     
                     <div className="flex flex-wrap gap-2">
-                      {(Array.isArray(profile?.additional_info?.grade_level)
-                        ? profile.additional_info.grade_level
+                      {(Array.isArray(profile?.additional_info?.grade_levels)
+                        ? profile.additional_info.grade_levels
                         : []
                       ).map((s, i) => (
                         <span
@@ -263,7 +275,7 @@ const Profile = () => {
 
                 {/* CERTIFICATIONS & ACHIEVEMENTS */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  <div className="bg-white rounded-xl shadow p-6">
+                  <div className="bg-white rounded-xl shadow p-4 sm:p-6">
                     <h1 className="flex items-center font-semibold mb-5">
                       <span className="inline-flex items-center w-10 h-10">
                         📜
@@ -295,7 +307,7 @@ const Profile = () => {
                     </ul>
                   </div>
 
-                  <div className="bg-white rounded-xl shadow p-6">
+                  <div className="bg-white rounded-xl shadow p-4 sm:p-6">
                     <h1 className="flex items-center font-semibold mb-5">
                       <span className="inline-flex items-center w-10 h-10">
                         🏆
@@ -332,27 +344,114 @@ const Profile = () => {
 
             {/* Experience */}
             {activeTab === "experience" && (
-              <div className="bg-white rounded-xl shadow p-6">
-                <h3 className="font-semibold mb-4">Experience</h3>
-                <p className="text-sm text-gray-600">
-                  Experience details would be displayed here.
-                </p>
-              </div>
+              <>
+                {profile.additional_info.experience.map((exp, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition mb-4"
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex-1">
+                        <div className="flex justify-between">
+                          <div className="flex items-center gap-5 mb-2">
+                            <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
+                              🏫
+                            </div>
+                            <div>
+                              <h3 className="text-xl text-gray-800">
+                                {exp.position}
+                              </h3>
+                              <p className="text-blue-500 font-medium">{exp.school}</p>
+                            </div>
+                          </div>
+
+                          <div>
+                            <h3 className="px-2 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
+                              {exp.to ? "Past" : "Current"}
+                            </h3>
+                          </div>
+                        </div>
+
+                        <p className="text-sm text-gray-600 mb-3 pl-20">
+                          {formatDate(exp.from)} - {formatDate(exp.to)}
+                          {typeof exp.to === "string" &&
+                            exp.to.toLowerCase() === "present" && (
+                              <span className="ml-2 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
+                                Current
+                              </span>
+                            )}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="pl-20">
+                      <p className="text-sm font-medium text-gray-700 mb-2">
+                        Key Responsibilities:
+                      </p>
+                      <ul className="space-y-1">
+                        {Array.isArray(exp.key_responsibilities) &&
+                          exp.key_responsibilities.map((resp, idx) => (
+                            <li
+                              key={idx}
+                              className="text-gray-700 text-sm flex items-start"
+                            >
+                              <span className="text-blue-500 mr-2">•</span>
+                              <span>{resp}</span>
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </>
             )}
 
             {/* Education */}
             {activeTab === "education" && (
-              <div className="bg-white rounded-xl shadow p-6">
-                <h3 className="font-semibold mb-4">Education</h3>
-                <p className="text-sm text-gray-600">
-                  Education details would be displayed here.
-                </p>
-              </div>
+              <>
+                {profile.additional_info.education.map((edu, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition mb-4"
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex-1">
+                        <div className="flex justify-between">
+                          <div className="flex items-center gap-5 mb-2">
+                            <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
+                              🎓
+                            </div>
+                            <div>
+                              <h3 className="text-xl text-gray-800">
+                                {edu.degree}
+                              </h3>
+                              <p className="text-blue-500 font-medium">{edu.college_university}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <p className="text-sm text-gray-600 mb-3 pl-20">
+                          {formatDate(edu.from)} - {formatDate(edu.to)}
+                          {typeof edu.to === "string" &&
+                            edu.to.toLowerCase() === "present" && (
+                              <span className="ml-2 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
+                                Current
+                              </span>
+                            )}
+
+                            <span className="text-black-500 mx-5">•</span>
+                            <span>{edu.percentage}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
             )}
 
             {/* Jobs Applied */}
             {activeTab === "jobs" && (
-              <div className="bg-white rounded-xl shadow p-6">
+              <div className="bg-white rounded-xl shadow p-4 sm:p-6">
                 <h3 className="font-semibold mb-4">Jobs Applied</h3>
                 <p className="text-sm text-gray-600">
                   List of jobs applied would be displayed here.
@@ -363,7 +462,7 @@ const Profile = () => {
 
           {/* RIGHT SECTION */}
           <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow p-6">
+            <div className="bg-white rounded-xl shadow p-4 sm:p-6">
               <h3 className="font-semibold mb-4">Quick Information</h3>
 
               <div className="space-y-3 text-sm">
@@ -377,7 +476,7 @@ const Profile = () => {
                 <div>
                   <p className="text-gray-400">Expected Salary</p>
                   <p className="text-green-600 font-semibold">
-                    {profile?.additional_info?.expected_salary ?? '--'}
+                    {formateExpectedSalary(profile?.additional_info?.min_salary, profile?.additional_info?.max_salary)}
                   </p>
                 </div>
 
