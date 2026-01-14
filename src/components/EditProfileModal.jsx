@@ -52,7 +52,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
           key_responsibilities: [""]
         }
       ],
-      preferred_location: []
+      preferred_location: ""
     }
   });
 
@@ -130,9 +130,9 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                   }
                 ],
 
-            preferred_location: Array.isArray(profile.additional_info?.preferred_location)
-              ? profile.additional_info.preferred_location
-              : []
+            preferred_location: profile.additional_info?.preferred_location
+              ? profile.additional_info.preferred_location.split(",").map(l => l.trim())
+              : ""
           }
         });
       }
@@ -184,7 +184,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
   );
 
   const addLocation = (location) => {
-    if (!selectedLocations.find(l => l.id === location.id)) {
+    if (!selectedLocations.includes(location)) {
       handleAdditional(
         "preferred_location",
         [...selectedLocations, location]
@@ -194,11 +194,11 @@ const EditProfileModal = ({ open, onClose, profile }) => {
     setShowDropdown(false);
   };
 
-  const removeLocation = (id) => {
-    handleAdditional(
-      "preferred_location",
-      selectedLocations.filter(l => l.id !== id)
-    );
+  const removeLocation = (index) => {
+    const updated = [...selectedLocations];
+    updated.splice(index, 1);
+
+    handleAdditional("preferred_location", updated);
   };
 
   const validate = () => {
@@ -298,8 +298,13 @@ const EditProfileModal = ({ open, onClose, profile }) => {
       });
 
       // PREFERRED LOCATION
-      form.additional_info.preferred_location.forEach((loc, i) =>
-        fd.append(`preferred_location[${i}]`, loc.id)
+      fd.append(
+        "preferred_location",
+        form.additional_info.preferred_location
+        .filter(l => l.trim() !== "")
+        .forEach((loc, i) => {
+          fd.append(`preferred_location[${i}]`, loc);
+        })
       );
 
       // BASIC FIELDS
@@ -326,11 +331,13 @@ const EditProfileModal = ({ open, onClose, profile }) => {
       if (form.avatar_url) fd.append("avatar", form.avatar_url);
       if (form.banner_image_url) fd.append("banner_image", form.banner_image_url);
       if (form.resume) fd.append("resume", form.resume);
-
+      
       await updateProfile(fd);
 
       alert("Profile updated successfully ✅");
       onClose();
+
+
     } catch (error) {
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
@@ -706,7 +713,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                     <input
                       type="month"
                       className="input"
-                      value={edu.to}
+                      value={edu.to || ""}
                       onChange={(e) => {
                         const arr = [...form.additional_info.education];
                         arr[index].to = e.target.value;
@@ -867,15 +874,16 @@ const EditProfileModal = ({ open, onClose, profile }) => {
 
             {/* Selected Chips */}
             <div className="flex flex-wrap gap-2">
-              {selectedLocations.map((loc) => (
+              {selectedLocations.map((loc, index) => (
+
                 <span
-                  key={loc.id}
+                  key={index}
                   className="flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm"
                 >
-                  {loc.name}
+                  {loc}
                   <button
                     type="button"
-                    onClick={() => removeLocation(loc.id)}
+                    onClick={() => removeLocation(index)}
                     className="text-red-500"
                   >
                     ✕
@@ -903,7 +911,7 @@ const EditProfileModal = ({ open, onClose, profile }) => {
                   filteredLocations.map((loc) => (
                     <div
                       key={loc.id}
-                      onClick={() => addLocation(loc)}
+                      onClick={() => addLocation(loc.name)}
                       className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
                     >
                       {loc.name}
