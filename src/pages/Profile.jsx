@@ -7,6 +7,7 @@ import durationIcon from "../assets/icons/duration.svg";
 import locationIcon from "../assets/icons/location.svg";
 import aboutUsIcon from "../assets/icons/about-us.svg";
 import teachingExpertiseIcon from "../assets/icons/teaching-expertise.svg";
+import schoolStatisticIcon from "../assets/icons/school-statistic.svg"
 import teacherBannerImage from "../assets/images/teacher-banner.png";
 import teacherAvatarImage from "../assets/images/teacher-avatar.png";
 import schoolBannerImage from "../assets/images/school-banner.png";
@@ -28,6 +29,20 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const navigate = useNavigate();
   const hasFetched = useRef(false);
+
+  const USER_FORM_CONFIG = {
+    1: { // Teacher
+      tabs: ["overview", "experience", "education", "jobs"]
+    },
+
+    2: { // School
+      tabs: ["overview", "vacancies"]
+    },
+
+    3: { // Recruiter
+      tabs: ["overview", "experience", "education", "jobs"]
+    },
+  };
 
   const FETCH_BANNER_AVATAR = {
     1: { // Teacher
@@ -184,7 +199,7 @@ const Profile = () => {
 
             {/* TABS */}
             <div className="bg-white rounded-xl shadow p-2 flex flex-wrap gap-3 sm:gap-6">
-              {["overview", "experience", "education", "jobs"].map((tab) => (
+              {USER_FORM_CONFIG[profile.user_type].tabs.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -202,7 +217,7 @@ const Profile = () => {
 
             {/* OVERVIEW */}
             {activeTab === "overview" && (
-              <div>
+              <>
                 {/* ABOUT US */}
                 <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
                   <h3 className="flex items-center gap-3 font-semibold mb-5">
@@ -222,124 +237,218 @@ const Profile = () => {
                   </p>
                 </div>
 
-                {/* TEACHING EXPERTISE */}
-                <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
-                  <h3 className="flex items-center gap-3 font-semibold mb-5">
-                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100">
-                      <img
-                        src={teachingExpertiseIcon}
-                        alt="Teaching Expertise"
-                        className="w-6 h-6"
-                      />
-                    </span>
-
-                    Teaching Expertise
-                  </h3>
-
-                  <div className="mb-4">
-                    <p className="text-sm font-medium mb-2">Subjects</p>
-
-                    <div className="flex flex-wrap gap-2">
-                      {(Array.isArray(profile?.additional_info?.subjects)
-                        ? profile.additional_info.subjects
-                        : []
-                      ).map((s, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
-                        >
-                          {s.name}
+                {profile.user_type == 1 && (
+                  <>
+                    {/* TEACHING EXPERTISE */}
+                    <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
+                      <h3 className="flex items-center gap-3 font-semibold mb-5">
+                        <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100">
+                          <img
+                            src={teachingExpertiseIcon}
+                            alt="Teaching Expertise"
+                            className="w-6 h-6"
+                          />
                         </span>
-                      ))}
-                    </div>
-                  </div>
 
-                  <div>
-                    <p className="text-sm mb-2">Grade Levels</p>
-                    
-                    <div className="flex flex-wrap gap-2">
-                      {(Array.isArray(profile?.additional_info?.grade_levels)
-                        ? profile.additional_info.grade_levels
-                        : []
-                      ).map((s, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
-                        >
-                          {s.name}
+                        Teaching Expertise
+                      </h3>
+
+                      <div className="mb-4">
+                        <p className="text-sm font-medium mb-2">Subjects</p>
+
+                        <div className="flex flex-wrap gap-2">
+                          {(Array.isArray(profile?.additional_info?.subjects)
+                            ? profile.additional_info.subjects
+                            : []
+                          ).map((s, i) => (
+                            <span
+                              key={i}
+                              className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
+                            >
+                              {s.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-sm mb-2">Grade Levels</p>
+                        
+                        <div className="flex flex-wrap gap-2">
+                          {(Array.isArray(profile?.additional_info?.grade_levels)
+                            ? profile.additional_info.grade_levels
+                            : []
+                          ).map((s, i) => (
+                            <span
+                              key={i}
+                              className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
+                            >
+                              {s.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* CERTIFICATIONS & ACHIEVEMENTS */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                      <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+                        <h1 className="flex items-center font-semibold mb-5">
+                          <span className="inline-flex items-center w-10 h-10">
+                            📜
+                          </span>
+
+                          Certifications
+                        </h1>
+                        
+                        <ul className="text-sm text-gray-600 space-y-2">
+                          {(profile?.additional_info?.certification || "")
+                            .split(",")
+                            .filter(Boolean)
+                            .map((item, index) => (
+                              <li key={index} className="flex items-start gap-2">
+                                <span
+                                  className="text-green-600 relative"
+                                  style={{
+                                    width: "10.5px",
+                                    height: "21px",
+                                    top: "-0.38px",
+                                    opacity: 1,
+                                  }}
+                                >
+                                  ✓
+                                </span>
+                                <span>{item.trim()}</span>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+
+                      <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+                        <h1 className="flex items-center font-semibold mb-5">
+                          <span className="inline-flex items-center w-10 h-10">
+                            🏆
+                          </span>
+
+                          Achievements
+                        </h1>
+
+                        <ul className="text-sm text-gray-600 space-y-2">
+                          {(profile?.additional_info?.achievement || "")
+                            .split(",")
+                            .filter(Boolean)
+                            .map((item, index) => (
+                              <li key={index} className="flex items-start gap-2">
+                                <span
+                                  className="text-yellow-500 relative"
+                                  style={{
+                                    width: "10.5px",
+                                    height: "21px",
+                                    top: "-0.38px",
+                                    opacity: 1,
+                                  }}
+                                >
+                                  ★
+                                </span>
+                                <span>{item.trim()}</span>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {profile.user_type == 2 && (
+                  <>
+                    {/* School Statistics */}
+                    <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
+                      <h3 className="flex items-center gap-3 font-semibold mb-5">
+                        <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100">
+                          <img
+                            src={schoolStatisticIcon}
+                            alt="School Statistics"
+                            className="w-6 h-6"
+                          />
                         </span>
-                      ))}
+
+                        School Statistics
+                      </h3>
+
+                      <div className="mb-4">
+                        <p className="text-sm font-medium mb-2">Subjects</p>
+
+                        <div className="flex flex-wrap gap-2">
+                          {(Array.isArray(profile?.additional_info?.subjects)
+                            ? profile.additional_info.subjects
+                            : []
+                          ).map((s, i) => (
+                            <span
+                              key={i}
+                              className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
+                            >
+                              {s.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-sm mb-2">Grade Levels</p>
+                        
+                        <div className="flex flex-wrap gap-2">
+                          {(Array.isArray(profile?.additional_info?.grade_levels)
+                            ? profile.additional_info.grade_levels
+                            : []
+                          ).map((s, i) => (
+                            <span
+                              key={i}
+                              className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
+                            >
+                              {s.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                {/* CERTIFICATIONS & ACHIEVEMENTS */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-                    <h1 className="flex items-center font-semibold mb-5">
-                      <span className="inline-flex items-center w-10 h-10">
-                        📜
-                      </span>
+                    {/* Why Join US */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                      <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+                        <h1 className="flex items-center font-semibold mb-5">
+                          <span className="inline-flex items-center w-10 h-10">
+                            🌟
+                          </span>
 
-                      Certifications
-                    </h1>
-                    
-                    <ul className="text-sm text-gray-600 space-y-2">
-                      {(profile?.additional_info?.certification || "")
-                        .split(",")
-                        .filter(Boolean)
-                        .map((item, index) => (
-                          <li key={index} className="flex items-start gap-2">
-                            <span
-                              className="text-green-600 relative"
-                              style={{
-                                width: "10.5px",
-                                height: "21px",
-                                top: "-0.38px",
-                                opacity: 1,
-                              }}
-                            >
-                              ✓
-                            </span>
-                            <span>{item.trim()}</span>
-                          </li>
-                        ))}
-                    </ul>
-                  </div>
-
-                  <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-                    <h1 className="flex items-center font-semibold mb-5">
-                      <span className="inline-flex items-center w-10 h-10">
-                        🏆
-                      </span>
-
-                      Achievements
-                    </h1>
-
-                    <ul className="text-sm text-gray-600 space-y-2">
-                      {(profile?.additional_info?.achievement || "")
-                        .split(",")
-                        .filter(Boolean)
-                        .map((item, index) => (
-                          <li key={index} className="flex items-start gap-2">
-                            <span
-                              className="text-yellow-500 relative"
-                              style={{
-                                width: "10.5px",
-                                height: "21px",
-                                top: "-0.38px",
-                                opacity: 1,
-                              }}
-                            >
-                              ★
-                            </span>
-                            <span>{item.trim()}</span>
-                          </li>
-                        ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
+                          Why Join Us
+                        </h1>
+                        
+                        <ul className="text-sm text-gray-600 space-y-2">
+                          {(profile?.additional_info?.why_join_us || "")
+                            .split(",")
+                            .filter(Boolean)
+                            .map((item, index) => (
+                              <li key={index} className="flex items-start gap-2">
+                                <span
+                                  className="text-green-600 relative"
+                                  style={{
+                                    width: "10.5px",
+                                    height: "21px",
+                                    top: "-0.38px",
+                                    opacity: 1,
+                                  }}
+                                >
+                                  ★
+                                </span>
+                                <span>{item.trim()}</span>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </>
             )}
 
             {/* Experience */}
@@ -457,6 +566,11 @@ const Profile = () => {
                   List of jobs applied would be displayed here.
                 </p>
               </div>
+            )}
+
+            {activeTab === "vacancies" && (
+              <>
+              </>
             )}
           </div>
 
