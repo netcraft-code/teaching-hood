@@ -508,6 +508,7 @@ const Profile = () => {
         open={editOpen}
         onClose={() => setEditOpen(false)}
         profile={profile}
+        onUpdate={(updatedProfile) => setProfile(updatedProfile)}
       />
     </>
   );

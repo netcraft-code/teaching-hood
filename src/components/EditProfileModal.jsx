@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getSubjects, getGradeLevels, getCities, updateProfile, getStates } from "../api/auth";
+import { getSubjects, getGradeLevels, getCities, updateProfile, getProfile, getStates } from "../api/auth";
 
-const EditProfileModal = ({ open, onClose, profile }) => {
+const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [subjects, setSubjects] = useState([]);
   const [grades, setGrades] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -298,14 +298,11 @@ const EditProfileModal = ({ open, onClose, profile }) => {
       });
 
       // PREFERRED LOCATION
-      fd.append(
-        "preferred_location",
-        form.additional_info.preferred_location
+      form.additional_info.preferred_location
         .filter(l => l.trim() !== "")
         .forEach((loc, i) => {
           fd.append(`preferred_location[${i}]`, loc);
-        })
-      );
+        });
 
       // BASIC FIELDS
       fd.append("name", form.name);
@@ -334,10 +331,12 @@ const EditProfileModal = ({ open, onClose, profile }) => {
       
       await updateProfile(fd);
 
+      const res = await getProfile();
+      
+      onUpdate(res.data.data);
+
       alert("Profile updated successfully ✅");
       onClose();
-
-
     } catch (error) {
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
