@@ -188,7 +188,7 @@ const Profile = () => {
                 />
 
                 <div className="flex-1 mt-6">
-                  <h2 className="text-xl sm:text-3xl font-semibold mb-2">{userType == 1 ? profile.name : profile.school_name}</h2>
+                  <h2 className="text-xl sm:text-3xl font-semibold mb-2">{profile.name}</h2>
                   <p className="text-m text-gray-500">
                     {profile?.position || 'Not Specified'}
                   </p>

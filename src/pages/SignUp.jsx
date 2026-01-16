@@ -127,11 +127,10 @@ const SignUpPage = () => {
 
     try {
       const payload = {
-        name: fullName,
         email: email,
         phone: phoneNumber,
         city: city,
-        school_name: schoolName,
+        name: schoolName,
         password: password,
         password_confirmation: confirmPassword,
         user_type: userType, // teacher / school / recruiter

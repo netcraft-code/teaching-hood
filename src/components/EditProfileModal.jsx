@@ -13,7 +13,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [userType, setUserType] = useState(0);
   const [form, setForm] = useState({
     name: "",
-    school_name: "",
     phone: "",
     email: "",
     avatar_url: null,
@@ -100,7 +99,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
         
         setForm({
           name: profile.name || "",
-          school_name: profile.school_name || "",
           phone: profile.phone || "",
           email: profile.email || "",
           avatar_url: null,
@@ -345,7 +343,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             fd.append(`preferred_location[${i}]`, loc);
           });
 
-        fd.append("name", form.name);
         fd.append("availability", form.additional_info.availability);
         fd.append("notice_period", form.additional_info.notice_period);
         fd.append("min_salary", form.additional_info.min_salary);
@@ -356,7 +353,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       }
 
       if (userType == 2) {
-        fd.append("school_name", form.school_name);
         fd.append("students", form.additional_info.students)
         fd.append("teachers", form.additional_info.teachers)
         fd.append("why_join_us", form.additional_info.why_join_us .filter(c => c.trim() !== "") .join(","));
@@ -364,6 +360,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       }
 
       // BASIC FIELDS
+      fd.append("name", form.name);
       fd.append("phone", form.phone);
       fd.append("position", form.position);
       fd.append("total_experience", form.total_experience);
@@ -413,33 +410,17 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           {/* Personal Information */}
           <Section title="Personal Information" icon="👤">
             <Grid>
-              {userType == 1 && (
-                <Field label="Full Name" required>
+              <Field label="Full Name" required>
 
-                  <input
-                    type="text"
-                    name="name"
-                    className="input"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="Enter your full name"
-                  />
-                </Field>
-              )}
-
-              {userType == 2 && (
-                <Field label="School Name" required>
-
-                  <input
-                    type="text"
-                    name="school_name"
-                    className="input"
-                    value={form.school_name}
-                    onChange={handleChange}
-                    placeholder="Enter school name"
-                  />
-                </Field>
-              )}
+                <input
+                  type="text"
+                  name="name"
+                  className="input"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Enter your full name"
+                />
+              </Field>
               
               <Field label="Email Address" required>
                 <input
