@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('additonal_info', function (Blueprint $table) {
+        Schema::table('additional_info', function (Blueprint $table) {
             $table->string('availability')->nullable()->default(0);
             $table->string('expected_salary')->nullable();
             $table->string('notice_period')->nullable();

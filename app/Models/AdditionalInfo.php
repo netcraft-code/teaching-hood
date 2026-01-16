@@ -16,14 +16,16 @@ class AdditionalInfo extends Model
         'achievement',
         'certification',
         'availability',
-        // 'expected_salary',
         'notice_period',
-        // 'preferred_location',
         'resume',
         'avatar_url',
         'banner_image_url',
         'min_salary',
-        'max_salary'
+        'max_salary',
+        'students',
+        'teachers',
+        'why_join_us',
+        'website',
     ];
 
     protected function casts(): array

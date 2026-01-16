@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('additional_info_subject', function (Blueprint $table) {
-            $table->id();
-            $table->integer('subject_id');
-            $table->integer('additional_info_id');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('status')->default(1);
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('additional_info_subject');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };

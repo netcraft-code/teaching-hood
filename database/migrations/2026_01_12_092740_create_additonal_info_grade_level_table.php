@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('additonal_info_grade_level', function (Blueprint $table) {
+        Schema::create('additional_info_grade_level', function (Blueprint $table) {
             $table->id();
             $table->integer('grade_level_id');
-            $table->integer('additonal_info_id');
+            $table->integer('additional_info_id');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('additonal_info_grade_level');
+        Schema::dropIfExists('additional_info_grade_level');
     }
 };
