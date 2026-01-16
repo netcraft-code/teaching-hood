@@ -10,8 +10,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [userType, setUserType] = useState(0);
   const [form, setForm] = useState({
     name: "",
+    school_name: "",
     phone: "",
     email: "",
     avatar_url: null,
@@ -52,11 +54,31 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           key_responsibilities: [""]
         }
       ],
-      preferred_location: ""
+      preferred_location: "",
+      students: "",
+      teachers: "",
+      why_join_us: [""],
+      website: ""
     }
   });
 
   const selectedLocations = form.additional_info.preferred_location || [];
+
+  const USER_BASE_DETAILS = {
+    1: {
+      positionLabel: "Position",
+      positionPlaceHolder: "e.g., Senior Teacher",
+      totalExperience: "Years of Experience",
+      avatarUrl: "Profile Picture",
+    },
+
+    2: {
+      positionLabel: "Educational Board",
+      positionPlaceHolder: "e.g., CBSE Affiliated School",
+      totalExperience: "Year Established",
+      avatarUrl: "School Profile",
+    },
+  };
 
   /* ---------------- LOAD DATA ---------------- */
   useEffect(() => {
@@ -74,8 +96,11 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       setLocations(l.data.data);
 
       if (profile) {
+        setUserType(profile.user_type);
+        
         setForm({
           name: profile.name || "",
+          school_name: profile.school_name || "",
           phone: profile.phone || "",
           email: profile.email || "",
           avatar_url: null,
@@ -132,7 +157,14 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
             preferred_location: profile.additional_info?.preferred_location
               ? profile.additional_info.preferred_location.split(",").map(l => l.trim())
-              : ""
+              : "",
+            
+            students: profile.additional_info.students,
+            teachers: profile.additional_info.teachers,
+            why_join_us: profile.additional_info?.why_join_us
+              ? profile.additional_info.why_join_us.split(",").map(c => c.trim())
+              : [""],
+            website: profile.additional_info.website
           }
         });
       }
@@ -208,32 +240,40 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!form.phone) e.phone = "Phone is required";
     if (!form.position) e.position = "Position is required";
 
-    if (!form.additional_info.subjects.length)
-      e.subjects = "At least one subject required";
+    if (userType == 1) {
+      if (!form.additional_info.subjects.length)
+        e.subjects = "At least one subject required";
+  
+      if (!form.additional_info.grade_levels.length)
+        e.grade_levels = "At least one grade level required";
+  
+      if (!form.additional_info.education[0]?.degree)
+        e.education = "Education details required";
+  
+      if (!form.additional_info.experience[0]?.position)
+        e.experience = "Experience details required";
+  
+      if (!form.additional_info.preferred_location.length)
+        e.preferred_location = "Preferred location required";
+  
+      if (!form.additional_info.min_salary)
+        e.min_salary = "Min salary required";
+  
+      if (!form.additional_info.max_salary)
+        e.max_salary = "Max salary required";
+  
+      if (
+        Number(form.additional_info.max_salary) <
+        Number(form.additional_info.min_salary)
+      ) {
+        e.max_salary = "Max salary must be greater than Min salary";
+      }
+    }
 
-    if (!form.additional_info.grade_levels.length)
-      e.grade_levels = "At least one grade level required";
-
-    if (!form.additional_info.education[0]?.degree)
-      e.education = "Education details required";
-
-    if (!form.additional_info.experience[0]?.position)
-      e.experience = "Experience details required";
-
-    if (!form.additional_info.preferred_location.length)
-      e.preferred_location = "Preferred location required";
-
-    if (!form.additional_info.min_salary)
-      e.min_salary = "Min salary required";
-
-    if (!form.additional_info.max_salary)
-      e.max_salary = "Max salary required";
-
-    if (
-      Number(form.additional_info.max_salary) <
-      Number(form.additional_info.min_salary)
-    ) {
-      e.max_salary = "Max salary must be greater than Min salary";
+    if(userType == 2) {
+      if (!form.website) e.website = "Website required";
+      if (!form.students) e.students = "Students required";
+      if (!form.teachers) e.teachers = "Teachers required";
     }
 
     // Address
@@ -244,7 +284,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!form.country) e.country = "Country required";
 
     setErrors(e);
-    console.log(e);
+    
     return Object.keys(e).length === 0;
   };
 
@@ -266,53 +306,67 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
       const fd = new FormData();
 
-      // SUBJECTS
-      form.additional_info.subjects.forEach((s, i) =>
-        fd.append(`subjects[${i}]`, s.id)
-      );
+      if (userType == 1) {
+        // SUBJECTS
+        form.additional_info.subjects.forEach((s, i) =>
+          fd.append(`subjects[${i}]`, s.id)
+        );
 
-      // GRADE LEVELS
-      form.additional_info.grade_levels.forEach((g, i) =>
-        fd.append(`grade_levels[${i}]`, g.id)
-      );
+        // GRADE LEVELS
+        form.additional_info.grade_levels.forEach((g, i) =>
+          fd.append(`grade_levels[${i}]`, g.id)
+        );
 
-      // EDUCATION
-      form.additional_info.education.forEach((edu, i) => {
-        fd.append(`education[${i}][degree]`, edu.degree);
-        fd.append(`education[${i}][college_university]`, edu.college_university);
-        fd.append(`education[${i}][from]`, edu.from);
-        fd.append(`education[${i}][to]`, edu.to);
-        fd.append(`education[${i}][percentage]`, edu.percentage);
-      });
-
-      // EXPERIENCE
-      form.additional_info.experience.forEach((exp, i) => {
-        fd.append(`experience[${i}][position]`, exp.position);
-        fd.append(`experience[${i}][school]`, exp.school);
-        fd.append(`experience[${i}][from]`, exp.from);
-        fd.append(`experience[${i}][to]`, exp.to);
-
-        exp.key_responsibilities.forEach((r, j) => {
-          fd.append(`experience[${i}][key_responsibilities][${j}]`, r);
+        // EDUCATION
+        form.additional_info.education.forEach((edu, i) => {
+          fd.append(`education[${i}][degree]`, edu.degree);
+          fd.append(`education[${i}][college_university]`, edu.college_university);
+          fd.append(`education[${i}][from]`, edu.from);
+          fd.append(`education[${i}][to]`, edu.to);
+          fd.append(`education[${i}][percentage]`, edu.percentage);
         });
-      });
 
-      // PREFERRED LOCATION
-      form.additional_info.preferred_location
-        .filter(l => l.trim() !== "")
-        .forEach((loc, i) => {
-          fd.append(`preferred_location[${i}]`, loc);
+        // EXPERIENCE
+        form.additional_info.experience.forEach((exp, i) => {
+          fd.append(`experience[${i}][position]`, exp.position);
+          fd.append(`experience[${i}][school]`, exp.school);
+          fd.append(`experience[${i}][from]`, exp.from);
+          fd.append(`experience[${i}][to]`, exp.to);
+
+          exp.key_responsibilities.forEach((r, j) => {
+            fd.append(`experience[${i}][key_responsibilities][${j}]`, r);
+          });
         });
+
+        // PREFERRED LOCATION
+        form.additional_info.preferred_location
+          .filter(l => l.trim() !== "")
+          .forEach((loc, i) => {
+            fd.append(`preferred_location[${i}]`, loc);
+          });
+
+        fd.append("name", form.name);
+        fd.append("availability", form.additional_info.availability);
+        fd.append("notice_period", form.additional_info.notice_period);
+        fd.append("min_salary", form.additional_info.min_salary);
+        fd.append("max_salary", form.additional_info.max_salary);
+
+        fd.append("achievement", form.additional_info.achievement .filter(a => a.trim() !== "") .join(","));
+        fd.append("certification", form.additional_info.certification .filter(c => c.trim() !== "") .join(","));
+      }
+
+      if (userType == 2) {
+        fd.append("school_name", form.school_name);
+        fd.append("students", form.additional_info.students)
+        fd.append("teachers", form.additional_info.teachers)
+        fd.append("why_join_us", form.additional_info.why_join_us .filter(c => c.trim() !== "") .join(","));
+        fd.append("website", form.additional_info.website)
+      }
 
       // BASIC FIELDS
-      fd.append("name", form.name);
       fd.append("phone", form.phone);
       fd.append("position", form.position);
       fd.append("total_experience", form.total_experience);
-      fd.append("availability", form.additional_info.availability);
-      fd.append("notice_period", form.additional_info.notice_period);
-      fd.append("min_salary", form.additional_info.min_salary);
-      fd.append("max_salary", form.additional_info.max_salary);
 
       fd.append("address", form.address);
       fd.append("city", form.city);
@@ -321,8 +375,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       fd.append("country", form.country);
 
       fd.append("about_us", form.additional_info.about_us || "");
-      fd.append("achievement", form.additional_info.achievement .filter(a => a.trim() !== "") .join(","));
-      fd.append("certification", form.additional_info.certification .filter(c => c.trim() !== "") .join(","));
 
       // FILES
       if (form.avatar_url) fd.append("avatar", form.avatar_url);
@@ -361,17 +413,33 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           {/* Personal Information */}
           <Section title="Personal Information" icon="👤">
             <Grid>
-              <Field label="Full Name" required>
+              {userType == 1 && (
+                <Field label="Full Name" required>
 
-                <input
-                  type="text"
-                  name="name"
-                  className="input"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Enter your full name"
-                />
-              </Field>
+                  <input
+                    type="text"
+                    name="name"
+                    className="input"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Enter your full name"
+                  />
+                </Field>
+              )}
+
+              {userType == 2 && (
+                <Field label="School Name" required>
+
+                  <input
+                    type="text"
+                    name="school_name"
+                    className="input"
+                    value={form.school_name}
+                    onChange={handleChange}
+                    placeholder="Enter school name"
+                  />
+                </Field>
+              )}
               
               <Field label="Email Address" required>
                 <input
@@ -397,18 +465,18 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 />
               </Field>
 
-              <Field label="Position" required>
+              <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
                 <input
                   type="text"
                   name="position"
                   className="input"
                   value={form.position}
                   onChange={handleChange}
-                  placeholder="e.g., Senior Teacher"
+                  placeholder={USER_BASE_DETAILS[userType]?.positionPlaceHolder}
                 />
               </Field>
 
-              <Field label="Years of Experience">
+              <Field label={USER_BASE_DETAILS[userType]?.totalExperience}>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -424,7 +492,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             </Grid>
 
             <Grid>
-              <Field label="Profile Picture">
+              <Field label={USER_BASE_DETAILS[userType]?.avatarUrl}>
                 <input
                   type="file"
                   name="avatar_url"
@@ -530,414 +598,476 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               />
             </Field>
 
-            <Grid>
-              <Field label="Subjects">
-                <select
-                  multiple
-                  className="input h-40 overflow-y-auto"
-                  value={form.additional_info.subjects.map(s => String(s.id))}
-                  onChange={(e) => handleMulti(e, "subjects", subjects)}
-                >
-                  {subjects.map(s => (
-                    <option key={s.id} value={s.id} className="py-2">
-                      {s.name}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
-              </Field>
-
-              <Field label="Grade Levels">
-                <select
-                  multiple
-                  className="input h-40 overflow-y-auto"
-                  value={form.additional_info.grade_levels.map(g => String(g.id))}
-                  onChange={(e) => handleMulti(e, "grade_levels", grades)}
-                >
-                  {grades.map(g => (
-                    <option key={g.id} value={g.id} className="py-2">
-                      {g.name}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
-              </Field>
-            </Grid>
-
-            <Dynamic
-              label="Achievements"
-              icon="🏆"
-              values={form.additional_info.achievement}
-              onAdd={() => addArray("achievement")}
-              onChange={(i, v) => updateArray("achievement", i, v)}
-              onRemove={(i) => removeArray("achievement", i)}
-              placeholder="e.g., Teacher of the Year 2023"
-            />
-
-            <Dynamic
-              label="Certifications"
-              icon="📜"
-              values={form.additional_info.certification}
-              onAdd={() => addArray("certification")}
-              onChange={(i, v) => updateArray("certification", i, v)}
-              onRemove={(i) => removeArray("certification", i)}
-              placeholder="e.g., TEFL Certified"
-            />
-
-            <Grid>
-              <Field label="Availability">
-                <select
-                  className="input"
-                  value={form.additional_info.availability}
-                  onChange={(e) => handleAdditional("availability", e.target.value)}
-                >
-                  <option value="">Select availability</option>
-                  <option value="Full Time">Full Time</option>
-                  <option value="Part Time">Part Time</option>
-                  <option value="Contract">Contract</option>
-                </select>
-              </Field>
-
-              <Field label="Notice Period">
-                <select
-                  className="input"
-                  value={form.additional_info.notice_period}
-                  onChange={(e) => handleAdditional("notice_period", e.target.value)}
-                >
-                  <option value="">Select notice period</option>
-                  <option value="Immediate">Immediate</option>
-                  <option value="10 Days">10 Days</option>
-                  <option value="15 Days">15 Days</option>
-                  <option value="30 Days">30 Days</option>
-                </select>
-              </Field>
-            </Grid>
-
-            <Field label="Expected Salary Range (per year)">
-              <div className="flex gap-3 items-center">
-                <div className="flex-1">
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                    <input
-                      type="number"
-                      min={1000}
-                      className="input"
-                      style={{ paddingLeft: "2.5rem" }} // 👈 FIX
-                      value={form.additional_info.min_salary}
-                      onChange={(e) => handleAdditional("min_salary", e.target.value)}
-                      placeholder="Min"
-                    />
-                  </div>
-                </div>
-
-                <span className="text-gray-400 font-medium">to</span>
-
-                <div className="flex-1">
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                    <input
-                      type="number"
-                      min={form.additional_info.min_salary}
-                      className="input"
-                      style={{ paddingLeft: "2.5rem" }} // 👈 FIX
-                      value={form.additional_info.max_salary}
-                      onChange={(e) => handleAdditional("max_salary", e.target.value)}
-                      placeholder="Max"
-                    />
-                  </div>
-                </div>
-              </div>
-            </Field>
-          </Section>
-
-          <Section title="Education" icon="🎓">
-            {form.additional_info.education.map((edu, index) => (
-              <div key={index} className="border rounded-xl p-4 space-y-3 bg-gray-50 relative">
-                {form.additional_info.education.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const arr = [...form.additional_info.education];
-                      arr.splice(index, 1);
-                      handleAdditional("education", arr);
-                    }}
-                    className="absolute top-2 right-2 text-red-600 hover:bg-red-100 rounded-full p-1"
-                    aria-label="Remove Education"
-                  >
-                    ✕
-                  </button>
-                )}
-
+            {userType == 1 && (
+              <>
                 <Grid>
-                  <Field label="Degree">
-                    <input
-                      className="input"
-                      value={edu.degree}
-                      onChange={(e) => {
-                        const arr = [...form.additional_info.education];
-                        arr[index].degree = e.target.value;
-                        handleAdditional("education", arr);
-                      }}
-                    />
+                  <Field label="Subjects">
+                    <select
+                      multiple
+                      className="input h-40 overflow-y-auto"
+                      value={form.additional_info.subjects.map(s => String(s.id))}
+                      onChange={(e) => handleMulti(e, "subjects", subjects)}
+                    >
+                      {subjects.map(s => (
+                        <option key={s.id} value={s.id} className="py-2">
+                          {s.name}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
                   </Field>
 
-                  <Field label="College / University">
-                    <input
-                      className="input"
-                      value={edu.college_university}
-                      onChange={(e) => {
-                        const arr = [...form.additional_info.education];
-                        arr[index].college_university = e.target.value;
-                        handleAdditional("education", arr);
-                      }}
-                    />
+                  <Field label="Grade Levels">
+                    <select
+                      multiple
+                      className="input h-40 overflow-y-auto"
+                      value={form.additional_info.grade_levels.map(g => String(g.id))}
+                      onChange={(e) => handleMulti(e, "grade_levels", grades)}
+                    >
+                      {grades.map(g => (
+                        <option key={g.id} value={g.id} className="py-2">
+                          {g.name}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
                   </Field>
                 </Grid>
 
-                <Grid>
-                  <Field label="From">
-                    <input
-                      type="month"
-                      className="input"
-                      value={edu.from}
-                      onChange={(e) => {
-                        const arr = [...form.additional_info.education];
-                        arr[index].from = e.target.value;
-                        handleAdditional("education", arr);
-                      }}
-                    />
-                  </Field>
-
-                  <Field label="To">
-                    <input
-                      type="month"
-                      className="input"
-                      value={edu.to || ""}
-                      onChange={(e) => {
-                        const arr = [...form.additional_info.education];
-                        arr[index].to = e.target.value;
-                        handleAdditional("education", arr);
-                      }}
-                    />
-                  </Field>
-                </Grid>
-
-                <Field label="Percentage">
-                  <input
-                    type="number"
-                    className="input"
-                    value={edu.percentage}
-                    onChange={(e) => {
-                      const arr = [...form.additional_info.education];
-                      arr[index].percentage = e.target.value;
-                      handleAdditional("education", arr);
-                    }}
-                  />
-                </Field>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleAdditional("education", [
-                      ...form.additional_info.education,
-                      { degree: "", college_university: "", from: "", to: "", percentage: "" }
-                    ])
-                  }
-                  className="text-blue-600 text-sm font-medium"
-                >
-                  + Add Education
-                </button>
-              </div>
-            ))}
-          </Section>
-
-          <Section title="Experience" icon="💼">
-            {form.additional_info.experience.map((exp, index) => (
-              <div key={index} className="border rounded-xl p-4 bg-gray-50 space-y-3 relative">
-                {/* REMOVE BUTTON */}
-                {form.additional_info.experience.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const arr = [...form.additional_info.experience];
-                      arr.splice(index, 1);
-                      handleAdditional("experience", arr);
-                    }}
-                    className="absolute top-2 right-2 text-red-600 hover:bg-red-100 rounded-full p-1"
-                    aria-label="Remove Experience"
-                  >
-                    ✕
-                  </button>
-                )}
-                
-                <Grid>
-                  <Field label="Position">
-                    <input
-                      className="input"
-                      value={exp.position}
-                      onChange={(e) => {
-                        const arr = [...form.additional_info.experience];
-                        arr[index].position = e.target.value;
-                        handleAdditional("experience", arr);
-                      }}
-                    />
-                  </Field>
-
-                  <Field label="School / Organization">
-                    <input
-                      className="input"
-                      value={exp.school}
-                      onChange={(e) => {
-                        const arr = [...form.additional_info.experience];
-                        arr[index].school = e.target.value;
-                        handleAdditional("experience", arr);
-                      }}
-                    />
-                  </Field>
-                </Grid>
-
-                <Grid>
-                  <Field label="From">
-                    <input
-                      type="month"
-                      className="input"
-                      value={exp.from}
-                      onChange={(e) => {
-                        const arr = [...form.additional_info.experience];
-                        arr[index].from = e.target.value;
-                        handleAdditional("experience", arr);
-                      }}
-                    />
-                  </Field>
-
-                  <Field label="To">
-                    <input
-                      type="month"
-                      className="input"
-                      value={exp.to || ""}
-                      onChange={(e) => {
-                        const arr = [...form.additional_info.experience];
-                        arr[index].to = e.target.value;
-                        handleAdditional("experience", arr);
-                      }}
-                    />
-                  </Field>
-                </Grid>
-
-                {/* RESPONSIBILITIES */}
                 <Dynamic
-                  label="Key Responsibilities"
-                  values={exp.key_responsibilities}
-                  onAdd={() => {
-                    const arr = [...form.additional_info.experience];
-                    arr[index].key_responsibilities.push("");
-                    handleAdditional("experience", arr);
-                  }}
-                  onChange={(i, v) => {
-                    const arr = [...form.additional_info.experience];
-                    arr[index].key_responsibilities[i] = v;
-                    handleAdditional("experience", arr);
-                  }}
-                  onRemove={(i) => {
-                    const arr = [...form.additional_info.experience];
-                    arr[index].key_responsibilities.splice(i, 1);
-                    handleAdditional("experience", arr);
-                  }}
-                  placeholder="Responsibility details"
+                  label="Achievements"
+                  icon="🏆"
+                  values={form.additional_info.achievement}
+                  onAdd={() => addArray("achievement")}
+                  onChange={(i, v) => updateArray("achievement", i, v)}
+                  onRemove={(i) => removeArray("achievement", i)}
+                  placeholder="e.g., Teacher of the Year 2023"
                 />
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleAdditional("experience", [
-                      ...form.additional_info.experience,
-                      {
-                        position: "",
-                        school: "",
-                        from: "",
-                        to: "",
-                        key_responsibilities: [""]
-                      }
-                    ])
-                  }
-                  className="text-blue-600 text-sm font-medium"
-                >
-                  + Add Experience
-                </button>
-              </div>
-            ))}
-          </Section>
+                <Dynamic
+                  label="Certifications"
+                  icon="📜"
+                  values={form.additional_info.certification}
+                  onAdd={() => addArray("certification")}
+                  onChange={(i, v) => updateArray("certification", i, v)}
+                  onRemove={(i) => removeArray("certification", i)}
+                  placeholder="e.g., TEFL Certified"
+                />
 
-          <div className="my-8">
-            <label className="label">Preferred Location</label>
-
-            {/* Selected Chips */}
-            <div className="flex flex-wrap gap-2">
-              {selectedLocations.map((loc, index) => (
-
-                <span
-                  key={index}
-                  className="flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm"
-                >
-                  {loc}
-                  <button
-                    type="button"
-                    onClick={() => removeLocation(index)}
-                    className="text-red-500"
-                  >
-                    ✕
-                  </button>
-                </span>
-              ))}
-            </div>
-
-            {/* Search Input */}
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setShowDropdown(true);
-              }}
-              placeholder="Search location..."
-              className="input"
-            />
-
-            {/* Dropdown */}
-            {showDropdown && (
-              <div className="border rounded-md max-h-48 overflow-auto bg-white shadow">
-                {filteredLocations.length ? (
-                  filteredLocations.map((loc) => (
-                    <div
-                      key={loc.id}
-                      onClick={() => addLocation(loc.name)}
-                      className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                <Grid>
+                  <Field label="Availability">
+                    <select
+                      className="input"
+                      value={form.additional_info.availability}
+                      onChange={(e) => handleAdditional("availability", e.target.value)}
                     >
-                      {loc.name}
+                      <option value="">Select availability</option>
+                      <option value="Full Time">Full Time</option>
+                      <option value="Part Time">Part Time</option>
+                      <option value="Contract">Contract</option>
+                    </select>
+                  </Field>
+
+                  <Field label="Notice Period">
+                    <select
+                      className="input"
+                      value={form.additional_info.notice_period}
+                      onChange={(e) => handleAdditional("notice_period", e.target.value)}
+                    >
+                      <option value="">Select notice period</option>
+                      <option value="Immediate">Immediate</option>
+                      <option value="10 Days">10 Days</option>
+                      <option value="15 Days">15 Days</option>
+                      <option value="30 Days">30 Days</option>
+                    </select>
+                  </Field>
+                </Grid>
+
+                <Field label="Expected Salary Range (per year)">
+                  <div className="flex gap-3 items-center">
+                    <div className="flex-1">
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                        <input
+                          type="number"
+                          min={1000}
+                          className="input"
+                          style={{ paddingLeft: "2.5rem" }} // 👈 FIX
+                          value={form.additional_info.min_salary}
+                          onChange={(e) => handleAdditional("min_salary", e.target.value)}
+                          placeholder="Min"
+                        />
+                      </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="px-3 py-2 text-gray-500">No results found</div>
+
+                    <span className="text-gray-400 font-medium">to</span>
+
+                    <div className="flex-1">
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                        <input
+                          type="number"
+                          min={form.additional_info.min_salary}
+                          className="input"
+                          style={{ paddingLeft: "2.5rem" }} // 👈 FIX
+                          value={form.additional_info.max_salary}
+                          onChange={(e) => handleAdditional("max_salary", e.target.value)}
+                          placeholder="Max"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Field>
+              </>
+            )}
+
+            {userType == 2 && (
+              <>
+                <Dynamic
+                    label="Why Join Us"
+                    icon="📜"
+                    values={form.additional_info.why_join_us}
+                    onAdd={() => addArray("why_join_us")}
+                    onChange={(i, v) => updateArray("why_join_us", i, v)}
+                    onRemove={(i) => removeArray("why_join_us", i)}
+                  />
+
+                  <Grid>
+                    <Field label="Students">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          name="students"
+                          min="0"
+                          className="input"
+                          value={form.students}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </Field>
+
+                    <Field label="Teachers">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          name="teachers"
+                          min="0"
+                          className="input"
+                          value={form.teachers}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </Field>
+
+                    <Field label="Website">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          name="website"
+                          min="0"
+                          className="input"
+                          value={form.website}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </Field>
+                  </Grid>
+              </>
+            )}
+          </Section>
+          
+          {userType == 1 && (
+            <>
+              <Section title="Education" icon="🎓">
+                {form.additional_info.education.map((edu, index) => (
+                  <div key={index} className="border rounded-xl p-4 space-y-3 bg-gray-50 relative">
+                    {form.additional_info.education.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const arr = [...form.additional_info.education];
+                          arr.splice(index, 1);
+                          handleAdditional("education", arr);
+                        }}
+                        className="absolute top-2 right-2 text-red-600 hover:bg-red-100 rounded-full p-1"
+                        aria-label="Remove Education"
+                      >
+                        ✕
+                      </button>
+                    )}
+
+                    <Grid>
+                      <Field label="Degree">
+                        <input
+                          className="input"
+                          value={edu.degree}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.education];
+                            arr[index].degree = e.target.value;
+                            handleAdditional("education", arr);
+                          }}
+                        />
+                      </Field>
+
+                      <Field label="College / University">
+                        <input
+                          className="input"
+                          value={edu.college_university}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.education];
+                            arr[index].college_university = e.target.value;
+                            handleAdditional("education", arr);
+                          }}
+                        />
+                      </Field>
+                    </Grid>
+
+                    <Grid>
+                      <Field label="From">
+                        <input
+                          type="month"
+                          className="input"
+                          value={edu.from}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.education];
+                            arr[index].from = e.target.value;
+                            handleAdditional("education", arr);
+                          }}
+                        />
+                      </Field>
+
+                      <Field label="To">
+                        <input
+                          type="month"
+                          className="input"
+                          value={edu.to || ""}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.education];
+                            arr[index].to = e.target.value;
+                            handleAdditional("education", arr);
+                          }}
+                        />
+                      </Field>
+                    </Grid>
+
+                    <Field label="Percentage">
+                      <input
+                        type="number"
+                        className="input"
+                        value={edu.percentage}
+                        onChange={(e) => {
+                          const arr = [...form.additional_info.education];
+                          arr[index].percentage = e.target.value;
+                          handleAdditional("education", arr);
+                        }}
+                      />
+                    </Field>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleAdditional("education", [
+                          ...form.additional_info.education,
+                          { degree: "", college_university: "", from: "", to: "", percentage: "" }
+                        ])
+                      }
+                      className="text-blue-600 text-sm font-medium"
+                    >
+                      + Add Education
+                    </button>
+                  </div>
+                ))}
+              </Section>
+
+              <Section title="Experience" icon="💼">
+                {form.additional_info.experience.map((exp, index) => (
+                  <div key={index} className="border rounded-xl p-4 bg-gray-50 space-y-3 relative">
+                    {/* REMOVE BUTTON */}
+                    {form.additional_info.experience.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const arr = [...form.additional_info.experience];
+                          arr.splice(index, 1);
+                          handleAdditional("experience", arr);
+                        }}
+                        className="absolute top-2 right-2 text-red-600 hover:bg-red-100 rounded-full p-1"
+                        aria-label="Remove Experience"
+                      >
+                        ✕
+                      </button>
+                    )}
+                    
+                    <Grid>
+                      <Field label="Position">
+                        <input
+                          className="input"
+                          value={exp.position}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.experience];
+                            arr[index].position = e.target.value;
+                            handleAdditional("experience", arr);
+                          }}
+                        />
+                      </Field>
+
+                      <Field label="School / Organization">
+                        <input
+                          className="input"
+                          value={exp.school}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.experience];
+                            arr[index].school = e.target.value;
+                            handleAdditional("experience", arr);
+                          }}
+                        />
+                      </Field>
+                    </Grid>
+
+                    <Grid>
+                      <Field label="From">
+                        <input
+                          type="month"
+                          className="input"
+                          value={exp.from}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.experience];
+                            arr[index].from = e.target.value;
+                            handleAdditional("experience", arr);
+                          }}
+                        />
+                      </Field>
+
+                      <Field label="To">
+                        <input
+                          type="month"
+                          className="input"
+                          value={exp.to || ""}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.experience];
+                            arr[index].to = e.target.value;
+                            handleAdditional("experience", arr);
+                          }}
+                        />
+                      </Field>
+                    </Grid>
+
+                    {/* RESPONSIBILITIES */}
+                    <Dynamic
+                      label="Key Responsibilities"
+                      values={exp.key_responsibilities}
+                      onAdd={() => {
+                        const arr = [...form.additional_info.experience];
+                        arr[index].key_responsibilities.push("");
+                        handleAdditional("experience", arr);
+                      }}
+                      onChange={(i, v) => {
+                        const arr = [...form.additional_info.experience];
+                        arr[index].key_responsibilities[i] = v;
+                        handleAdditional("experience", arr);
+                      }}
+                      onRemove={(i) => {
+                        const arr = [...form.additional_info.experience];
+                        arr[index].key_responsibilities.splice(i, 1);
+                        handleAdditional("experience", arr);
+                      }}
+                      placeholder="Responsibility details"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleAdditional("experience", [
+                          ...form.additional_info.experience,
+                          {
+                            position: "",
+                            school: "",
+                            from: "",
+                            to: "",
+                            key_responsibilities: [""]
+                          }
+                        ])
+                      }
+                      className="text-blue-600 text-sm font-medium"
+                    >
+                      + Add Experience
+                    </button>
+                  </div>
+                ))}
+              </Section>
+
+              <div className="my-8">
+                <label className="label">Preferred Location</label>
+
+                {/* Selected Chips */}
+                <div className="flex flex-wrap gap-2">
+                  {selectedLocations.map((loc, index) => (
+
+                    <span
+                      key={index}
+                      className="flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm"
+                    >
+                      {loc}
+                      <button
+                        type="button"
+                        onClick={() => removeLocation(index)}
+                        className="text-red-500"
+                      >
+                        ✕
+                      </button>
+                    </span>
+                  ))}
+                </div>
+
+                {/* Search Input */}
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setShowDropdown(true);
+                  }}
+                  placeholder="Search location..."
+                  className="input"
+                />
+
+                {/* Dropdown */}
+                {showDropdown && (
+                  <div className="border rounded-md max-h-48 overflow-auto bg-white shadow">
+                    {filteredLocations.length ? (
+                      filteredLocations.map((loc) => (
+                        <div
+                          key={loc.id}
+                          onClick={() => addLocation(loc.name)}
+                          className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          {loc.name}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="px-3 py-2 text-gray-500">No results found</div>
+                    )}
+                  </div>
                 )}
               </div>
-            )}
-          </div>
 
-          {/* Resume */}
-          <Section title="Resume" icon="📄">
-            <Field label="Upload Resume (PDF)">
-              <input
-                type="file"
-                accept="application/pdf"
-                name="resume"
-                onChange={handleChange}
-                className="file-input"
-              />
-              {form.resume && (
-                <p className="text-sm text-green-600 mt-2">✓ {form.resume.name}</p>
-              )}
-            </Field>
-          </Section>
+              {/* Resume */}
+              <Section title="Resume" icon="📄">
+                <Field label="Upload Resume (PDF)">
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    name="resume"
+                    onChange={handleChange}
+                    className="file-input"
+                  />
+                  {form.resume && (
+                    <p className="text-sm text-green-600 mt-2">✓ {form.resume.name}</p>
+                  )}
+                </Field>
+              </Section>
+            </>
+          )}
 
           {/* Action Buttons */}
           <div className="flex gap-3 mt-8 pt-6 border-t border-gray-200">
@@ -1044,7 +1174,7 @@ const Field = ({ label, required, children }) => (
 
 const Dynamic = ({ label, icon, values, onAdd, onChange, onRemove, placeholder }) => {
   const safeValues = Array.isArray(values) ? values : [""];
-  
+
   return (
     <div className="border-2 border-gray-200 rounded-xl p-4 bg-gray-50">
       <div className="flex justify-between items-center mb-3">

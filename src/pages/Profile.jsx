@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getProfile, logout } from "../api/auth";
+import { getProfile, logoutUser } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
 import EditProfileModal from "../components/EditProfileModal";
@@ -8,12 +8,11 @@ import locationIcon from "../assets/icons/location.svg";
 import aboutUsIcon from "../assets/icons/about-us.svg";
 import teachingExpertiseIcon from "../assets/icons/teaching-expertise.svg";
 import schoolStatisticIcon from "../assets/icons/school-statistic.svg"
+import schoolVacanciesIcon from "../assets/icons/school-vacancies.svg"
 import teacherBannerImage from "../assets/images/teacher-banner.png";
-import teacherAvatarImage from "../assets/images/teacher-avatar.png";
 import schoolBannerImage from "../assets/images/school-banner.png";
-import schoolAvatarImage from "../assets/images/school-avatar.png";
 import recruiterBannerImage from "../assets/images/recruiter-banner.png";
-import recruiterAvatarImage from "../assets/images/recruiter-avatar.png";
+import defaultAvatarImage from "../assets/images/default-avatar.png";
 
 // Router State Management
 const routes = {
@@ -26,38 +25,53 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [editOpen, setEditOpen] = useState(false);
+  const [userType, setUserType] = useState(0);
   const [activeTab, setActiveTab] = useState("overview");
   const navigate = useNavigate();
   const hasFetched = useRef(false);
 
   const USER_FORM_CONFIG = {
     1: { // Teacher
-      tabs: ["overview", "experience", "education", "jobs"]
+      tabs: ["overview", "experience", "education", "jobs"],
+      status: [
+        "Unavailable",
+        "Available",
+      ],
     },
 
     2: { // School
-      tabs: ["overview", "vacancies"]
+      tabs: ["overview", "vacancies"],
+      status: [
+        "Unverified",
+        "Verified",
+      ],
     },
 
     3: { // Recruiter
-      tabs: ["overview", "experience", "education", "jobs"]
+      tabs: ["overview"],
+      status: [
+        "Available",
+        "Unavailable",
+      ],
     },
   };
+
+  const currentUser = USER_FORM_CONFIG[userType];
 
   const FETCH_BANNER_AVATAR = {
     1: { // Teacher
       bannerImage: teacherBannerImage,
-      avatarImage: teacherAvatarImage,
+      avatarImage: defaultAvatarImage,
     },
 
     2: { // School
       bannerImage: schoolBannerImage,
-      avatarImage: schoolAvatarImage,
+      avatarImage: defaultAvatarImage,
     },
 
     3: { // Recruiter
       bannerImage: recruiterBannerImage,
-      avatarImage: recruiterAvatarImage,
+      avatarImage: defaultAvatarImage,
     },
   };
 
@@ -88,6 +102,7 @@ const Profile = () => {
       try {
         const res = await getProfile();
         setProfile(res.data.data);
+        setUserType(res.data.data.user_type);
       } catch (err) {
         setError("Unauthorized or session expired");
         localStorage.removeItem("auth_token");
@@ -105,7 +120,7 @@ const Profile = () => {
     setError('');
 
     try {
-      const res = await logout(); // ✅ Using auth.js
+      const res = await logoutUser(); // ✅ Using auth.js
       console.log("Logout response:", res);
       if (res.data.status) {
         localStorage.removeItem("auth_token");
@@ -119,6 +134,18 @@ const Profile = () => {
       setLoading(false);
     }
   };
+
+  const getTotalDurationCount = (totalExperience) => {
+    const currentYear = new Date().getFullYear();
+    if (!totalExperience || totalExperience > currentYear) return "";
+
+    const years = currentYear - totalExperience;
+    return `${totalExperience} (${years} years)`;
+  };
+
+  const getFormattedAddress = (address) => {
+    return `${address.address}, ${address.city}, ${address.state}, ${address.pincode}, ${address.country}`
+  }
 
   if (loading) {
     return (
@@ -149,21 +176,21 @@ const Profile = () => {
             {/* PROFILE CARD */}
             <div className="rounded-2xl relative shadow-md">
               <img
-                src={getBannerAvatar(profile.banner_image_url, profile.user_type, 'bannerImage')}
+                src={getBannerAvatar(profile.banner_image_url, userType, 'bannerImage')}
                 alt="cover"
                 className="w-full h-32 rounded-t-2xl"
               />
 
               <div className="flex items-start gap-4 mx-8 pb-8">
                 <img
-                  src={getBannerAvatar(profile.avatar_url, profile.user_type, 'avatarImage')}
-                  className="w-24 h-24 sm:w-32 sm:h-32 -mt-16"
+                  src={getBannerAvatar(profile.avatar_url, userType, 'avatarImage')}
+                  className="w-24 h-24 rounded-full sm:w-32 sm:h-32 -mt-16"
                 />
 
                 <div className="flex-1 mt-6">
-                  <h2 className="text-xl sm:text-3xl font-semibold mb-2">{profile.name}</h2>
+                  <h2 className="text-xl sm:text-3xl font-semibold mb-2">{userType == 1 ? profile.name : profile.school_name}</h2>
                   <p className="text-m text-gray-500">
-                    {profile?.position || 'Position not specified'}
+                    {profile?.position || 'Not Specified'}
                   </p>
 
                   <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
@@ -175,31 +202,31 @@ const Profile = () => {
                     <span className="flex items-center gap-1">
                       <img src={durationIcon} alt="Duration" />
                       
-                      {profile?.total_experience ? `${profile.total_experience} years experience` : '0 year experience'}
+                      {profile?.total_experience ?  (userType == 1 ? `${profile.total_experience} years experience` : `Est. ${getTotalDurationCount(profile.total_experience)}`) : '----'}
                     </span>
                   </div>
                 </div>
 
                 <span className={`flex items-center gap-2 px-4 py-2 mt-2 text-sm rounded-full ${
-                  profile?.additional_info?.availability 
+                  profile.status 
                   ? 'bg-green-100 text-green-600' 
                   : 'bg-red-100 text-red-600'
                   }`}
                 >
                   <span className={`w-2 h-2 rounded-full ${
-                    profile?.additional_info?.availability 
+                    profile.status 
                     ? 'bg-green-600' 
                     : 'bg-red-600'
                     }`}
                   ></span>
-                  {profile?.additional_info?.availability ? 'Available' : 'Unavailable'}
+                  {currentUser?.status[profile.status]}
                 </span>
               </div>
             </div>
 
             {/* TABS */}
             <div className="bg-white rounded-xl shadow p-2 flex flex-wrap gap-3 sm:gap-6">
-              {USER_FORM_CONFIG[profile.user_type].tabs.map((tab) => (
+              {currentUser.tabs.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -237,7 +264,7 @@ const Profile = () => {
                   </p>
                 </div>
 
-                {profile.user_type == 1 && (
+                {userType == 1 && (
                   <>
                     {/* TEACHING EXPERTISE */}
                     <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
@@ -359,7 +386,7 @@ const Profile = () => {
                   </>
                 )}
 
-                {profile.user_type == 2 && (
+                {userType == 2 && (
                   <>
                     {/* School Statistics */}
                     <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
@@ -375,39 +402,24 @@ const Profile = () => {
                         School Statistics
                       </h3>
 
-                      <div className="mb-4">
-                        <p className="text-sm font-medium mb-2">Subjects</p>
-
-                        <div className="flex flex-wrap gap-2">
-                          {(Array.isArray(profile?.additional_info?.subjects)
-                            ? profile.additional_info.subjects
-                            : []
-                          ).map((s, i) => (
-                            <span
-                              key={i}
-                              className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
-                            >
-                              {s.name}
-                            </span>
-                          ))}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="border p-6 bg-[#EFF6FF] text-xs rounded-xl">
+                          <div className="text-blue-500 text-2xl font-semibold">
+                            {profile.additional_info.students}+
+                          </div>
+                            Students
                         </div>
-                      </div>
-
-                      <div>
-                        <p className="text-sm mb-2">Grade Levels</p>
-                        
-                        <div className="flex flex-wrap gap-2">
-                          {(Array.isArray(profile?.additional_info?.grade_levels)
-                            ? profile.additional_info.grade_levels
-                            : []
-                          ).map((s, i) => (
-                            <span
-                              key={i}
-                              className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
-                            >
-                              {s.name}
-                            </span>
-                          ))}
+                        <div className="border p-6 bg-[#F0FDF4] text-xs rounded-xl">
+                          <div className="text-green-500 text-2xl font-semibold">
+                            {profile.additional_info.teachers}+
+                          </div>
+                          Teachers
+                        </div>
+                        <div className="border p-6 bg-[#FEF2F2] text-xs rounded-xl">
+                          <div className="text-red-500 text-2xl font-semibold">
+                            {profile?.additional_info?.length || 0}
+                          </div>
+                          Open Positions
                         </div>
                       </div>
                     </div>
@@ -430,7 +442,7 @@ const Profile = () => {
                             .map((item, index) => (
                               <li key={index} className="flex items-start gap-2">
                                 <span
-                                  className="text-green-600 relative"
+                                  className="text-yellow-500 relative"
                                   style={{
                                     width: "10.5px",
                                     height: "21px",
@@ -560,7 +572,7 @@ const Profile = () => {
 
             {/* Jobs Applied */}
             {activeTab === "jobs" && (
-              <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+              <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
                 <h3 className="font-semibold mb-4">Jobs Applied</h3>
                 <p className="text-sm text-gray-600">
                   List of jobs applied would be displayed here.
@@ -570,6 +582,19 @@ const Profile = () => {
 
             {activeTab === "vacancies" && (
               <>
+                <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+                  <h3 className="flex items-center gap-3 font-semibold mb-5">
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100">
+                      <img
+                        src={schoolVacanciesIcon}
+                        alt="About Us"
+                        className="w-6 h-6"
+                      />
+                    </span>
+
+                    School Vacancies
+                  </h3>
+                </div>
               </>
             )}
           </div>
@@ -577,41 +602,96 @@ const Profile = () => {
           {/* RIGHT SECTION */}
           <div className="space-y-6">
             <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-              <h3 className="font-semibold mb-4">Quick Information</h3>
+              {userType == 1 && (
+                <>
+                  <h3 className="font-semibold mb-4">Quick Information</h3>
 
-              <div className="space-y-3 text-sm">
-                <div>
-                  <p className="text-gray-400">Availability</p>
-                  <p>
-                    {profile?.additional_info?.availability ?? '--'}
-                  </p>
-                </div>
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <p className="text-gray-400">Availability</p>
+                      <p>
+                        {profile?.additional_info?.availability ?? '--'}
+                      </p>
+                    </div>
 
-                <div>
-                  <p className="text-gray-400">Expected Salary</p>
-                  <p className="text-green-600 font-semibold">
-                    {formateExpectedSalary(profile?.additional_info?.min_salary, profile?.additional_info?.max_salary)}
-                  </p>
-                </div>
+                    <div>
+                      <p className="text-gray-400">Expected Salary</p>
+                      <p className="text-green-600 font-semibold">
+                        {formateExpectedSalary(profile?.additional_info?.min_salary, profile?.additional_info?.max_salary)}
+                      </p>
+                    </div>
 
-                <div>
-                  <p className="text-gray-400">Notice Period</p>
-                  <p>{profile?.additional_info?.notice_period ?? '--'}</p>
-                </div>
+                    <div>
+                      <p className="text-gray-400">Notice Period</p>
+                      <p>{profile?.additional_info?.notice_period ?? '--'}</p>
+                    </div>
 
-                <div>
-                  <p className="text-gray-400">Preferred Location</p>
-                  <p>{profile?.additional_info?.preferred_location ?? '--'}</p>
-                </div>
-              </div>
+                    <div>
+                      <p className="text-gray-400">Preferred Location</p>
+                      <p>{profile?.additional_info?.preferred_location ?? '--'}</p>
+                    </div>
+                  </div>
 
-              <button className="w-full mt-4 border rounded-lg py-2 text-sm">
-                Upload Latest Resume
-              </button>
+                  <button className="w-full mt-4 border rounded-lg py-2 text-sm">
+                    Upload Latest Resume
+                  </button>
 
-              <button onClick={handleLogout} className="w-full mt-4 border rounded-lg py-2 text-sm">
-                Logout
-              </button>
+                  <button onClick={handleLogout} className="w-full mt-4 border rounded-lg py-2 text-sm">
+                    Logout
+                  </button>
+                </>
+              )}
+
+              {userType == 2 && (
+                <>
+                  <h3 className="font-semibold mb-4">Contact Information</h3>
+
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <p className="text-gray-400">Email</p>
+                      <p className="text-xs">
+                        {profile?.email ?? '--'}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-gray-400">Phone</p>
+                      <p className="text-xs">
+                        {profile.phone}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-gray-400">Website</p>
+                      {profile?.additional_info?.website ? (
+                      <a
+                        href={
+                          profile.additional_info.website.startsWith('http')
+                            ? profile.additional_info.website
+                            : `https://${profile.additional_info.website}`
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-600 hover:text-blue-800 hover:underline break-all"
+                      >
+                        {profile.additional_info.website}
+                      </a>
+                    ) : (
+                      <p className="text-xs text-gray-400">--</p>
+                    )}
+                    </div>
+
+                    <div>
+                      <p className="text-gray-400">Address</p>
+                      <p className="text-xs">{getFormattedAddress(profile.addresses)}</p>
+                    </div>
+                  </div>
+
+                  <button onClick={handleLogout} className="w-full mt-4 border rounded-lg py-2 text-sm">
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

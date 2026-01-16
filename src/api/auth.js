@@ -1,170 +1,85 @@
-import axios from "axios";
+import api from "../services/api";
 
-const API_BASE_URL = "https://teaching-hood-backend.netcraftglobal.com/api";
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATION
+|--------------------------------------------------------------------------
+*/
 
-// Check if user is authenticated
-export const isAuthenticated = () => {
-  const token = localStorage.getItem("auth_token");
-
-  return !!token;
-};
-
-// Register User
+// Register
 export const registerUser = (data) => {
-    return axios.post(`${API_BASE_URL}/register`, data, {
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
+  return api.post("/api/register", data);
 };
 
-// Login User
-export const loginUser = async (payload) => {
-    return await axios.post(`${API_BASE_URL}/login`, payload, {
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
+// Login
+export const loginUser = (data) => {
+  return api.post("/api/login", data);
 };
 
-// Send OTP to email
-export const sendOTP = async (email) => {
-  return await axios.post(`${API_BASE_URL}/send-otp`, { email }, {
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
+// Logout
+export const logoutUser = () => {
+  return api.post("/api/logout");
+};
+
+/*
+|--------------------------------------------------------------------------
+| USER PROFILE
+|--------------------------------------------------------------------------
+*/
+
+// Get logged-in user profile
+export const getProfile = () => {
+  return api.get("/api/profile");
+};
+
+// Update profile
+export const updateProfile = (data) => {
+  return api.post("/api/profile/update", data);
+};
+
+/*
+|--------------------------------------------------------------------------
+| OTP
+|--------------------------------------------------------------------------
+*/
+
+// Send OTP
+export const sendOTP = (email) => {
+  return api.post("/api/send-otp", { email });
 };
 
 // Verify OTP
-export const verifyOTP = async (email, otp) => {
-  return await axios.post(`${API_BASE_URL}/verify-otp`, { email, otp }, {
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
+export const verifyOTP = (email, otp) => {
+  return api.post("/api/verify-otp", { email, otp });
 };
 
-// Get User Profile
-export const getProfile = () => {
-    const token = localStorage.getItem("auth_token");
+/*
+|--------------------------------------------------------------------------
+| MASTER DATA
+|--------------------------------------------------------------------------
+*/
 
-    if (!token) {
-        return Promise.reject("No token found");
-    }
-
-    return axios.get(`${API_BASE_URL}/profile`, {
-        headers: {
-            "Content-Type": "application/json",
-            "accept": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
-};
-
-// Logout User
-export const logout = () => {
-    const token = localStorage.getItem("auth_token");
-
-    if (!token) {
-        return Promise.reject("No token found");
-    }
-
-    return axios.post(`${API_BASE_URL}/logout`, {}, {
-        headers: {
-            "accept": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
-};
-
-// View User Profile by ID
-export const viewProfile = async (id) => {
-  return await axios.get(`${API_BASE_URL}/view-profile/${id}`, {
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-};
-
-// Get Subjects List
+// Subjects
 export const getSubjects = () => {
-    const token = localStorage.getItem("auth_token");
-
-    if (!token) {
-        return Promise.reject("No token found");
-    }
-
-    return axios.get(`${API_BASE_URL}/subjects`, {
-        headers: {
-            "Content-Type": "application/json",
-            "accept": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
+  return api.get("/api/subjects");
 };
 
-// Get Grade Levels List
+// Grade Levels
 export const getGradeLevels = () => {
-    const token = localStorage.getItem("auth_token");
-
-    if (!token) {
-        return Promise.reject("No token found");
-    }
-
-    return axios.get(`${API_BASE_URL}/gradelevels`, {
-        headers: {
-            "Content-Type": "application/json",
-            "accept": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
+  return api.get("/api/gradelevels");
 };
 
-// Get States List
+// States
 export const getStates = () => {
-    const token = localStorage.getItem("auth_token");
-
-    if (!token) {
-        return Promise.reject("No token found");
-    }
-
-    return axios.get(`${API_BASE_URL}/states`, {
-        headers: {
-            "Content-Type": "application/json",
-            "accept": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
+  return api.get("/api/states");
 };
 
+// Cities
 export const getCities = () => {
-    const token = localStorage.getItem("auth_token");
-
-    if (!token) {
-        return Promise.reject("No token found");
-    }
-
-    return axios.get(`${API_BASE_URL}/city`, {
-        headers: {
-            "Content-Type": "application/json",
-            "accept": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
+  return api.get("/api/city");
 };
 
-export const updateProfile = (data) => {
-    const token = localStorage.getItem("auth_token");
-
-    if (!token) {
-        return Promise.reject("No token found");
-    }
-
-    return axios.post(`${API_BASE_URL}/profile/update`, data, {
-        headers: {
-            "accept": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
+// View profile by ID
+export const viewProfile = (id) => {
+  return api.get(`/view-profile/${id}`);
 };

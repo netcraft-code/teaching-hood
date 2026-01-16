@@ -1,13 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter, BrowserRouter } from "react-router-dom";
+import { Capacitor } from "@capacitor/core";
 import App from "./App";
 import "./index.css";
 
+
+const Router = Capacitor.isNativePlatform()
+  ? HashRouter
+  : BrowserRouter;
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <BrowserRouter basename="/Customization/Abhishek/ReactJs/teachinghood">
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+  <Router>
+    <App />
+  </Router>
 );
