@@ -46,4 +46,9 @@ class AdditionalInfo extends Model
     {
         return $this->belongsToMany(GradeLevel::class);
     }
+
+    public function preferred_locations()
+    {
+        return $this->belongsToMany(PreferredLocationCity::class);
+    }
 }

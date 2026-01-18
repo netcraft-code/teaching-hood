@@ -10,4 +10,9 @@ class PreferredLocationCity extends Model
         'city_id',
         'additional_info_id'
     ];
+
+    public static function scopeFilterByAdditionalId($query, $addtionalId)
+    {
+        return $query->where('additional_info_id', $addtionalId);
+    }
 }

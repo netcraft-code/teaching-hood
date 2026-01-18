@@ -20,23 +20,25 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'      => 'required|string',
+            'first_name'      => 'required|string',
+            'last_name'      => 'nullable|string',
             'email'     => 'required|email|unique:users,email',
             'password'  => 'required|min:6',
             'user_type' => 'required|in:1,2,3', // 1 = Teacher, 2 = School, 3 = Recuiter
             'city'      => 'required_if:user_type,2,3',
             'phone'     => 'required|unique:users,phone',
-            'school_name' => 'required_if:user_type,2',
+            // 'school_name' => 'required_if:user_type,2',
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'user_type' => $request->user_type,
             'city' => $request->city,
             'phone' => $request->phone,
-            'school_name' => $request->school_name,
+            // 'school_name' => $request->school_name,
         ]);
 
         $token = $user->createToken('api-token')->plainTextToken;
@@ -67,13 +69,29 @@ class AuthController extends Controller
         $token = $user->createToken('api-token')->plainTextToken;
         $user['token'] = $token;
 
+        if ($user['avatar_url']) {
+            $user['avatar_url'] = url('/') . "/storage/" . $user['avatar_url'];
+        }
+
+        if ($user['banner_image_url']) {
+            $user['banner_image_url'] = url('/') . "/storage/" . $user['banner_image_url'];
+        }
+
         return response_formatter(DEFAULT_200, $user);
     }
 
     // USER PROFILE
     public function profile(Request $request)
     {
-        $data = auth()->user()->load('additional_info.grade_levels','additional_info.subjects', 'addresses');
+        $data = auth()->user()->load('additional_info.grade_levels', 'additional_info.subjects', 'additional_info.preferred_locations', 'addresses');
+
+        if ($data['avatar_url']) {
+            $data['avatar_url'] = url('/') . "/storage/" . $data['avatar_url'];
+        }
+
+        if ($data['banner_image_url']) {
+            $data['banner_image_url'] = url('/') . "/storage/" . $data['banner_image_url'];
+        }
 
         return response_formatter(DEFAULT_200, $data);
     }
@@ -83,7 +101,7 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response_formatter(DEFAULT_LOGGED_OUT_401);
+        return response_formatter(DEFAULT_LOGGED_OUT_200);
     }
 
     public function sendOTP(Request $request)
@@ -208,6 +226,14 @@ class AuthController extends Controller
     public function specificProfile($id)
     {
         $user = User::with('additional_info.subjects', 'additional_info.grade_level', 'addresses')->find($id);
+
+        if ($user['avatar_url']) {
+            $user['avatar_url'] = url('/') . "/storage/" . $user['avatar_url'];
+        }
+
+        if ($user['banner_image_url']) {
+            $user['banner_image_url'] = url('/') . "/storage/" . $user['banner_image_url'];
+        }
 
         return response_formatter(DEFAULT_200, $user);
     }

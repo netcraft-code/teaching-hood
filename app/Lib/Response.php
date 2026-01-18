@@ -54,8 +54,8 @@ const DEFAULT_INVALID_CREDENTAILS_401 = [
     'message' => 'Invalid credentials'
 ];
 
-const DEFAULT_LOGGED_OUT_401 = [
-    'response_code' => 401,
+const DEFAULT_LOGGED_OUT_200 = [
+    'response_code' => 200,
     'status' => true,
     'message' => 'Logged out'
 ];
@@ -101,7 +101,3 @@ const DEFAULT_DELETED_200 = [
     'status' => true,
     'message' => 'Resource deleted successfully'
 ];
-
-
-
-

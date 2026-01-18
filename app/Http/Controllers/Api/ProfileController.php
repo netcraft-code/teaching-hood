@@ -13,21 +13,22 @@ use App\Models\PreferredLocationCity;
 
 class ProfileController extends Controller
 {
-    public function get()
-    {
-        $data = auth()->user()->load('additional_info.subjects', 'additional_info.grade_level', 'addresses');
+    public $data = [];
 
-        return response_formatter(DEFAULT_200, $data);
-    }
-
-    public function update(Request $request)
+    public function update()
     {
-        if (auth()->user()->user_type == 1) {
-            $this->teacherProfile();
-        } else if (auth()->user()->user_type == 2) {
-            $this->schoolProfile();
-        } else if (auth()->user()->user_type == 3) {
-            $this->recruiterProfile();
+        switch (auth()->user()->user_type) {
+            case 1:
+                $this->teacherProfile();
+                break;
+            case 2:
+                $this->schoolProfile();
+                break;
+            case 3:
+                $this->recruiterProfile();
+                break;
+            default:
+                return response_formatter(DEFAULT_400);
         }
 
         return response_formatter(DEFAULT_UPDATED_200);
@@ -37,14 +38,15 @@ class ProfileController extends Controller
     {
         request()->validate([
             'about_us'            => 'required|string',
-            'subjects'             => 'required|array',
-            'grade_levels'         => 'required|array',
+            'subjects'            => 'required|array',
+            'grade_levels'        => 'required|array',
             'experience'          => 'required|array',
             'education'           => 'required|array',
             'achievement'         => 'required|string',
             'certification'       => 'required|string',
 
-            'name'                => 'required|string|max:255',
+            'first_name'                => 'required|string|max:255',
+            'last_name'                 => 'nullable|string|max:255',
             'phone'               => 'required|string|max:20',
             'position'            => 'nullable|string|max:255',
             'total_experience'    => 'nullable|string|max:255',
@@ -52,7 +54,7 @@ class ProfileController extends Controller
             'availability'        => 'required|string',
             // 'expected_salary'     => 'required|string',
             'notice_period'       => 'required|string',
-            'preferred_location'  => 'required|array',
+            'preferred_location'  => 'required|string',
             'min_salary'          => 'required|integer',
             'max_salary'          => 'required|integer',
 
@@ -70,14 +72,24 @@ class ProfileController extends Controller
 
         $user = auth()->user();
 
-        /* ================= User Update ================= */
-        $userData = request()->only([
-            'name',
-            'phone',
-            'position',
-            'total_experience',
-        ]);
+        $this->data = $this->updateUserData();
 
+        if (request()->hasFile('resume')) {
+            // delete old resume if exists
+            $old = AdditionalInfo::where('user_id', auth()->id())->value('resume');
+            if ($old && Storage::disk('public')->exists($old)) {
+                Storage::disk('public')->delete($old);
+            }
+
+            $this->data['resume'] = request()->file('resume')
+                ->store('resumes', 'public'); // storage/app/public/resumes
+        }
+
+        $this->updateBanners($user);
+
+        $user->update($this->data);
+
+        /* ================= Save ================= */
         $data = request()->only([
             'about_us',
             'experience',
@@ -90,22 +102,6 @@ class ProfileController extends Controller
             'min_salary',
             'max_salary'
         ]);
-
-        if (request()->hasFile('resume')) {
-            // delete old resume if exists
-            $old = AdditionalInfo::where('user_id', auth()->id())->value('resume');
-            if ($old && Storage::disk('public')->exists($old)) {
-                Storage::disk('public')->delete($old);
-            }
-
-            $data['resume'] = request()->file('resume')
-                ->store('resumes', 'public'); // storage/app/public/resumes
-        }
-
-        $this->updateBanners($user);
-
-        /* ================= Save ================= */
-        $user->update($userData);
 
         $additional_info_id = AdditionalInfo::updateOrCreate(
             ['user_id' => auth()->id()],
@@ -146,19 +142,6 @@ class ProfileController extends Controller
                 ]
             );
         }
-
-        foreach (request()->preferred_location as $city) {
-            PreferredLocationCity::updateOrCreate(
-                [
-                    'additional_info_id' => $additional_info_id->id,
-                    'city_id'    => $city,
-                ],
-                [
-                    'additional_info_id' => $additional_info_id->id,
-                    'city_id'    => $city,
-                ]
-            );
-        }
     }
 
     public function schoolProfile()
@@ -170,7 +153,8 @@ class ProfileController extends Controller
             'students'       => 'required|string',
             'teachers'       => 'required|string',
 
-            'name'                => 'required|string|max:255',
+            'first_name'                => 'required|string|max:255',
+            'last_name'                 => 'nullable|string|max:255',
             'phone'               => 'required|string|max:20',
             'position'            => 'nullable|string|max:255',
             'total_experience'    => 'nullable|string|max:255',
@@ -187,13 +171,11 @@ class ProfileController extends Controller
 
         $user = auth()->user();
 
-        /* ================= User Update ================= */
-        $userData = request()->only([
-            'name',
-            'phone',
-            'position',
-            'total_experience',
-        ]);
+        $this->data = $this->updateUserData();
+
+        $this->updateBanners($user);
+
+        $user->update($this->data);
 
         $data = request()->only([
             'about_us',
@@ -203,10 +185,6 @@ class ProfileController extends Controller
             "teachers"
         ]);
 
-        $this->updateBanners($user);
-
-        $user->update($userData);
-
         AdditionalInfo::updateOrCreate(
             ['user_id' => auth()->id()],
             $data
@@ -214,6 +192,63 @@ class ProfileController extends Controller
 
         /* ================= Save Address ================= */
         $this->updateAddresses($user);
+    }
+
+    public function recruiterProfile()
+    {
+        request()->validate([
+            'about_us'            => 'required|string',
+
+            'first_name'                => 'required|string|max:255',
+            'last_name'                 => 'nullable|string|max:255',
+            'phone'               => 'required|string|max:20',
+            'position'            => 'nullable|string|max:255',
+            'total_experience'    => 'nullable|string|max:255',
+
+            'avatar_url'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'banner_image_url'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+
+            /* ================= Address ================= */
+            'address'             => 'required|string|max:500',
+            'city'                => 'required|string|max:100',
+            'state'               => 'required|string|max:100',
+            'pincode'             => 'required|string|max:10',
+            'country'             => 'nullable|string|max:100',
+        ]);
+
+        $user = auth()->user();
+
+        /* ================= User Update ================= */
+        $this->data = $this->updateUserData();
+
+        $this->updateAddresses($user);
+
+        $this->updateBanners($user);
+
+        $user->update($this->data);
+
+        $data = request()->only([
+            'about_us',
+        ]);
+
+        AdditionalInfo::updateOrCreate(
+            ['user_id' => auth()->id()],
+            $data
+        );
+    }
+
+    public function updateUserData()
+    {
+        $userData = request()->only([
+            'first_name',
+            'last_name',
+            'phone',
+            'position',
+            'total_experience',
+            'board'
+        ]);
+
+        return $userData;
     }
 
     public function updateAddresses($user)
@@ -241,8 +276,8 @@ class ProfileController extends Controller
 
             $avatarPath = request()->file('avatar_url')->store('profile-images', 'public');
 
-            $userData['avatar_url'] = $avatarPath;
-            $data['avatar_url']     = $avatarPath;
+            // $userData['avatar_url'] = $avatarPath;
+            $this->data['avatar_url']     = $avatarPath;
         }
 
         /* ================= Banner (User + AdditionalInfo) ================= */
@@ -254,56 +289,27 @@ class ProfileController extends Controller
 
             $bannerPath = request()->file('banner_image_url')->store('banner-images', 'public');
 
-            $userData['banner_image_url'] = $bannerPath;
-            $data['banner_image_url']     = $bannerPath;
+            // $userData['banner_image_url'] = $bannerPath;
+            $this->data['banner_image_url']     = $bannerPath;
         }
+
+        return $this->data;
     }
 
-    public function recruiterProfile()
+    public function updateImage()
     {
-        request()->validate([
-            'about_us'            => 'required|string',
-
-            'name'                => 'required|string|max:255',
-            'phone'               => 'required|string|max:20',
-            'position'            => 'nullable|string|max:255',
-            'total_experience'    => 'nullable|string|max:255',
-
-            'resume'              => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-            'avatar_url'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'banner_image_url'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-
-            /* ================= Address ================= */
-            'address'             => 'required|string|max:500',
-            'city'                => 'required|string|max:100',
-            'state'               => 'required|string|max:100',
-            'pincode'             => 'required|string|max:10',
-            'country'             => 'nullable|string|max:100',
-        ]);
+        // request()->validate([
+        //     'image_type' => 'required|in:avatar,banner',
+        //     'avatar_url' => 'required_if:image_type,avatar|image|mimes:jpg,jpeg,png,webp|max:2048',
+        //     'banner_image_url' => 'required_if:image_type,banner|image|mimes:jpg,jpeg,png,webp|max:4096',
+        // ]);
 
         $user = auth()->user();
 
-        /* ================= User Update ================= */
-        $userData = request()->only([
-            'name',
-            'phone',
-            'position',
-            'total_experience',
-        ]);
-
-        $data = request()->only([
-            'about_us',
-        ]);
+        $userData = $this->updateBanners($user);
 
         $user->update($userData);
 
-        $this->updateAddresses($user);
-
-        $this->updateBanners($user);
-
-        AdditionalInfo::updateOrCreate(
-            ['user_id' => auth()->id()],
-            $data
-        );
+        return response_formatter(DEFAULT_UPDATED_200);
     }
 }

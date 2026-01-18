@@ -14,6 +14,8 @@ Route::post('send-otp', [AuthController::class, 'sendOTP']);
 Route::post('verify-otp', [AuthController::class, 'verifyOTP']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('image/update', [ProfileController::class, 'updateImage']);
+
     Route::get('profile', [AuthController::class, 'profile']);
     Route::get('subjects', [HelperController::class, 'getSubjects']);
     Route::get('gradelevels', [HelperController::class, 'getGradeLevel']);
@@ -28,7 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('change-password', [AuthController::class, 'changePassword']);
 
-    // create job post
     Route::apiResource('job-posts', JobPostController::class);
 
     Route::post('send-message', [AuthController::class, 'sendMessage']);
