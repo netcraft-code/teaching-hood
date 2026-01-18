@@ -144,7 +144,9 @@ const Profile = () => {
   };
 
   const getFormattedAddress = (address) => {
-    return `${address.address}, ${address.city}, ${address.state}, ${address.pincode}, ${address.country}`
+    if (! address?.address) return "--";
+    
+    return `${address?.address}, ${address?.city}, ${address?.state}, ${address?.pincode}, ${address?.country}`;
   }
 
   if (loading) {
@@ -188,12 +190,12 @@ const Profile = () => {
                 />
 
                 <div className="flex-1 mt-6">
-                  <h2 className="text-xl sm:text-3xl font-semibold mb-2">{profile.name}</h2>
+                  <h2 className="text-xl sm:text-3xl font-semibold mb-3">{profile.first_name} {userType == 1 ? profile.last_name : ''}</h2>
                   <p className="text-m text-gray-500">
-                    {profile?.position || 'Not Specified'}
+                    {userType == 1 ? profile?.position : profile?.board}
                   </p>
 
-                  <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
                     <span className="flex items-center gap-1">
                       <img src={locationIcon} alt="Duration" />
                       
@@ -405,13 +407,13 @@ const Profile = () => {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="border p-6 bg-[#EFF6FF] text-xs rounded-xl">
                           <div className="text-blue-500 text-2xl font-semibold">
-                            {profile.additional_info.students}+
+                            {profile?.additional_info?.students || 0}+
                           </div>
                             Students
                         </div>
                         <div className="border p-6 bg-[#F0FDF4] text-xs rounded-xl">
                           <div className="text-green-500 text-2xl font-semibold">
-                            {profile.additional_info.teachers}+
+                            {profile?.additional_info?.teachers || 0}+
                           </div>
                           Teachers
                         </div>
@@ -466,7 +468,7 @@ const Profile = () => {
             {/* Experience */}
             {activeTab === "experience" && (
               <>
-                {profile.additional_info.experience.map((exp, index) => (
+                {profile?.additional_info?.experience.map((exp, index) => (
                   <div
                     key={index}
                     className="bg-white rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition mb-4"
@@ -509,7 +511,7 @@ const Profile = () => {
                       <p className="text-sm font-medium text-gray-700 mb-2">
                         Key Responsibilities:
                       </p>
-                      <ul className="space-y-1">
+                      <ul className="space-y-3">
                         {Array.isArray(exp.key_responsibilities) &&
                           exp.key_responsibilities.map((resp, idx) => (
                             <li
@@ -530,7 +532,7 @@ const Profile = () => {
             {/* Education */}
             {activeTab === "education" && (
               <>
-                {profile.additional_info.education.map((edu, index) => (
+                {profile?.additional_info?.education.map((edu, index) => (
                   <div
                     key={index}
                     className="bg-white rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition mb-4"
@@ -546,7 +548,7 @@ const Profile = () => {
                               <h3 className="text-xl text-gray-800">
                                 {edu.degree}
                               </h3>
-                              <p className="text-blue-500 font-medium">{edu.college_university}</p>
+                              <p className="text-green-500 font-medium">{edu.college_university}</p>
                             </div>
                           </div>
                         </div>
@@ -561,7 +563,7 @@ const Profile = () => {
                             )}
 
                             <span className="text-black-500 mx-5">•</span>
-                            <span>{edu.percentage}</span>
+                            <span className="text-blue-400">{edu.percentage}%</span>
                         </p>
                       </div>
                     </div>
@@ -666,15 +668,15 @@ const Profile = () => {
                       {profile?.additional_info?.website ? (
                       <a
                         href={
-                          profile.additional_info.website.startsWith('http')
+                          profile?.additional_info?.website.startsWith('http')
                             ? profile.additional_info.website
-                            : `https://${profile.additional_info.website}`
+                            : `https://${profile?.additional_info?.website}`
                         }
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-xs text-blue-600 hover:text-blue-800 hover:underline break-all"
                       >
-                        {profile.additional_info.website}
+                        {profile?.additional_info?.website}
                       </a>
                     ) : (
                       <p className="text-xs text-gray-400">--</p>
@@ -683,7 +685,7 @@ const Profile = () => {
 
                     <div>
                       <p className="text-gray-400">Address</p>
-                      <p className="text-xs">{getFormattedAddress(profile.addresses)}</p>
+                      <p className="text-xs">{getFormattedAddress(profile?.addresses)}</p>
                     </div>
                   </div>
 

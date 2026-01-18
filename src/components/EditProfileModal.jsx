@@ -10,9 +10,11 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const[pageLoading, setPageLoading] = useState(true)
   const [userType, setUserType] = useState(0);
   const [form, setForm] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     phone: "",
     email: "",
     avatar_url: null,
@@ -69,6 +71,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       positionPlaceHolder: "e.g., Senior Teacher",
       totalExperience: "Years of Experience",
       avatarUrl: "Profile Picture",
+      firstNameLabel: "First Name",
     },
 
     2: {
@@ -76,6 +79,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       positionPlaceHolder: "e.g., CBSE Affiliated School",
       totalExperience: "Year Established",
       avatarUrl: "School Profile",
+      firstNameLabel: "School Name",
     },
   };
 
@@ -84,87 +88,93 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!open) return;
 
     const load = async () => {
-      const s = await getSubjects();
-      const g = await getGradeLevels();
-      const state = await getStates();
-      const l = await getCities();
-      
-      setSubjects(s.data.data);
-      setGrades(g.data.data);
-      setStates(state.data.data);
-      setLocations(l.data.data);
-
-      if (profile) {
-        setUserType(profile.user_type);
+      try {
+        const s = await getSubjects();
+        const g = await getGradeLevels();
+        const state = await getStates();
+        const l = await getCities();
         
-        setForm({
-          name: profile.name || "",
-          phone: profile.phone || "",
-          email: profile.email || "",
-          avatar_url: null,
-          banner_image_url: null,
-          position: profile.position || "",
-          total_experience: profile.total_experience || "",
-          resume: null,
-          address: profile.addresses.address,
-          city: profile.addresses.city,
-          state: profile.addresses.state,
-          pincode: profile.addresses.pincode,
-          country: profile.addresses.country || "India",
-          additional_info: {
-            about_us: profile.additional_info?.about_us || "",
-            subjects: Array.isArray(profile.additional_info?.subjects) 
-              ? profile.additional_info.subjects
-              : [],
-            grade_levels: Array.isArray(profile.additional_info?.grade_levels)
-              ? profile.additional_info.grade_levels
-              : [],
-            achievement: profile.additional_info?.achievement
-              ? profile.additional_info.achievement.split(",").map(a => a.trim())
-              : [""],
-            certification: profile.additional_info?.certification
-              ? profile.additional_info.certification.split(",").map(c => c.trim())
-              : [""],
-            availability: profile.additional_info?.availability || "",
-            min_salary: profile.additional_info?.min_salary || "",
-            max_salary: profile.additional_info?.max_salary || "",
-            notice_period: profile.additional_info?.notice_period || "",
-            education: Array.isArray(profile.additional_info?.education)
-              ? profile.additional_info.education
-              : [
-                  {
-                    degree: "",
-                    college_university: "",
-                    from: "",
-                    to: "",
-                    percentage: ""
-                  }
-                ],
+        setSubjects(s.data.data);
+        setGrades(g.data.data);
+        setStates(state.data.data);
+        setLocations(l.data.data);
 
-            experience: Array.isArray(profile.additional_info?.experience)
-              ? profile.additional_info.experience
-              : [
-                  {
-                    position: "",
-                    school: "",
-                    from: "",
-                    to: "",
-                    key_responsibilities: [""]
-                  }
-                ],
+        if (profile) {
+          setUserType(profile.user_type);
+          
+          setForm({
+            first_name: profile.first_name || "",
+            last_name: profile.last_name || "",
+            phone: profile.phone || "",
+            email: profile.email || "",
+            avatar_url: null,
+            banner_image_url: null,
+            position: profile.position || "",
+            board: profile.board || "",
+            total_experience: profile.total_experience || "",
+            resume: null,
+            address: profile?.addresses?.address || "",
+            city: profile?.addresses?.city || "",
+            state: profile?.addresses?.state || "",
+            pincode: profile?.addresses?.pincode || "",
+            country: profile?.addresses?.country || "India",
+            additional_info: {
+              about_us: profile.additional_info?.about_us || "",
+              subjects: Array.isArray(profile.additional_info?.subjects) 
+                ? profile.additional_info.subjects
+                : [],
+              grade_levels: Array.isArray(profile.additional_info?.grade_levels)
+                ? profile.additional_info.grade_levels
+                : [],
+              achievement: profile.additional_info?.achievement
+                ? profile.additional_info.achievement.split(",").map(a => a.trim())
+                : [""],
+              certification: profile.additional_info?.certification
+                ? profile.additional_info.certification.split(",").map(c => c.trim())
+                : [""],
+              availability: profile.additional_info?.availability || "",
+              min_salary: profile.additional_info?.min_salary || "",
+              max_salary: profile.additional_info?.max_salary || "",
+              notice_period: profile.additional_info?.notice_period || "",
+              education: Array.isArray(profile.additional_info?.education)
+                ? profile.additional_info.education
+                : [
+                    {
+                      degree: "",
+                      college_university: "",
+                      from: "",
+                      to: "",
+                      percentage: ""
+                    }
+                  ],
 
-            preferred_location: profile.additional_info?.preferred_location
-              ? profile.additional_info.preferred_location.split(",").map(l => l.trim())
-              : "",
-            
-            students: profile.additional_info.students,
-            teachers: profile.additional_info.teachers,
-            why_join_us: profile.additional_info?.why_join_us
-              ? profile.additional_info.why_join_us.split(",").map(c => c.trim())
-              : [""],
-            website: profile.additional_info.website
-          }
-        });
+              experience: Array.isArray(profile.additional_info?.experience)
+                ? profile.additional_info.experience
+                : [
+                    {
+                      position: "",
+                      school: "",
+                      from: "",
+                      to: "",
+                      key_responsibilities: [""]
+                    }
+                  ],
+
+              preferred_location: profile.additional_info?.preferred_location
+                ? profile.additional_info.preferred_location.split(",").map(l => l.trim())
+                : "",
+              
+              students: profile?.additional_info?.students || 0,
+              teachers: profile?.additional_info?.teachers || 0,
+              why_join_us: profile?.additional_info?.why_join_us
+                ? profile.additional_info.why_join_us.split(",").map(c => c.trim())
+                : [""],
+              website: profile?.additional_info?.website || ""
+            }
+          });
+        }
+      } finally {
+        setPageLoading(false);
       }
     };
 
@@ -234,11 +244,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const validate = () => {
     const e = {};
 
-    if (!form.name) e.name = "Name is required";
+    if (!form.first_name) e.first_name = "Name is required";
     if (!form.phone) e.phone = "Phone is required";
-    if (!form.position) e.position = "Position is required";
-
+    
     if (userType == 1) {
+      if (!form.position) e.position = "Position is required";
+      
       if (!form.additional_info.subjects.length)
         e.subjects = "At least one subject required";
   
@@ -269,9 +280,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     }
 
     if(userType == 2) {
-      if (!form.website) e.website = "Website required";
-      if (!form.students) e.students = "Students required";
-      if (!form.teachers) e.teachers = "Teachers required";
+      if (!form.additional_info.website) e.website = "Website required";
+      if (!form.additional_info.students) e.students = "Students required";
+      if (!form.additional_info.teachers) e.teachers = "Teachers required";
+      if (!form.board) e.board = "Board required";
     }
 
     // Address
@@ -282,7 +294,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!form.country) e.country = "Country required";
 
     setErrors(e);
-    
+    console.log(e);
     return Object.keys(e).length === 0;
   };
 
@@ -303,7 +315,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       setErrors({});
 
       const fd = new FormData();
-
+      
       if (userType == 1) {
         // SUBJECTS
         form.additional_info.subjects.forEach((s, i) =>
@@ -336,12 +348,19 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           });
         });
 
-        // PREFERRED LOCATION
+        // // PREFERRED LOCATION
         form.additional_info.preferred_location
           .filter(l => l.trim() !== "")
           .forEach((loc, i) => {
             fd.append(`preferred_location[${i}]`, loc);
           });
+
+        // PREFERRED LOCATION (as string)
+        // const preferredLocation = form.additional_info.preferred_location
+        //   .filter(l => l.trim() !== "")
+        //   .join(", ");
+
+        // fd.append("preferred_location", preferredLocation);
 
         fd.append("availability", form.additional_info.availability);
         fd.append("notice_period", form.additional_info.notice_period);
@@ -350,19 +369,22 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
         fd.append("achievement", form.additional_info.achievement .filter(a => a.trim() !== "") .join(","));
         fd.append("certification", form.additional_info.certification .filter(c => c.trim() !== "") .join(","));
+
+        fd.append("position", form.position);
       }
 
       if (userType == 2) {
-        fd.append("students", form.additional_info.students)
-        fd.append("teachers", form.additional_info.teachers)
+        fd.append("students", form.additional_info.students);
+        fd.append("teachers", form.additional_info.teachers);
         fd.append("why_join_us", form.additional_info.why_join_us .filter(c => c.trim() !== "") .join(","));
-        fd.append("website", form.additional_info.website)
+        fd.append("website", form.additional_info.website);
+        fd.append("board", form.board);
       }
 
       // BASIC FIELDS
-      fd.append("name", form.name);
+      fd.append("first_name", form.first_name);
+      fd.append("last_name", form.last_name);
       fd.append("phone", form.phone);
-      fd.append("position", form.position);
       fd.append("total_experience", form.total_experience);
 
       fd.append("address", form.address);
@@ -374,10 +396,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       fd.append("about_us", form.additional_info.about_us || "");
 
       // FILES
-      if (form.avatar_url) fd.append("avatar", form.avatar_url);
-      if (form.banner_image_url) fd.append("banner_image", form.banner_image_url);
+      if (form.avatar_url) fd.append("avatar_url", form.avatar_url);
+      if (form.banner_image_url) fd.append("banner_image_url", form.banner_image_url);
       if (form.resume) fd.append("resume", form.resume);
-      
+
       await updateProfile(fd);
 
       const res = await getProfile();
@@ -399,6 +421,14 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
   if (!open) return null;
 
+  if (pageLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="loader" />
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -410,17 +440,35 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           {/* Personal Information */}
           <Section title="Personal Information" icon="👤">
             <Grid>
-              <Field label="Full Name" required>
+              <Field label={USER_BASE_DETAILS[userType]?.firstNameLabel} required>
 
                 <input
                   type="text"
-                  name="name"
+                  name="first_name"
                   className="input"
-                  value={form.name}
+                  value={form.first_name}
                   onChange={handleChange}
-                  placeholder="Enter your full name"
                 />
+
+                {errors.firstName && (
+                  <p className="text-sm text-red-600 mt-1">{errors.firstName}</p>
+                )}
               </Field>
+
+              {userType == 1 && (
+                <>
+                  <Field label="Last Name" required>
+
+                    <input
+                      type="text"
+                      name="last_name"
+                      className="input"
+                      value={form.last_name}
+                      onChange={handleChange}
+                    />
+                  </Field>
+                </>
+              )}
               
               <Field label="Email Address" required>
                 <input
@@ -446,16 +494,35 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 />
               </Field>
 
-              <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
-                <input
-                  type="text"
-                  name="position"
-                  className="input"
-                  value={form.position}
-                  onChange={handleChange}
-                  placeholder={USER_BASE_DETAILS[userType]?.positionPlaceHolder}
-                />
-              </Field>
+              {userType == 1 && (
+                <>
+                  <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
+                    <input
+                      type="text"
+                      name="position"
+                      className="input"
+                      value={form.position}
+                      onChange={handleChange}
+                      placeholder={USER_BASE_DETAILS[userType]?.positionPlaceHolder}
+                    />
+                  </Field>
+                </>
+              )}
+
+              {userType == 2 && (
+                <>
+                  <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
+                    <input
+                      type="text"
+                      name="board"
+                      className="input"
+                      value={form.board}
+                      onChange={handleChange}
+                      placeholder={USER_BASE_DETAILS[userType]?.positionPlaceHolder}
+                    />
+                  </Field>
+                </>
+              )}
 
               <Field label={USER_BASE_DETAILS[userType]?.totalExperience}>
                 <div className="flex items-center gap-2">
@@ -705,54 +772,54 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             {userType == 2 && (
               <>
                 <Dynamic
-                    label="Why Join Us"
-                    icon="📜"
-                    values={form.additional_info.why_join_us}
-                    onAdd={() => addArray("why_join_us")}
-                    onChange={(i, v) => updateArray("why_join_us", i, v)}
-                    onRemove={(i) => removeArray("why_join_us", i)}
-                  />
+                  label="Why Join Us"
+                  icon="📜"
+                  values={form.additional_info.why_join_us}
+                  onAdd={() => addArray("why_join_us")}
+                  onChange={(i, v) => updateArray("why_join_us", i, v)}
+                  onRemove={(i) => removeArray("why_join_us", i)}
+                />
 
-                  <Grid>
-                    <Field label="Students">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="number"
-                          name="students"
-                          min="0"
-                          className="input"
-                          value={form.students}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </Field>
+                <Grid>
+                  <Field label="Students">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        name="students"
+                        min="0"
+                        className="input"
+                        value={form.additional_info.students}
+                        onChange={(e) => handleAdditional("students", e.target.value)}
+                      />
+                    </div>
+                  </Field>
 
-                    <Field label="Teachers">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="number"
-                          name="teachers"
-                          min="0"
-                          className="input"
-                          value={form.teachers}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </Field>
+                  <Field label="Teachers">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        name="teachers"
+                        min="0"
+                        className="input"
+                        value={form.additional_info.teachers}
+                        onChange={(e) => handleAdditional("teachers", e.target.value)}
+                      />
+                    </div>
+                  </Field>
 
-                    <Field label="Website">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="text"
-                          name="website"
-                          min="0"
-                          className="input"
-                          value={form.website}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </Field>
-                  </Grid>
+                  <Field label="Website">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        name="website"
+                        min="0"
+                        className="input"
+                        value={form.additional_info.website}
+                        onChange={(e) => handleAdditional("website", e.target.value)}
+                      />
+                    </div>
+                  </Field>
+                </Grid>
               </>
             )}
           </Section>

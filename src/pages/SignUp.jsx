@@ -18,9 +18,10 @@ const routes = {
 // Sign Up Component
 const SignUpPage = () => {
   const [userType, setUserType] = useState(1);
-  const [fullName, setFullName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [position, setPosition] = useState("");
   const [city, setCity] = useState('');
-  const [schoolName, setSchoolName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,31 +36,29 @@ const SignUpPage = () => {
 
   const USER_FORM_CONFIG = {
     1: { // Teacher
-      nameLabel: "Name",
-      namePlaceholder: "Enter your full name",
+      firstNameLabel: "First Name",
+      firstNamePlaceholder: "Enter your first name",
+      lastNameLabel: "Last Name",
+      lastNamePlaceholder: "Enter your last name",
       mobileLabel: "Mobile Number",
       mobilePlaceholder: "+91 9876543210",
       emailLabel: "Email Address",
-      emailPlaceholder: "you@example.com",
+      emailPlaceholder: "teacher@example.com",
       showCity: false,
-      showSchool: false,
       tabColor: "#FF5E57",
       title: "Join Teachinghood to take your career to the next level"
     },
 
     2: { // School
-      schoolLabel: "School Name",
-      schoolPlaceholder: "Enter school name",
-      nameLabel: "HR Name",
-      namePlaceholder: "Enter HR name",
+      firstNameLabel: "School Name",
+      firstNamePlaceholder: "Enter school name",
       mobileLabel: "Office Mobile Number",
       mobilePlaceholder: "+91 9876543210",
-      emailLabel: "HR Email",
-      emailPlaceholder: "hr@school.com",
+      emailLabel: "School Email",
+      emailPlaceholder: "school@example.com",
       cityLabel: "City",
       cityPlaceholder: "Enter city name",
       showCity: true,
-      showSchool: true,
       tabColor: "#28C76F",
       title: "Join Teachinghood to take your career to the next level school"
     },
@@ -70,11 +69,10 @@ const SignUpPage = () => {
       mobileLabel: "Company Mobile Number",
       mobilePlaceholder: "+91 9876543210",
       emailLabel: "Email Address",
-      emailPlaceholder: "you@company.com",
+      emailPlaceholder: "company@example.com",
       cityLabel: "City",
       cityPlaceholder: "Enter city name",
       showCity: true,
-      showSchool: false,
       tabColor: "#FFC107",
       title: "Join Teachinghood to take your career to the next level recruiter"
     },
@@ -98,12 +96,12 @@ const SignUpPage = () => {
     setSuccess("");
 
     // Basic validation
-    if (!fullName || !email || !phoneNumber || !password || !confirmPassword) {
+    if (!firstName || !email || !phoneNumber || !password || !confirmPassword) {
       setError("All fields are required");
       return;
     }
 
-    if (userType === 2 && (!schoolName || !city)) {
+    if (userType == 2 &&  !city) {
       setError("All fields are required");
       return;
     }
@@ -119,7 +117,7 @@ const SignUpPage = () => {
     }
 
     if (!agreeTerms) {
-      setError("Please accept terms & conditions");
+      setError("Please accept terms and conditions to continue");
       return;
     }
 
@@ -127,10 +125,11 @@ const SignUpPage = () => {
 
     try {
       const payload = {
+        first_name: firstName,
+        last_name: lastName,
         email: email,
         phone: phoneNumber,
         city: city,
-        name: schoolName,
         password: password,
         password_confirmation: confirmPassword,
         user_type: userType, // teacher / school / recruiter
@@ -142,8 +141,8 @@ const SignUpPage = () => {
         setSuccess("Account created & Login successfully 🎉 Redirecting to Profile...");
 
         setTimeout(() => {
-          if (res.data?.token) {
-            localStorage.setItem("auth_token", res.data.token);
+          if (res.data?.data?.token) {
+            localStorage.setItem("auth_token", res.data.data.token);
           }
 
           navigate(routes.PROFILE);
@@ -161,7 +160,7 @@ const SignUpPage = () => {
       if (err.response?.data?.errors) {
         errorMessages = Object.entries(err.response.data.errors)
           .map(([key, values]) => `${key}: ${values.join(", ")}`)
-          .join("\n");
+          .join("<br />");
       }
 
       setError(errorMessages);
@@ -231,37 +230,81 @@ const SignUpPage = () => {
             </div>
           </div>
 
-          {/* School Name Input */}
-          {currentConfig.showSchool && (
-            <>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {currentConfig.schoolLabel}
-                </label>
-                <input
-                  type="text"
-                  placeholder={currentConfig.schoolPlaceholder}
-                  value={schoolName}
-                  onChange={(e) => setSchoolName(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                />
-              </div>
-            </>
-          )}
-
-          {/* Name Input */}
+          {/* First Name Input */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {currentConfig.nameLabel}
+              {currentConfig.firstNameLabel}
             </label>
             <input
               type="text"
-              placeholder={currentConfig.namePlaceholder}
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              placeholder={currentConfig.firstNamePlaceholder}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg"
             />
           </div>
+
+          {userType == 1 && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {currentConfig.lastNameLabel}
+              </label>
+              <input
+                type="text"
+                placeholder={currentConfig.lastNamePlaceholder}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+              />
+            </div>
+          )}
+
+          {/* Position Radio */}
+          {userType == 2 && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Position
+              </label>
+
+              <div className="flex gap-6">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="position"
+                    value="Teacher"
+                    checked={position === "Teacher"}
+                    onChange={(e) => setPosition(e.target.value)}
+                    className="text-blue-600"
+                  />
+                  Teacher
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="position"
+                    value="Principal"
+                    checked={position === "Principal"}
+                    onChange={(e) => setPosition(e.target.value)}
+                    className="text-blue-600"
+                  />
+                  Principal
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="position"
+                    value="Vice Principal / Coordinator"
+                    checked={position === "Vice Principal / Coordinator"}
+                    onChange={(e) => setPosition(e.target.value)}
+                    className="text-blue-600"
+                  />
+                  Vice Principal / Coordinator
+                </label>
+              </div>
+            </div>
+          )}
 
           {/* Mobile Number Input */}
           <div className="mb-4">
@@ -371,8 +414,10 @@ const SignUpPage = () => {
           </div>
 
           {error && (
-            <p className="mb-3 text-sm text-red-600 bg-red-50 p-2 rounded">
-              {error}
+            <p
+              className="mb-3 text-sm text-red-600 bg-red-50 p-2 rounded"
+              dangerouslySetInnerHTML={{ __html: error}}
+            >
             </p>
           )}
 

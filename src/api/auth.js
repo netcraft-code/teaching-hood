@@ -35,6 +35,7 @@ export const getProfile = () => {
 // Update profile
 export const updateProfile = (data) => {
   return api.post("/api/profile/update", data);
+  // return api.post("/api/profile/update", [(data) => JSON.stringify(data)]);
 };
 
 /*
