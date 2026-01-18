@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { getSubjects, getGradeLevels, getCities, updateProfile, getProfile, getStates } from "../api/auth";
 
 const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
@@ -80,6 +80,14 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       totalExperience: "Year Established",
       avatarUrl: "School Profile",
       firstNameLabel: "School Name",
+    },
+
+    3: {
+      positionLabel: "Position",
+      positionPlaceHolder: "e.g., CBSE Affiliated School",
+      totalExperience: "Years",
+      avatarUrl: "Bussiness Profile",
+      firstNameLabel: "Bussiness Name",
     },
   };
 
@@ -247,9 +255,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!form.first_name) e.first_name = "Name is required";
     if (!form.phone) e.phone = "Phone is required";
     
-    if (userType == 1) {
-      if (!form.position) e.position = "Position is required";
-      
+    if (userType == 1) {      
       if (!form.additional_info.subjects.length)
         e.subjects = "At least one subject required";
   
@@ -284,6 +290,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       if (!form.additional_info.students) e.students = "Students required";
       if (!form.additional_info.teachers) e.teachers = "Teachers required";
       if (!form.board) e.board = "Board required";
+    }
+
+    if(userType == 1 || userType == 3) {
+      if (!form.position) e.position = "Position is required";
     }
 
     // Address
@@ -348,19 +358,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           });
         });
 
-        // // PREFERRED LOCATION
-        form.additional_info.preferred_location
-          .filter(l => l.trim() !== "")
-          .forEach((loc, i) => {
-            fd.append(`preferred_location[${i}]`, loc);
-          });
-
         // PREFERRED LOCATION (as string)
-        // const preferredLocation = form.additional_info.preferred_location
-        //   .filter(l => l.trim() !== "")
-        //   .join(", ");
+        const preferredLocation = form.additional_info.preferred_location
+          .filter(l => l.trim() !== "")
+          .join(", ");
 
-        // fd.append("preferred_location", preferredLocation);
+        fd.append("preferred_location", preferredLocation);
 
         fd.append("availability", form.additional_info.availability);
         fd.append("notice_period", form.additional_info.notice_period);
@@ -370,7 +373,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
         fd.append("achievement", form.additional_info.achievement .filter(a => a.trim() !== "") .join(","));
         fd.append("certification", form.additional_info.certification .filter(c => c.trim() !== "") .join(","));
 
-        fd.append("position", form.position);
+        fd.append("last_name", form.last_name);
+        
+        if (form.resume) fd.append("resume", form.resume);
       }
 
       if (userType == 2) {
@@ -381,9 +386,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
         fd.append("board", form.board);
       }
 
+      if (userType == 1 || userType == 2) {
+        fd.append("position", form.position);
+      }
+
       // BASIC FIELDS
       fd.append("first_name", form.first_name);
-      fd.append("last_name", form.last_name);
       fd.append("phone", form.phone);
       fd.append("total_experience", form.total_experience);
 
@@ -398,7 +406,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       // FILES
       if (form.avatar_url) fd.append("avatar_url", form.avatar_url);
       if (form.banner_image_url) fd.append("banner_image_url", form.banner_image_url);
-      if (form.resume) fd.append("resume", form.resume);
 
       await updateProfile(fd);
 
@@ -494,7 +501,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 />
               </Field>
 
-              {userType == 1 && (
+              {userType == 1 || userType == 3 && (
                 <>
                   <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
                     <input

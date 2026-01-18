@@ -64,8 +64,8 @@ const SignUpPage = () => {
     },
 
     3: { // Recruiter
-      nameLabel: "Company Name",
-      namePlaceholder: "Enter company name",
+      firstNameLabel: "Company Name",
+      firstNamePlaceholder: "Enter company name",
       mobileLabel: "Company Mobile Number",
       mobilePlaceholder: "+91 9876543210",
       emailLabel: "Email Address",

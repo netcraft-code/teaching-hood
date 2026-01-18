@@ -50,8 +50,8 @@ const Profile = () => {
     3: { // Recruiter
       tabs: ["overview"],
       status: [
-        "Available",
         "Unavailable",
+        "Available",
       ],
     },
   };
@@ -192,7 +192,7 @@ const Profile = () => {
                 <div className="flex-1 mt-6">
                   <h2 className="text-xl sm:text-3xl font-semibold mb-3">{profile.first_name} {userType == 1 ? profile.last_name : ''}</h2>
                   <p className="text-m text-gray-500">
-                    {userType == 1 ? profile?.position : profile?.board}
+                    {userType == 2 ? profile?.board : profile?.position}
                   </p>
 
                   <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
@@ -644,7 +644,7 @@ const Profile = () => {
                 </>
               )}
 
-              {userType == 2 && (
+              {userType == 2 || userType == 3 && (
                 <>
                   <h3 className="font-semibold mb-4">Contact Information</h3>
 
@@ -663,25 +663,27 @@ const Profile = () => {
                       </p>
                     </div>
 
-                    <div>
-                      <p className="text-gray-400">Website</p>
-                      {profile?.additional_info?.website ? (
-                      <a
-                        href={
-                          profile?.additional_info?.website.startsWith('http')
-                            ? profile.additional_info.website
-                            : `https://${profile?.additional_info?.website}`
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-blue-600 hover:text-blue-800 hover:underline break-all"
-                      >
-                        {profile?.additional_info?.website}
-                      </a>
-                    ) : (
-                      <p className="text-xs text-gray-400">--</p>
+                    {userType == 2 && (
+                      <div>
+                        <p className="text-gray-400">Website</p>
+                        {profile?.additional_info?.website ? (
+                          <a
+                            href={
+                              profile?.additional_info?.website.startsWith('http')
+                                ? profile.additional_info.website
+                                : `https://${profile?.additional_info?.website}`
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-600 hover:text-blue-800 hover:underline break-all"
+                          >
+                            {profile?.additional_info?.website}
+                          </a>
+                        ) : (
+                          <p className="text-xs text-gray-400">--</p>
+                        )}
+                      </div>
                     )}
-                    </div>
 
                     <div>
                       <p className="text-gray-400">Address</p>
