@@ -501,7 +501,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 />
               </Field>
 
-              {userType == 1 || userType == 3 && (
+              {userType == 1 && (
                 <>
                   <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
                     <input

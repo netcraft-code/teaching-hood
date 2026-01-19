@@ -260,7 +260,7 @@ const SignUpPage = () => {
           )}
 
           {/* Position Radio */}
-          {userType == 2 && (
+          {userType == 1 && (
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Position
