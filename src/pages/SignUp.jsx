@@ -131,6 +131,7 @@ const SignUpPage = () => {
         phone: phoneNumber,
         city: city,
         password: password,
+        position: position,
         password_confirmation: confirmPassword,
         user_type: userType, // teacher / school / recruiter
       };
