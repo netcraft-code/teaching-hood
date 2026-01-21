@@ -16,8 +16,9 @@ api.interceptors.request.use((config) => {
 
   // ✅ ONLY for update profile API
   if (
-    config.url === "/api/profile/update" &&
-    config.data instanceof FormData
+    (config.url === "/api/profile/update"
+    || config.url === "/api/image/update")
+    && config.data instanceof FormData
   ) {
     config.headers["Content-Type"] = "multipart/form-data";
   } else {

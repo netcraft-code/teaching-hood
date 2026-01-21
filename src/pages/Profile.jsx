@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getProfile, logoutUser } from "../api/auth";
+import { getProfile, logoutUser, updateAvatarBanner } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
 import EditProfileModal from "../components/EditProfileModal";
+import ImageUploadModal from "../components/ImageUploadModal";
 import durationIcon from "../assets/icons/duration.svg";
 import locationIcon from "../assets/icons/location.svg";
 import aboutUsIcon from "../assets/icons/about-us.svg";
@@ -29,6 +30,10 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const navigate = useNavigate();
   const hasFetched = useRef(false);
+
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [imageType, setImageType] = useState(null); // 'avatar' | 'banner'
+
 
   const USER_FORM_CONFIG = {
     1: { // Teacher
@@ -149,6 +154,25 @@ const Profile = () => {
     return `${address?.address}, ${address?.city}, ${address?.state}, ${address?.pincode}, ${address?.country}`;
   }
 
+  const handleImageUpload = async (file, type) => {
+    const fd = new FormData();
+    fd.append(type, file);
+
+    const res = await updateAvatarBanner(fd);
+    
+    console.log(res);
+
+    if (res.data.status) {
+      setProfile(prev => ({
+        ...prev,
+        avatar_url:
+          type === "avatar_url" ? res.data.data.avatar_url : prev.avatar_url,
+        banner_image_url:
+          type === "banner_image_url" ? res.data.data.banner_image_url : prev.banner_image_url,
+      }));
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -177,17 +201,41 @@ const Profile = () => {
 
             {/* PROFILE CARD */}
             <div className="rounded-2xl relative shadow-md">
-              <img
-                src={getBannerAvatar(profile.banner_image_url, userType, 'bannerImage')}
-                alt="cover"
-                className="w-full h-32 rounded-t-2xl"
-              />
-
-              <div className="flex items-start gap-4 mx-8 pb-8">
+              <div className="relative">
                 <img
-                  src={getBannerAvatar(profile.avatar_url, userType, 'avatarImage')}
-                  className="w-24 h-24 rounded-full sm:w-32 sm:h-32 -mt-16"
+                  src={getBannerAvatar(profile.banner_image_url, userType, 'bannerImage')}
+                  alt="cover"
+                  className="w-full h-32 rounded-t-2xl"
                 />
+
+                <button
+                  onClick={() => {
+                    setImageType("banner_image_url");
+                    setImageModalOpen(true);
+                  }}
+                  className="absolute top-3 right-3 bg-white p-1 rounded-full shadow hover:bg-gray-100"
+                >
+                  ✏️
+                </button>
+              </div>
+
+              <div className="flex items-start gap-4 mx-8 pb-8 relative">
+                <div className="relative">
+                  <img
+                    src={getBannerAvatar(profile.avatar_url, userType, 'avatarImage')}
+                    className="w-24 h-24 sm:w-32 sm:h-32 rounded-full -mt-16 object-cover"
+                  />
+
+                  <button
+                    onClick={() => {
+                      setImageType("avatar_url");
+                      setImageModalOpen(true);
+                    }}
+                    className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow hover:bg-gray-100"
+                  >
+                    ✏️
+                  </button>
+                </div>
 
                 <div className="flex-1 mt-6">
                   <h2 className="text-xl sm:text-3xl font-semibold mb-3">{profile.first_name} {userType == 1 ? profile.last_name : ''}</h2>
@@ -221,7 +269,7 @@ const Profile = () => {
                     : 'bg-red-600'
                     }`}
                   ></span>
-                  {currentUser?.status[profile.status]}
+                  {userType == 1 ? currentUser?.status[profile.status] : ''}
                 </span>
               </div>
             </div>
@@ -286,9 +334,9 @@ const Profile = () => {
                         <p className="text-sm font-medium mb-2">Subjects</p>
 
                         <div className="flex flex-wrap gap-2">
-                          {(Array.isArray(profile?.additional_info?.subjects)
+                          {profile?.additional_info?.subjects ? (Array.isArray(profile?.additional_info?.subjects)
                             ? profile.additional_info.subjects
-                            : []
+                            : ["No Subject Selected"]
                           ).map((s, i) => (
                             <span
                               key={i}
@@ -296,7 +344,7 @@ const Profile = () => {
                             >
                               {s.name}
                             </span>
-                          ))}
+                          )) : "----"}
                         </div>
                       </div>
 
@@ -304,7 +352,7 @@ const Profile = () => {
                         <p className="text-sm mb-2">Grade Levels</p>
                         
                         <div className="flex flex-wrap gap-2">
-                          {(Array.isArray(profile?.additional_info?.grade_levels)
+                          {profile?.additional_info?.grade_levels ? (Array.isArray(profile?.additional_info?.grade_levels)
                             ? profile.additional_info.grade_levels
                             : []
                           ).map((s, i) => (
@@ -314,7 +362,7 @@ const Profile = () => {
                             >
                               {s.name}
                             </span>
-                          ))}
+                          )) : "----"}
                         </div>
                       </div>
                     </div>
@@ -331,7 +379,7 @@ const Profile = () => {
                         </h1>
                         
                         <ul className="text-sm text-gray-600 space-y-2">
-                          {(profile?.additional_info?.certification || "")
+                          {profile?.additional_info?.certification ? (profile?.additional_info?.certification)
                             .split(",")
                             .filter(Boolean)
                             .map((item, index) => (
@@ -349,7 +397,7 @@ const Profile = () => {
                                 </span>
                                 <span>{item.trim()}</span>
                               </li>
-                            ))}
+                            )) : "----"}
                         </ul>
                       </div>
 
@@ -363,7 +411,7 @@ const Profile = () => {
                         </h1>
 
                         <ul className="text-sm text-gray-600 space-y-2">
-                          {(profile?.additional_info?.achievement || "")
+                          {profile?.additional_info?.achievement ? (profile?.additional_info?.achievement)
                             .split(",")
                             .filter(Boolean)
                             .map((item, index) => (
@@ -381,7 +429,7 @@ const Profile = () => {
                                 </span>
                                 <span>{item.trim()}</span>
                               </li>
-                            ))}
+                            )) : "----"}
                         </ul>
                       </div>
                     </div>
@@ -438,7 +486,7 @@ const Profile = () => {
                         </h1>
                         
                         <ul className="text-sm text-gray-600 space-y-2">
-                          {(profile?.additional_info?.why_join_us || "")
+                          {profile?.additional_info?.why_join_us ? (profile?.additional_info?.why_join_us)
                             .split(",")
                             .filter(Boolean)
                             .map((item, index) => (
@@ -456,7 +504,7 @@ const Profile = () => {
                                 </span>
                                 <span>{item.trim()}</span>
                               </li>
-                            ))}
+                            )) : "----"}
                         </ul>
                       </div>
                     </div>
@@ -644,7 +692,7 @@ const Profile = () => {
                 </>
               )}
 
-              {userType == 2 || userType == 3 && (
+              {(userType == 2 || userType == 3) && (
                 <>
                   <h3 className="font-semibold mb-4">Contact Information</h3>
 
@@ -659,7 +707,7 @@ const Profile = () => {
                     <div>
                       <p className="text-gray-400">Phone</p>
                       <p className="text-xs">
-                        {profile.phone}
+                        {'+91 ' + profile.phone}
                       </p>
                     </div>
 
@@ -707,6 +755,16 @@ const Profile = () => {
         onClose={() => setEditOpen(false)}
         profile={profile}
         onUpdate={(updatedProfile) => setProfile(updatedProfile)}
+      />
+
+      <ImageUploadModal
+        open={imageModalOpen}
+        type={imageType}
+        onClose={() => {
+          setImageModalOpen(false);
+          setImageType(null);
+        }}
+        onUpload={handleImageUpload}
       />
     </>
   );

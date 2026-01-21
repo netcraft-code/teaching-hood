@@ -41,7 +41,7 @@ const SignUpPage = () => {
       lastNameLabel: "Last Name",
       lastNamePlaceholder: "Enter your last name",
       mobileLabel: "Mobile Number",
-      mobilePlaceholder: "+91 9876543210",
+      mobilePlaceholder: "9876543210",
       emailLabel: "Email Address",
       emailPlaceholder: "teacher@example.com",
       showCity: false,
@@ -53,7 +53,7 @@ const SignUpPage = () => {
       firstNameLabel: "School Name",
       firstNamePlaceholder: "Enter school name",
       mobileLabel: "Office Mobile Number",
-      mobilePlaceholder: "+91 9876543210",
+      mobilePlaceholder: "9876543210",
       emailLabel: "School Email",
       emailPlaceholder: "school@example.com",
       cityLabel: "City",
@@ -67,7 +67,7 @@ const SignUpPage = () => {
       firstNameLabel: "Company Name",
       firstNamePlaceholder: "Enter company name",
       mobileLabel: "Company Mobile Number",
-      mobilePlaceholder: "+91 9876543210",
+      mobilePlaceholder: "9876543210",
       emailLabel: "Email Address",
       emailPlaceholder: "company@example.com",
       cityLabel: "City",
@@ -312,13 +312,24 @@ const SignUpPage = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {currentConfig.mobileLabel}
             </label>
-            <input
-              type="text"
-              placeholder={currentConfig.mobilePlaceholder}
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-            />
+            <div className="grid grid-cols-5 gap-2">
+              <input
+                type="text"
+                value="+91"
+                readOnly
+                className="input col-span-1 bg-gray-100 cursor-not-allowed text-center w-full px-4 py-3 border border-gray-300 rounded-lg"
+              />
+
+              <input
+                type="tel"
+                name="phone"
+                className="input col-span-4 w-full px-4 py-3 border border-gray-300 rounded-lg"
+                placeholder={currentConfig.mobilePlaceholder}
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                maxLength={10}
+              />
+            </div>
           </div>
 
           {/* Email Input */}

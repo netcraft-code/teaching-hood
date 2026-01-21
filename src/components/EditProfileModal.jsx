@@ -78,7 +78,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       positionLabel: "Educational Board",
       positionPlaceHolder: "e.g., CBSE Affiliated School",
       totalExperience: "Year Established",
-      avatarUrl: "School Profile",
+      avatarUrl: "School Profile Picture",
       firstNameLabel: "School Name",
     },
 
@@ -491,14 +491,24 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
             <Grid>
               <Field label="Phone Number">
-                <input
-                  type="tel"
-                  name="phone"
-                  className="input"
-                  value={form.phone}
-                  onChange={handleChange}
-                  placeholder="+1 (555) 000-0000"
-                />
+                <div className="grid grid-cols-5 gap-2">
+                  <input
+                    type="text"
+                    value="+91"
+                    readOnly
+                    className="input col-span-1 bg-gray-100 cursor-not-allowed text-center"
+                  />
+
+                  <input
+                    type="tel"
+                    name="phone"
+                    className="input col-span-4"
+                    value={form.phone}
+                    onChange={handleChange}
+                    placeholder="9876543210"
+                    maxLength={10}
+                  />
+                </div>
               </Field>
 
               {userType == 1 && (
@@ -710,13 +720,13 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 />
 
                 <Grid>
-                  <Field label="Availability">
+                  <Field label="Employment Type">
                     <select
                       className="input"
                       value={form.additional_info.availability}
                       onChange={(e) => handleAdditional("availability", e.target.value)}
                     >
-                      <option value="">Select availability</option>
+                      <option value="">Select Employment Type</option>
                       <option value="Full Time">Full Time</option>
                       <option value="Part Time">Part Time</option>
                       <option value="Contract">Contract</option>
@@ -731,9 +741,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     >
                       <option value="">Select notice period</option>
                       <option value="Immediate">Immediate</option>
-                      <option value="10 Days">10 Days</option>
                       <option value="15 Days">15 Days</option>
                       <option value="30 Days">30 Days</option>
+                      <option value="60 Days">60 Days</option>
+                      <option value="90 Days">90 Days</option>
                     </select>
                   </Field>
                 </Grid>
@@ -788,7 +799,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 />
 
                 <Grid>
-                  <Field label="Students">
+                  <Field label="Total No. of Students">
                     <div className="flex items-center gap-2">
                       <input
                         type="number"
@@ -801,7 +812,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     </div>
                   </Field>
 
-                  <Field label="Teachers">
+                  <Field label="Total No. of Teachers">
                     <div className="flex items-center gap-2">
                       <input
                         type="number"
@@ -833,107 +844,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           
           {userType == 1 && (
             <>
-              <Section title="Education" icon="🎓">
-                {form.additional_info.education.map((edu, index) => (
-                  <div key={index} className="border rounded-xl p-4 space-y-3 bg-gray-50 relative">
-                    {form.additional_info.education.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const arr = [...form.additional_info.education];
-                          arr.splice(index, 1);
-                          handleAdditional("education", arr);
-                        }}
-                        className="absolute top-2 right-2 text-red-600 hover:bg-red-100 rounded-full p-1"
-                        aria-label="Remove Education"
-                      >
-                        ✕
-                      </button>
-                    )}
-
-                    <Grid>
-                      <Field label="Degree">
-                        <input
-                          className="input"
-                          value={edu.degree}
-                          onChange={(e) => {
-                            const arr = [...form.additional_info.education];
-                            arr[index].degree = e.target.value;
-                            handleAdditional("education", arr);
-                          }}
-                        />
-                      </Field>
-
-                      <Field label="College / University">
-                        <input
-                          className="input"
-                          value={edu.college_university}
-                          onChange={(e) => {
-                            const arr = [...form.additional_info.education];
-                            arr[index].college_university = e.target.value;
-                            handleAdditional("education", arr);
-                          }}
-                        />
-                      </Field>
-                    </Grid>
-
-                    <Grid>
-                      <Field label="From">
-                        <input
-                          type="month"
-                          className="input"
-                          value={edu.from}
-                          onChange={(e) => {
-                            const arr = [...form.additional_info.education];
-                            arr[index].from = e.target.value;
-                            handleAdditional("education", arr);
-                          }}
-                        />
-                      </Field>
-
-                      <Field label="To">
-                        <input
-                          type="month"
-                          className="input"
-                          value={edu.to || ""}
-                          onChange={(e) => {
-                            const arr = [...form.additional_info.education];
-                            arr[index].to = e.target.value;
-                            handleAdditional("education", arr);
-                          }}
-                        />
-                      </Field>
-                    </Grid>
-
-                    <Field label="Percentage">
-                      <input
-                        type="number"
-                        className="input"
-                        value={edu.percentage}
-                        onChange={(e) => {
-                          const arr = [...form.additional_info.education];
-                          arr[index].percentage = e.target.value;
-                          handleAdditional("education", arr);
-                        }}
-                      />
-                    </Field>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleAdditional("education", [
-                          ...form.additional_info.education,
-                          { degree: "", college_university: "", from: "", to: "", percentage: "" }
-                        ])
-                      }
-                      className="text-blue-600 text-sm font-medium"
-                    >
-                      + Add Education
-                    </button>
-                  </div>
-                ))}
-              </Section>
-
               <Section title="Experience" icon="💼">
                 {form.additional_info.experience.map((exp, index) => (
                   <div key={index} className="border rounded-xl p-4 bg-gray-50 space-y-3 relative">
@@ -1046,6 +956,107 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       className="text-blue-600 text-sm font-medium"
                     >
                       + Add Experience
+                    </button>
+                  </div>
+                ))}
+              </Section>
+
+              <Section title="Education" icon="🎓">
+                {form.additional_info.education.map((edu, index) => (
+                  <div key={index} className="border rounded-xl p-4 space-y-3 bg-gray-50 relative">
+                    {form.additional_info.education.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const arr = [...form.additional_info.education];
+                          arr.splice(index, 1);
+                          handleAdditional("education", arr);
+                        }}
+                        className="absolute top-2 right-2 text-red-600 hover:bg-red-100 rounded-full p-1"
+                        aria-label="Remove Education"
+                      >
+                        ✕
+                      </button>
+                    )}
+
+                    <Grid>
+                      <Field label="Degree">
+                        <input
+                          className="input"
+                          value={edu.degree}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.education];
+                            arr[index].degree = e.target.value;
+                            handleAdditional("education", arr);
+                          }}
+                        />
+                      </Field>
+
+                      <Field label="College / University">
+                        <input
+                          className="input"
+                          value={edu.college_university}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.education];
+                            arr[index].college_university = e.target.value;
+                            handleAdditional("education", arr);
+                          }}
+                        />
+                      </Field>
+                    </Grid>
+
+                    <Grid>
+                      <Field label="From">
+                        <input
+                          type="month"
+                          className="input"
+                          value={edu.from}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.education];
+                            arr[index].from = e.target.value;
+                            handleAdditional("education", arr);
+                          }}
+                        />
+                      </Field>
+
+                      <Field label="To">
+                        <input
+                          type="month"
+                          className="input"
+                          value={edu.to || ""}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.education];
+                            arr[index].to = e.target.value;
+                            handleAdditional("education", arr);
+                          }}
+                        />
+                      </Field>
+                    </Grid>
+
+                    <Field label="Percentage">
+                      <input
+                        type="number"
+                        className="input"
+                        value={edu.percentage}
+                        onChange={(e) => {
+                          const arr = [...form.additional_info.education];
+                          arr[index].percentage = e.target.value;
+                          handleAdditional("education", arr);
+                        }}
+                      />
+                    </Field>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleAdditional("education", [
+                          ...form.additional_info.education,
+                          { degree: "", college_university: "", from: "", to: "", percentage: "" }
+                        ])
+                      }
+                      className="text-blue-600 text-sm font-medium"
+                    >
+                      + Add Education
                     </button>
                   </div>
                 ))}
