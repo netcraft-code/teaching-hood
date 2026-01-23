@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::get('view-profile/{id}', [AuthController::class, 'specificProfile']);
+Route::get('city', [HelperController::class, 'city']);
+
+Route::get('city/jobs', [JobPostController::class, 'getMaxCitiesJobs']);
 
 Route::post('send-otp', [AuthController::class, 'sendOTP']);
 Route::post('verify-otp', [AuthController::class, 'verifyOTP']);
@@ -20,7 +23,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('subjects', [HelperController::class, 'getSubjects']);
     Route::get('gradelevels', [HelperController::class, 'getGradeLevel']);
 
-    Route::get('city', [HelperController::class, 'city']);
     Route::get('states', [HelperController::class, 'states']);
     Route::get('countries', [HelperController::class, 'countries']);
 

@@ -10,9 +10,10 @@ use Illuminate\Validation\Rule;
 
 class JobPostController extends Controller
 {
-    // 📌 LIST ALL JOB POSTS
     public function index(Request $request)
     {
+        return response_formatter(DEFAULT_200, $jobs);
+
         $request->validate([
             'school_name' => 'nullable|string|max:255',
             'subject'     => 'nullable|string|max:255',
@@ -21,30 +22,22 @@ class JobPostController extends Controller
         ]);
 
         $jobs = JobPost::query()
-
             ->when($request->school_name, function ($query) use ($request) {
                 $query->where('school_name', 'like', '%' . $request->school_name . '%');
             })
-
             ->when($request->subject, function ($query) use ($request) {
                 $query->where('subject', 'like', '%' . $request->subject . '%');
             })
-
             ->when($request->grade, function ($query) use ($request) {
                 $query->where('grade', 'like', '%' . $request->grade . '%');
             })
-
             ->when($request->location, function ($query) use ($request) {
                 $query->where('location', 'like', '%' . $request->location . '%');
             })
-
             ->latest()
             ->get();
 
-        return response_formatter(
-            DEFAULT_200,
-            $jobs
-        );
+        return response_formatter(DEFAULT_200, $jobs);
     }
 
     // 📌 CREATE JOB POST
@@ -138,5 +131,17 @@ class JobPostController extends Controller
         JobPost::findOrFail($id)->delete();
 
         return response_formatter(DEFAULT_DELETED_200);
+    }
+
+    public function getMaxCitiesJobs()
+    {
+        $jobs = JobPost::with('city')
+            ->select('city_id', \DB::raw('COUNT(*) as total_jobs'))
+            ->groupBy('city_id')
+            ->orderByDesc('total_jobs')
+            ->limit(5)
+            ->get();
+
+        return response_formatter(DEFAULT_200, $jobs);
     }
 }

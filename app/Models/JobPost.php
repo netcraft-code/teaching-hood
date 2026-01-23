@@ -8,7 +8,7 @@ class JobPost extends Model
 {
     protected $fillable = [
         'school_name',
-        'city',
+        'city_id',
         'state',
         'pincode',
         'board',
@@ -21,4 +21,9 @@ class JobPost extends Model
         'food',
         'accommodation',
     ];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }
