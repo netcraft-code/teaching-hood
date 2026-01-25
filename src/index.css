@@ -2,15 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* custom small vars */
-:root{
-  --primary: #0d6efd;
-}
-
 @layer base {
   html {
     overflow-y: scroll;
   }
-}
 
-body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+  body {
+    @apply font-sans;
+  }
+}

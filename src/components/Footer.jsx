@@ -4,36 +4,35 @@ import {
   FaLinkedinIn,
   FaInstagram,
 } from "react-icons/fa";
-import logo from "../assets/images/logo.svg";
+import logo from "../assets/icons/logo.svg";
 
 const Footer = () => {
   return (
     <footer className="bg-[#0B1828] text-gray-300">
-      <div className="mx-auto px-6 md:px-24 pb-7 pt-12">
+      <div className="mx-auto px-6 md:px-20 pb-7 pt-12">
         {/* MAIN FOOTER */}
-        <div className="mx-auto flex flex-col md:flex-row gap-10 md:gap-28 mb-6">
+        <div className="mx-auto flex flex-col md:flex-row gap-10 md:gap-36 mb-6">
           <div className="flex flex-row items-center justify-start">
             {/* BRAND */}
             <div className="space-y-4">
-              <div className='flex flex-col items-start justify-start'>
-                <div className="flex flex-col items-center justify-center">
-                  <button onClick={() => navigate(routes.HOME)} className="flex items-center justify-center">
-                    <img
-                      src={logo}
-                      alt="Teachinghood Logo"
-                      className="w-9 h-9 object-contain"
-                    />
-                  </button>
-                  
-                  <div className="text-2xl md:text-3xl text-white text-center mt-2 md:mt-0">Teachinghood</div>
-                </div>
+              <div className="flex items-start">
+                <button
+                  onClick={() => navigate(routes.HOME)}
+                  className="w-[208px] h-[67px] flex items-center justify-start focus:outline-none"
+                >
+                  <img
+                    src={logo}
+                    alt="Teachinghood Logo"
+                    className="h-full object-contain"
+                  />
+                </button>
               </div>
 
-              <p className="text-sm text-gray-400 max-w-xs" >
+              <p className="font-sf font-normal text-[16px] leading-[26px] tracking-[0] text-gray-400 whitespace-nowrap">
                 On a mission to simplify school hiring in India
               </p>
 
-              <div className="text-sm space-y-1 text-gray-400">
+              <div className="font-sf font-normal text-[16px] leading-[26px] tracking-[0] text-gray-400">
                 <p>contact@teachinghood.com</p>
                 <p>+91-9923800424</p>
                 <p>Gurgaon, India</p>
@@ -58,22 +57,22 @@ const Footer = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-36">
             {/* CANDIDATES */}
             <div>
-              <h4 className="text-white font-semibold mb-4">Candidates</h4>
+              <h4 className="text-white font-semibold mb-4 font-sf text-[18px] leading-[27px] tracking-[0]">Candidates</h4>
               <ul className="space-y-3 text-xs">
-                <li className="hover:text-white cursor-pointer">Find Jobs</li>
-                <li className="hover:text-white cursor-pointer">Create Profile</li>
-                <li className="hover:text-white cursor-pointer">Track Application</li>
-                <li className="hover:text-white cursor-pointer">Learning Resources</li>
+                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Find Jobs</li>
+                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Create Profile</li>
+                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Track Application</li>
+                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Learning Resources</li>
               </ul>
             </div>
 
             {/* SCHOOLS */}
             <div>
-              <h4 className="text-white font-semibold mb-4">Schools</h4>
+              <h4 className="text-white font-semibold mb-4 font-sf text-[18px] leading-[27px] tracking-[0]">Schools</h4>
               <ul className="space-y-3 text-xs">
-                <li className="hover:text-white cursor-pointer">Post Jobs</li>
-                <li className="hover:text-white cursor-pointer">Search Candidates</li>
-                <li className="hover:text-white cursor-pointer">
+                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Post Jobs</li>
+                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Search Candidates</li>
+                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Seek Hiring Support
                 </li>
               </ul>
@@ -81,12 +80,12 @@ const Footer = () => {
 
             {/* RECRUITER */}
             <div>
-              <h4 className="text-white font-semibold mb-4">Recruiter</h4>
+              <h4 className="text-white font-semibold mb-4 font-sf text-[18px] leading-[27px] tracking-[0]">Recruiter</h4>
               <ul className="space-y-3 text-xs">
-                <li className="hover:text-white cursor-pointer">Post Jobs</li>
-                <li className="hover:text-white cursor-pointer">Search Candidates</li>
-                <li className="hover:text-white cursor-pointer">
-                  Seek Hiring Support
+                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Post Jobs</li>
+                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Search Candidates</li>
+                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                  Seek Dedicated Hiring Support
                 </li>
               </ul>
             </div>
@@ -99,13 +98,21 @@ const Footer = () => {
         {/* BOTTOM BAR */}
         <div className="mx-auto pt-4 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-2 md:gap-0">
           <div className="flex gap-6">
-            <span className="hover:text-white cursor-pointer">About Us</span>
-            <span className="hover:text-white cursor-pointer">Contact Us</span>
-            <span className="hover:text-white cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-white cursor-pointer">Terms of Service</span>
+            <span className="font-sf font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+              About Us
+            </span>
+            <span className="font-sf font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+              Contact Us
+            </span>
+            <span className="font-sf font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+              Privacy Policy
+            </span>
+            <span className="font-sf font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+              Terms of Service
+            </span>
           </div>
 
-          <div className="mt-2 md:mt-0">
+          <div className="mt-2 md:mt-0 font-sf font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400">
             Developed by XYZ
           </div>
         </div>

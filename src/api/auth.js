@@ -85,5 +85,9 @@ export const getCities = () => {
 
 // View profile by ID
 export const viewProfile = (id) => {
-  return api.get(`/view-profile/${id}`);
+  return api.get(`/api/view-profile/${id}`);
+};
+
+export const getMaxCitiesJobs = () => {
+  return api.get("/api/city/jobs");
 };
