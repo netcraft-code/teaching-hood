@@ -75,7 +75,7 @@ const Faqs = () => {
         </div>
 
         {/* FAQ List */}
-        <div className="max-w-3xl mx-auto space-y-4">
+        <div className="max-w-3xl mx-auto space-y-4 max-h-[350px] overflow-y-auto pr-2">
           {faqs.map((faq, index) => (
             <div
               key={index}
@@ -85,7 +85,7 @@ const Faqs = () => {
                 onClick={() => toggleFAQ(index)}
                 className="w-full flex items-center justify-between p-6 text-left bg-gray-50"
               >
-                <span className="font-semibold text-gray-900 pr-4">{faq.question}</span>
+                <span className="font-semibold text-[18px] text-gray-900 pr-4">{faq.question}</span>
                 {openIndex === index ? (
                   <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" />
                 ) : (

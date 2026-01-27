@@ -73,7 +73,7 @@ const TeachersSection = () => {
           <div>
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-red-50 px-4 py-2 rounded-full mb-6">
-              <span className="text-sm text-red-500 font-semibold text-[21.39px] p-2">For Teachers</span>
+              <span className="text-lg text-red-600 font-bold text-[21.39px]">For Teachers</span>
             </div>
 
             {/* Heading */}
@@ -88,7 +88,7 @@ const TeachersSection = () => {
                   <div className={`flex-shrink-0 w-10 h-10 ${feature.bgColor} rounded-lg shadow-sm flex items-center justify-center border border-gray-100`}>
                     {feature.icon}
                   </div>
-                  <p className="text-gray-700 leading-relaxed pt-2 font-semibold text-[16px]">
+                  <p className="text-gray-700 leading-relaxed pt-2 font-semibold text-[18px]">
                     {feature.text}
                   </p>
                 </div>
@@ -106,7 +106,7 @@ const TeachersSection = () => {
                 <div>
                   <div className="text-blue-500 font-semibold text-sm mb-1">Pro Tip:</div>
                   <p className="text-gray-700 text-sm">
-                    Complete your profile to get 3x more interview calls from top schools.
+                    Complete your profile to increase your chance of receiving interview calls from top schools
                   </p>
                 </div>
               </div>

@@ -20,9 +20,7 @@ const RecruitersSection = () => {
   ];
 
   const stats = [
-    { value: '50+', label: 'Partner Schools', color: 'text-blue-600' },
-    { value: '95%', label: 'Satisfaction', color: 'text-green-600' },
-    { value: '24/7', label: 'Support', color: 'text-orange-600' }
+    { value: '50+', label: 'Partner Schools', color: 'text-blue-600' }
   ];
 
   return (
@@ -39,14 +37,16 @@ const RecruitersSection = () => {
               />
 
               {/* Stats Overlay */}
-              <div className="absolute bottom-6 left-[30%] bg-white rounded-xl shadow-xl p-4 text-center w-[40%]">
-                <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="absolute bottom-6 left-[30%] bg-white rounded-xl shadow-xl p-4 w-[20%] flex items-center justify-center">
+                <div className="grid grid-cols-1 gap-4 text-center">
                   {stats.map((stat, index) => (
-                    <div key={index} className="text-center">
+                    <div key={index} className="flex flex-col items-center justify-center">
                       <div className={`text-lg md:text-xl font-normal ${stat.color} mb-1`}>
                         {stat.value}
                       </div>
-                      <div className="text-xs text-gray-600">{stat.label}</div>
+                      <div className="text-xs text-gray-600 whitespace-nowrap">
+                        {stat.label}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -57,8 +57,8 @@ const RecruitersSection = () => {
           {/* Right Side - Content */}
           <div>
             {/* Badge */}
-            <div className="inline-flex items-center space-x-2 bg-yellow-100 px-6 py-4 rounded-full mb-6">
-              <span className="text-lg text-yellow-500 font-semibold">For Recruiters</span>
+            <div className="inline-flex items-center space-x-2 bg-yellow-50 px-4 py-2 rounded-full mb-6">
+              <span className="text-lg text-yellow-600 font-bold text-[21.39px]">For Recruiters</span>
             </div>
 
             {/* Heading */}
@@ -73,7 +73,7 @@ const RecruitersSection = () => {
                   <div className="flex-shrink-0 w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center border border-gray-100">
                     {feature.icon}
                   </div>
-                  <p className="text-gray-700 leading-relaxed pt-3">
+                  <p className="text-gray-700 leading-relaxed pt-2 font-semibold text-[18px]">
                     {feature.text}
                   </p>
                 </div>

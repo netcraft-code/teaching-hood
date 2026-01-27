@@ -39,10 +39,10 @@ const HeroSection = () => {
 
           {/* Main Heading */}
           <h1 className="mb-4 flex justify-center items-center gap-4">
-            <span className="text-white font-sf font-extrabold italic text-[90px] leading-[1] tracking-[0]">
+            <span className="text-white font-extrabold italic text-[90px] leading-[1] tracking-[0]">
               Hiring
             </span>
-            <span className="text-white font-sf font-medium text-[48px] sm:text-[64px] md:text-[80px] lg:text-[90px] leading-[1] tracking-[0]">
+            <span className="text-white font-normal text-[48px] sm:text-[64px] md:text-[80px] lg:text-[90px] leading-[1] tracking-[0]">
               Simplified
             </span>
           </h1>

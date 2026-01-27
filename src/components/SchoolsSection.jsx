@@ -32,11 +32,11 @@ const SchoolsSection = () => {
           <div>
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full mb-6">
-              <span className="text-lg text-green-600 font-bold">For Schools</span>
+              <span className="text-lg text-green-600 font-bold text-[21.39px]">For Schools</span>
             </div>
 
             {/* Heading */}
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 mb-6">
               Make your life easy, simplify your hiring process.
             </h2>
 
@@ -47,7 +47,7 @@ const SchoolsSection = () => {
                   <div className="flex-shrink-0 w-12 h-12 bg-gray-50 rounded-xl shadow-sm flex items-center justify-center border border-gray-100">
                     {feature.icon}
                   </div>
-                  <p className="text-gray-700 leading-relaxed pt-3">
+                  <p className="text-gray-700 leading-relaxed pt-2 font-semibold text-[18px]">
                     {feature.text}
                   </p>
                 </div>
