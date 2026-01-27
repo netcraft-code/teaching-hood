@@ -3,6 +3,8 @@ import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Profile from "../pages/Profile";
+import PostJob from "../pages/PostJob";
+import ProtectedRoute from "../pages/ProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -10,7 +12,24 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path="/profile" element={<Profile />} />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/post-job"
+        element={
+          <ProtectedRoute>
+            <PostJob />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };
