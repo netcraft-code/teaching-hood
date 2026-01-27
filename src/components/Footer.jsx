@@ -1,6 +1,5 @@
 import {
   FaFacebookF,
-  FaTwitter,
   FaLinkedinIn,
   FaInstagram,
 } from "react-icons/fa";
@@ -8,8 +7,8 @@ import logo from "../assets/icons/logo.svg";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0B1828] text-gray-300">
-      <div className="mx-auto px-6 md:px-20 pb-7 pt-12">
+    <footer className="bg-[#0B1828] text-gray-300 mx-auto w-full">
+      <div className="mx-auto px-6 md:px-20 pb-7 pt-12 max-w-7xl">
         {/* MAIN FOOTER */}
         <div className="mx-auto flex flex-col md:flex-row gap-10 md:gap-36 mb-6">
           <div className="flex flex-row items-center justify-start">
@@ -40,17 +39,32 @@ const Footer = () => {
 
               {/* SOCIAL ICONS */}
               <div className="flex gap-3 pt-2">
-                {[FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram].map(
-                  (Icon, i) => (
-                    <span
-                      key={i}
-                      className="w-9 h-9 rounded-md bg-[#132939] flex items-center justify-center hover:bg-[#1e3a52] transition cursor-pointer"
-                    >
-                      <Icon size={14} />
-                    </span>
-                  )
-                )}
+                {[
+                  {
+                    Icon: FaFacebookF,
+                    url: "https://www.facebook.com/profile.php?id=61570978044911",
+                  },
+                  {
+                    Icon: FaLinkedinIn,
+                    url: "https://www.linkedin.com/company/teachinghood/?viewAsMember=true",
+                  },
+                  {
+                    Icon: FaInstagram,
+                    url: "https://www.instagram.com/teachinghood/",
+                  },
+                ].map(({ Icon, url }, i) => (
+                  <a
+                    key={i}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-md bg-[#132939] flex items-center justify-center hover:bg-[#1e3a52] transition cursor-pointer"
+                  >
+                    <Icon size={14} className="text-white" />
+                  </a>
+                ))}
               </div>
+
             </div>
           </div>
 
