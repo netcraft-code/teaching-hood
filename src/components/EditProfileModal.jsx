@@ -97,15 +97,17 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
     const load = async () => {
       try {
-        const s = await getSubjects();
-        const g = await getGradeLevels();
-        const state = await getStates();
-        const l = await getCities();
-        
-        setSubjects(s.data.data);
-        setGrades(g.data.data);
-        setStates(state.data.data);
-        setLocations(l.data.data);
+        const [subjectsRes, gradesRes, stateRes, cityRes] = await Promise.all([
+          getSubjects(),
+          getGradeLevels(),
+          getStates(),
+          getCities()
+        ]);
+
+        setSubjects(subjectsRes.data.data);
+        setGrades(gradesRes.data.data);
+        setStates(stateRes.data.data);
+        setLocations(cityRes.data.data);
 
         if (profile) {
           setUserType(profile.user_type);
@@ -193,12 +195,26 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     setForm({ ...form, [name]: type === "file" ? files[0] : value });
+
+    setErrors(prev => ({
+      ...prev,
+      [name]: ""
+    }));
   };
 
   const handleAdditional = (name, value) => {
     setForm({
       ...form,
       additional_info: { ...form.additional_info, [name]: value }
+    });
+
+    setErrors(prev => {
+      const updated = { ...prev };
+
+      // normal field
+      updated[name] = "";
+
+      return updated;
     });
   };
 
@@ -208,6 +224,11 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       .filter(i => ids.includes(i.id))
       .map(i => ({ id: i.id, name: i.name }));
     handleAdditional(field, data);
+
+    setErrors(prev => ({
+      ...prev,
+      [field]: ""
+    }));
   };
 
   const updateArray = (field, index, value) => {
@@ -238,6 +259,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
         [...selectedLocations, location]
       );
     }
+
+    setErrors(prev => ({
+      ...prev,
+      preferred_location: ""
+    }));
+    
     setSearch("");
     setShowDropdown(false);
   };
@@ -446,26 +473,25 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
         <div className="px-8 py-6">
           {/* Personal Information */}
           <Section title="Personal Information" icon="👤">
+            {/* Name, Email Address */}
             <Grid>
+              {/* First Name Input */}
               <Field label={USER_BASE_DETAILS[userType]?.firstNameLabel} required>
-
                 <input
                   type="text"
                   name="first_name"
-                  className="input"
+                  className={inputClass(errors.first_name)}
                   value={form.first_name}
                   onChange={handleChange}
                 />
 
-                {errors.firstName && (
-                  <p className="text-sm text-red-600 mt-1">{errors.firstName}</p>
-                )}
+                <ErrorText error={errors.first_name} />
               </Field>
 
+              {/* Last Name Input */}
               {userType == 1 && (
                 <>
                   <Field label="Last Name" required>
-
                     <input
                       type="text"
                       name="last_name"
@@ -476,7 +502,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   </Field>
                 </>
               )}
-              
+
+              {/* Email Address */}
               <Field label="Email Address" required>
                 <input
                   type="email"
@@ -489,7 +516,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </Field>
             </Grid>
 
+            {/* Phone Number, Position, Board, Total Experience */}
             <Grid>
+              {/* Phone Number */}
               <Field label="Phone Number">
                 <div className="grid grid-cols-5 gap-2">
                   <input
@@ -502,45 +531,54 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   <input
                     type="tel"
                     name="phone"
-                    className="input col-span-4"
+                    className={`col-span-4 ${inputClass(errors.phone)}`}
                     value={form.phone}
                     onChange={handleChange}
                     placeholder="9876543210"
                     maxLength={10}
                   />
                 </div>
+
+                <ErrorText error={errors.phone} />
               </Field>
 
+              {/* Position */}
               {userType == 1 && (
                 <>
                   <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
                     <input
                       type="text"
                       name="position"
-                      className="input"
+                      className={inputClass(errors.position)}
                       value={form.position}
                       onChange={handleChange}
                       placeholder={USER_BASE_DETAILS[userType]?.positionPlaceHolder}
                     />
+
+                    <ErrorText error={errors.position} />
                   </Field>
                 </>
               )}
 
+              {/* Board */}
               {userType == 2 && (
                 <>
                   <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
                     <input
                       type="text"
                       name="board"
-                      className="input"
+                      className={inputClass(errors.board)}
                       value={form.board}
                       onChange={handleChange}
                       placeholder={USER_BASE_DETAILS[userType]?.positionPlaceHolder}
                     />
+
+                    <ErrorText error={errors.board} />
                   </Field>
                 </>
               )}
 
+              {/* Total Experience */}
               <Field label={USER_BASE_DETAILS[userType]?.totalExperience}>
                 <div className="flex items-center gap-2">
                   <input
@@ -556,7 +594,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </Field>
             </Grid>
 
+            {/* Avatar Image, Banner Image */}
             <Grid>
+              {/* Avatar Image */}
               <Field label={USER_BASE_DETAILS[userType]?.avatarUrl}>
                 <input
                   type="file"
@@ -567,6 +607,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 />
               </Field>
 
+              {/* Banner Image */}
               <Field label="Banner Image">
                 <input
                   type="file"
@@ -579,7 +620,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             </Grid>
           </Section>
 
+          {/* Address, Pincode, Country, State, City */}
           <Section title="Address" icon="">
+            {/* Address */}
             <Field label="Address" required>
               <textarea
                 className={inputClass(errors.address)}
@@ -590,7 +633,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               <ErrorText error={errors.address} />
             </Field>
 
+            {/* Pincode, Country */}
             <Grid>
+              {/* Pincode */}
               <Field label="Pincode" required>
                 <input
                   type="text"
@@ -605,6 +650,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 <ErrorText error={errors.pincode} />
               </Field>
 
+              {/* Country */}
               <Field label="Country" required>
                 <input
                   type="text"
@@ -617,7 +663,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </Field>
             </Grid>
 
+            {/* State, City */}
             <Grid>
+              {/* State */}
               <Field label="State" required>
                 <select
                   className={inputClass(errors.state)}
@@ -634,6 +682,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 <ErrorText error={errors.state} />
               </Field>
 
+              {/* City */}
               <Field label="City" required>
                 <select
                   className={inputClass(errors.city)}
@@ -669,7 +718,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   <Field label="Subjects">
                     <select
                       multiple
-                      className="input h-40 overflow-y-auto"
+                      className={`h-40 overflow-y-auto ${inputClass(errors.subjects)}`}
                       value={form.additional_info.subjects.map(s => String(s.id))}
                       onChange={(e) => handleMulti(e, "subjects", subjects)}
                     >
@@ -680,12 +729,14 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       ))}
                     </select>
                     <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
+
+                    <ErrorText error={errors.subjects} />
                   </Field>
 
                   <Field label="Grade Levels">
                     <select
                       multiple
-                      className="input h-40 overflow-y-auto"
+                      className={`h-40 overflow-y-auto ${inputClass(errors.grade_levels)}`}
                       value={form.additional_info.grade_levels.map(g => String(g.id))}
                       onChange={(e) => handleMulti(e, "grade_levels", grades)}
                     >
@@ -696,6 +747,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       ))}
                     </select>
                     <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
+
+                    <ErrorText error={errors.grade_levels} />
                   </Field>
                 </Grid>
 
@@ -749,44 +802,51 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   </Field>
                 </Grid>
 
+                {/* Min-Max Salary */}
                 <Field label="Expected Salary Range (per year)">
                   <div className="flex gap-3 items-center">
                     <div className="flex-1">
+                      {/* Min Salary Input */}
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
                         <input
                           type="number"
                           min={1000}
-                          className="input"
+                          className={inputClass(errors.min_salary)}
                           style={{ paddingLeft: "2.5rem" }} // 👈 FIX
                           value={form.additional_info.min_salary}
                           onChange={(e) => handleAdditional("min_salary", e.target.value)}
                           placeholder="Min"
                         />
                       </div>
+
+                      <ErrorText error={errors.min_salary} />
                     </div>
 
                     <span className="text-gray-400 font-medium">to</span>
 
+                    {/* Max Salary Input */}
                     <div className="flex-1">
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
                         <input
                           type="number"
                           min={form.additional_info.min_salary}
-                          className="input"
+                          className={inputClass(errors.max_salary)}
                           style={{ paddingLeft: "2.5rem" }} // 👈 FIX
                           value={form.additional_info.max_salary}
                           onChange={(e) => handleAdditional("max_salary", e.target.value)}
                           placeholder="Max"
                         />
                       </div>
+                      <ErrorText error={errors.max_salary} />
                     </div>
                   </div>
                 </Field>
               </>
             )}
 
+            {/* Why Join Us, Students, Teachers, Website */}
             {userType == 2 && (
               <>
                 <Dynamic
@@ -798,6 +858,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   onRemove={(i) => removeArray("why_join_us", i)}
                 />
 
+                {/* Students, Teachers, Website */}
                 <Grid>
                   <Field label="Total No. of Students">
                     <div className="flex items-center gap-2">
@@ -805,11 +866,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         type="number"
                         name="students"
                         min="0"
-                        className="input"
+                        className={inputClass(errors.students)}
                         value={form.additional_info.students}
                         onChange={(e) => handleAdditional("students", e.target.value)}
                       />
                     </div>
+                    <ErrorText error={errors.students} />
                   </Field>
 
                   <Field label="Total No. of Teachers">
@@ -818,11 +880,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         type="number"
                         name="teachers"
                         min="0"
-                        className="input"
+                        className={inputClass(errors.teachers)}
                         value={form.additional_info.teachers}
                         onChange={(e) => handleAdditional("teachers", e.target.value)}
                       />
                     </div>
+                    <ErrorText error={errors.teachers} />
                   </Field>
 
                   <Field label="Website">
@@ -831,11 +894,13 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         type="text"
                         name="website"
                         min="0"
-                        className="input"
+                        className={inputClass(errors.website)}
                         value={form.additional_info.website}
                         onChange={(e) => handleAdditional("website", e.target.value)}
                       />
                     </div>
+                    
+                    <ErrorText error={errors.website} />
                   </Field>
                 </Grid>
               </>
@@ -866,7 +931,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     <Grid>
                       <Field label="Position">
                         <input
-                          className="input"
+                          className={inputClass(errors.experience)}
                           value={exp.position}
                           onChange={(e) => {
                             const arr = [...form.additional_info.experience];
@@ -874,6 +939,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                             handleAdditional("experience", arr);
                           }}
                         />
+
+                        <ErrorText error={errors.experience} />
                       </Field>
 
                       <Field label="School / Organization">
@@ -982,7 +1049,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     <Grid>
                       <Field label="Degree">
                         <input
-                          className="input"
+                          className={inputClass(errors.education)}
                           value={edu.degree}
                           onChange={(e) => {
                             const arr = [...form.additional_info.education];
@@ -990,6 +1057,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                             handleAdditional("education", arr);
                           }}
                         />
+                        <ErrorText error={errors.education} />
                       </Field>
 
                       <Field label="College / University">
@@ -1094,8 +1162,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     setShowDropdown(true);
                   }}
                   placeholder="Search location..."
-                  className="input"
+                  className={inputClass(errors.preferred_location)}
                 />
+
+                <ErrorText error={errors.preferred_location} />
 
                 {/* Dropdown */}
                 {showDropdown && (

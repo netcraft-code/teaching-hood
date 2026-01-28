@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getProfile, logoutUser, updateAvatarBanner } from "../api/auth";
+import { getProfile, logoutUser, updateAvatarBanner, getJob } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
 import EditProfileModal from "../components/EditProfileModal";
@@ -30,10 +30,10 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const navigate = useNavigate();
   const hasFetched = useRef(false);
+  const [createdJobs, setCreatedJobs] = useState([]);
 
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [imageType, setImageType] = useState(null); // 'avatar' | 'banner'
-
 
   const USER_FORM_CONFIG = {
     1: { // Teacher
@@ -139,6 +139,20 @@ const Profile = () => {
       setLoading(false);
     }
   };
+
+  const fetchTabData = async (tab) => {
+    if (tab === 'vacancies') {
+      try {
+        const res = await getJob();
+        console.log(res);
+        setCreatedJobs(res.data.data);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Issue in fetching jobs. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    }
+  }
 
   const getTotalDurationCount = (totalExperience) => {
     const currentYear = new Date().getFullYear();
@@ -279,7 +293,7 @@ const Profile = () => {
               {currentUser.tabs.map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => { setActiveTab(tab); fetchTabData(tab);}}
                   className={`px-4 py-2 rounded-lg text-sm capitalize transition
                     ${
                       activeTab === tab
@@ -516,7 +530,7 @@ const Profile = () => {
             {/* Experience */}
             {activeTab === "experience" && (
               <>
-                {profile?.additional_info?.experience.map((exp, index) => (
+                {profile?.additional_info?.experience.reverse().map((exp, index) => (
                   <div
                     key={index}
                     className="bg-white rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition mb-4"
@@ -580,7 +594,7 @@ const Profile = () => {
             {/* Education */}
             {activeTab === "education" && (
               <>
-                {profile?.additional_info?.education.map((edu, index) => (
+                {profile?.additional_info?.education.reverse().map((edu, index) => (
                   <div
                     key={index}
                     className="bg-white rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition mb-4"

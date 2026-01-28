@@ -99,3 +99,7 @@ export const sendMessage = (data) => {
 export const postJob = (data) => {
   return api.post("/api/job-posts", data);
 }
+
+export const getJob = () => {
+  return api.get("/api/job-posts");
+}
