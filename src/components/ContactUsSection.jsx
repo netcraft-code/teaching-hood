@@ -1,24 +1,55 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, MessageCircle, Send, ChevronDown, ChevronUp } from 'lucide-react';
 import contactUsEmailIcon from "./../assets/icons/contact-us-email.svg"
+import { sendMessage } from "../api/auth";
 
 const ContactUsSection = () => {
     const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    attachment: null,
   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleFileChange = (e) => {
+    setFormData({ 
+      ...formData, 
+      attachment: e.target.files[0] 
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Message sent successfully!');
-    setFormData({ name: '', email: '', message: '' });
-    alert(...formData);
+
+    try {
+      const payload = new FormData();
+      payload.append("name", formData.name);
+      payload.append("email", formData.email);
+      payload.append("message", formData.message);
+
+      if (formData.attachment) {
+        payload.append("attachment", formData.attachment);
+      }
+
+      await sendMessage(payload);
+
+      alert("Message sent successfully!");
+
+      setFormData({
+        name: '',
+        email: '',
+        message: '',
+        attachment: null,
+      });
+
+    } catch (error) {
+      console.error("Contact form error:", error);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -89,6 +120,26 @@ const ContactUsSection = () => {
                   rows="4"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 resize-none"
                 ></textarea>
+              </div>
+
+              {/* Attachment */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Attachment (optional)
+                </label>
+
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  accept=".pdf,.doc,.docx,.jpg,.png"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-pointer"
+                />
+
+                {formData.attachment && (
+                  <p className="text-xs text-gray-600 mt-1">
+                    Selected: {formData.attachment.name}
+                  </p>
+                )}
               </div>
 
               {/* Submit Button */}

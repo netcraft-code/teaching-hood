@@ -21,7 +21,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
+      
       <Route
         path="/post-job"
         element={

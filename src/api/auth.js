@@ -91,3 +91,11 @@ export const viewProfile = (id) => {
 export const getMaxCitiesJobs = () => {
   return api.get("/api/city/jobs");
 };
+
+export const sendMessage = (data) => {
+  return api.post("/api/send-message", data);
+}
+
+export const postJob = (data) => {
+  return api.post("/api/job-posts", data);
+}
