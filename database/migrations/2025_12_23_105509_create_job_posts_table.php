@@ -14,24 +14,32 @@ return new class extends Migration
         Schema::create('job_posts', function (Blueprint $table) {
             $table->id();
 
-            // School details
-            $table->string('school_name')->unique();
-            $table->string('city');
-            $table->string('state');
-            $table->string('pincode', 10);
-            $table->string('board');
+            // School Details
+            $table->string('school_name');
+            $table->string('city_id');
 
-            // Job details
-            $table->string('subject');
-            $table->string('grade');
-            $table->string('salary_range');
-            $table->unsignedInteger('min_experience');
-            $table->string('qualification');
-            $table->unsignedInteger('no_of_teachers');
+            // Job Details
+            $table->integer('subject_id')->nullable();
+            $table->integer('grade_id')->nullable();
 
-            // Facilities (optional)
+            // Facilities
             $table->boolean('food')->default(false);
             $table->boolean('accommodation')->default(false);
+
+            $table->string('job_type');
+            $table->integer('min_salary');
+            $table->integer('max_salary');
+            $table->string('experience_required');
+
+            $table->text('job_description');
+            $table->text('qualification_requirements');
+
+            $table->date('application_deadline');
+
+            $table->string('contact_email');
+            $table->string('contact_phone');
+
+            $table->boolean('status')->default(false);
 
             $table->timestamps();
         });

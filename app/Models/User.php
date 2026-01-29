@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Address::class);
     }
+
+    public function job_posts()
+    {
+        return $this->hasMany(JobPost::class);
+    }
 }

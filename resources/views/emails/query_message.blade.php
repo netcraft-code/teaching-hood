@@ -33,11 +33,6 @@
                             <p style="font-size:14px; color:#333;">
                                 <strong>Email:</strong> {{ $data['email'] }}
                             </p>
-
-                            <p style="font-size:14px; color:#333;">
-                                <strong>Subject:</strong> {{ $data['subject'] }}
-                            </p>
-
                             <hr style="border:none; border-top:1px solid #e5e5e5; margin:20px 0;">
 
                             <p style="font-size:14px; color:#333; line-height:1.6;">

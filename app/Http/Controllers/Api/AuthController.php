@@ -27,7 +27,6 @@ class AuthController extends Controller
             'user_type' => 'required|in:1,2,3', // 1 = Teacher, 2 = School, 3 = Recuiter
             'city'      => 'required_if:user_type,2,3',
             'phone'     => 'required|unique:users,phone',
-            // 'school_name' => 'required_if:user_type,2',
         ]);
 
         $user = User::create([
@@ -38,7 +37,6 @@ class AuthController extends Controller
             'user_type' => $request->user_type,
             'city' => $request->city,
             'phone' => $request->phone,
-            // 'school_name' => $request->school_name,
         ]);
 
         $token = $user->createToken('api-token')->plainTextToken;
@@ -81,9 +79,10 @@ class AuthController extends Controller
     }
 
     // USER PROFILE
-    public function profile(Request $request)
+    public function profile()
     {
-        $data = auth()->user()->load('additional_info.grade_levels', 'additional_info.subjects', 'additional_info.preferred_locations', 'addresses');
+        $data = auth()->user()->load('additional_info.grade_levels', 'additional_info.subjects', 'addresses', 'job_posts');
+        $data['totalActiveJobs'] = $data['job_posts']->count();
 
         if ($data['avatar_url']) {
             $data['avatar_url'] = url('/') . "/storage/" . $data['avatar_url'];
@@ -195,19 +194,25 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name'    => 'required|string|max:255',
             'email'   => 'required|email|max:255',
-            'subject' => 'required|string|max:255',
             'message' => 'required|string',
+            'attachment' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,jpeg,png',
         ]);
 
         DB::beginTransaction();
 
         try {
             // ✅ STORE MESSAGE FIRST
-            $queryMessage = QueryMessage::create($validated);
+            QueryMessage::create($validated);
 
             // ✅ SEND EMAIL TO ADMIN (recommended)
             Mail::to(config('mail.from.address'))
                 ->send(new QueryMessageMail($validated));
+
+            $attachmentPath = null;
+            if ($request->hasFile('attachment')) {
+                $attachmentPath = $request->file('attachment')
+                    ->store('query-attachments', 'public');
+            }
 
             DB::commit();
 
