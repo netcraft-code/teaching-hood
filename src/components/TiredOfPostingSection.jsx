@@ -99,7 +99,7 @@ const TiredOfPostingSection = () => {
               >
                 <option value="" disabled>Subject (e.g., Mathematics)</option>
                 {subjects.map((s) => (
-                  <option key={s.id} value={s.name}>{s.name}</option>
+                  <option key={s.id} value={s.name} className='text-black'>{s.name}</option>
                 ))}
               </select>
 
@@ -128,7 +128,7 @@ const TiredOfPostingSection = () => {
               >
                 <option value="" disabled>Grade (e.g., Primary)</option>
                 {grades.map((g) => (
-                  <option key={g.id} value={g.name}>{g.name}</option>
+                  <option key={g.id} value={g.name} className='text-black'>{g.name}</option>
                 ))}
               </select>
 
@@ -151,7 +151,7 @@ const TiredOfPostingSection = () => {
               >
                 <option value="" disabled>Location (e.g., Delhi)</option>
                 {cities.map((city) => (
-                  <option key={city.id} value={city.name}>{city.name}</option>
+                  <option key={city.id} value={city.name} className='text-black'>{city.name}</option>
                 ))}
               </select>
 

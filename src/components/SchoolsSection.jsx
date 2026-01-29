@@ -25,13 +25,13 @@ const SchoolsSection = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-green-50">
+    <section className="py-16 md:py-24 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Side - Content */}
           <div>
             {/* Badge */}
-            <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center space-x-2 bg-green-100 px-4 py-2 rounded-full mb-6">
               <span className="text-lg text-green-600 font-bold text-[21.39px]">For Schools</span>
             </div>
 

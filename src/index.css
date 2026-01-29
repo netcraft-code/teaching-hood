@@ -7,6 +7,10 @@
     overflow-y: scroll;
   }
 
+  html, body {
+    overflow-x: hidden;
+  }
+
   body {
     @apply font-sans;
   }

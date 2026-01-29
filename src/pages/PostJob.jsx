@@ -19,6 +19,7 @@ const PostJob = () => {
 
   const [formData, setFormData] = useState({
     school_name: '',
+    position: '',
     subject_id: '',
     grade_id: '',
     city_id: '',
@@ -61,11 +62,22 @@ const PostJob = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
     
+    setFormData(prev => {
+      const updated = {
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      };
+      
+      // 👇 Clear subject/grade when switching away from Teacher
+      if (name === 'position' && value !== 'Teacher') {
+        updated.subject_id = '';
+        updated.grade_id = '';
+      }
+      
+      return updated;
+    });
+
     setErrors(prev => {
       let newErrors = { ...prev };
 
@@ -75,6 +87,12 @@ const PostJob = () => {
       // 🔥 SPECIAL CASE: salary range
       if (name === "min_salary" || name === "max_salary") {
         newErrors.salary = "";
+      }
+
+      // 👇 Clear subject/grade errors when switching position
+      if (name === 'position') {
+        newErrors.subject_id = "";
+        newErrors.grade_id = "";
       }
 
       return newErrors;
@@ -102,8 +120,13 @@ const PostJob = () => {
   const validateForm = () => {
     let newErrors = {};
 
-    if (!formData.subject_id) newErrors.subject_id = "Subject is required";
-    if (!formData.grade_id) newErrors.grade_id = "Grade is required";
+    if (!formData.position) newErrors.position = "Position type is required"; // 👈 New validation
+
+    if (formData.position === 'Teacher') {
+      if (!formData.subject_id) newErrors.subject_id = "Subject is required";
+      if (!formData.grade_id) newErrors.grade_id = "Grade is required";
+    }
+    
     if (!formData.city_id) newErrors.city_id = "Location is required";
     if (!formData.job_type) newErrors.job_type = "Job type is required";
 
@@ -224,49 +247,90 @@ const PostJob = () => {
               </div>
               
               <div className="space-y-5">
-                {/* Subject */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Subject <span className="text-red-500">*</span>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    Position <span className="text-red-500">*</span>
                   </label>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    {['Teacher', 'Principal', 'Coordinator', 'Vice Principal'].map((position) => (
+                      <label
+                        key={position}
+                        className={`flex items-center space-x-3 p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          formData.position === position
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="position"
+                          value={position}
+                          checked={formData.position === position}
+                          onChange={handleInputChange}
+                          className="w-5 h-5 text-blue-500 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                        />
+                        <span className={`font-medium ${
+                          formData.position === position ? 'text-blue-700' : 'text-gray-700'
+                        }`}>
+                          {position}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
 
-                  <Select
-                    options={subjects.map(s => ({ value: s.id, label: s.name }))}
-                    value={subjects.find(s => s.id === formData.subject_id) ? { value: formData.subject_id, label: subjects.find(s => s.id === formData.subject_id).name } : null}
-                    onChange={(selected) => {
-                      setFormData(prev => ({ ...prev, subject_id: selected.value }));
-                      setErrors(prev => ({ ...prev, subject_id: "" }));
-                    }}
-                    placeholder="Select subject"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
-                  />
-
-                  {errors.subject_id && (
-                    <p className="text-sm text-red-500 mt-1">{errors.subject_id}</p>
+                  {errors.position && (
+                    <p className="text-sm text-red-500 mt-2">{errors.position}</p>
                   )}
                 </div>
 
-                {/* Grade */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Grade <span className="text-red-500">*</span>
-                  </label>
+                {/* 👇 CONDITIONAL: Subject - Only show for Teacher */}
+                {formData.position === 'Teacher' && (
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Subject <span className="text-red-500">*</span>
+                    </label>
 
-                  <Select
-                    options={grades.map(g => ({ value: g.id, label: g.name }))}
-                    value={grades.find(g => g.id === formData.grade_id) ? { value: formData.grade_id, label: grades.find(g => g.id === formData.grade_id).name } : null}
-                    onChange={(selected) => {
-                      setFormData(prev => ({ ...prev, grade_id: selected.value }));
-                      setErrors(prev => ({ ...prev, grade_id: "" }));
-                    }}
-                    placeholder="Select grade"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
-                  />
+                    <Select
+                      options={subjects.map(s => ({ value: s.id, label: s.name }))}
+                      value={subjects.find(s => s.id === formData.subject_id) ? { value: formData.subject_id, label: subjects.find(s => s.id === formData.subject_id).name } : null}
+                      onChange={(selected) => {
+                        setFormData(prev => ({ ...prev, subject_id: selected.value }));
+                        setErrors(prev => ({ ...prev, subject_id: "" }));
+                      }}
+                      placeholder="Select subject"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                    />
 
-                  {errors.grade_id && (
-                    <p className="text-sm text-red-500 mt-1">{errors.grade_id}</p>
-                  )}
-                </div>
+                    {errors.subject_id && (
+                      <p className="text-sm text-red-500 mt-1">{errors.subject_id}</p>
+                    )}
+                  </div>
+                )}
+
+                {/* 👇 CONDITIONAL: Grade - Only show for Teacher */}
+                {formData.position === 'Teacher' && (
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Grade <span className="text-red-500">*</span>
+                    </label>
+
+                    <Select
+                      options={grades.map(g => ({ value: g.id, label: g.name }))}
+                      value={grades.find(g => g.id === formData.grade_id) ? { value: formData.grade_id, label: grades.find(g => g.id === formData.grade_id).name } : null}
+                      onChange={(selected) => {
+                        setFormData(prev => ({ ...prev, grade_id: selected.value }));
+                        setErrors(prev => ({ ...prev, grade_id: "" }));
+                      }}
+                      placeholder="Select grade"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                    />
+
+                    {errors.grade_id && (
+                      <p className="text-sm text-red-500 mt-1">{errors.grade_id}</p>
+                    )}
+                  </div>
+                )}
 
                 {/* Location */}
                 <div>
@@ -379,7 +443,7 @@ const PostJob = () => {
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none appearance-none"
                     >
                       <option value="">Select experience level</option>
-                      <option value="0-1">0-1 years</option>
+                      <option value="0">Fresher</option>
                       <option value="1-3">1-3 years</option>
                       <option value="3-5">3-5 years</option>
                       <option value="5+">5+ years</option>
@@ -399,9 +463,16 @@ const PostJob = () => {
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Benefits/Perks/Accommodation
                   </label>
-                  <div className="space-y-3">
-                    <label className="flex items-start space-x-3 p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200">
-                      <div className="flex items-center h-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 grid grid-cols-1 md:grid-cols-2 items-center">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <Home className="w-5 h-5 text-orange-500" />
+                          <span className="font-medium text-gray-800">Food Provided</span>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-1">Fresh breakfast & lunch</p>
+                      </div>
+                      <div className="flex justify-end">
                         <input
                           type="checkbox"
                           name="food"
@@ -410,17 +481,17 @@ const PostJob = () => {
                           className="w-5 h-5 text-blue-500 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                         />
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                          <Home className="w-5 h-5 text-orange-500" />
-                          <span className="font-medium text-gray-800">Food Provided</span>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-1">Fresh breakfast & lunch</p>
-                      </div>
                     </label>
 
-                    <label className="flex items-start space-x-3 p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200">
-                      <div className="flex items-center h-6">
+                    <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <Home className="w-5 h-5 text-purple-500" />
+                          <span className="font-medium text-gray-800">Accommodation</span>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-1">On-site or nearby housing</p>
+                      </div>
+                      <div className="flex justify-end">
                         <input
                           type="checkbox"
                           name="accommodation"
@@ -428,13 +499,6 @@ const PostJob = () => {
                           onChange={handleInputChange}
                           className="w-5 h-5 text-blue-500 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                         />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                          <Home className="w-5 h-5 text-purple-500" />
-                          <span className="font-medium text-gray-800">Accommodation</span>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-1">On-site or nearby housing</p>
                       </div>
                     </label>
                   </div>
