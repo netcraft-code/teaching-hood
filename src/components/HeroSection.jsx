@@ -96,8 +96,8 @@ const HeroSection = () => {
                 style={{ 
                   textShadow: `
                     3px 2px 3px rgba(0, 0, 0, 0.10),
-                    3px 3px 3px rgba(0, 0, 0, 0.10)
-                    3px 4px 4px rgba(0, 0, 0, 0.10)
+                    3px 3px 3px rgba(0, 0, 0, 0.10),
+                    3px 4px 4px rgba(0, 0, 0, 0.10),
                     3px 4px 4px rgba(0, 0, 0, 0.10)
                   `
                 }}
@@ -108,8 +108,10 @@ const HeroSection = () => {
                 className="text-white font-normal text-[48px] sm:text-[60px] md:text-[70px] lg:text-[90px] leading-[1] tracking-[0]"
                 style={{ 
                   textShadow: `
-                    0px 2px 0px rgba(0, 0, 0, 0.10),
-                    0px 2px 0px rgba(0, 0, 0, 0.10)
+                    3px 2px 3px rgba(0, 0, 0, 0.10),
+                    3px 3px 3px rgba(0, 0, 0, 0.10),
+                    3px 4px 4px rgba(0, 0, 0, 0.10),
+                    3px 4px 4px rgba(0, 0, 0, 0.10)
                   `
                 }}
               >
