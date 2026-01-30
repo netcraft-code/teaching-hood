@@ -200,7 +200,7 @@ const SignUpPage = () => {
         </div>
 
         {/* Sign Up Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8">
           {/* User Type Selection */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">I am a</label>
@@ -267,7 +267,7 @@ const SignUpPage = () => {
                 Position
               </label>
 
-              <div className="flex gap-6">
+              <div className="flex gap-3">
                 <label className="flex items-center gap-2">
                   <input
                     type="radio"

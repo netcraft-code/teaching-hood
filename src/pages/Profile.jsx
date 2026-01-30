@@ -141,17 +141,17 @@ const Profile = () => {
   };
 
   const fetchTabData = async (tab) => {
-    if (tab === 'vacancies') {
-      try {
-        const res = await getJob();
-        console.log(res);
-        setCreatedJobs(res.data.data);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Issue in fetching jobs. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    }
+    // if (tab === 'vacancies') {
+    //   try {
+    //     const res = await getJob();
+    //     console.log(res);
+    //     setCreatedJobs(res.data.data);
+    //   } catch (err) {
+    //     setError(err.response?.data?.message || 'Issue in fetching jobs. Please try again.');
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // }
   }
 
   const getTotalDurationCount = (totalExperience) => {

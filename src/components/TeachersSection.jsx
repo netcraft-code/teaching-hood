@@ -78,12 +78,12 @@ const TeachersSection = () => {
             </div>
 
             {/* Heading */}
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-semibold text-gray-900 mb-6 pr-36">
+            <h2 className="text-xl md:text-3xl lg:text-5xl font-semibold text-gray-900 mb-6">
               Your teaching journey starts here.
             </h2>
 
             {/* Features List */}
-            <div className="space-y-6 mb-8 mr-8">
+            <div className="space-y-6 mb-8">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start space-x-4">
                   <div className={`flex-shrink-0 w-10 h-10 ${feature.bgColor} rounded-lg shadow-sm flex items-center justify-center border border-gray-100`}>

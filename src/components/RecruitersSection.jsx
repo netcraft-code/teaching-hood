@@ -37,18 +37,19 @@ const RecruitersSection = () => {
               <img 
                 src={trecruiterSectionLeftImage}
                 alt="Recruiter meeting"
-                className="w-full object-cover h-[640px]"
+                className="w-full object-cover h-[400px] sm:h-[500px] md:h-[640px]"
               />
 
               {/* Stats Overlay */}
-              <div className="absolute bottom-6 left-[30%] bg-white rounded-xl shadow-xl p-4 w-[20%] flex items-center justify-center">
-                <div className="grid grid-cols-1 gap-4 text-center">
+              <div className="absolute left-1/2 bottom-8 md:bottom-16 transform -translate-x-1/2 translate-y-1/2 
+                              bg-white rounded-xl shadow-xl p-3 sm:p-4 flex items-center justify-center">
+                <div className="grid grid-cols-1 gap-3 text-center">
                   {stats.map((stat, index) => (
                     <div key={index} className="flex flex-col items-center justify-center">
-                      <div className={`text-lg md:text-xl font-normal ${stat.color} mb-1`}>
+                      <div className={`text-lg sm:text-xl md:text-2xl font-normal ${stat.color} mb-1`}>
                         {stat.value}
                       </div>
-                      <div className="text-xs text-gray-600 whitespace-nowrap">
+                      <div className="text-xs sm:text-sm text-gray-600 whitespace-nowrap">
                         {stat.label}
                       </div>
                     </div>
