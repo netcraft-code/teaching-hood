@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Book, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import { HeroImages } from "../assets/images/HeroImages";
+import { homePageIcons } from "../assets/icons/HomePageIcons";
 import { getCities, getGradeLevels, getSubjects } from "../api/auth";
 
 const HeroSection = () => {
@@ -129,7 +130,7 @@ const HeroSection = () => {
               <div className="flex flex-col md:flex-row gap-2">
                 {/* Subject */}
                 <div className="flex-1 relative">
-                  <Book className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
+                  <img src={homePageIcons.subjectIcon} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
 
                   <select
                     value={subject}
@@ -151,13 +152,7 @@ const HeroSection = () => {
 
                 {/* Grade */}
                 <div className="flex-1 relative">
-                  <svg
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]"
-                    width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                  >
-                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
-                  </svg>
+                  <img src={homePageIcons.gradeIcon} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
 
                   <select
                     value={grade}
@@ -180,7 +175,7 @@ const HeroSection = () => {
 
                 {/* Location */}
                 <div className="flex-1 relative">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
+                  <img src={homePageIcons.locationIcon} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
 
                   <select
                     value={location}

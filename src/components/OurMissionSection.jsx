@@ -1,6 +1,7 @@
 import React from 'react';
 import { Users } from 'lucide-react';
 import { HomeImages } from "../assets/images/HomeImages";
+import { homePageIcons } from "../assets/icons/HomePageIcons";
 
 const OurMissionSection = () => {
   return (
@@ -57,30 +58,26 @@ const OurMissionSection = () => {
           {/* Right Image */}
             <div className="relative flex justify-center lg:justify-end">
                 {/* Main Image */}
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl w-full lg:w-[95%]">
+                <div className="relative w-full lg:w-[95%]">
+                  <div className="rounded-2xl overflow-hidden shadow-2xl">
                     <img
-                        src={HomeImages.ourMission}
-                        alt="Teacher in classroom"
-                        className="w-full h-[400px] md:h-[550px] object-cover"
+                      src={HomeImages.ourMission}
+                      alt="Teacher in classroom"
+                      className="w-full h-[400px] md:h-[550px] object-cover"
                     />
+                  </div>
 
-                    {/* Community Badge */}
-                    <div className="absolute bottom-1 left-0 transform -translate-y-1/2 -translate-x-1/4 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center space-x-3 z-10">
-                    {/* <div className="absolute bottom-6 -left-2 bg-white rounded-xl shadow-2xl p-4 border-2 border-gray-100 px-4 py-3"> */}
-                      {/* Icon */}
-                      <Users className="text-green-500" size={20} />
-
-                      {/* Text Column */}
-                      <div className="flex flex-col">
-                          <span className="text-xs font-sf font-medium text-gray-600">Community</span>
-                          <span className="font-sf font-normal text-sm text-gray-900">Growing Daily</span>
-                      </div>
+                  {/* Community Badge */}
+                  <div className="absolute bottom-1 -left-6 transform -translate-y-1/2 -translate-x-1/4 bg-white rounded-xl shadow-lg p-4 flex items-center space-x-3 z-10">
+                    <div className={`flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg shadow-sm flex items-center justify-center border border-gray-100`}>
+                      <img src={homePageIcons.teacherJoinFree} className="w-5 h-5 text-green-500" alt="Stay in Loop Icon" />
                     </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium text-gray-600">Community</span>
+                      <span className="font-normal text-lg text-gray-900">Growing Daily</span>
+                    </div>
+                  </div>
                 </div>
-
-                {/* Decorative Elements */}
-                <div className="absolute -z-10 -top-4 -right-4 w-32 h-32 bg-blue-100 rounded-full opacity-50"></div>
-                <div className="absolute -z-10 -bottom-4 -left-4 w-24 h-24 bg-green-100 rounded-full opacity-50"></div>
             </div>
         </div>
       </div>

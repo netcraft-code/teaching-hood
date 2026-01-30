@@ -122,7 +122,7 @@
                   Call Us
                 </p>
                 <p className="text-[19px] font-normal leading-[28.5px] text-green-600 align-middle">
-                  +1 (514) 312-5678
+                  +91-9923800424
                 </p>
               </div>
             </div>
@@ -172,7 +172,7 @@
               <div className="text-center">
                 <p className="text-[16px] font-normal leading-[24px] align-middle">Call Us</p>
                 <p className="text-[19px] font-normal leading-[28.5px] text-green-600 align-middle">
-                  +1 (514) 312-5678
+                  +91-9923800424
                 </p>
               </div>
             </div>

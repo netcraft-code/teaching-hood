@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, MessageCircle } from 'lucide-react';
+import { homePageIcons } from "../assets/icons/HomePageIcons";
 
 const Faqs = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -61,7 +62,7 @@ const Faqs = () => {
         <div className="text-center mb-12">
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full mb-6">
-            <MessageCircle className="w-4 h-4 text-blue-600" />
+            <img src={homePageIcons.faqIcon} className="w-4 h-4 text-blue-600" />
             <span className="text-sm text-blue-600 font-semibold">FAQ</span>
           </div>
 

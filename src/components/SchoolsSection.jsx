@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import { Users, TrendingUp, Target, Award, Check, Bell, Megaphone, FileText, Sparkles, Shield, Star, ChevronDown, ChevronUp, Mail, Phone, MapPin, MessageCircle, Send } from 'lucide-react';
+import { homePageIcons } from "../assets/icons/HomePageIcons";
 
 // 5. For Schools Section
 const SchoolsSection = () => {
   const features = [
     {
-      icon: <Megaphone className="w-6 h-6 text-red-500" />,
-      text: 'Post unlimited teaching vacancies and reach hundreds of active job-seeking teachers.'
+      icon: <img src={homePageIcons.schoolPostUnlimited} className="w-6 h-6 text-red-500" />,
+      text: 'Post unlimited teaching vacancies and reach hundreds of active job-seeking teachers.',
+      bgColor: 'bg-red-100'
     },
     {
-      icon: <FileText className="w-6 h-6 text-blue-500" />,
-      text: 'Get free access to candidate pool and contact matching profiles.'
+      icon: <img src={homePageIcons.schoolGetFree} className="w-6 h-6 text-blue-500" />,
+      text: 'Get free access to candidate pool and contact matching profiles.',
+      bgColor: 'bg-blue-100'
     },
     {
-      icon: <Sparkles className="w-6 h-6 text-yellow-500" />,
-      text: 'Find the right fit faster with smart filtering and easy onboarding.'
+      icon: <img src={homePageIcons.schoolFindRight} className="w-6 h-6 text-yellow-500" />,
+      text: 'Find the right fit faster with smart filtering and easy onboarding.',
+      bgColor: 'bg-yellow-100'
     }
   ];
 
@@ -29,7 +33,7 @@ const SchoolsSection = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Side - Content */}
-          <div>
+          <div className='mx-8'>
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-green-100 px-4 py-2 rounded-full mb-6">
               <span className="text-lg text-green-600 font-bold text-[21.39px]">For Schools</span>
@@ -44,7 +48,7 @@ const SchoolsSection = () => {
             <div className="space-y-6">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-gray-50 rounded-xl shadow-sm flex items-center justify-center border border-gray-100">
+                  <div className={`flex-shrink-0 w-12 h-12 ${feature.bgColor} rounded-xl shadow-sm flex items-center justify-center border border-gray-100`}>
                     {feature.icon}
                   </div>
                   <p className="text-gray-700 leading-relaxed pt-2 font-semibold text-[18px]">
@@ -57,18 +61,25 @@ const SchoolsSection = () => {
 
           {/* Right Side - Dashboard Preview */}
           <div className="relative">
-            <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-6">
+            <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 w-[95%]">
               {/* Dashboard Header */}
-              <div className="flex items-center justify-between mb-6">
-                {/* <div>
+              <div className="flex items-center justify-between mb-12">
+                <div
+                  className="
+                    absolute bg-white rounded-xl p-4
+                    -top-8 -left-6
+                    shadow-[0px_0px_0px_rgba(0,0,0,0),0px_0px_0px_rgba(0,0,0,0),0px_10px_10px_rgba(0,0,0,0.15),3px_4px_4px_rgba(0,0,0,0.10)]
+                  "
+                >
                   <div className="text-sm text-gray-500 mb-1">Avg. Time to Hire</div>
-                  <div className="text-2xl font-bold text-gray-900">7 Days</div>
-                </div> */}
+                  <div className="text-2xl font-normal text-green-500">7 Days</div>
+                </div>
+
                 <div className="flex items-center justify-between w-full">
                   {/* Left content */}
                   <div className='justify-start'>
-                    <div className="text-sm font-medium text-gray-700">
-                      Dashboard
+                    <div className="text-lg font-medium text-gray-700">
+                      Hiring Dashboard
                     </div>
                     <div className="text-xs text-gray-500">
                       Manage all your vacancies
@@ -76,7 +87,7 @@ const SchoolsSection = () => {
                   </div>
 
                   {/* Right badge */}
-                  <span className="justify-end px-4 py-2 bg-green-100 text-green-600 text-xs font-semibold rounded-lg whitespace-nowrap">
+                  <span className="justify-end px-4 py-2 bg-green-50 text-green-500 text-sm font-normal rounded-lg whitespace-nowrap">
                     12 Active
                   </span>
                 </div>

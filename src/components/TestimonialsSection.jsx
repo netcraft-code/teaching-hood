@@ -10,6 +10,7 @@ const TestimonialsSection = () => {
       role: "English Teacher",
       avatar: "R",
       color: "bg-blue",
+      bgColor: "bg-blue-500",
       borderColor: "border-blue-400",
       reviewQuote: homePageIcons.reviewBlue
     },
@@ -19,6 +20,7 @@ const TestimonialsSection = () => {
       role: "Principal",
       avatar: "S",
       color: "bg-green",
+      bgColor: "bg-green-500",
       borderColor: "border-green-400",
       reviewQuote: homePageIcons.reviewGreen
     },
@@ -28,6 +30,7 @@ const TestimonialsSection = () => {
       role: "Primary Teacher",
       avatar: "A",
       color: "bg-yellow",
+      bgColor: "bg-yellow-500",
       borderColor: "border-yellow-400",
       reviewQuote: homePageIcons.reviewYellow
     },
@@ -37,6 +40,7 @@ const TestimonialsSection = () => {
       role: "HR Manager",
       avatar: "R",
       color: "bg-red",
+      bgColor: "bg-red-500",
       borderColor: "border-red-400",
       reviewQuote: homePageIcons.reviewRed
     }
@@ -94,7 +98,7 @@ const TestimonialsSection = () => {
 
               {/* Author */}
               <div className="flex items-center space-x-3 pt-4 border-t border-gray-100">
-                <div className={`w-12 h-12 ${testimonial.color}-500 rounded-full flex items-center justify-center text-white font-bold text-lg`}>
+                <div className={`w-12 h-12 ${testimonial.bgColor} rounded-full flex items-center justify-center text-white font-bold text-lg`}>
                   {testimonial.avatar}
                 </div>
                 <div>

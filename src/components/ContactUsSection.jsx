@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin, MessageCircle, Send, ChevronDown, ChevronUp } from 'lucide-react';
 import contactUsEmailIcon from "./../assets/icons/contact-us-email.svg"
 import { sendMessage } from "../api/auth";
+import schoolFindRightIcon from "./../assets/icons/school-find-right.svg"
 
 const ContactUsSection = () => {
     const [formData, setFormData] = useState({
@@ -45,7 +46,6 @@ const ContactUsSection = () => {
         message: '',
         attachment: null,
       });
-
     } catch (error) {
       console.error("Contact form error:", error);
       alert("Something went wrong. Please try again.");
@@ -167,7 +167,7 @@ const ContactUsSection = () => {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500 mb-1">Email</div>
-                    <div className="font-semibold text-gray-900">contact@teachinghood.com</div>
+                    <div className="font-normal text-gray-900">contact@teachinghood.com</div>
                   </div>
                 </div>
 
@@ -178,7 +178,7 @@ const ContactUsSection = () => {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500 mb-1">Phone</div>
-                    <div className="font-semibold text-gray-900">+91-9923800424</div>
+                    <div className="font-normal text-gray-900">+91-9923800424</div>
                   </div>
                 </div>
 
@@ -189,28 +189,29 @@ const ContactUsSection = () => {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500 mb-1">Location</div>
-                    <div className="font-semibold text-gray-900">Gurgaon, India</div>
+                    <div className="font-normal text-gray-900">Gurgaon, India</div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Quick Response Box */}
-            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border-2 border-blue-100">
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0">
-                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                    <MessageCircle className="w-5 h-5 text-white" />
-                  </div>
+            <div className="flex rounded-2xl p-6 border-l-4 border-blue-400 shadow-md bg-white">
+              <div>
+                {/* Icon + Heading */}
+                <div className="flex items-center space-x-2 mb-1">
+                  <img src={schoolFindRightIcon} className="w-5 h-5" alt="icon" />
+                  <h4 className="font-semibold text-blue-500">Quick Response:</h4>
                 </div>
-                <div>
-                  <h4 className="font-bold text-gray-900 mb-2">Quick Response</h4>
-                  <p className="text-sm text-gray-600">
-                    We typically respond within 24 hours during business days.
-                  </p>
-                </div>
+
+                {/* Paragraph */}
+                <p className="text-sm text-gray-600">
+                  We typically respond within 24 hours during business days.
+                </p>
               </div>
             </div>
+
+
           </div>
         </div>
       </div>

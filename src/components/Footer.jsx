@@ -27,11 +27,11 @@ const Footer = () => {
                 </button>
               </div>
 
-              <p className="font-sf font-normal text-[16px] leading-[26px] tracking-[0] text-gray-400 whitespace-nowrap">
+              <p className="font-normal text-[16px] leading-[26px] tracking-[0] text-gray-400 whitespace-nowrap">
                 On a mission to simplify school hiring in India
               </p>
 
-              <div className="font-sf font-normal text-[16px] leading-[26px] tracking-[0] text-gray-400">
+              <div className="font-normal text-[16px] leading-[26px] tracking-[0] text-gray-400">
                 <p>contact@teachinghood.com</p>
                 <p>+91-9923800424</p>
                 <p>Gurgaon, India</p>
@@ -71,22 +71,22 @@ const Footer = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-36">
             {/* CANDIDATES */}
             <div>
-              <h4 className="text-white font-semibold mb-4 font-sf text-[18px] leading-[27px] tracking-[0]">Candidates</h4>
+              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">Candidates</h4>
               <ul className="space-y-3 text-xs">
-                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Find Jobs</li>
-                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Create Profile</li>
-                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Track Application</li>
-                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Learning Resources</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Find Jobs</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Create Profile</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Track Application</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Learning Resources</li>
               </ul>
             </div>
 
             {/* SCHOOLS */}
             <div>
-              <h4 className="text-white font-semibold mb-4 font-sf text-[18px] leading-[27px] tracking-[0]">Schools</h4>
+              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">Schools</h4>
               <ul className="space-y-3 text-xs">
-                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Post Jobs</li>
-                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Search Candidates</li>
-                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Post Jobs</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Search Candidates</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Seek Hiring Support
                 </li>
               </ul>
@@ -94,11 +94,11 @@ const Footer = () => {
 
             {/* RECRUITER */}
             <div>
-              <h4 className="text-white font-semibold mb-4 font-sf text-[18px] leading-[27px] tracking-[0]">Recruiter</h4>
+              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">Recruiter</h4>
               <ul className="space-y-3 text-xs">
-                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Post Jobs</li>
-                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Search Candidates</li>
-                <li className="hover:text-white cursor-pointer font-sf font-normal text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Post Jobs</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">Search Candidates</li>
+                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Seek Dedicated Hiring Support
                 </li>
               </ul>
@@ -112,21 +112,21 @@ const Footer = () => {
         {/* BOTTOM BAR */}
         <div className="mx-auto pt-4 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-2 md:gap-0">
           <div className="flex gap-6">
-            <span className="font-sf font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+            <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
               About Us
             </span>
-            <span className="font-sf font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+            <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
               Contact Us
             </span>
-            <span className="font-sf font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+            <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
               Privacy Policy
             </span>
-            <span className="font-sf font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+            <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
               Terms of Service
             </span>
           </div>
 
-          <div className="mt-2 md:mt-0 font-sf font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400">
+          <div className="mt-2 md:mt-0 font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400">
             Developed by XYZ
           </div>
         </div>

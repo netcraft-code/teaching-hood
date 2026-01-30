@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Book, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import { getCities, getGradeLevels, getSubjects } from "../api/auth";
+import { homePageIcons } from "../assets/icons/HomePageIcons";
 
 const TiredOfPostingSection = () => {
     const [subjects, setSubjects] = useState([]);
@@ -55,7 +56,7 @@ const TiredOfPostingSection = () => {
     };
 
     return (
-    <section className="py-16 md:py-24 bg-green-50">
+    <section className="py-16 md:py-24 bg-[linear-gradient(135deg,rgba(239,246,255,0.7)_0%,#FFFFFF_50%,rgba(240,253,244,0.3)_100%)]">
       <div className="container mx-auto px-4">
 
         {/* Heading */}
@@ -73,10 +74,10 @@ const TiredOfPostingSection = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-white border-2 border-gray-100 rounded-2xl p-8 hover:shadow-xl transition"
+              className="bg-white border-2 border-gray-100 rounded-2xl p-8 px-12 shadow-xl transition"
             >
               <div className="text-center text-2xl mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-bold text-center mb-2">{feature.title}</h3>
+              <h3 className="text-xl font-normal text-center mb-2">{feature.title}</h3>
               <p className="text-gray-600 text-center">{feature.description}</p>
             </div>
           ))}
@@ -88,7 +89,7 @@ const TiredOfPostingSection = () => {
 
             {/* Subject */}
             <div className="flex-1 relative">
-              <Book className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
+              <img src={homePageIcons.subjectIcon} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
 
               <select
                 value={subject}
@@ -110,13 +111,7 @@ const TiredOfPostingSection = () => {
 
             {/* Grade */}
             <div className="flex-1 relative">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]"
-                width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
+              <img src={homePageIcons.gradeIcon} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
 
               <select
                 value={grade}
@@ -139,7 +134,7 @@ const TiredOfPostingSection = () => {
 
             {/* Location */}
             <div className="flex-1 relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
+              <img src={homePageIcons.locationIcon} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
 
               <select
                 value={location}
