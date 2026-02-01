@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import JobCard from "../components/JobCard";
 
-const PostJob = () => {
-
+const Home = () => {
   return (
-    <div className="min-h-screen from-slate-50 via-blue-50 to-indigo-50">
-    </div>
+    <>
+      <Header />
+      <JobCard />
+      <Footer />
+    </>
   );
 };
 
-export default PostJob;
+export default Home;

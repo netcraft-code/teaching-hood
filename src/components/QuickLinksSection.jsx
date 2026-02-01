@@ -20,18 +20,22 @@ const QuickLinksSection = () => {
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8">
       {/* Heading Section */}
-      <div className="text-center mb-8">
-        <h1 className="font-sf font-semibold text-[48px] leading-[65px] tracking-[0px] text-gray-900 mb-2">
+      <div className="text-center mb-4">
+        <h1 className="font-semibold text-[48px] leading-[65px] tracking-[0px] text-gray-900 mb-2">
           Opportunities handpicked for you
         </h1>
 
-        <p className="font-sf font-normal text-[18px] leading-[29.25px] tracking-[0px] text-gray-600">
+        <p className="font-normal text-[18px] leading-[29.25px] tracking-[0px] text-gray-600">
           Discover the most in-demand teaching and school leadership roles curated specially for you.
         </p>
-        <p className="font-sf font-normal text-[18px] leading-[29.25px] tracking-[0px] text-gray-600">
+        <p className="font-normal text-[18px] leading-[29.25px] tracking-[0px] text-gray-600">
           Find the position that matches your skills, passion, and experience.
         </p>
       </div>
+
+      <p className="font-medium flex justify-center text-[20px] leading-[29.25px] tracking-[0px] text-red-500 mb-12">
+        Quick Links
+      </p>
 
       {/* Quick Links Section */}
       <div className="flex flex-wrap justify-center -mx-3 md:gap-6">

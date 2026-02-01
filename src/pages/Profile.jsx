@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getProfile, logoutUser, updateAvatarBanner, getJob } from "../api/auth";
+import { getProfile, logoutUser, updateAvatarBanner, getJobs } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
 import EditProfileModal from "../components/EditProfileModal";
@@ -143,7 +143,7 @@ const Profile = () => {
   const fetchTabData = async (tab) => {
     // if (tab === 'vacancies') {
     //   try {
-    //     const res = await getJob();
+    //     const res = await getJobs();
     //     console.log(res);
     //     setCreatedJobs(res.data.data);
     //   } catch (err) {
