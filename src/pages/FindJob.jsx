@@ -2,7 +2,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import JobCard from "../components/JobCard";
 
-const Home = () => {
+const FindJob = () => {
   return (
     <>
       <Header />
@@ -12,4 +12,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default FindJob;

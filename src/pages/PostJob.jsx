@@ -4,6 +4,7 @@ import { getCities, getGradeLevels, getSubjects, getProfile, postJob } from "../
 import AsyncSelect from 'react-select/async';
 import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
+import { postJobIcons } from "../assets/icons/postJobIcons"
 
 const PostJob = () => {
   const [subjects, setSubjects] = useState([]);
@@ -142,6 +143,12 @@ const PostJob = () => {
     if (!formData.job_description)
       newErrors.job_description = "Job description is required";
 
+    if (!formData.contact_email)
+      newErrors.contact_email = "Email field is required"
+    
+    if (!formData.contact_phone)
+      newErrors.contact_phone = "Phone Number is required"
+
     if (!formData.qualification_requirements)
       newErrors.qualification_requirements = "Qualifications & requirements are required";
 
@@ -240,13 +247,14 @@ const PostJob = () => {
             {/* Basic Information Card */}
             <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <User className="w-5 h-5 text-blue-600" />
+                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                  <img src={postJobIcons.basicInformation} className="w-5 h-5 text-blue-600" />
                 </div>
                 <h2 className="text-xl font-bold text-gray-800">Basic Information</h2>
               </div>
               
               <div className="space-y-5">
+                <p className="text-sm text-gray-600">Tell us about the position</p>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Position <span className="text-red-500">*</span>
@@ -268,9 +276,9 @@ const PostJob = () => {
                           value={position}
                           checked={formData.position === position}
                           onChange={handleInputChange}
-                          className="w-5 h-5 text-blue-500 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                          className="w-3 h-3 text-blue-500 border-gray-300 focus:ring-blue-500 focus:ring-2"
                         />
-                        <span className={`font-medium ${
+                        <span className={`font-regular ${
                           formData.position === position ? 'text-blue-700' : 'text-gray-700'
                         }`}>
                           {position}
@@ -391,14 +399,14 @@ const PostJob = () => {
             {/* Job Details Card */}
             <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-green-600" />
+                <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+                  <img src={postJobIcons.jobDeatail} className="w-5 h-5 text-green-600" />
                 </div>
                 <h2 className="text-xl font-bold text-gray-800">Job Details</h2>
               </div>
               
               <div className="space-y-5">
-                <p className="text-sm text-gray-600">Collect job details information</p>
+                <p className="text-sm text-gray-600">Subject and grade information</p>
 
                 {/* Salary Range */}
                 <div>
@@ -423,7 +431,7 @@ const PostJob = () => {
                       className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-2">Tip: We usually charge 10% on candidates.</p>
+                  <p className="text-xs text-gray-500 mt-2">💡 Tip: Jobs with salary info get 3x more applications.</p>
 
                   {errors.salary && (
                     <p className="text-sm text-red-500 mt-1">{errors.salary}</p>
@@ -461,16 +469,18 @@ const PostJob = () => {
                 {/* Benefits */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Benefits/Perks/Accommodation
+                    Benefits (Food & Accommodation)
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 grid grid-cols-1 md:grid-cols-2 items-center">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
-                          <Home className="w-5 h-5 text-orange-500" />
+                          <div className='bg-orange-50 flex items-center justify-center w-10 h-10 rounded-full'>
+                            <img src={postJobIcons.food} className="w-5 h-5" />
+                          </div>
                           <span className="font-medium text-gray-800">Food Provided</span>
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">Fresh breakfast & lunch</p>
+                        <p className="text-xs text-gray-600 mt-1">Meals included for staff</p>
                       </div>
                       <div className="flex justify-end">
                         <input
@@ -485,14 +495,16 @@ const PostJob = () => {
 
                     <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
                       <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                          <Home className="w-5 h-5 text-purple-500" />
+                        <div className="flex items-center space-x-2 rounded-full">
+                          <div className='bg-purple-100 flex items-center justify-center w-10 h-10 rounded-full'>
+                            <img src={postJobIcons.accommodation} className="w-5 h-5" />
+                          </div>
                           <span className="font-medium text-gray-800">Accommodation</span>
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">On-site or nearby housing</p>
+                        <p className="text-sm text-gray-600 mt-1">Living Quarters available</p>
                       </div>
                       <div className="flex justify-end">
-                        <input
+                        <input  
                           type="checkbox"
                           name="accommodation"
                           checked={formData.accommodation}
@@ -509,14 +521,14 @@ const PostJob = () => {
             {/* Requirements & Description Card */}
             <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-yellow-600" />
+                <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
+                  <img src={postJobIcons.requirementDescription} className="w-5 h-5" />
                 </div>
                 <h2 className="text-xl font-bold text-gray-800">Requirements & Description</h2>
               </div>
               
               <div className="space-y-5">
-                <p className="text-sm text-gray-600">Explain the requirements for the job</p>
+                <p className="text-sm text-gray-600">Detailed information about the role</p>
 
                 {/* Job Description */}
                 <div>
@@ -528,7 +540,7 @@ const PostJob = () => {
                     value={formData.job_description}
                     onChange={handleInputChange}
                     rows="4"
-                    placeholder="Describe the role, responsibilities, and your needs for this opportunity (e.g., ..."
+                    placeholder="Describe the role, responsibilities, and what makes this opportunity great..."
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none resize-none"
                   />
 
@@ -549,7 +561,7 @@ const PostJob = () => {
                     value={formData.qualification_requirements}
                     onChange={handleInputChange}
                     rows="4"
-                    placeholder="List required qualifications, skills, certificates, and any conditions (e.g., B.Ed, ..."
+                    placeholder="List required qualifications, skills, certifications, etc. (one per line)"
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none resize-none"
                   />
 
@@ -580,14 +592,14 @@ const PostJob = () => {
             {/* Contact Information Card */}
             <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                  <Users className="w-5 h-5 text-red-600" />
+                <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
+                  <img src={postJobIcons.contactInformation} className="w-5 h-5" />
                 </div>
                 <h2 className="text-xl font-bold text-gray-800">Contact Information</h2>
               </div>
               
               <div className="space-y-5">
-                <p className="text-sm text-gray-600">Help candidates contact you</p>
+                <p className="text-sm text-gray-600">How candidates can reach you</p>
 
                 {/* Contact Email */}
                 <div>
@@ -598,10 +610,15 @@ const PostJob = () => {
                     type="email"
                     name="contact_email"
                     value={formData.contact_email}
-                    disabled
+                    onChange={handleInputChange}
                     placeholder="info@school.com"
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                   />
+                  {errors.contact_email && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.contact_email}
+                    </p>
+                  )}
                 </div>
 
                 {/* Contact Phone */}
@@ -613,17 +630,25 @@ const PostJob = () => {
                     type="tel"
                     name="contact_phone"
                     value={formData.contact_phone}
-                    disabled
-                    placeholder="+91 (12345) 67890"
+                    onChange={handleInputChange}
+                    placeholder="9876543210"
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                   />
+
+                  {errors.contact_phone && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.contact_phone}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Action Buttons - Mobile */}
-            <div className="flex space-x-3">
-              <button onClick={() => navigate("/")} className="flex-1 px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 font-medium">
+            <div className="grid grid-cols-2 gap-12 mx-20">
+              <button
+                onClick={() => navigate("/")}
+                className="flex-1 px-2 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 font-medium">
                 Cancel
               </button>
               <button 
@@ -641,26 +666,26 @@ const PostJob = () => {
             <div className="bg-blue-50 rounded-3xl p-6 top-24">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-10 h-10 bg-white backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <HelpCircle className="w-5 h-5 text-blue-600" />
+                  <img src={postJobIcons.tipsForSuccess} className="w-5 h-5" />
                 </div>
                 <h3 className="font-medium">Tips for Success</h3>
               </div>
               
               <div className="space-y-3 text-sm">
-                <div className="flex items-start space-x-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-black mt-1.5 flex-shrink-0" />
+                <div className="flex space-x-2">
+                  <img src={postJobIcons.tipsTick} />
                   <p className='font-normal text-gray-700'>Be specific about requirements</p>
                 </div>
-                <div className="flex items-start space-x-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-black mt-1.5 flex-shrink-0" />
-                  <p className='font-normal text-gray-700'>Include salary/CTCB (optional)</p>
+                <div className="flex space-x-2">
+                  <img src={postJobIcons.tipsTick} />
+                  <p className='font-normal text-gray-700'>Include salary for better response</p>
                 </div>
-                <div className="flex items-start space-x-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-black mt-1.5 flex-shrink-0" />
+                <div className="flex space-x-2">
+                  <img src={postJobIcons.tipsTick} />
                   <p className='font-normal text-gray-700'>Highlight school culture & benefits</p>
                 </div>
-                <div className="flex items-start space-x-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-black mt-1.5 flex-shrink-0" />
+                <div className="flex space-x-2">
+                  <img src={postJobIcons.tipsTick} />
                   <p className='font-normal text-gray-700'>Use clear, professional language</p>
                 </div>
               </div>
@@ -683,7 +708,7 @@ const PostJob = () => {
 
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-6 h-6 text-purple-600" />
+                    <img src={postJobIcons.hireTime} className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="font-normal text-xl text-green-400">7 Days</div>

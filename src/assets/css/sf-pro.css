@@ -1,11 +1,9 @@
 /* src/assets/fonts/sf-pro.css */
-
 @font-face {
   font-family: "SF Pro Display";
-  src: url("./../fonts/SFPRODISPLAYHEAVYITALIC.OTF") format("opentype");
-  font-weight: 800;
-  font-style: italic;
-  font-display: swap;
+  src: url("./../fonts/SFPRODISPLAYLIGHTITALIC.OTF") format("opentype");
+  font-weight: 300;
+  font-style: light;
 }
 
 @font-face {
@@ -18,15 +16,15 @@
 @font-face {
   font-family: "SF Pro Display";
   src: url("./../fonts/SFPRODISPLAYMEDIUM.OTF") format("opentype");
-  font-weight: 600;
-  font-style: semibold;
+  font-weight: 500;
+  font-style: medium;
 }
 
 @font-face {
   font-family: "SF Pro Display";
   src: url("./../fonts/SFPRODISPLAYMEDIUM.OTF") format("opentype");
-  font-weight: 500;
-  font-style: medium;
+  font-weight: 600;
+  font-style: semibold;
 }
 
 @font-face {
@@ -34,4 +32,12 @@
   src: url("./../fonts/SFPRODISPLAYBOLD.OTF") format("opentype");
   font-weight: 700;
   font-style: bold;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("./../fonts/SFPRODISPLAYHEAVYITALIC.OTF") format("opentype");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
 }

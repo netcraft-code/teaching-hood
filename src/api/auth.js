@@ -100,6 +100,6 @@ export const postJob = (data) => {
   return api.post("/api/job-posts", data);
 }
 
-export const getJobs = () => {
-  return api.get("/api/job-posts");
+export const getJobs = (params = {}) => {
+  return api.get("/api/job-posts",  { params });
 }

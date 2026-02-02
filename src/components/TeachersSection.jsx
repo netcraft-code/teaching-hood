@@ -1,5 +1,4 @@
 import React from "react";
-import { Users, Check, Bell } from "lucide-react";
 import teacherSectionLeftImage from "./../assets/images/teacher-section-left.png";
 import teacherSectionRightImage from "./../assets/images/teacher-section-right.png";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
@@ -123,24 +122,11 @@ const TeachersSection = () => {
             {/* Pro Tip Box */}
             <a
               href="/signup"
-              class="bg-blue-500 hover:bg-blue-700 text-white px-8 py-4 rounded-lg
+              className="bg-blue-500 hover:bg-blue-700 text-white px-8 py-4 rounded-lg
             font-sf font-bold text-[16px] whitespace-nowrap"
             >
               Create Profile
             </a>
-            {/* <div className="bg-blue-50 rounded-lg p-6 w-[90%]">
-              <div className="flex items-start space-x-3">
-                <div>
-                  <div className="text-blue-500 font-semibold text-sm mb-1">
-                    💡 Pro Tip:
-                  </div>
-                  <p className="text-gray-700 text-sm">
-                    Complete your profile to increase your chance of receiving
-                    interview calls from top schools
-                  </p>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
