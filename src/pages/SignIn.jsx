@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Eye, EyeOff, Lock } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { loginUser, sendOTP, verifyOTP } from "../api/auth"; // ✅ Import from auth.js
-import logo from "../assets/images/logo.svg";
+import logo from "../assets/images/logo.png";
 import authPageBG from "../assets/images/auth-page-bg.png"
 
 const routes = {

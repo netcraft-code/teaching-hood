@@ -93,14 +93,20 @@ const TeachersSection = () => {
           <div>
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-red-50 px-4 py-2 rounded-full mb-6">
-              <span className="text-lg text-red-600 font-bold text-[21.39px]">
+              <span className="text-lg text-red-600 font-semibold text-[21.39px]">
                 For Teachers
               </span>
             </div>
+            <a
+              href="/signup"
+              className="inline-flex items-center space-x-2 bg-red-50 px-4 py-2 rounded-full mb-6 ml-4 font-bold text-red-600"
+            >
+              Create Profile
+            </a>
 
             {/* Heading */}
             <h2 className="text-xl md:text-3xl lg:text-5xl font-semibold text-gray-900 mb-6">
-              Your teaching journey starts here.
+              Your teaching journey starts here
             </h2>
 
             {/* Features List */}
@@ -120,13 +126,6 @@ const TeachersSection = () => {
             </div>
 
             {/* Pro Tip Box */}
-            <a
-              href="/signup"
-              className="bg-blue-500 hover:bg-blue-700 text-white px-8 py-4 rounded-lg
-            font-sf font-bold text-[16px] whitespace-nowrap"
-            >
-              Create Profile
-            </a>
           </div>
         </div>
       </div>
