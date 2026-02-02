@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Home, User, FileText, HelpCircle, Users, Briefcase, Calendar, Book } from 'lucide-react';
+import { ChevronDown, HelpCircle, Users, Briefcase } from 'lucide-react';
 import { getCities, getGradeLevels, getSubjects, getProfile, postJob } from "../api/auth";
 import AsyncSelect from 'react-select/async';
 import Select from 'react-select';
@@ -10,9 +10,11 @@ const PostJob = () => {
   const [subjects, setSubjects] = useState([]);
   const [grades, setGrades] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchDropdowns();
@@ -20,6 +22,7 @@ const PostJob = () => {
 
   const [formData, setFormData] = useState({
     school_name: '',
+    board: '',
     position: '',
     subject_id: '',
     grade_id: '',
@@ -39,6 +42,8 @@ const PostJob = () => {
   });
 
   const fetchDropdowns = async () => {
+    setLoading(true);
+
     try {
       const [subjectsRes, gradesRes, profileRes] = await Promise.all([
         getSubjects(),
@@ -48,16 +53,20 @@ const PostJob = () => {
 
       setSubjects(subjectsRes?.data?.data || []);
       setGrades(gradesRes?.data?.data || []);
-
+      setProfile(profileRes?.data?.data || null);
+console.log(profileRes?.data?.data);
       // Pre-fill contact info
       setFormData(prev => ({
         ...prev,
         contact_email: profileRes?.data?.data?.email || '',
         contact_phone: profileRes?.data?.data?.phone || '',
-        school_name: profileRes?.data?.data?.first_name || ''
+        school_name: profileRes?.data?.data?.first_name || '',
+        board: profileRes?.data?.data?.board || ''
       }));
     } catch (error) {
       console.error("Dropdown API error", error);
+    } finally {
+      setLoading(false); // ✅ VERY IMPORTANT
     }
   };
 
@@ -126,6 +135,10 @@ const PostJob = () => {
     if (formData.position === 'Teacher') {
       if (!formData.subject_id) newErrors.subject_id = "Subject is required";
       if (!formData.grade_id) newErrors.grade_id = "Grade is required";
+    }
+
+    if (profile.user_type == 3) {
+      if (!formData.board) newErrors.board = "Board is required";
     }
     
     if (!formData.city_id) newErrors.city_id = "Location is required";
@@ -203,6 +216,14 @@ const PostJob = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading ...
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen from-slate-50 via-blue-50 to-indigo-50">
       {/* Header */}
@@ -255,6 +276,44 @@ const PostJob = () => {
               
               <div className="space-y-5">
                 <p className="text-sm text-gray-600">Tell us about the position</p>
+
+                {profile.user_type == 3 && (
+                  <div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        School Name
+                      </label>
+
+                      <input
+                        type="text"
+                        name="school_name"
+                        value={formData.school_name}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 mb-6 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Board
+                      </label>
+
+                      <input
+                        type="text"
+                        name="board"
+                        value={formData.board}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                      />
+
+                      {errors.board && (
+                        <p className="text-sm text-red-500 mt-1">{errors.board}</p>
+                      )}
+                    </div>
+
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Position <span className="text-red-500">*</span>
