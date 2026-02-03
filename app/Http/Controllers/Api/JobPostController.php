@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\JobPost;
+use App\Models\LikedJob;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class JobPostController extends Controller
 {
@@ -57,17 +57,14 @@ class JobPostController extends Controller
             $job->city_name = $job->city->name;
             $job->subject_name = $job->subject?->name;
             $job->grade_name = $job->grade?->name;
-            $job->is_liked = 0;
-            $job->new_jobs = 0;
-
-            if (auth()->user()->user_type == 2) {
-                $job->board = auth()->user()->board;
-            }
+            $job->is_liked = $job->like ? true : false;
 
             $job->total_applicants = 0;
         });
 
-        return response_formatter(DEFAULT_200, $jobs);
+        $extraData['new_jobs'] = 0;
+
+        return response_formatter(DEFAULT_200, $jobs, $extraData);
     }
 
     // CREATE JOB POST
@@ -190,7 +187,6 @@ class JobPostController extends Controller
     public function destroy($id)
     {
         JobPost::findOrFail($id)->delete();
-
         return response_formatter(DEFAULT_DELETED_200);
     }
 
@@ -209,5 +205,44 @@ class JobPostController extends Controller
         });
 
         return response_formatter(DEFAULT_200, $jobs);
+    }
+
+    public function like(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'job_post_id' => 'required|exists:job_posts,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response_formatter(DEFAULT_VALIDATION_422, $validator->errors());
+        }
+
+        $userId = auth()->id();
+
+        $likedJob = LikedJob::where([
+            'user_id'     => $userId,
+            'job_post_id' => $request->job_post_id,
+        ])->first();
+
+        if (!$likedJob) {
+            // ✅ LIKE
+            LikedJob::create([
+                'user_id'     => $userId,
+                'job_post_id' => $request->job_post_id,
+            ]);
+
+            return response_formatter(DEFAULT_200, [
+                'liked' => true,
+                'message' => 'Job liked successfully'
+            ]);
+        } else {
+            // ❌ UNLIKE
+            $likedJob->delete();
+
+            return response_formatter(DEFAULT_200, [
+                'liked' => false,
+                'message' => 'Job unliked successfully'
+            ]);
+        }
     }
 }

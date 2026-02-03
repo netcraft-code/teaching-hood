@@ -31,4 +31,19 @@ class JobPost extends Model
     {
         return $this->belongsTo(City::class);
     }
+
+    public function grade()
+    {
+        return $this->belongsTo(GradeLevel::class);
+    }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
+
+    public function like()
+    {
+        return $this->belongsTo(LikedJob::class, 'user_id', 'user_id');
+    }
 }

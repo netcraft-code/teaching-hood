@@ -32,6 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('change-password', [AuthController::class, 'changePassword']);
 
+    Route::post('like', [JobPostController::class, 'like']);
+
     Route::apiResource('job-posts', JobPostController::class);
 
     Route::post('send-message', [AuthController::class, 'sendMessage']);
