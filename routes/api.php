@@ -15,13 +15,13 @@ Route::get('city/jobs', [JobPostController::class, 'getMaxCitiesJobs']);
 
 Route::post('send-otp', [AuthController::class, 'sendOTP']);
 Route::post('verify-otp', [AuthController::class, 'verifyOTP']);
+Route::get('subjects', [HelperController::class, 'getSubjects']);
+Route::get('gradelevels', [HelperController::class, 'getGradeLevel']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('image/update', [ProfileController::class, 'updateImage']);
 
     Route::get('profile', [AuthController::class, 'profile']);
-    Route::get('subjects', [HelperController::class, 'getSubjects']);
-    Route::get('gradelevels', [HelperController::class, 'getGradeLevel']);
 
     Route::get('states', [HelperController::class, 'states']);
     Route::get('countries', [HelperController::class, 'countries']);
