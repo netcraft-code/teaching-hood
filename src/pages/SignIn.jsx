@@ -201,7 +201,7 @@ const SignInPage = () => {
 
           <div className="flex items-center justify-center mx-auto">
             <p className="text-lg sm:text-xl font-semibold text-center leading-[33px] text-white">
-              Welcome Back
+              Log In
             </p>
           </div>
         </div>
