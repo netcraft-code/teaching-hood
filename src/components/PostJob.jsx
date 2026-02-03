@@ -235,7 +235,7 @@ const PostJob = () => {
                       className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-2">Tip: We usually charge 10% on candidates.</p>
+                  {/* <p className="text-xs text-gray-500 mt-2">Tip: We usually charge 10% on candidates.</p> */}
                 </div>
 
                 {/* Experience Required */}

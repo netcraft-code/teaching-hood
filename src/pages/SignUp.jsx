@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Mail, Eye, EyeOff } from "lucide-react";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/tp-logo.png";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
 import authPageBG from "../assets/images/auth-page-bg.png";
@@ -195,7 +195,7 @@ const SignUpPage = () => {
               <img
                 src={logo}
                 alt="Teachinghood Logo"
-                className="h-12 sm:h-16 w-auto"
+                className="w-[250px]"
               />
             </button>
           </div>

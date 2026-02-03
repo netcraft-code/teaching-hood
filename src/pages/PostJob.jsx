@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, HelpCircle, Users, Briefcase } from 'lucide-react';
-import { getCities, getGradeLevels, getSubjects, getProfile, postJob } from "../api/auth";
-import AsyncSelect from 'react-select/async';
-import Select from 'react-select';
+import React, { useState, useEffect } from "react";
+import { ChevronDown, HelpCircle, Users, Briefcase } from "lucide-react";
+import {
+  getCities,
+  getGradeLevels,
+  getSubjects,
+  getProfile,
+  postJob,
+} from "../api/auth";
+import AsyncSelect from "react-select/async";
+import Select from "react-select";
 import { useNavigate } from "react-router-dom";
-import { postJobIcons } from "../assets/icons/postJobIcons"
+import { postJobIcons } from "../assets/icons/postJobIcons";
 
 const PostJob = () => {
   const [subjects, setSubjects] = useState([]);
@@ -21,24 +27,24 @@ const PostJob = () => {
   }, []);
 
   const [formData, setFormData] = useState({
-    school_name: '',
-    board: '',
-    position: '',
-    subject_id: '',
-    grade_id: '',
-    city_id: '',
-    job_type: '',
-    min_salary: '',
-    max_salary: '',
-    experience_required: '',
+    school_name: "",
+    board: "",
+    position: "",
+    subject_id: "",
+    grade_id: "",
+    city_id: "",
+    job_type: "",
+    min_salary: "",
+    max_salary: "",
+    experience_required: "",
     food: false,
     accommodation: false,
-    job_description: '',
-    qualification_requirements: '',
-    application_deadline: '',
+    job_description: "",
+    qualification_requirements: "",
+    application_deadline: "",
     status: false,
-    contact_email: '',
-    contact_phone: ''
+    contact_email: "",
+    contact_phone: "",
   });
 
   const fetchDropdowns = async () => {
@@ -48,20 +54,20 @@ const PostJob = () => {
       const [subjectsRes, gradesRes, profileRes] = await Promise.all([
         getSubjects(),
         getGradeLevels(),
-        getProfile()
+        getProfile(),
       ]);
 
       setSubjects(subjectsRes?.data?.data || []);
       setGrades(gradesRes?.data?.data || []);
       setProfile(profileRes?.data?.data || null);
-console.log(profileRes?.data?.data);
+      console.log(profileRes?.data?.data);
       // Pre-fill contact info
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        contact_email: profileRes?.data?.data?.email || '',
-        contact_phone: profileRes?.data?.data?.phone || '',
-        school_name: profileRes?.data?.data?.first_name || '',
-        board: profileRes?.data?.data?.board || ''
+        contact_email: profileRes?.data?.data?.email || "",
+        contact_phone: profileRes?.data?.data?.phone || "",
+        school_name: profileRes?.data?.data?.first_name || "",
+        board: profileRes?.data?.data?.board || "",
       }));
     } catch (error) {
       console.error("Dropdown API error", error);
@@ -72,23 +78,23 @@ console.log(profileRes?.data?.data);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
-    setFormData(prev => {
+
+    setFormData((prev) => {
       const updated = {
         ...prev,
-        [name]: type === 'checkbox' ? checked : value
+        [name]: type === "checkbox" ? checked : value,
       };
-      
+
       // 👇 Clear subject/grade when switching away from Teacher
-      if (name === 'position' && value !== 'Teacher') {
-        updated.subject_id = '';
-        updated.grade_id = '';
+      if (name === "position" && value !== "Teacher") {
+        updated.subject_id = "";
+        updated.grade_id = "";
       }
-      
+
       return updated;
     });
 
-    setErrors(prev => {
+    setErrors((prev) => {
       let newErrors = { ...prev };
 
       // clear field specific error
@@ -100,7 +106,7 @@ console.log(profileRes?.data?.data);
       }
 
       // 👇 Clear subject/grade errors when switching position
-      if (name === 'position') {
+      if (name === "position") {
         newErrors.subject_id = "";
         newErrors.grade_id = "";
       }
@@ -117,22 +123,24 @@ console.log(profileRes?.data?.data);
         limit: 20,
       });
 
-      return res?.data?.data?.map(city => ({
-        value: city.id,
-        label: city.name,
-      })) || [];
+      return (
+        res?.data?.data?.map((city) => ({
+          value: city.id,
+          label: city.name,
+        })) || []
+      );
     } catch (error) {
       console.error("City API error", error);
       return [];
     }
   };
-  
+
   const validateForm = () => {
     let newErrors = {};
 
     if (!formData.position) newErrors.position = "Position type is required"; // 👈 New validation
 
-    if (formData.position === 'Teacher') {
+    if (formData.position === "Teacher") {
       if (!formData.subject_id) newErrors.subject_id = "Subject is required";
       if (!formData.grade_id) newErrors.grade_id = "Grade is required";
     }
@@ -140,7 +148,7 @@ console.log(profileRes?.data?.data);
     if (profile.user_type == 3) {
       if (!formData.board) newErrors.board = "Board is required";
     }
-    
+
     if (!formData.city_id) newErrors.city_id = "Location is required";
     if (!formData.job_type) newErrors.job_type = "Job type is required";
 
@@ -157,13 +165,14 @@ console.log(profileRes?.data?.data);
       newErrors.job_description = "Job description is required";
 
     if (!formData.contact_email)
-      newErrors.contact_email = "Email field is required"
-    
+      newErrors.contact_email = "Email field is required";
+
     if (!formData.contact_phone)
-      newErrors.contact_phone = "Phone Number is required"
+      newErrors.contact_phone = "Phone Number is required";
 
     if (!formData.qualification_requirements)
-      newErrors.qualification_requirements = "Qualifications & requirements are required";
+      newErrors.qualification_requirements =
+        "Qualifications & requirements are required";
 
     setErrors(newErrors);
 
@@ -190,17 +199,14 @@ console.log(profileRes?.data?.data);
 
       // ✅ Success UX
       alert(
-        status === 1
-          ? "Job published successfully!"
-          : "Job saved as draft!"
+        status === 1 ? "Job published successfully!" : "Job saved as draft!",
       );
-      
+
       if (response?.data?.status === true) {
         navigate("/profile"); // 👈 redirect here
       } else {
         alert("Job saved but something looks wrong.");
       }
-
     } catch (error) {
       console.error("Job save failed:", error);
 
@@ -233,9 +239,7 @@ console.log(profileRes?.data?.data);
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
               <Briefcase className="w-5 h-5 text-white" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Post a Job
-            </h1>
+            <h1 className="text-xl bg-clip-text font-medium">Post a Job</h1>
           </div>
           <div className="flex space-x-2 sm:space-x-3">
             <button
@@ -249,11 +253,10 @@ console.log(profileRes?.data?.data);
             <button
               onClick={() => handleSubmit(1)}
               disabled={submitting}
-              className="px-4 px-6 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50"
+              className="px-4 px-6 py-2 text-white rounded-lg disabled:opacity-50 rounded-[1000px] w-[117px] bg-[rgba(0,_127,_255,_1)]"
             >
               {submitting ? "Publishing..." : "Publish"}
             </button>
-
           </div>
         </div>
       </header>
@@ -261,21 +264,26 @@ console.log(profileRes?.data?.data);
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          
           {/* Left Column - Form */}
           <div className="lg:col-span-2 space-y-6">
-            
             {/* Basic Information Card */}
             <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                  <img src={postJobIcons.basicInformation} className="w-5 h-5 text-blue-600" />
+                  <img
+                    src={postJobIcons.basicInformation}
+                    className="w-5 h-5 text-blue-600"
+                  />
                 </div>
-                <h2 className="text-xl font-bold text-gray-800">Basic Information</h2>
+                <h2 className="text-xl font-bold text-gray-800">
+                  Basic Information
+                </h2>
               </div>
-              
+
               <div className="space-y-5">
-                <p className="text-sm text-gray-600">Tell us about the position</p>
+                <p className="text-sm text-gray-600">
+                  Tell us about the position
+                </p>
 
                 {profile.user_type == 3 && (
                   <div>
@@ -307,10 +315,11 @@ console.log(profileRes?.data?.data);
                       />
 
                       {errors.board && (
-                        <p className="text-sm text-red-500 mt-1">{errors.board}</p>
+                        <p className="text-sm text-red-500 mt-1">
+                          {errors.board}
+                        </p>
                       )}
                     </div>
-
                   </div>
                 )}
 
@@ -318,15 +327,20 @@ console.log(profileRes?.data?.data);
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Position <span className="text-red-500">*</span>
                   </label>
-                  
+
                   <div className="grid grid-cols-2 gap-3">
-                    {['Teacher', 'Principal', 'Coordinator', 'Vice Principal'].map((position) => (
+                    {[
+                      "Teacher",
+                      "Principal",
+                      "Coordinator",
+                      "Vice Principal",
+                    ].map((position) => (
                       <label
                         key={position}
                         className={`flex items-center space-x-3 p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
                           formData.position === position
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-gray-200 bg-gray-50 hover:border-gray-300"
                         }`}
                       >
                         <input
@@ -337,9 +351,13 @@ console.log(profileRes?.data?.data);
                           onChange={handleInputChange}
                           className="w-3 h-3 text-blue-500 border-gray-300 focus:ring-blue-500 focus:ring-2"
                         />
-                        <span className={`font-regular ${
-                          formData.position === position ? 'text-blue-700' : 'text-gray-700'
-                        }`}>
+                        <span
+                          className={`font-regular ${
+                            formData.position === position
+                              ? "text-blue-700"
+                              : "text-gray-700"
+                          }`}
+                        >
                           {position}
                         </span>
                       </label>
@@ -347,54 +365,90 @@ console.log(profileRes?.data?.data);
                   </div>
 
                   {errors.position && (
-                    <p className="text-sm text-red-500 mt-2">{errors.position}</p>
+                    <p className="text-sm text-red-500 mt-2">
+                      {errors.position}
+                    </p>
                   )}
                 </div>
 
                 {/* 👇 CONDITIONAL: Subject - Only show for Teacher */}
-                {formData.position === 'Teacher' && (
+                {formData.position === "Teacher" && (
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Subject <span className="text-red-500">*</span>
                     </label>
 
                     <Select
-                      options={subjects.map(s => ({ value: s.id, label: s.name }))}
-                      value={subjects.find(s => s.id === formData.subject_id) ? { value: formData.subject_id, label: subjects.find(s => s.id === formData.subject_id).name } : null}
+                      options={subjects.map((s) => ({
+                        value: s.id,
+                        label: s.name,
+                      }))}
+                      value={
+                        subjects.find((s) => s.id === formData.subject_id)
+                          ? {
+                              value: formData.subject_id,
+                              label: subjects.find(
+                                (s) => s.id === formData.subject_id,
+                              ).name,
+                            }
+                          : null
+                      }
                       onChange={(selected) => {
-                        setFormData(prev => ({ ...prev, subject_id: selected.value }));
-                        setErrors(prev => ({ ...prev, subject_id: "" }));
+                        setFormData((prev) => ({
+                          ...prev,
+                          subject_id: selected.value,
+                        }));
+                        setErrors((prev) => ({ ...prev, subject_id: "" }));
                       }}
                       placeholder="Select subject"
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                     />
 
                     {errors.subject_id && (
-                      <p className="text-sm text-red-500 mt-1">{errors.subject_id}</p>
+                      <p className="text-sm text-red-500 mt-1">
+                        {errors.subject_id}
+                      </p>
                     )}
                   </div>
                 )}
 
                 {/* 👇 CONDITIONAL: Grade - Only show for Teacher */}
-                {formData.position === 'Teacher' && (
+                {formData.position === "Teacher" && (
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Grade <span className="text-red-500">*</span>
                     </label>
 
                     <Select
-                      options={grades.map(g => ({ value: g.id, label: g.name }))}
-                      value={grades.find(g => g.id === formData.grade_id) ? { value: formData.grade_id, label: grades.find(g => g.id === formData.grade_id).name } : null}
+                      options={grades.map((g) => ({
+                        value: g.id,
+                        label: g.name,
+                      }))}
+                      value={
+                        grades.find((g) => g.id === formData.grade_id)
+                          ? {
+                              value: formData.grade_id,
+                              label: grades.find(
+                                (g) => g.id === formData.grade_id,
+                              ).name,
+                            }
+                          : null
+                      }
                       onChange={(selected) => {
-                        setFormData(prev => ({ ...prev, grade_id: selected.value }));
-                        setErrors(prev => ({ ...prev, grade_id: "" }));
+                        setFormData((prev) => ({
+                          ...prev,
+                          grade_id: selected.value,
+                        }));
+                        setErrors((prev) => ({ ...prev, grade_id: "" }));
                       }}
                       placeholder="Select grade"
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                     />
 
                     {errors.grade_id && (
-                      <p className="text-sm text-red-500 mt-1">{errors.grade_id}</p>
+                      <p className="text-sm text-red-500 mt-1">
+                        {errors.grade_id}
+                      </p>
                     )}
                   </div>
                 )}
@@ -412,15 +466,20 @@ console.log(profileRes?.data?.data);
                     value={selectedCity}
                     onChange={(option) => {
                       setSelectedCity(option);
-                      setFormData(prev => ({ ...prev, city_id: option ? option.value : "" }));
-                      setErrors(prev => ({ ...prev, city_id: "" }));
+                      setFormData((prev) => ({
+                        ...prev,
+                        city_id: option ? option.value : "",
+                      }));
+                      setErrors((prev) => ({ ...prev, city_id: "" }));
                     }}
                     placeholder="Search city"
-                    className='w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none'
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                   />
 
                   {errors.city_id && (
-                    <p className="text-sm text-red-500 mt-1">{errors.city_id}</p>
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.city_id}
+                    </p>
                   )}
                 </div>
 
@@ -430,17 +489,17 @@ console.log(profileRes?.data?.data);
                     Job Type <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-3 gap-3">
-                    {['Full-Time', 'Part-Time', 'Contract'].map((type) => (
+                    {["Full-Time", "Part-Time", "Contract"].map((type) => (
                       <button
                         key={type}
                         onClick={() => {
-                          setFormData(prev => ({ ...prev, job_type: type }));
-                          setErrors(prev => ({ ...prev, job_type: "" }));
+                          setFormData((prev) => ({ ...prev, job_type: type }));
+                          setErrors((prev) => ({ ...prev, job_type: "" }));
                         }}
                         className={`py-3 px-4 rounded-xl font-medium transition-all duration-200 text-sm sm:text-base ${
                           formData.job_type === type
-                            ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                         }`}
                       >
                         {type}
@@ -449,7 +508,9 @@ console.log(profileRes?.data?.data);
                   </div>
 
                   {errors.job_type && (
-                    <p className="text-sm text-red-500 mt-2">{errors.job_type}</p>
+                    <p className="text-sm text-red-500 mt-2">
+                      {errors.job_type}
+                    </p>
                   )}
                 </div>
               </div>
@@ -459,18 +520,24 @@ console.log(profileRes?.data?.data);
             <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-                  <img src={postJobIcons.jobDeatail} className="w-5 h-5 text-green-600" />
+                  <img
+                    src={postJobIcons.jobDeatail}
+                    className="w-5 h-5 text-green-600"
+                  />
                 </div>
                 <h2 className="text-xl font-bold text-gray-800">Job Details</h2>
               </div>
-              
+
               <div className="space-y-5">
-                <p className="text-sm text-gray-600">Subject and grade information</p>
+                <p className="text-sm text-gray-600">
+                  Subject and grade information
+                </p>
 
                 {/* Salary Range */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Salary Range (per month) <span className="text-red-500">*</span>
+                    Salary Range (per month){" "}
+                    <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     <input
@@ -490,7 +557,7 @@ console.log(profileRes?.data?.data);
                       className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-2">💡 Tip: Jobs with salary info get 3x more applications.</p>
+                  {/* <p className="text-xs text-gray-500 mt-2">💡 Tip: Jobs with salary info get 3x more applications.</p> */}
 
                   {errors.salary && (
                     <p className="text-sm text-red-500 mt-1">{errors.salary}</p>
@@ -531,15 +598,19 @@ console.log(profileRes?.data?.data);
                     Benefits (Food & Accommodation)
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 grid grid-cols-1 md:grid-cols-2 items-center">
+                    <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 grid grid-cols-1 md:grid-cols-2 items-center border">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
-                          <div className='bg-orange-50 flex items-center justify-center w-10 h-10 rounded-full'>
+                          <div className="bg-orange-50 flex items-center justify-center w-10 h-10 rounded-full">
                             <img src={postJobIcons.food} className="w-5 h-5" />
                           </div>
-                          <span className="font-medium text-gray-800">Food Provided</span>
+                          <span className="font-medium text-gray-800">
+                            Food Provided
+                          </span>
                         </div>
-                        <p className="text-xs text-gray-600 mt-1">Meals included for staff</p>
+                        <p className="text-xs text-gray-600 mt-1">
+                          Meals included for staff
+                        </p>
                       </div>
                       <div className="flex justify-end">
                         <input
@@ -552,18 +623,25 @@ console.log(profileRes?.data?.data);
                       </div>
                     </label>
 
-                    <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
+                    <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 grid grid-cols-1 md:grid-cols-2 gap-3 items-center border">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 rounded-full">
-                          <div className='bg-purple-100 flex items-center justify-center w-10 h-10 rounded-full'>
-                            <img src={postJobIcons.accommodation} className="w-5 h-5" />
+                          <div className="bg-purple-100 flex items-center justify-center w-10 h-10 rounded-full">
+                            <img
+                              src={postJobIcons.accommodation}
+                              className="w-5 h-5"
+                            />
                           </div>
-                          <span className="font-medium text-gray-800">Accommodation</span>
+                          <span className="font-medium text-gray-800">
+                            Accommodation
+                          </span>
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">Living Quarters available</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Living Quarters available
+                        </p>
                       </div>
                       <div className="flex justify-end">
-                        <input  
+                        <input
                           type="checkbox"
                           name="accommodation"
                           checked={formData.accommodation}
@@ -581,13 +659,20 @@ console.log(profileRes?.data?.data);
             <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
-                  <img src={postJobIcons.requirementDescription} className="w-5 h-5" />
+                  <img
+                    src={postJobIcons.requirementDescription}
+                    className="w-5 h-5"
+                  />
                 </div>
-                <h2 className="text-xl font-bold text-gray-800">Requirements & Description</h2>
+                <h2 className="text-xl font-bold text-gray-800">
+                  Requirements & Description
+                </h2>
               </div>
-              
+
               <div className="space-y-5">
-                <p className="text-sm text-gray-600">Detailed information about the role</p>
+                <p className="text-sm text-gray-600">
+                  Detailed information about the role
+                </p>
 
                 {/* Job Description */}
                 <div>
@@ -613,7 +698,8 @@ console.log(profileRes?.data?.data);
                 {/* Qualifications & Requirements */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Qualifications & Requirements <span className="text-red-500">*</span>
+                    Qualifications & Requirements{" "}
+                    <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     name="qualification_requirements"
@@ -652,13 +738,20 @@ console.log(profileRes?.data?.data);
             <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
-                  <img src={postJobIcons.contactInformation} className="w-5 h-5" />
+                  <img
+                    src={postJobIcons.contactInformation}
+                    className="w-5 h-5"
+                  />
                 </div>
-                <h2 className="text-xl font-bold text-gray-800">Contact Information</h2>
+                <h2 className="text-xl font-bold text-gray-800">
+                  Contact Information
+                </h2>
               </div>
-              
+
               <div className="space-y-5">
-                <p className="text-sm text-gray-600">How candidates can reach you</p>
+                <p className="text-sm text-gray-600">
+                  How candidates can reach you
+                </p>
 
                 {/* Contact Email */}
                 <div>
@@ -704,13 +797,14 @@ console.log(profileRes?.data?.data);
             </div>
 
             {/* Action Buttons - Mobile */}
-            <div className="grid grid-cols-2 gap-12 mx-20">
+            <div className="grid grid-cols-2 gap-12">
               <button
                 onClick={() => navigate("/")}
-                className="flex-1 px-2 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 font-medium">
+                className="flex-1 px-2 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 font-medium"
+              >
                 Cancel
               </button>
-              <button 
+              <button
                 onClick={() => handleSubmit(1)}
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg shadow-blue-500/30"
               >
@@ -729,39 +823,53 @@ console.log(profileRes?.data?.data);
                 </div>
                 <h3 className="font-medium">Tips for Success</h3>
               </div>
-              
+
               <div className="space-y-3 text-sm">
                 <div className="flex space-x-2">
                   <img src={postJobIcons.tipsTick} />
-                  <p className='font-normal text-gray-700'>Be specific about requirements</p>
+                  <p className="font-normal text-gray-700">
+                    Be specific about requirements
+                  </p>
                 </div>
                 <div className="flex space-x-2">
                   <img src={postJobIcons.tipsTick} />
-                  <p className='font-normal text-gray-700'>Include salary for better response</p>
+                  <p className="font-normal text-gray-700">
+                    Include salary for better response
+                  </p>
                 </div>
                 <div className="flex space-x-2">
                   <img src={postJobIcons.tipsTick} />
-                  <p className='font-normal text-gray-700'>Highlight school culture & benefits</p>
+                  <p className="font-normal text-gray-700">
+                    Highlight school culture & benefits
+                  </p>
                 </div>
                 <div className="flex space-x-2">
                   <img src={postJobIcons.tipsTick} />
-                  <p className='font-normal text-gray-700'>Use clear, professional language</p>
+                  <p className="font-normal text-gray-700">
+                    Use clear, professional language
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Stats Card */}
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-              <h3 className="text-lg font-medium text-gray-800 mb-4">Why Post on Teachingclass?</h3>
-              
+              <h3 className="text-lg font-medium text-gray-800 mb-4">
+                Why Post on Teachingclass?
+              </h3>
+
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
                     <Users className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <div className="font-normal text-xl text-blue-400">500+</div>
-                    <div className="text-sm font-normal text-gray-600">Active Teachers</div>
+                    <div className="font-normal text-xl text-blue-400">
+                      500+
+                    </div>
+                    <div className="text-sm font-normal text-gray-600">
+                      Active Teachers
+                    </div>
                   </div>
                 </div>
 
@@ -770,8 +878,12 @@ console.log(profileRes?.data?.data);
                     <img src={postJobIcons.hireTime} className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="font-normal text-xl text-green-400">7 Days</div>
-                    <div className="text-sm font-normal text-gray-600">Avg. Time to Hire</div>
+                    <div className="font-normal text-xl text-green-400">
+                      7 Days
+                    </div>
+                    <div className="text-sm font-normal text-gray-600">
+                      Avg. Time to Hire
+                    </div>
                   </div>
                 </div>
               </div>
@@ -783,13 +895,15 @@ console.log(profileRes?.data?.data);
                 <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                   <HelpCircle className="w-5 h-5 text-green-600" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-800">Need Help?</h3>
+                <h3 className="text-lg font-medium text-gray-800">
+                  Need Help?
+                </h3>
               </div>
 
               <p className="text-sm font-normal text-gray-600 mb-4">
                 Our team is here to help you find the perfect candidate.
               </p>
-              
+
               <button className="w-full px-4 py-3 bg-green-100 text-green-400 rounded-xl hover:bg-green-500 hover:text-white transition-all duration-200 font-medium">
                 Contact Support
               </button>

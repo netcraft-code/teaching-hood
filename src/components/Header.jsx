@@ -73,8 +73,11 @@ const Header = () => {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div onClick={() => goTo(routes.HOME)} className="cursor-pointer">
-            <img src={logo} alt="Logo" className="h-9 sm:h-11 w-auto" />
+          <div
+            onClick={() => goTo(routes.HOME)}
+            className="cursor-pointer w-[160px]"
+          >
+            <img src={logo} alt="Logo" />
           </div>
 
           {/* Desktop Menu */}
