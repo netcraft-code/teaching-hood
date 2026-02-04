@@ -6,6 +6,7 @@ import Profile from "../pages/Profile";
 import PostJob from "../pages/PostJob";
 import FindJob from "../pages/FindJob";
 import ProtectedRoute from "../pages/ProtectedRoute";
+import AboutUs from "../pages/AboutUs";
 
 const AppRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/about-us" element={<AboutUs />} />
 
       <Route
         path="/profile"

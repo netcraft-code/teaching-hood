@@ -54,7 +54,7 @@ const PostJob = () => {
       setSubjects(subjectsRes?.data?.data || []);
       setGrades(gradesRes?.data?.data || []);
       setProfile(profileRes?.data?.data || null);
-console.log(profileRes?.data?.data);
+      
       // Pre-fill contact info
       setFormData(prev => ({
         ...prev,
@@ -233,7 +233,7 @@ console.log(profileRes?.data?.data);
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
               <Briefcase className="w-5 h-5 text-white" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <h1 className="text-xl sm:text-2xl font-regular">
               Post a Job
             </h1>
           </div>

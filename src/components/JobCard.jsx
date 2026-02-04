@@ -552,7 +552,7 @@ const JobCard = () => {
                   jobs.map((job) => (
                     <div
                       key={job.id}
-                      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
+                      className="bg-white rounded-2xl border-t-8 border-blue-400 shadow-lg transition-shadow p-6"
                     >
                       <div className="flex items-start justify-between gap-4">
                         {/* LEFT SIDE */}
@@ -596,7 +596,6 @@ const JobCard = () => {
                         </button>
                       </div>
 
-
                       {/* Job Details */}
                       <div className="flex-1">
                         {/* Tags */}
@@ -633,7 +632,7 @@ const JobCard = () => {
                           <div className="text-2xl font-semibold text-gray-900">
                             {formatSalary(job.min_salary, job.max_salary)}
                           </div>
-                          <button className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+                          <button className="px-6 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 transition-colors flex items-center gap-2">
                             Apply Now
                             <ChevronRight className="w-4 h-4" />
                           </button>
