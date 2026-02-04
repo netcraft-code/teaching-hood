@@ -99,7 +99,7 @@ const TeachersSection = () => {
             </div>
             <a
               href="/signup"
-              className="inline-flex items-center space-x-2 bg-red-50 px-4 py-2 rounded-full mb-6 ml-4 font-bold text-red-600"
+              className="inline-flex items-center space-x-2 px-4 py-2 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white"
             >
               Create Profile
             </a>

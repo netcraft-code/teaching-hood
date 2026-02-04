@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Briefcase, Clock, Award, ChevronRight, Heart } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  Search,
+  MapPin,
+  Briefcase,
+  Clock,
+  Award,
+  ChevronRight,
+  Heart,
+} from "lucide-react";
 import { HeroImages } from "../assets/images/HeroImages";
 import { getCities, getJobs } from "../api/auth";
-import { findJobIcons } from "./../assets/icons/findJobIcons"
+import { findJobIcons } from "./../assets/icons/findJobIcons";
 import { Range, getTrackBackground } from "react-range";
 
 const JobCard = () => {
@@ -12,14 +20,14 @@ const JobCard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalJobs, setTotalJobs] = useState(0);
   const [newJobs, setNewJobs] = useState(0);
-  
+
   // Filter states
-  const [selectedCity, setSelectedCity] = useState('all');
-  const [selectedJobType, setSelectedJobType] = useState('all');
-  const [selectedExperience, setSelectedExperience] = useState('0-1');
+  const [selectedCity, setSelectedCity] = useState("all");
+  const [selectedJobType, setSelectedJobType] = useState("all");
+  const [selectedExperience, setSelectedExperience] = useState("0-1");
   const [salaryRange, setSalaryRange] = useState([0, 0]);
-  const [postedDate, setPostedDate] = useState('any');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [postedDate, setPostedDate] = useState("any");
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchRadius, setSearchRadius] = useState(0);
 
   const MIN = 0;
@@ -58,7 +66,7 @@ const JobCard = () => {
         setCities(response.data.data || []);
       }
     } catch (error) {
-      console.error('Error fetching cities:', error);
+      console.error("Error fetching cities:", error);
     }
   };
 
@@ -89,7 +97,7 @@ const JobCard = () => {
     salaryRange,
     postedDate,
     searchQuery,
-    searchRadius
+    searchRadius,
   ]);
 
   // Get human readable time
@@ -99,15 +107,15 @@ const JobCard = () => {
     const diffTime = Math.abs(now - date);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return '1 day ago';
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "1 day ago";
     if (diffDays < 7) return `${diffDays} days ago`;
     if (diffDays < 30) {
       const weeks = Math.floor(diffDays / 7);
-      return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
+      return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
     }
     const months = Math.floor(diffDays / 30);
-    return `${months} month${months > 1 ? 's' : ''} ago`;
+    return `${months} month${months > 1 ? "s" : ""} ago`;
   };
 
   // Format salary to LPA
@@ -144,15 +152,18 @@ const JobCard = () => {
   return (
     <div>
       <section
-          className="py-16 md:py-24 min-h-[40vh] bg-cover bg-center relative overflow-hidden"
-          style={{ backgroundImage: `url(${HeroImages.bg})` }}
+        className="py-16 md:py-24 min-h-[40vh] bg-cover bg-center relative overflow-hidden"
+        style={{ backgroundImage: `url(${HeroImages.bg})` }}
       >
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white backdrop-blur-sm px-4 py-2 rounded-full mb-6">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              <span className="text-sm text-gray-600 font-regular"><span className='text-blue-500'>{newJobs} new jobs</span> posted this week</span>
+              <span className="text-sm text-gray-600 font-regular">
+                <span className="text-blue-500">{newJobs} new jobs</span> posted
+                this week
+              </span>
             </div>
 
             {/* Main Heading */}
@@ -166,7 +177,7 @@ const JobCard = () => {
             </h2>
 
             {/* Subheading */}
-            <p  
+            <p
               className="font-light text-4xl md:text-5xl lg:text-6xl text-white text-[20px] leading-[28px] tracking-[0] text-center mb-10 max-w-2xl mx-auto"
               style={{
                 textShadow: "0px 4px 4px #00000040",
@@ -174,10 +185,9 @@ const JobCard = () => {
             >
               Teaching Opportunity
             </p>
-            
+
             <div className="w-full max-w-5xl mx-auto px-4">
               <div className="flex items-center bg-white rounded-2xl shadow-lg p-3 gap-3">
-                
                 {/* Search Icon + Input */}
                 <div className="flex items-center flex-1 gap-3 px-4">
                   <svg
@@ -202,7 +212,7 @@ const JobCard = () => {
                     className="w-full outline-none text-sm md:text-base"
                   />
                 </div>
-                
+
                 <button
                   onClick={() => {
                     setCurrentPage(1);
@@ -223,87 +233,130 @@ const JobCard = () => {
           <div className="flex gap-6">
             {/* Left Sidebar - Filters */}
             <div className="w-80 flex-shrink-0">
-              <div className="bg-white rounded-lg shadow-sm p-6 sticky top-6">
+              <div className="bg-white rounded-[24px] shadow-sm p-6 sticky top-6">
                 <h2 className="text-2xl font-semibold mb-6">Filters</h2>
 
                 {/* Location Filter */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <img src={findJobIcons.findJobLocation} className="w-5 h-5 text-blue-600" />
+                    <img
+                      src={findJobIcons.findJobLocation}
+                      className="w-5 h-5 text-blue-600"
+                    />
                     <h3 className="font-medium">Location</h3>
                   </div>
-                  <select
-                    value={selectedCity}
-                    onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="all">All Cities</option>
-                    {cities.map(city => (
-                      <option key={city.id} value={city.id.toString()}>
-                        {city.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative w-full">
+                    <select
+                      value={selectedCity}
+                      onChange={(e) => setSelectedCity(e.target.value)}
+                      className="
+                      w-full appearance-none
+                      bg-white
+                      px-4 py-3
+                      pr-10
+                      border border-gray-200
+                      rounded-xl
+                      text-gray-700
+                      text-sm
+                      shadow-sm
+                      focus:outline-none
+                      focus:ring-2 focus:ring-blue-500
+                      focus:border-blue-500
+                    "
+                    >
+                      <option value="all">All Cities</option>
+                      {cities.map((city) => (
+                        <option key={city.id} value={city.id.toString()}>
+                          {city.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Dropdown Icon */}
+                    <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center">
+                      <svg
+                        className="w-4 h-4 text-gray-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Job Type Filter */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <img src={findJobIcons.jobType} className="w-5 h-5 text-blue-600" />
+                    <img
+                      src={findJobIcons.jobType}
+                      className="w-5 h-5 text-blue-600"
+                    />
                     <h3 className="font-medium">Job Type</h3>
                   </div>
-                  <div className="space-y-2">
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="jobType"
-                        value="all"
-                        checked={selectedJobType === 'all'}
-                        onChange={(e) => setSelectedJobType(e.target.value)}
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="ml-2 text-gray-700">All Types</span>
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="jobType"
-                        value="Full-Time"
-                        checked={selectedJobType === 'Full-Time'}
-                        onChange={(e) => setSelectedJobType(e.target.value)}
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="ml-2 text-gray-700">Full-time</span>
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="jobType"
-                        value="Part-Time"
-                        checked={selectedJobType === 'Part-Time'}
-                        onChange={(e) => setSelectedJobType(e.target.value)}
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="ml-2 text-gray-700">Part-time</span>
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="jobType"
-                        value="Contract"
-                        checked={selectedJobType === 'Contract'}
-                        onChange={(e) => setSelectedJobType(e.target.value)}
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="ml-2 text-gray-700">Contract</span>
-                    </label>
+                  <div className="space-y-3">
+                    {[
+                      { label: "All Types", value: "all" },
+                      { label: "Full-time", value: "Full-Time" },
+                      { label: "Part-time", value: "Part-Time" },
+                      { label: "Contract", value: "Contract" },
+                    ].map((item) => {
+                      const isActive = selectedJobType === item.value;
+
+                      return (
+                        <label
+                          key={item.value}
+                          className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition
+                    ${
+                      isActive
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-200 hover:border-blue-300"
+                    }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            {/* Custom Radio */}
+                            <span
+                              className={`w-5 h-5 flex items-center justify-center rounded-full border
+                        ${isActive ? "border-blue-600" : "border-gray-300"}`}
+                            >
+                              {isActive && (
+                                <span className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
+                              )}
+                            </span>
+
+                            <span className="text-gray-800 font-medium">
+                              {item.label}
+                            </span>
+                          </div>
+
+                          {/* Hidden Radio Input */}
+                          <input
+                            type="radio"
+                            name="jobType"
+                            value={item.value}
+                            checked={isActive}
+                            onChange={(e) => setSelectedJobType(e.target.value)}
+                            className="hidden"
+                          />
+                        </label>
+                      );
+                    })}
                   </div>
                 </div>
 
                 {/* Experience Filter */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <img src={findJobIcons.experience} className="w-5 h-5 text-blue-600" />
+                    <img
+                      src={findJobIcons.experience}
+                      className="w-5 h-5 text-blue-600"
+                    />
                     <h3 className="font-medium">Experience</h3>
                   </div>
                   <div className="space-y-2">
@@ -312,7 +365,7 @@ const JobCard = () => {
                         type="radio"
                         name="experience"
                         value="fresher"
-                        checked={selectedExperience === '0-1'}
+                        checked={selectedExperience === "0-1"}
                         onChange={(e) => setSelectedExperience(e.target.value)}
                         className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                       />
@@ -323,7 +376,7 @@ const JobCard = () => {
                         type="radio"
                         name="experience"
                         value="1-3"
-                        checked={selectedExperience === '1-3'}
+                        checked={selectedExperience === "1-3"}
                         onChange={(e) => setSelectedExperience(e.target.value)}
                         className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                       />
@@ -334,7 +387,7 @@ const JobCard = () => {
                         type="radio"
                         name="experience"
                         value="3-5"
-                        checked={selectedExperience === '3-5'}
+                        checked={selectedExperience === "3-5"}
                         onChange={(e) => setSelectedExperience(e.target.value)}
                         className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                       />
@@ -345,7 +398,7 @@ const JobCard = () => {
                         type="radio"
                         name="experience"
                         value="5+"
-                        checked={selectedExperience === '5+'}
+                        checked={selectedExperience === "5+"}
                         onChange={(e) => setSelectedExperience(e.target.value)}
                         className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                       />
@@ -438,7 +491,7 @@ const JobCard = () => {
                         type="radio"
                         name="postedDate"
                         value="any"
-                        checked={postedDate === 'any'}
+                        checked={postedDate === "any"}
                         onChange={(e) => setPostedDate(e.target.value)}
                         className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                       />
@@ -449,7 +502,7 @@ const JobCard = () => {
                         type="radio"
                         name="postedDate"
                         value="24h"
-                        checked={postedDate === '24h'}
+                        checked={postedDate === "24h"}
                         onChange={(e) => setPostedDate(e.target.value)}
                         className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                       />
@@ -460,7 +513,7 @@ const JobCard = () => {
                         type="radio"
                         name="postedDate"
                         value="week"
-                        checked={postedDate === 'week'}
+                        checked={postedDate === "week"}
                         onChange={(e) => setPostedDate(e.target.value)}
                         className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                       />
@@ -471,7 +524,7 @@ const JobCard = () => {
                         type="radio"
                         name="postedDate"
                         value="month"
-                        checked={postedDate === 'month'}
+                        checked={postedDate === "month"}
                         onChange={(e) => setPostedDate(e.target.value)}
                         className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                       />
@@ -491,7 +544,9 @@ const JobCard = () => {
                       />
                       Search Radius
                     </h3>
-                    <span className="text-blue-600 font-semibold">{searchRadius}km</span>
+                    <span className="text-blue-600 font-semibold">
+                      {searchRadius}km
+                    </span>
                   </div>
 
                   <input
@@ -526,7 +581,7 @@ const JobCard = () => {
               {/* Header */}
               <div className="mb-6">
                 <h1 className="text-3xl font-bold mb-2">
-                  {jobs.length} Position{jobs.length !== 1 ? 's' : ''} Available
+                  {jobs.length} Position{jobs.length !== 1 ? "s" : ""} Available
                 </h1>
                 <p className="text-gray-600">Find your perfect teaching role</p>
               </div>
@@ -540,7 +595,9 @@ const JobCard = () => {
                   </div>
                 ) : jobs.length === 0 ? (
                   <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-                    <p className="text-gray-600 text-lg">No jobs found matching your filters</p>
+                    <p className="text-gray-600 text-lg">
+                      No jobs found matching your filters
+                    </p>
                     <button
                       onClick={clearAllFilters}
                       className="mt-4 text-blue-600 hover:underline"
@@ -557,10 +614,12 @@ const JobCard = () => {
                       <div className="flex items-start justify-between gap-4">
                         {/* LEFT SIDE */}
                         <div className="flex items-start gap-4">
-                          
                           {/* School Icon */}
                           <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-                            <img src={findJobIcons.schoolIcon} className="w-8 h-8" />
+                            <img
+                              src={findJobIcons.schoolIcon}
+                              className="w-8 h-8"
+                            />
                           </div>
 
                           {/* Job Info */}
@@ -572,7 +631,10 @@ const JobCard = () => {
                               </h3>
 
                               <span className="px-2 py-1 bg-green-50 text-green-700 text-xs flex items-center gap-1 font-medium rounded-full">
-                                <img src={findJobIcons.verified} className="w-4 h-4" />
+                                <img
+                                  src={findJobIcons.verified}
+                                  className="w-4 h-4"
+                                />
                                 Verified
                               </span>
                             </div>
@@ -584,7 +646,10 @@ const JobCard = () => {
 
                             {/* Applicants */}
                             <div className="flex items-center gap-1 mt-1 text-sm text-gray-600">
-                              <img src={findJobIcons.applicant} className="w-4 h-4" />
+                              <img
+                                src={findJobIcons.applicant}
+                                className="w-4 h-4"
+                              />
                               <span>{job.total_applicants} applicants</span>
                             </div>
                           </div>
@@ -610,19 +675,31 @@ const JobCard = () => {
                         {/* Job Info */}
                         <div className="grid grid-cols-4 gap-4 mb-4 text-sm text-gray-600">
                           <div className="flex items-center gap-1">
-                            <img src={findJobIcons.findJobLocation} className="w-4 h-4" />
+                            <img
+                              src={findJobIcons.findJobLocation}
+                              className="w-4 h-4"
+                            />
                             <span>{job.city_name}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <img src={findJobIcons.availableJobType} className="w-4 h-4" />
+                            <img
+                              src={findJobIcons.availableJobType}
+                              className="w-4 h-4"
+                            />
                             <span>{job.job_type}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <img src={findJobIcons.timeDuration} className="w-4 h-4" />
+                            <img
+                              src={findJobIcons.timeDuration}
+                              className="w-4 h-4"
+                            />
                             <span>{getTimeAgo(job.created_at)}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <img src={findJobIcons.totalExperience} className="w-4 h-4" />
+                            <img
+                              src={findJobIcons.totalExperience}
+                              className="w-4 h-4"
+                            />
                             <span>{job.experience_required} years</span>
                           </div>
                         </div>
@@ -647,7 +724,9 @@ const JobCard = () => {
               {!loading && jobs.length > 0 && totalJobs > 10 && (
                 <div className="mt-8 flex justify-center gap-2">
                   <button
-                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(1, prev - 1))
+                    }
                     disabled={currentPage === 1}
                     className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
@@ -657,7 +736,7 @@ const JobCard = () => {
                     Page {currentPage} of {Math.ceil(totalJobs / 10)}
                   </span>
                   <button
-                    onClick={() => setCurrentPage(prev => prev + 1)}
+                    onClick={() => setCurrentPage((prev) => prev + 1)}
                     disabled={currentPage >= Math.ceil(totalJobs / 10)}
                     className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
