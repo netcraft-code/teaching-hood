@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Mail, Eye, EyeOff, Lock } from 'lucide-react';
+import React, { useState } from "react";
+import { Mail, Eye, EyeOff, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, sendOTP, verifyOTP } from "../api/auth"; // ✅ Import from auth.js
-import logo from "../assets/images/logo.svg";
-import authPageBG from "../assets/images/auth-page-bg.png"
+import logo from "../assets/images/tp-logo.png";
+import authPageBG from "../assets/images/auth-page-bg.png";
 
 const routes = {
-  HOME: '/',
-  SIGNUP: '/signup',
-  PROFILE: '/profile',
-  TERMS: '/terms',
-  PRIVACY: '/privacy',
-  HELP: '/help'
+  HOME: "/",
+  SIGNUP: "/signup",
+  PROFILE: "/profile",
+  TERMS: "/terms",
+  PRIVACY: "/privacy",
+  HELP: "/help",
 };
 
 const SignInPage = () => {
@@ -21,28 +21,28 @@ const SignInPage = () => {
   const navigate = useNavigate();
 
   // Step management
-  const [step, setStep] = useState('choice'); // 'choice', 'password', 'otp-input', 'otp-verify'
-  
+  const [step, setStep] = useState("choice"); // 'choice', 'password', 'otp-input', 'otp-verify'
+
   // Form data
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [otp, setOtp] = useState(['', '', '', '']);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState(["", "", "", ""]);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  
+
   const [otpTimer, setOtpTimer] = useState(OTP_VALIDITY);
   const [resendTimer, setResendTimer] = useState(RESEND_DELAY);
-  
+
   // UI states
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   // ✅ Password Login - using auth.js
   const handlePasswordLogin = async () => {
-    setError('');
-    
+    setError("");
+
     if (!email || !password) {
-      setError('Email and password are required');
+      setError("Email and password are required");
       return;
     }
 
@@ -53,13 +53,15 @@ const SignInPage = () => {
       const res = await loginUser(payload); // ✅ Using auth.js
 
       if (res.data.status) {
-        localStorage.setItem('auth_token', res.data.data.token);
+        localStorage.setItem("auth_token", res.data.data.token);
         navigate(routes.PROFILE);
       } else {
-        setError(res.data?.message || 'Invalid credentials');
+        setError(res.data?.message || "Invalid credentials");
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
+      setError(
+        err.response?.data?.message || "Invalid credentials. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -67,10 +69,10 @@ const SignInPage = () => {
 
   // ✅ Send OTP - using auth.js
   const handleSendOTP = async () => {
-    setError('');
+    setError("");
 
     if (!email) {
-      setError('Email is required');
+      setError("Email is required");
       return;
     }
 
@@ -78,25 +80,27 @@ const SignInPage = () => {
 
     try {
       const res = await sendOTP(email); // ✅ Using auth.js
-      
+
       if (res.data.status) {
-        setStep('otp-verify');
+        setStep("otp-verify");
 
         // reset timers
         setOtpTimer(OTP_VALIDITY);
         setResendTimer(RESEND_DELAY);
       } else {
-        setError(res.data?.message || 'Failed to send OTP');
+        setError(res.data?.message || "Failed to send OTP");
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to send OTP. Please try again.');
+      setError(
+        err.response?.data?.message || "Failed to send OTP. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
   React.useEffect(() => {
-    if (step !== 'otp-verify') return;
+    if (step !== "otp-verify") return;
 
     const interval = setInterval(() => {
       setOtpTimer((prev) => (prev > 0 ? prev - 1 : 0));
@@ -107,13 +111,13 @@ const SignInPage = () => {
   }, [step]);
 
   const formatTime = (seconds) => {
-    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const s = String(seconds % 60).padStart(2, '0');
+    const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const s = String(seconds % 60).padStart(2, "0");
     return `${m}:${s}`;
   };
 
   const handleResendOTP = async () => {
-    setOtp(['', '', '', '']);
+    setOtp(["", "", "", ""]);
     setOtpTimer(OTP_VALIDITY);
     setResendTimer(RESEND_DELAY);
 
@@ -122,12 +126,12 @@ const SignInPage = () => {
 
   // ✅ Verify OTP - using auth.js
   const handleVerifyOTP = async () => {
-    setError('');
+    setError("");
 
-    const otpCode = otp.join('');
-    
+    const otpCode = otp.join("");
+
     if (otpCode.length !== 4) {
-      setError('Please enter complete OTP');
+      setError("Please enter complete OTP");
       return;
     }
 
@@ -137,13 +141,13 @@ const SignInPage = () => {
       const res = await verifyOTP(email, otpCode); // ✅ Using auth.js
 
       if (res.data.status) {
-        localStorage.setItem('auth_token', res.data.data.token);
+        localStorage.setItem("auth_token", res.data.data.token);
         navigate(routes.PROFILE);
       } else {
-        setError(res.data?.message || 'Invalid OTP');
+        setError(res.data?.message || "Invalid OTP");
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid OTP. Please try again.');
+      setError(err.response?.data?.message || "Invalid OTP. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -152,7 +156,7 @@ const SignInPage = () => {
   // Handle OTP input
   const handleOtpChange = (index, value) => {
     if (!/^\d*$/.test(value)) return;
-    
+
     const newOtp = [...otp];
     newOtp[index] = value;
 
@@ -165,7 +169,7 @@ const SignInPage = () => {
   };
 
   const handleOtpKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
       const prevInput = document.getElementById(`otp-${index - 1}`);
       if (prevInput) prevInput.focus();
     }
@@ -183,18 +187,21 @@ const SignInPage = () => {
         {/* Logo */}
         <div className="flex flex-col text-center justify-center mb-8">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <button onClick={() => navigate(routes.HOME)} className="flex items-center justify-center space-x-2 mb-1">
+            <button
+              onClick={() => navigate(routes.HOME)}
+              className="flex items-center justify-center space-x-2 mb-1"
+            >
               <img
                 src={logo}
                 alt="Teachinghood Logo"
-                className="h-12 sm:h-16 w-auto"
+                className="w-[250px]"
               />
             </button>
           </div>
-          
-          <div className='flex items-center justify-center mx-auto'>
+
+          <div className="flex items-center justify-center mx-auto">
             <p className="text-lg sm:text-xl font-semibold text-center leading-[33px] text-white">
-              Welcome Back
+              Log In
             </p>
           </div>
         </div>
@@ -202,13 +209,18 @@ const SignInPage = () => {
         {/* Main Form */}
         <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8">
           {/* Step 1: Choose Login Method */}
-          {step === 'choice' && (
+          {step === "choice" && (
             <>
               {/* Email Input */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email address</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email address
+                </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <Mail
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
                   <input
                     type="email"
                     placeholder="you@example.com"
@@ -230,11 +242,11 @@ const SignInPage = () => {
                 <button
                   onClick={() => {
                     if (!email) {
-                      setError('Please enter your email');
+                      setError("Please enter your email");
                       return;
                     }
-                    setError('');
-                    setStep('password');
+                    setError("");
+                    setStep("password");
                   }}
                   className="w-full bg-white border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:border-blue-600 hover:text-blue-600 transition flex items-center justify-center space-x-2"
                 >
@@ -245,11 +257,11 @@ const SignInPage = () => {
                 <button
                   onClick={() => {
                     if (!email) {
-                      setError('Please enter your email');
+                      setError("Please enter your email");
                       return;
                     }
-                    setError('');
-                    setStep('otp-input');
+                    setError("");
+                    setStep("otp-input");
                   }}
                   className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center justify-center space-x-2"
                 >
@@ -261,10 +273,10 @@ const SignInPage = () => {
           )}
 
           {/* Step 2: Password Login */}
-          {step === 'password' && (
+          {step === "password" && (
             <>
               <button
-                onClick={() => setStep('choice')}
+                onClick={() => setStep("choice")}
                 className="text-sm text-blue-600 hover:underline mb-4 flex items-center"
               >
                 ← Back
@@ -272,9 +284,14 @@ const SignInPage = () => {
 
               {/* Email (Read-only) */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email address</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email address
+                </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <Mail
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
                   <input
                     type="email"
                     value={email}
@@ -287,8 +304,12 @@ const SignInPage = () => {
               {/* Password Input */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-gray-700">Password</label>
-                  <a href="#" className="text-sm text-blue-600 hover:underline">Forgot password?</a>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Password
+                  </label>
+                  <a href="#" className="text-sm text-blue-600 hover:underline">
+                    Forgot password?
+                  </a>
                 </div>
                 <div className="relative">
                   <input
@@ -297,7 +318,7 @@ const SignInPage = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !loading) {
+                      if (e.key === "Enter" && !loading) {
                         handlePasswordLogin();
                       }
                     }}
@@ -322,7 +343,12 @@ const SignInPage = () => {
                   onChange={(e) => setRememberMe(e.target.checked)}
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <label htmlFor="remember" className="ml-2 text-sm text-gray-700">Remember Me</label>
+                <label
+                  htmlFor="remember"
+                  className="ml-2 text-sm text-gray-700"
+                >
+                  Remember Me
+                </label>
               </div>
 
               {error && (
@@ -337,16 +363,16 @@ const SignInPage = () => {
                 disabled={loading}
                 className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50"
               >
-                {loading ? 'Signing in...' : 'Sign in'}
+                {loading ? "Signing in..." : "Sign in"}
               </button>
             </>
           )}
 
           {/* Step 3: Enter Email for OTP */}
-          {step === 'otp-input' && (
+          {step === "otp-input" && (
             <>
               <button
-                onClick={() => setStep('choice')}
+                onClick={() => setStep("choice")}
                 className="text-sm text-blue-600 hover:underline mb-4 flex items-center"
               >
                 ← Back
@@ -354,9 +380,14 @@ const SignInPage = () => {
 
               {/* Email Input */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email
+                </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <Mail
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
                   <input
                     type="email"
                     placeholder="you@example.com"
@@ -383,18 +414,18 @@ const SignInPage = () => {
                 disabled={loading}
                 className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50"
               >
-                {loading ? 'Sending OTP...' : 'Send OTP'}
+                {loading ? "Sending OTP..." : "Send OTP"}
               </button>
             </>
           )}
 
           {/* Step 4: Verify OTP */}
-          {step === 'otp-verify' && (
+          {step === "otp-verify" && (
             <>
               <button
                 onClick={() => {
-                  setStep('otp-input');
-                  setOtp(['', '', '', '']);
+                  setStep("otp-input");
+                  setOtp(["", "", "", ""]);
                 }}
                 className="text-sm text-blue-600 hover:underline mb-4 flex items-center"
               >
@@ -405,9 +436,11 @@ const SignInPage = () => {
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   Enter 4-digit code:-
-
                   <label className="text-center text-xs text-gray-500 mt-1 mb-3">
-                    Expires in <span className="font-semibold">{formatTime(otpTimer)}</span>
+                    Expires in{" "}
+                    <span className="font-semibold">
+                      {formatTime(otpTimer)}
+                    </span>
                   </label>
                 </label>
 
@@ -425,7 +458,7 @@ const SignInPage = () => {
                     />
                   ))}
                 </div>
-                
+
                 {/* Resend OTP */}
                 <div className="text-center mt-4">
                   <p className="text-sm text-gray-600 mb-2">
@@ -437,16 +470,15 @@ const SignInPage = () => {
                     disabled={resendTimer > 0 || loading}
                     className={`text-sm font-semibold ${
                       resendTimer > 0
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-blue-600 hover:underline'
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-blue-600 hover:underline"
                     }`}
                   >
                     {resendTimer > 0
                       ? `Resend OTP in ${formatTime(resendTimer)}`
-                      : 'Resend OTP'}
+                      : "Resend OTP"}
                   </button>
                 </div>
-
               </div>
 
               {error && (
@@ -461,14 +493,14 @@ const SignInPage = () => {
                 disabled={loading}
                 className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50"
               >
-                {loading ? 'Verifying...' : 'Verify & Login'}
+                {loading ? "Verifying..." : "Verify & Login"}
               </button>
             </>
           )}
         </div>
 
         {/* Security Notice */}
-        {(step === 'otp-verify' || step === 'otp-input') && (
+        {(step === "otp-verify" || step === "otp-input") && (
           <>
             <div className=" mt-6 w-full max-w-[448px] min-h-[54px] bg-[#F1F4FF] border border-t border-t-[#DBEAFE] border-x-transparent border-b-transparent rounded-[14px] px-[17px] py-[12px] flex items-center justify-center opacity-100">
               <p className=" text-[14px] leading-[20px] font-normal font-[Arimo] text-[#364153] text-center">
@@ -480,24 +512,41 @@ const SignInPage = () => {
 
         {/* Sign Up Link */}
         <p className="text-center text-sm text-gray-600 mt-6">
-          Don't have an account?{' '}
-
-          <button onClick={() => navigate(routes.SIGNUP)} className="text-blue-600 font-semibold hover:underline">
+          Don't have an account?{" "}
+          <button
+            onClick={() => navigate(routes.SIGNUP)}
+            className="text-blue-600 font-semibold hover:underline"
+          >
             Sign up
           </button>
         </p>
 
         {/* Footer Links */}
         <div className="flex flex-wrap justify-center gap-3 mt-6 mb-12 text-sm text-gray-600">
-          <button onClick={() => navigate(routes.TERMS)} className="hover:text-blue-600">Terms</button>
-          
+          <button
+            onClick={() => navigate(routes.TERMS)}
+            className="hover:text-blue-600"
+          >
+            Terms
+          </button>
+
           <span>•</span>
-          
-          <button onClick={() => navigate(routes.PRIVACY)} className="hover:text-blue-600">Privacy</button>
-          
+
+          <button
+            onClick={() => navigate(routes.PRIVACY)}
+            className="hover:text-blue-600"
+          >
+            Privacy
+          </button>
+
           <span>•</span>
-          
-          <button onClick={() => navigate(routes.HELP)} className="hover:text-blue-600">Help</button>
+
+          <button
+            onClick={() => navigate(routes.HELP)}
+            className="hover:text-blue-600"
+          >
+            Help
+          </button>
         </div>
       </div>
     </div>

@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
-import { Mail, Eye, EyeOff } from 'lucide-react';
-import logo from "../assets/images/logo.svg";
+import React, { useState } from "react";
+import { Mail, Eye, EyeOff } from "lucide-react";
+import logo from "../assets/images/tp-logo.png";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
-import authPageBG from "../assets/images/auth-page-bg.png"
+import authPageBG from "../assets/images/auth-page-bg.png";
 
 // Router State Management
 const routes = {
-  HOME: '/',
-  SIGNIN: '/signin',
-  PROFILE: '/profile',
-  TERMS: '/terms',
-  PRIVACY: '/privacy',
-  HELP: '/help'
+  HOME: "/",
+  SIGNIN: "/signin",
+  PROFILE: "/profile",
+  TERMS: "/terms",
+  PRIVACY: "/privacy",
+  HELP: "/help",
 };
 
 // Sign Up Component
 const SignUpPage = () => {
   const [userType, setUserType] = useState(1);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [position, setPosition] = useState("");
-  const [city, setCity] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [city, setCity] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
@@ -35,7 +35,8 @@ const SignUpPage = () => {
   const [success, setSuccess] = useState("");
 
   const USER_FORM_CONFIG = {
-    1: { // Teacher
+    1: {
+      // Teacher
       firstNameLabel: "First Name",
       firstNamePlaceholder: "Enter your first name",
       lastNameLabel: "Last Name",
@@ -46,10 +47,11 @@ const SignUpPage = () => {
       emailPlaceholder: "teacher@example.com",
       showCity: false,
       tabColor: "#FF5E57",
-      title: "Join Teachinghood to take your career to the next level"
+      title: "Join Teachinghood to take your career to the next level",
     },
 
-    2: { // School
+    2: {
+      // School
       firstNameLabel: "School Name",
       firstNamePlaceholder: "Enter school name",
       mobileLabel: "Office Mobile Number",
@@ -60,10 +62,11 @@ const SignUpPage = () => {
       cityPlaceholder: "Enter city name",
       showCity: true,
       tabColor: "#28C76F",
-      title: "Join Teachinghood to take your career to the next level school"
+      title: "Join Teachinghood to take your career to the next level school",
     },
 
-    3: { // Recruiter
+    3: {
+      // Recruiter
       firstNameLabel: "Company Name",
       firstNamePlaceholder: "Enter company name",
       mobileLabel: "Company Mobile Number",
@@ -74,7 +77,8 @@ const SignUpPage = () => {
       cityPlaceholder: "Enter city name",
       showCity: true,
       tabColor: "#FFC107",
-      title: "Join Teachinghood to take your career to the next level recruiter"
+      title:
+        "Join Teachinghood to take your career to the next level recruiter",
     },
   };
 
@@ -101,7 +105,7 @@ const SignUpPage = () => {
       return;
     }
 
-    if (userType == 2 &&  !city) {
+    if (userType == 2 && !city) {
       setError("All fields are required");
       return;
     }
@@ -139,7 +143,9 @@ const SignUpPage = () => {
       const res = await registerUser(payload);
 
       if (res.data.status) {
-        setSuccess("Account created & Login successfully 🎉 Redirecting to Profile...");
+        setSuccess(
+          "Account created & Login successfully 🎉 Redirecting to Profile...",
+        );
 
         setTimeout(() => {
           if (res.data?.data?.token) {
@@ -173,7 +179,6 @@ const SignUpPage = () => {
   return (
     <div
       className="min-h-screen w-full flex items-center justify-center bg-no-repeat bg-center py-8 mx-auto bg-cover"
-
       style={{
         backgroundImage: `url(${authPageBG})`,
         backgroundSize: "180% 100%",
@@ -183,16 +188,19 @@ const SignUpPage = () => {
         {/* Logo */}
         <div className="flex flex-col text-center justify-center mb-8">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <button onClick={() => navigate(routes.HOME)} className="flex items-center justify-center space-x-2 mb-1">
+            <button
+              onClick={() => navigate(routes.HOME)}
+              className="flex items-center justify-center space-x-2 mb-1"
+            >
               <img
                 src={logo}
                 alt="Teachinghood Logo"
-                className="h-12 sm:h-16 w-auto"
+                className="w-[250px]"
               />
             </button>
           </div>
-          
-          <div className='flex items-center justify-center mx-auto'>
+
+          <div className="flex items-center justify-center mx-auto">
             <p className="text-lg sm:text-xl font-semibold text-center leading-[33px] text-white">
               {currentConfig.title}
             </p>
@@ -203,7 +211,9 @@ const SignUpPage = () => {
         <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8">
           {/* User Type Selection */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">I am a</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              I am a
+            </label>
             <div className="flex gap-2">
               <button
                 onClick={() => setUserType(1)}
@@ -338,7 +348,10 @@ const SignUpPage = () => {
               {currentConfig.emailLabel}
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Mail
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
               <input
                 type="email"
                 placeholder={currentConfig.emailPlaceholder}
@@ -369,7 +382,9 @@ const SignUpPage = () => {
 
           {/* Password Input */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Password
+            </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -386,12 +401,16 @@ const SignUpPage = () => {
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
-            <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters</p>
+            <p className="text-xs text-gray-500 mt-1">
+              Must be at least 8 characters
+            </p>
           </div>
 
           {/* Confirm Password Input */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Confirm Password
+            </label>
             <div className="relative">
               <input
                 type={showConfirmPassword ? "text" : "password"}
@@ -420,17 +439,22 @@ const SignUpPage = () => {
               className="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
             <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
-              I agree to the <a href="#" className="text-blue-500 hover:underline">Terms of Service</a> and{' '}
-              <a href="#" className="text-blue-500 hover:underline">Privacy Policy</a>
+              I agree to the{" "}
+              <a href="#" className="text-blue-500 hover:underline">
+                Terms of Service
+              </a>{" "}
+              and{" "}
+              <a href="#" className="text-blue-500 hover:underline">
+                Privacy Policy
+              </a>
             </label>
           </div>
 
           {error && (
             <p
               className="mb-3 text-sm text-red-600 bg-red-50 p-2 rounded"
-              dangerouslySetInnerHTML={{ __html: error}}
-            >
-            </p>
+              dangerouslySetInnerHTML={{ __html: error }}
+            ></p>
           )}
 
           {success && (
@@ -451,19 +475,37 @@ const SignUpPage = () => {
 
         {/* Sign In Link */}
         <p className="text-center text-sm text-gray-600 mt-6">
-          Already have an account?{' '}
-          <button onClick={() => navigate(routes.SIGNIN)} className="text-blue-600 font-semibold hover:underline">
+          Already have an account?{" "}
+          <button
+            onClick={() => navigate(routes.SIGNIN)}
+            className="text-blue-600 font-semibold hover:underline"
+          >
             Sign in
           </button>
         </p>
 
         {/* Footer Links */}
         <div className="flex flex-wrap justify-center gap-3 mt-6 text-sm text-gray-600">
-          <button onClick={() => navigate(routes.TERMS)} className="hover:text-blue-600">Terms</button>
+          <button
+            onClick={() => navigate(routes.TERMS)}
+            className="hover:text-blue-600"
+          >
+            Terms
+          </button>
           <span>•</span>
-          <button onClick={() => navigate(routes.PRIVACY)} className="hover:text-blue-600">Privacy</button>
+          <button
+            onClick={() => navigate(routes.PRIVACY)}
+            className="hover:text-blue-600"
+          >
+            Privacy
+          </button>
           <span>•</span>
-          <button onClick={() => navigate(routes.HELP)} className="hover:text-blue-600">Help</button>
+          <button
+            onClick={() => navigate(routes.HELP)}
+            className="hover:text-blue-600"
+          >
+            Help
+          </button>
         </div>
       </div>
     </div>
