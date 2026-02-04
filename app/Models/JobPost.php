@@ -25,6 +25,7 @@ class JobPost extends Model
         'status',
         'position',
         'user_id',
+        'is_applied',
     ];
 
     public function city()

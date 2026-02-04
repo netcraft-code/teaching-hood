@@ -245,4 +245,50 @@ class JobPostController extends Controller
             ]);
         }
     }
+
+    public function close($id)
+    {
+        $jobsPost = JobPost::find($id);
+        $jobsPost->update(['status' => false]);
+
+        return response_formatter(DEFAULT_200, [
+            'liked' => true,
+            'message' => 'Job closed successfully'
+        ]);
+    }
+
+    public function currentVacanies()
+    {
+        if (in_array(auth()->user()->user_type, [1, 2])) {
+            $perPage = (int) request()->get('perPage', 10);
+            $offset  = (int) request()->get('offset', 0);
+
+            $jobs = JobPost::with('city', 'grade', 'subject')
+                ->latest()
+                ->skip($offset)
+                ->paginate($perPage);
+
+            $jobs->map(function ($job) {
+                $job->city_name = $job->city->name;
+                $job->subject_name = $job->subject?->name;
+                $job->grade_name = $job->grade?->name;
+                $job->is_liked = $job->like ? true : false;
+
+                $job->total_applicants = 0;
+            });
+
+            return response_formatter(DEFAULT_200, $jobs);
+        }
+    }
+
+    public function applyJob($id)
+    {
+        $jobsPost = JobPost::find($id);
+        $jobsPost->update(['is_applied' => false]);
+
+        return response_formatter(DEFAULT_200, [
+            'liked' => true,
+            'message' => 'Job applied successfully'
+        ]);
+    }
 }

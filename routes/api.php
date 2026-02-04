@@ -36,5 +36,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('job-posts', JobPostController::class);
 
+    Route::prefix('job-post')->group(function () {
+        Route::post('update/{id}', [JobPostController::class, 'close']);
+        Route::get('current/vacanies', [JobPostController::class, 'currentVacanies']);
+        Route::get('apply/job/{id}', [JobPostController::class, 'applyJob']);
+    });
+
     Route::post('send-message', [AuthController::class, 'sendMessage']);
 });
