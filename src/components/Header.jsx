@@ -42,7 +42,7 @@ const Header = () => {
       : "text-gray-700 hover:text-blue-600";
 
   const goTo = (path) => {
-    if (!isLoggedIn && (path === "/post-job" || path === "/find-job")) {
+    if (!isLoggedIn && (path === "/post-job")) {
       navigate("/signin");
     } else {
       navigate(path);
@@ -54,19 +54,9 @@ const Header = () => {
     { name: "Home", path: "/" },
     { name: "Find a Job", path: "/find-job" },
     { name: "Post a Job", path: "/post-job" },
-    { name: "About Us", path: "/about" },
+    { name: "About Us", path: "/about-us" },
     { name: "Pricing", path: "/plan" },
   ];
-
-  // 🔹 Logged in + Teacher → remove Post Job
-  if (isLoggedIn && userType === 1) {
-    menuItems = menuItems.filter((item) => item.path !== "/post-job");
-  }
-
-  // 🔹 Logged in + School / Recruiter → remove Find Job
-  if (isLoggedIn && (userType === 2 || userType === 3)) {
-    menuItems = menuItems.filter((item) => item.path !== "/find-job");
-  }
 
   return (
     <header className="sticky top-0 z-50 shadow-sm">
@@ -82,16 +72,26 @@ const Header = () => {
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center space-x-8">
-            {menuItems.map((item) => (
-              <a
-                key={item.path}
-                onClick={() => goTo(item.path)}
-                className={`text-[16px] font-normal leading-[24px] tracking-[0] align-middle cursor-pointer ${isActive(item.path)}`}
-              >
-                {item.name}
-              </a>
-            ))}
+            {menuItems.map((item) => {
+              if (
+                item.path === "/post-job" &&
+                !(userType === 2 || userType === 3)
+              ) {
+                return null;
+              }
+
+              return (
+                <a
+                  key={item.path}
+                  onClick={() => goTo(item.path)}
+                  className={`text-[16px] font-normal leading-[24px] tracking-[0] align-middle cursor-pointer ${isActive(item.path)}`}
+                >
+                  {item.name}
+                </a>
+              );
+            })}
           </div>
+
 
           {/* Desktop Right Section */}
           <div className="hidden lg:flex items-center gap-6">

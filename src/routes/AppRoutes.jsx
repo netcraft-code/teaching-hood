@@ -7,14 +7,34 @@ import PostJob from "../pages/PostJob";
 import FindJob from "../pages/FindJob";
 import ProtectedRoute from "../pages/ProtectedRoute";
 import AboutUs from "../pages/AboutUs";
+import TermCondition from "../pages/TermCondition"
+import AuthRedirect from "../pages/AuthRedirect"
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp />} />
       <Route path="/about-us" element={<AboutUs />} />
+      <Route path="/term-condition" element={<TermCondition />} />
+
+      {/* Auth pages */}
+      <Route
+        path="/signin"
+        element={
+          <AuthRedirect>
+            <SignIn />
+          </AuthRedirect>
+        }
+      />
+
+      <Route
+        path="/signup"
+        element={
+          <AuthRedirect>
+            <SignUp />
+          </AuthRedirect>
+        }
+      />
 
       <Route
         path="/profile"

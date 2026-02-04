@@ -28,7 +28,7 @@ const CTASection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="px-8 py-4 bg-blue-500 text-white rounded-full hover:bg-gray-50 transition font-sf font-normal text-[16px] leading-[100%] shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5">
+            <button className="px-8 py-4 bg-blue-500 text-white rounded-full hover:bg-gray-50 hover:text-black transition font-sf font-normal text-[16px] leading-[100%] shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5">
                 Find A Job
             </button>
 

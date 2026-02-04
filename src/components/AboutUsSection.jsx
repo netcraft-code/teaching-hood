@@ -1,32 +1,33 @@
 import React from 'react';
 import { Users, Home, Briefcase, CheckCircle, Eye, Star, Lightbulb, Zap, Layers, Check, Calendar } from 'lucide-react';
 import { HeroImages } from "../assets/images/HeroImages";
+import { aboutUsIcons } from "./../assets/icons/about-us/aboutUs"
 
 const AboutUsSection = () => {
   const stats = [
     {
-      icon: Users,
+      icon: <img src={aboutUsIcons.teacherConnected} className='w-6 h-6 sm:w-7 sm:h-7' />,
       value: '50,000+',
       label: 'Teachers Connected',
       color: 'text-blue-500',
       bgColor: 'bg-blue-50'
     },
     {
-      icon: Home,
+      icon: <img src={aboutUsIcons.schoolRegister} className='w-6 h-6 sm:w-7 sm:h-7' />,
       value: '2,500+',
       label: 'Schools Registered',
       color: 'text-green-500',
       bgColor: 'bg-green-50'
     },
     {
-      icon: Briefcase,
+      icon: <img src={aboutUsIcons.recruiterActive} className='w-6 h-6 sm:w-7 sm:h-7' />,
       value: '1,000+',
       label: 'Recruiters Active',
       color: 'text-yellow-500',
       bgColor: 'bg-yellow-50'
     },
     {
-      icon: CheckCircle,
+      icon: <img src={aboutUsIcons.placementSuccess} className='w-6 h-6 sm:w-7 sm:h-7' />,
       value: '95%',
       label: 'Placement Success',
       color: 'text-red-500',
@@ -48,28 +49,28 @@ const AboutUsSection = () => {
 
   const values = [
     {
-      icon: Eye,
+      icon: <img src={aboutUsIcons.transparency} className='w-7 h-7' />,
       title: 'Transparency',
       description: 'We believe in open and honest communication between all stakeholders in the education ecosystem.',
       color: 'text-blue-500',
       bgColor: 'bg-blue-50'
     },
     {
-      icon: Star,
+      icon: <img src={aboutUsIcons.qualityFirst} className='w-7 h-7' />,
       title: 'Quality First',
       description: 'We focus on onboarding quality educators with institutions that value their skills and dedication.',
       color: 'text-green-500',
       bgColor: 'bg-green-50'
     },
     {
-      icon: Lightbulb,
+      icon: <img src={aboutUsIcons.innovation} className='w-7 h-7' />,
       title: 'Innovation',
       description: 'We continuously improve our platform with cutting-edge technology to serve the education sector better.',
       color: 'text-yellow-500',
       bgColor: 'bg-yellow-50'
     },
     {
-      icon: Zap,
+      icon: <img src={aboutUsIcons.empowerment} className='w-7 h-7' />,
       title: 'Empowerment',
       description: 'We empower teachers to find their ideal roles and schools to discover exceptional educators.',
       color: 'text-red-500',
@@ -82,31 +83,31 @@ const AboutUsSection = () => {
       name: 'Rajesh Kumar',
       role: 'Founder & CEO',
       description: 'Former educator with 15 years in education technology',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop'
+      image: aboutUsIcons.rajeshKumar
     },
     {
       name: 'Priya Sharma',
       role: 'Head of Product',
       description: 'Expert in building user-centric platforms',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop'
+      image: aboutUsIcons.priyaSharma
     },
     {
       name: 'Amit Patel',
       role: 'Head of Operations',
       description: 'Scaling education solutions across India',
-      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop'
+      image: aboutUsIcons.amitPatel
     },
     {
       name: 'Neha Gupta',
       role: 'Head of Partnerships',
       description: 'Building relationships with top schools',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop'
+      image: aboutUsIcons.nehGupta
     }
   ];
 
   const milestones = [
     {
-      year: '2022',
+      year: '2020',
       title: 'Teachinghood Founded',
       description: 'Started with a vision to transform teacher hiring in India',
       position: 'left'
@@ -114,7 +115,7 @@ const AboutUsSection = () => {
     {
       year: '2021',
       title: 'Reached 10,000 Teachers',
-      description: 'Crossed the first major milestone in supporting educators',
+      description: 'Crossed the first major milestone of registered educators',
       position: 'right'
     },
     {
@@ -132,66 +133,108 @@ const AboutUsSection = () => {
     {
       year: '2024',
       title: 'AI-Powered Matching',
-      description: 'Launched intelligent matching system to unite placements',
+      description: 'Launched intelligent matching system for better placements',
       position: 'left'
     }
   ];
 
   return (
     <div>
-        <section
-            className="w-full bg-cover bg-center overflow-hidden"
-            style={{ backgroundImage: `url(${HeroImages.bg})` }}
-        >
-            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-                {/* Badge */}
-                <div className="flex justify-center mb-8">
-                <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-md">
-                    <span className="bg-green-500 w-2 h-2 rounded-full "></span>
-                    <span className="text-sm font-regular text-gray-700">About Teachinghood</span>
-                </div>
-                </div>
-
-                {/* Heading */}
-                <div className="text-center mb-16">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4 tracking-tight">
-                        Transforming Education
-                    </h1>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-white tracking-tight">
-                        Hiring in India
-                    </h2>
-                </div>
-
-                {/* Stats Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                {stats.map((stat, index) => {
-                    const Icon = stat.icon;
-                    return (
-                    <div
-                        key={index}
-                        className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                    >
-                        <div className={`${stat.bgColor} ${stat.color} w-14 h-14 rounded-lg flex items-center justify-center mb-4`}>
-                        <Icon className="w-7 h-7" />
-                        </div>
-                        <div className="text-3xl font-bold text-gray-900 mb-2">
-                        {stat.value}
-                        </div>
-                        <div className="text-sm text-gray-600 font-medium">
-                        {stat.label}
+        <section className="relative w-full bg-transparent overflow-visible h-[300px] sm:h-[350px] md:h-[400px] lg:h-[440px]">
+            {/* Background Image Container */}
+            <div 
+                className="relative w-full bg-cover bg-center overflow-hidden h-[300px] sm:h-[350px] md:h-[400px] lg:h-[440px]"
+                style={{ backgroundImage: `url(${HeroImages.bg})` }}
+            >
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 md:pt-20">
+                    {/* Badge */}
+                    <div className="flex justify-center mb-6 sm:mb-8">
+                        <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-md">
+                            <span className="bg-green-500 w-2 h-2 rounded-full"></span>
+                            <span className="text-sm font-regular text-gray-700">About Teachinghood</span>
                         </div>
                     </div>
-                    );
-                })}
+                    
+                    {/* Heading */}
+                    <div className="text-center mb-8 sm:mb-12 md:mb-16">
+                        <h1 
+                            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-2 sm:mb-4 tracking-tight px-4"
+                            style={{ 
+                                textShadow: `
+                                    0px 0px 0px rgba(0, 0, 0, 0.10),
+                                    3px 3px 3px rgba(0, 0, 0, 0.10),
+                                    3px 4px 4px rgba(0, 0, 0, 0.10),
+                                    3px 4px 4px rgba(0, 0, 0, 0.10)
+                                `
+                            }}
+                        >
+                            Transforming Education
+                        </h1>
+                        <h2
+                            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-white tracking-tight px-4"
+                            style={{ 
+                                textShadow: `
+                                    0px 0px 0px rgba(0, 0, 0, 0.10),
+                                    3px 3px 3px rgba(0, 0, 0, 0.10),
+                                    3px 4px 4px rgba(0, 0, 0, 0.10),
+                                    3px 4px 4px rgba(0, 0, 0, 0.10)
+                                `
+                            }}
+                        >
+                            Hiring in India
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            {/* Stats Cards - Half overlap with background image */}
+            <div className="relative -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-28 bg-transparent">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mx-12">
+                        {stats.map((stat, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                                >
+                                    <div className={`${stat.bgColor} ${stat.color} w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4`}>
+                                        {stat.icon}
+                                    </div>
+                                    <div className="text-2xl sm:text-3xl font-bold text-gray-900 my-4 sm:my-4 flex items-center justify-center">
+                                        {stat.value}
+                                    </div>
+                                    <div className="text-xs sm:text-sm text-gray-600 font-medium flex items-center justify-center">
+                                        {stat.label}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         </section>
 
-        <div className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="py-20 mt-28 mx-16 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Our Mission */}
-                    <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+
+                        {/* Decorative Circle */}
+                        <img
+                            src={aboutUsIcons.missionCircle}
+                            alt=""
+                            className="
+                            absolute
+                            top-0
+                            right-0
+                            translate-x-1/2
+                            -translate-y-1/2
+                            h-40
+                            pointer-events-none
+                            "
+                        />
+
                         <div className="bg-blue-500 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                             <Layers className="w-7 h-7 text-white" />
                         </div>
@@ -210,8 +253,8 @@ const AboutUsSection = () => {
                         <div className="space-y-3">
                             {missionPoints.map((point, index) => (
                                 <div key={index} className="flex items-center gap-3">
-                                    <div className="flex-shrink-0">
-                                        <Check className="w-5 h-5 text-blue-500" />
+                                    <div className="w-5 h-5 bg-blue-50 rounded-full flex items-center justify-center">
+                                        <img src={aboutUsIcons.ourMissionTick} className="w-3 h-3 flex items-center justify-center" />
                                     </div>
 
                                     <span className="text-gray-700">{point}</span>
@@ -221,7 +264,22 @@ const AboutUsSection = () => {
                     </div>
 
                     {/* Our Vision */}
-                    <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+                        {/* Decorative Circle */}
+                        <img
+                            src={aboutUsIcons.missionCircle}
+                            alt=""
+                            className="
+                            absolute
+                            top-0
+                            right-0
+                            translate-x-1/2
+                            -translate-y-1/2
+                            h-40
+                            pointer-events-none
+                            "
+                        />
+
                         <div className="bg-green-500 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                             <Eye className="w-7 h-7 text-white" />
                         </div>
@@ -239,8 +297,8 @@ const AboutUsSection = () => {
                         <div className="space-y-3">
                             {visionPoints.map((point, index) => (
                                 <div key={index} className="flex items-center gap-3">
-                                    <div className="flex-shrink-0">
-                                        <Check className="w-5 h-5 text-green-500" />
+                                    <div className="w-5 h-5 bg-blue-50 rounded-full flex items-center justify-center">
+                                        <img src={aboutUsIcons.ourVisionTick} className="w-3 h-3 flex items-center justify-center" />
                                     </div>
 
                                     <span className="text-gray-700">{point}</span>
@@ -252,12 +310,12 @@ const AboutUsSection = () => {
             </div>
         </div>
 
-        <div className="py-20 bg-white">
+        <div className="py-20 bg-[linear-gradient(135deg,_#F9FAFB_0%,_rgba(239,246,255,0.5)_100%)]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 rounded-full px-4 py-2 mb-4">
-                        <Star className="w-4 h-4" />
+                        <img src={aboutUsIcons.whatDriveUs} className="w-4 h-4" />
                         <span className="text-sm font-medium">Our Values</span>
                     </div>
                     
@@ -273,15 +331,13 @@ const AboutUsSection = () => {
                 {/* Values Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {values.map((value, index) => {
-                        const Icon = value.icon;
-
                         return (
                             <div
                                 key={index}
                                 className="bg-white border border-gray-100 rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                             >
                                 <div className={`${value.bgColor} ${value.color} w-14 h-14 rounded-xl flex items-center justify-center mb-6`}>
-                                    <Icon className="w-7 h-7" />
+                                    {value.icon}
                                 </div>
                                 
                                 <h3 className="text-xl font-bold text-gray-900 mb-3">
@@ -298,12 +354,12 @@ const AboutUsSection = () => {
             </div>
         </div>
 
-        <div className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="py-20 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 rounded-full px-4 py-2 mb-4">
-                        <Users className="w-4 h-4" />
+                        <img src={aboutUsIcons.meetTheTeam} className="w-4 h-4" />
                         <span className="text-sm font-medium">Meet the Team</span>
                     </div>
                 
@@ -354,13 +410,13 @@ const AboutUsSection = () => {
             </div>
         </div>
 
-        <div className="py-20 bg-white">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="py-20 bg-[linear-gradient(135deg,_#F9FAFB_0%,_rgba(239,246,255,0.5)_100%)]">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center mb-20">
-                    <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 rounded-full px-4 py-2 mb-4">
-                        <Calendar className="w-4 h-4" />
-                        <span className="text-sm font-medium">Our Story</span>
+                    <div className="inline-flex items-center gap-2 bg-white text-green-500 rounded-full px-4 py-2 mb-4">
+                        <img src={aboutUsIcons.ourJourney} className="w-4 h-4" />
+                        <span className="text-sm font-regular">Our Journey</span>
                     </div>
                 
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -378,7 +434,7 @@ const AboutUsSection = () => {
                     <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-blue-200 via-blue-400 to-yellow-400" />
 
                     {/* Timeline Items */}
-                    <div className="space-y-16">
+                    <div className="space-y-12">
                         {milestones.map((milestone, index) => (
                             <div
                                 key={index}
@@ -391,22 +447,29 @@ const AboutUsSection = () => {
 
                                 {/* Content Card */}
                                 <div
-                                    className={`w-5/12 ${
+                                    className={`w-6/12 ${
                                         milestone.position === 'left' ? 'pr-12' : 'pl-12'
                                     }`}
                                 >
-                                    <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                                    <div
+                                        className={`
+                                            bg-white border border-gray-200 rounded-2xl p-6 shadow-lg
+                                            hover:shadow-xl transition-all duration-300 hover:-translate-y-1
+                                            flex flex-col
+                                            ${milestone.position === 'left' ? 'items-end text-right' : 'items-start text-left'}
+                                        `}
+                                    >
                                         {/* Year Badge */}
-                                        <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 rounded-full px-3 py-1 mb-3">
-                                            <Calendar className="w-3 h-3" />
-                                            <span className="text-xs font-semibold">{milestone.year}</span>
+                                        <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-500 rounded-full px-3 py-2 mb-3">
+                                            <img src={aboutUsIcons.calender} className="w-3 h-3" />
+                                            <span className="text-sm font-regular">{milestone.year}</span>
                                         </div>
-                        
-                                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+
+                                        <h3 className="text-xl font-medium text-gray-900 mb-2">
                                             {milestone.title}
                                         </h3>
-                                        
-                                        <p className="text-gray-600 text-sm leading-relaxed">
+
+                                        <p className="text-gray-600 text-m leading-relaxed">
                                             {milestone.description}
                                         </p>
                                     </div>

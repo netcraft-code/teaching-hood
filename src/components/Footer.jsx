@@ -1,7 +1,16 @@
 import { FaFacebookF, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import logo from "../assets/images/tp-logo.png";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const routes = {
+    HOME: "/",
+    ABOUT_US: "/about-us",
+    TERM_CONDITION: "/term-condition"
+  };
+
   return (
     <footer className="bg-[#0B1828] text-gray-300 mx-auto w-full">
       <div className="mx-auto px-6 md:px-20 pb-7 pt-12 max-w-7xl">
@@ -129,18 +138,25 @@ const Footer = () => {
         {/* BOTTOM BAR */}
         <div className="mx-auto pt-4 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-2 md:gap-0">
           <div className="flex gap-6">
-            <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+            <button
+              onClick={() => navigate(routes.ABOUT_US)}
+              className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer"
+            >
               About Us
-            </span>
+            </button>
+
             <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
               Contact Us
             </span>
             <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
               Privacy Policy
             </span>
-            <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+            <button
+              onClick={() => navigate(routes.TERM_CONDITION)}
+              className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer"
+            >
               Terms of Service
-            </span>
+            </button>
           </div>
 
           <div className="mt-2 md:mt-0 font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400">
