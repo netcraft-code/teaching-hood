@@ -239,9 +239,7 @@ const PostJob = () => {
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
               <Briefcase className="w-5 h-5 text-white" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-regular">
-              Post a Job
-            </h1>
+            <h1 className="text-xl sm:text-2xl font-regular">Post a Job</h1>
           </div>
           <div className="flex space-x-2 sm:space-x-3">
             <button
@@ -334,7 +332,7 @@ const PostJob = () => {
                     {[
                       "Teacher",
                       "Principal",
-                      "Coordinator",
+                      "Co-ordinator",
                       "Vice Principal",
                     ].map((position) => (
                       <label
