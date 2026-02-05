@@ -8,7 +8,7 @@ const Footer = () => {
   const routes = {
     HOME: "/",
     ABOUT_US: "/about-us",
-    TERM_CONDITION: "/term-condition"
+    TERM_CONDITION: "/term-condition",
   };
 
   return (
@@ -80,10 +80,10 @@ const Footer = () => {
               </h4>
               <ul className="space-y-3 text-xs">
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
-                  Find Jobs
+                  <a href="/find-job">Find Jobs</a>
                 </li>
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
-                  Create Profile
+                  <a href="/signup">Create Profile</a>
                 </li>
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Track Application
@@ -101,12 +101,23 @@ const Footer = () => {
               </h4>
               <ul className="space-y-3 text-xs">
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
-                  Post Jobs
+                  <a href="/post-job">Post Jobs</a>
                 </li>
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                {/* <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Search Candidates
-                </li>
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                </li> */}
+                <li
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Please call our representative for inquiring about dedicated hiring support: +91-9226224831",
+                      )
+                    ) {
+                      window.location.href = "tel:9226224831";
+                    }
+                  }}
+                  className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]"
+                >
                   Seek Hiring Support
                 </li>
               </ul>
@@ -119,11 +130,11 @@ const Footer = () => {
               </h4>
               <ul className="space-y-3 text-xs">
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
-                  Post Jobs
+                  <a href="/post-job">Post Jobs</a>
                 </li>
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                {/* <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Search Candidates
-                </li>
+                </li> */}
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Seek Dedicated Hiring Support
                 </li>
