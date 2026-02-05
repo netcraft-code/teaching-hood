@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\JobPost;
 use App\Models\LikedJob;
+use App\Models\AppliedJob;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +17,8 @@ class JobPostController extends Controller
         $perPage = (int) request()->get('perPage', 10);
         $offset  = (int) request()->get('offset', 0);
 
-        $jobs = JobPost::with('city', 'grade', 'subject')
+        $jobs = JobPost::withCount('appliedJobs')
+            ->with('city', 'grade', 'subject')
             ->when($request->school_name, function ($query) use ($request) {
                 $query->where('school_name', 'like', '%' . $request->school_name . '%');
             })
@@ -43,7 +45,7 @@ class JobPostController extends Controller
             })
             ->when($request->posted_date != 'any', function ($query) use ($request) {
                 match ($request->posted_date) {
-                    '24_hours' => $query->where('created_at', '>=', Carbon::now()->subHours(24)),
+                    '24h' => $query->where('created_at', '>=', Carbon::now()->subHours(24)),
                     'week'     => $query->where('created_at', '>=', Carbon::now()->subWeek()),
                     'month'    => $query->where('created_at', '>=', Carbon::now()->subMonth()),
                     default    => null,
@@ -53,16 +55,18 @@ class JobPostController extends Controller
             ->skip($offset)
             ->paginate($perPage);
 
+        $lastWeekJobs = JobPost::where('created_at', '>=', now()->subWeek())->count();
+
         $jobs->map(function ($job) {
             $job->city_name = $job->city->name;
             $job->subject_name = $job->subject?->name;
             $job->grade_name = $job->grade?->name;
             $job->is_liked = $job->like ? true : false;
 
-            $job->total_applicants = 0;
+            $job->total_applicants = $job->applied_jobs_count;
         });
 
-        $extraData['new_jobs'] = 0;
+        $extraData['new_jobs'] = $lastWeekJobs;
 
         return response_formatter(DEFAULT_200, $jobs, $extraData);
     }
@@ -141,19 +145,21 @@ class JobPostController extends Controller
     // 📌 JOB POST UPDATE
     public function update(Request $request, $id)
     {
+        $job = JobPost::findOrFail($id);
+
         $validator = Validator::make($request->all(), [
             // School details
-            'school_name' => 'required|string|max:255|unique:job_posts,school_name',
+            'school_name' => 'required|string|max:255|unique:job_posts,school_name,' . $job->id,
             'city_id'     => 'required|integer|exists:cities,id',
 
-            'position'  => 'required|string',
+            'position' => 'required|string',
 
             // Job details
-            'subject_id'  => 'nullable|integer|exists:subjects,id',
-            'grade_id'    => 'nullable|integer|exists:grade_levels,id',
+            'subject_id' => 'nullable|integer|exists:subjects,id',
+            'grade_id'   => 'nullable|integer|exists:grade_levels,id',
 
             // Facilities
-            'food'         => 'nullable|boolean',
+            'food'          => 'nullable|boolean',
             'accommodation' => 'nullable|boolean',
 
             // Job info
@@ -163,11 +169,15 @@ class JobPostController extends Controller
             'experience_required' => 'required|string|max:100',
 
             // Descriptions
-            'job_description'             => 'required|string',
-            'qualification_requirements'  => 'required|string',
+            'job_description'            => 'required|string',
+            'qualification_requirements' => 'required|string',
 
             // Dates
             'application_deadline' => 'required|date|after:today',
+
+            // Contact
+            'contact_email' => 'required|email|max:255',
+            'contact_phone' => 'required|string|max:20',
 
             // Status
             'status' => 'nullable|boolean',
@@ -177,8 +187,25 @@ class JobPostController extends Controller
             return response_formatter(DEFAULT_VALIDATION_422, $validator->errors());
         }
 
-        $job = JobPost::findOrFail($id);
-        $job->update($validator->validated());
+        $job->update([
+            'school_name'               => $request->school_name,
+            'position'                  => $request->position,
+            'city_id'                   => $request->city_id,
+            'subject_id'                => $request->subject_id,
+            'grade_id'                  => $request->grade_id,
+            'food'                      => $request->boolean('food'),
+            'accommodation'             => $request->boolean('accommodation'),
+            'job_type'                  => $request->job_type,
+            'min_salary'                => $request->min_salary,
+            'max_salary'                => $request->max_salary,
+            'experience_required'       => $request->experience_required,
+            'job_description'           => $request->job_description,
+            'qualification_requirements' => $request->qualification_requirements,
+            'application_deadline'      => $request->application_deadline,
+            'contact_email'             => $request->contact_email,
+            'contact_phone'             => $request->contact_phone,
+            'status'                    => $request->status ?? false,
+        ]);
 
         return response_formatter(DEFAULT_UPDATED_200, $job);
     }
@@ -259,7 +286,7 @@ class JobPostController extends Controller
 
     public function currentVacanies()
     {
-        if (in_array(auth()->user()->user_type, [1, 2])) {
+        if (auth()->user()->user_type == 2) {
             $perPage = (int) request()->get('perPage', 10);
             $offset  = (int) request()->get('offset', 0);
 
@@ -283,11 +310,32 @@ class JobPostController extends Controller
 
     public function applyJob($id)
     {
-        $jobsPost = JobPost::find($id);
-        $jobsPost->update(['is_applied' => false]);
+        $userId = auth()->id();
+
+        // ✅ Check job exists
+        $job = JobPost::findOrFail($id);
+
+        // ✅ Prevent duplicate application
+        $alreadyApplied = AppliedJob::where([
+            'user_id'     => $userId,
+            'job_post_id' => $id,
+        ])->exists();
+
+        if ($alreadyApplied) {
+            return response_formatter(DEFAULT_200, [
+                'applied' => true,
+                'message' => 'You have already applied for this job'
+            ]);
+        }
+
+        // ✅ Apply job
+        AppliedJob::create([
+            'user_id'     => $userId,
+            'job_post_id' => $id,
+        ]);
 
         return response_formatter(DEFAULT_200, [
-            'liked' => true,
+            'applied' => true,
             'message' => 'Job applied successfully'
         ]);
     }
