@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
-  Search,
-  MapPin,
-  Briefcase,
-  Clock,
-  Award,
   ChevronRight,
-  Heart,
 } from "lucide-react";
 import { HeroImages } from "../assets/images/HeroImages";
-import { getCities, getJobs } from "../api/auth";
+import { getCities, getJobs, likeUnlikeJobApi, applyJobApi } from "../api/auth";
 import { findJobIcons } from "./../assets/icons/findJobIcons";
 import { Range, getTrackBackground } from "react-range";
 
@@ -147,6 +141,45 @@ const JobCard = () => {
     setSearchRadius(0);
     setCurrentPage(1);
     fetchJobs();
+  };
+
+  const likeUnlikedJob = async (jobId) => {
+    try {
+      const response = await likeUnlikeJobApi({
+        job_post_id: jobId,
+      });
+
+      if (response.data.status) {
+        alert(response.data.data.message);
+
+        setJobs((jobs) =>
+          jobs.map((job) =>
+            job.id === jobId
+              ? { ...job, is_liked: !job.is_liked }
+              : job
+          )
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const applyJob = async (jobId) => {
+    try {
+      if (localStorage.getItem("auth_token")) {
+        const response = await applyJobApi(jobId);
+
+        if (response.data.status) {
+          alert(response.data.data.message);
+        }
+      } else {
+        alert("You need to login first");
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -656,8 +689,16 @@ const JobCard = () => {
                         </div>
 
                         {/* RIGHT SIDE */}
-                        <button className="text-gray-400 hover:text-red-500 transition-colors">
-                          <img src={findJobIcons.like} className="w-6 h-6" />
+                        <button
+                          onClick={() => likeUnlikedJob(job.id)}
+                          className="transition-colors"
+                        >
+                          <img
+                            src={findJobIcons.like}
+                            className={`w-6 h-6 ${
+                              job.is_liked ? "filter-red" : "opacity-40"
+                            }`}
+                          />
                         </button>
                       </div>
 
@@ -709,7 +750,10 @@ const JobCard = () => {
                           <div className="text-2xl font-semibold text-gray-900">
                             {formatSalary(job.min_salary, job.max_salary)}
                           </div>
-                          <button className="px-6 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 transition-colors flex items-center gap-2">
+                          <button
+                            className="px-6 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 transition-colors flex items-center gap-2"
+                            onClick={() => applyJob(job.id)}
+                          >
                             Apply Now
                             <ChevronRight className="w-4 h-4" />
                           </button>

@@ -14,4 +14,9 @@
   body {
     @apply font-sans;
   }
+
+  .filter-red {
+    filter: invert(27%) sepia(95%) saturate(7480%) hue-rotate(356deg)
+      brightness(97%) contrast(108%);
+  }
 }

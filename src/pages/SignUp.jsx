@@ -4,6 +4,7 @@ import logo from "../assets/images/tp-logo.png";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
 import authPageBG from "../assets/images/auth-page-bg.png";
+import Header from "../components/Header";
 
 // Router State Management
 const routes = {
@@ -177,338 +178,342 @@ const SignUpPage = () => {
   };
 
   return (
-    <div
-      className="min-h-screen w-full flex items-center justify-center bg-no-repeat bg-center py-8 mx-auto bg-cover"
-      style={{
-        backgroundImage: `url(${authPageBG})`,
-        backgroundSize: "180% 100%",
-      }}
-    >
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="flex flex-col text-center justify-center mb-8">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <button
-              onClick={() => navigate(routes.HOME)}
-              className="flex items-center justify-center space-x-2 mb-1"
-            >
-              <img
-                src={logo}
-                alt="Teachinghood Logo"
-                className="w-[250px]"
-              />
-            </button>
-          </div>
+    <>
+      <Header />
 
-          <div className="flex items-center justify-center mx-auto">
-            <p className="text-lg sm:text-xl font-semibold text-center leading-[33px] text-white">
-              {currentConfig.title}
-            </p>
-          </div>
-        </div>
-
-        {/* Sign Up Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8">
-          {/* User Type Selection */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              I am a
-            </label>
-            <div className="flex gap-2">
+      <div
+        className="min-h-screen w-full flex items-center justify-center bg-no-repeat bg-center py-8 mx-auto bg-cover"
+        style={{
+          backgroundImage: `url(${authPageBG})`,
+          backgroundSize: "180% 100%",
+        }}
+      >
+        <div className="w-full max-w-md">
+          {/* Logo */}
+          <div className="flex flex-col text-center justify-center mb-8">
+            <div className="flex items-center justify-center space-x-2 mb-4">
               <button
-                onClick={() => setUserType(1)}
-                style={getTabStyle(1)}
-                className="flex-1 py-2 px-2 sm:px-4 rounded-lg border-2 transition font-semibold"
+                onClick={() => navigate(routes.HOME)}
+                className="flex items-center justify-center space-x-2 mb-1"
               >
-                Teacher
+                <img
+                  src={logo}
+                  alt="Teachinghood Logo"
+                  className="w-[250px]"
+                />
               </button>
+            </div>
 
-              <button
-                onClick={() => setUserType(2)}
-                style={getTabStyle(2)}
-                className="flex-1 py-2 px-2 sm:px-4 rounded-lg border-2 transition font-semibold"
-              >
-                School
-              </button>
-
-              <button
-                onClick={() => setUserType(3)}
-                style={getTabStyle(3)}
-                className="flex-1 py-2 px-2 sm:px-4 rounded-lg border-2 transition font-semibold"
-              >
-                Recruiter
-              </button>
+            <div className="flex items-center justify-center mx-auto">
+              <p className="text-lg sm:text-xl font-semibold text-center leading-[33px] text-white">
+                {currentConfig.title}
+              </p>
             </div>
           </div>
 
-          {/* First Name Input */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {currentConfig.firstNameLabel}
-            </label>
-            <input
-              type="text"
-              placeholder={currentConfig.firstNamePlaceholder}
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-            />
-          </div>
-
-          {userType == 1 && (
+          {/* Sign Up Form */}
+          <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8">
+            {/* User Type Selection */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {currentConfig.lastNameLabel}
+                I am a
+              </label>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setUserType(1)}
+                  style={getTabStyle(1)}
+                  className="flex-1 py-2 px-2 sm:px-4 rounded-lg border-2 transition font-semibold"
+                >
+                  Teacher
+                </button>
+
+                <button
+                  onClick={() => setUserType(2)}
+                  style={getTabStyle(2)}
+                  className="flex-1 py-2 px-2 sm:px-4 rounded-lg border-2 transition font-semibold"
+                >
+                  School
+                </button>
+
+                <button
+                  onClick={() => setUserType(3)}
+                  style={getTabStyle(3)}
+                  className="flex-1 py-2 px-2 sm:px-4 rounded-lg border-2 transition font-semibold"
+                >
+                  Recruiter
+                </button>
+              </div>
+            </div>
+
+            {/* First Name Input */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {currentConfig.firstNameLabel}
               </label>
               <input
                 type="text"
-                placeholder={currentConfig.lastNamePlaceholder}
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                placeholder={currentConfig.firstNamePlaceholder}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg"
               />
             </div>
-          )}
 
-          {/* Position Radio */}
-          {userType == 1 && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Position
-              </label>
-
-              <div className="flex gap-3">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="position"
-                    value="Teacher"
-                    checked={position === "Teacher"}
-                    onChange={(e) => setPosition(e.target.value)}
-                    className="text-blue-600"
-                  />
-                  Teacher
-                </label>
-
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="position"
-                    value="Principal"
-                    checked={position === "Principal"}
-                    onChange={(e) => setPosition(e.target.value)}
-                    className="text-blue-600"
-                  />
-                  Principal
-                </label>
-
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="position"
-                    value="Vice Principal / Coordinator"
-                    checked={position === "Vice Principal / Coordinator"}
-                    onChange={(e) => setPosition(e.target.value)}
-                    className="text-blue-600"
-                  />
-                  Vice Principal / Coordinator
-                </label>
-              </div>
-            </div>
-          )}
-
-          {/* Mobile Number Input */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {currentConfig.mobileLabel}
-            </label>
-            <div className="grid grid-cols-5 gap-2">
-              <input
-                type="text"
-                value="+91"
-                readOnly
-                className="input col-span-1 bg-gray-100 cursor-not-allowed text-center w-full px-4 py-3 border border-gray-300 rounded-lg"
-              />
-
-              <input
-                type="tel"
-                name="phone"
-                className="input col-span-4 w-full px-4 py-3 border border-gray-300 rounded-lg"
-                placeholder={currentConfig.mobilePlaceholder}
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                maxLength={10}
-              />
-            </div>
-          </div>
-
-          {/* Email Input */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {currentConfig.emailLabel}
-            </label>
-            <div className="relative">
-              <Mail
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
-              <input
-                type="email"
-                placeholder={currentConfig.emailPlaceholder}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg"
-              />
-            </div>
-          </div>
-
-          {/* City Input */}
-          {currentConfig.showCity && (
-            <>
+            {userType == 1 && (
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {currentConfig.cityLabel}
+                  {currentConfig.lastNameLabel}
                 </label>
                 <input
                   type="text"
-                  placeholder={currentConfig.cityPlaceholder}
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
+                  placeholder={currentConfig.lastNamePlaceholder}
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                 />
               </div>
-            </>
-          )}
+            )}
 
-          {/* Password Input */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Create a password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+            {/* Position Radio */}
+            {userType == 1 && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Position
+                </label>
+
+                <div className="flex gap-3">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="position"
+                      value="Teacher"
+                      checked={position === "Teacher"}
+                      onChange={(e) => setPosition(e.target.value)}
+                      className="text-blue-600"
+                    />
+                    Teacher
+                  </label>
+
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="position"
+                      value="Principal"
+                      checked={position === "Principal"}
+                      onChange={(e) => setPosition(e.target.value)}
+                      className="text-blue-600"
+                    />
+                    Principal
+                  </label>
+
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="position"
+                      value="Vice Principal / Coordinator"
+                      checked={position === "Vice Principal / Coordinator"}
+                      onChange={(e) => setPosition(e.target.value)}
+                      className="text-blue-600"
+                    />
+                    Vice Principal / Coordinator
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {/* Mobile Number Input */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {currentConfig.mobileLabel}
+              </label>
+              <div className="grid grid-cols-5 gap-2">
+                <input
+                  type="text"
+                  value="+91"
+                  readOnly
+                  className="input col-span-1 bg-gray-100 cursor-not-allowed text-center w-full px-4 py-3 border border-gray-300 rounded-lg"
+                />
+
+                <input
+                  type="tel"
+                  name="phone"
+                  className="input col-span-4 w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  placeholder={currentConfig.mobilePlaceholder}
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  maxLength={10}
+                />
+              </div>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              Must be at least 8 characters
-            </p>
-          </div>
 
-          {/* Confirm Password Input */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Confirm Password
-            </label>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm your password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              >
-                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+            {/* Email Input */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {currentConfig.emailLabel}
+              </label>
+              <div className="relative">
+                <Mail
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
+                <input
+                  type="email"
+                  placeholder={currentConfig.emailPlaceholder}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg"
+                />
+              </div>
             </div>
+
+            {/* City Input */}
+            {currentConfig.showCity && (
+              <>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {currentConfig.cityLabel}
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={currentConfig.cityPlaceholder}
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Password Input */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Create a password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                Must be at least 8 characters
+              </p>
+            </div>
+
+            {/* Confirm Password Input */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                >
+                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Terms Checkbox */}
+            <div className="flex items-start mb-6">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={agreeTerms}
+                onChange={(e) => setAgreeTerms(e.target.checked)}
+                className="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
+                I agree to the{" "}
+                <a href="#" className="text-blue-500 hover:underline">
+                  Terms of Service
+                </a>{" "}
+                and{" "}
+                <a href="#" className="text-blue-500 hover:underline">
+                  Privacy Policy
+                </a>
+              </label>
+            </div>
+
+            {error && (
+              <p
+                className="mb-3 text-sm text-red-600 bg-red-50 p-2 rounded"
+                dangerouslySetInnerHTML={{ __html: error }}
+              ></p>
+            )}
+
+            {success && (
+              <p className="mb-3 text-sm text-green-600 bg-green-50 p-2 rounded">
+                {success}
+              </p>
+            )}
+
+            {/* Create Account Button */}
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition mb-4 disabled:opacity-50"
+            >
+              {loading ? "Creating account..." : "Create account"}
+            </button>
           </div>
 
-          {/* Terms Checkbox */}
-          <div className="flex items-start mb-6">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={agreeTerms}
-              onChange={(e) => setAgreeTerms(e.target.checked)}
-              className="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-            />
-            <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
-              I agree to the{" "}
-              <a href="#" className="text-blue-500 hover:underline">
-                Terms of Service
-              </a>{" "}
-              and{" "}
-              <a href="#" className="text-blue-500 hover:underline">
-                Privacy Policy
-              </a>
-            </label>
+          {/* Sign In Link */}
+          <p className="text-center text-sm text-gray-600 mt-6">
+            Already have an account?{" "}
+            <button
+              onClick={() => navigate(routes.SIGNIN)}
+              className="text-blue-600 font-semibold hover:underline"
+            >
+              Sign in
+            </button>
+          </p>
+
+          {/* Footer Links */}
+          <div className="flex flex-wrap justify-center gap-3 mt-6 text-sm text-gray-600">
+            <button
+              onClick={() => navigate(routes.TERMS)}
+              className="hover:text-blue-600"
+            >
+              Terms
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => navigate(routes.PRIVACY)}
+              className="hover:text-blue-600"
+            >
+              Privacy
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => navigate(routes.HELP)}
+              className="hover:text-blue-600"
+            >
+              Help
+            </button>
           </div>
-
-          {error && (
-            <p
-              className="mb-3 text-sm text-red-600 bg-red-50 p-2 rounded"
-              dangerouslySetInnerHTML={{ __html: error }}
-            ></p>
-          )}
-
-          {success && (
-            <p className="mb-3 text-sm text-green-600 bg-green-50 p-2 rounded">
-              {success}
-            </p>
-          )}
-
-          {/* Create Account Button */}
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition mb-4 disabled:opacity-50"
-          >
-            {loading ? "Creating account..." : "Create account"}
-          </button>
-        </div>
-
-        {/* Sign In Link */}
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Already have an account?{" "}
-          <button
-            onClick={() => navigate(routes.SIGNIN)}
-            className="text-blue-600 font-semibold hover:underline"
-          >
-            Sign in
-          </button>
-        </p>
-
-        {/* Footer Links */}
-        <div className="flex flex-wrap justify-center gap-3 mt-6 text-sm text-gray-600">
-          <button
-            onClick={() => navigate(routes.TERMS)}
-            className="hover:text-blue-600"
-          >
-            Terms
-          </button>
-          <span>•</span>
-          <button
-            onClick={() => navigate(routes.PRIVACY)}
-            className="hover:text-blue-600"
-          >
-            Privacy
-          </button>
-          <span>•</span>
-          <button
-            onClick={() => navigate(routes.HELP)}
-            className="hover:text-blue-600"
-          >
-            Help
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

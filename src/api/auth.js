@@ -103,3 +103,15 @@ export const postJob = (data) => {
 export const getJobs = (params = {}) => {
   return api.get("/api/job-posts",  { params });
 }
+
+export const likeUnlikeJobApi = (data) => {
+  return api.post("/api/like", data);
+}
+
+export const applyJobApi = (jobId) => {
+  return api.post(`api/job-post/apply/${jobId}`);
+};
+
+export const getVacanies = () => {
+  return api.get("api/job-post/current/vacanies");
+}

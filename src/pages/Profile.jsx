@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getProfile, logoutUser, updateAvatarBanner, getJobs } from "../api/auth";
+import { getProfile, logoutUser, updateAvatarBanner, getVacanies } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
 import EditProfileModal from "../components/EditProfileModal";
@@ -14,6 +14,7 @@ import teacherBannerImage from "../assets/images/teacher-banner.png";
 import schoolBannerImage from "../assets/images/school-banner.png";
 import recruiterBannerImage from "../assets/images/recruiter-banner.png";
 import defaultAvatarImage from "../assets/images/default-avatar.png";
+import Header from "../components/Header";
 
 // Router State Management
 const routes = {
@@ -31,9 +32,12 @@ const Profile = () => {
   const navigate = useNavigate();
   const hasFetched = useRef(false);
   const [createdJobs, setCreatedJobs] = useState([]);
+  const [totalCreatedJobs, setTotalCreatedJobs] = useState(0);
 
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [imageType, setImageType] = useState(null); // 'avatar' | 'banner'
+  const [createdJobLoading, setCreatedJobLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const USER_FORM_CONFIG = {
     1: {
@@ -153,17 +157,39 @@ const Profile = () => {
   };
 
   const fetchTabData = async (tab) => {
-    // if (tab === 'vacancies') {
-    //   try {
-    //     const res = await getJobs();
-    //     console.log(res);
-    //     setCreatedJobs(res.data.data);
-    //   } catch (err) {
-    //     setError(err.response?.data?.message || 'Issue in fetching jobs. Please try again.');
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // }
+    if (tab === 'vacancies') {
+      try {
+        setCreatedJobLoading(true);
+
+        const res = await getVacanies();
+        console.log(res);
+        setCreatedJobs(res.data.data.data);
+        setTotalCreatedJobs(res.data.data.total);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Issue in fetching jobs. Please try again.');
+      } finally {
+        setCreatedJobLoading(false);
+      }
+    }
+  };
+  
+  // Get job title
+  const getJobTitle = (job) => {
+    if (job.subject_name && job.grade_name) {
+      return `${job.subject_name} (${job.grade_name})`;
+    } else if (job.subject_name) {
+      return `${job.position} - ${job.subject_name}`;
+    } else if (job.grade_name) {
+      return `${job.position} - ${job.grade_name}`;
+    }
+    return job.position;
+  };
+
+  // Format salary to LPA
+  const formatSalary = (min, max) => {
+    const minLPA = (min);
+    const maxLPA = (max);
+    return `₹${minLPA} - ₹${maxLPA}/month`;
   };
 
   const getTotalDurationCount = (totalExperience) => {
@@ -219,6 +245,8 @@ const Profile = () => {
 
   return (
     <>
+      <Header />
+
       <ProfileHeader onEdit={() => setEditOpen(true)} profile={profile} />
 
       {/* Existing profile content */}
@@ -709,16 +737,113 @@ const Profile = () => {
             {activeTab === "vacancies" && (
               <>
                 <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-                  <h3 className="flex items-center gap-3 font-semibold mb-5">
-                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100">
-                      <img
-                        src={schoolVacanciesIcon}
-                        alt="About Us"
-                        className="w-6 h-6"
-                      />
-                    </span>
-                    School Vacancies
-                  </h3>
+                  <div className="grid grid-cols-2 items-center mb-8">
+                    {/* LEFT */}
+                    <div className="flex items-center gap-4 font-regular justify-start">
+                      <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-yellow-100">
+                        <img
+                          src={schoolVacanciesIcon}
+                          alt="About Us"
+                          className="w-6 h-6"
+                        />
+                      </span>
+                      Current Vacancies
+                    </div>
+
+                    {/* RIGHT BADGE */}
+                    <div className="flex justify-end">
+                      <span className="inline-flex items-center bg-green-100 text-green-600 text-xs font-medium rounded-full px-4 py-1.5">
+                        {totalCreatedJobs} Active Position
+                        {totalCreatedJobs !== 1 ? "s" : ""}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex-1">
+                    {/* Job Cards */}
+                    <div className="space-y-4">
+                      {createdJobLoading ? (
+                        <div className="text-center py-12">
+                          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                          <p className="mt-4 text-gray-600">Loading jobs...</p>
+                        </div>
+                      ) : createdJobs.length === 0 ? (
+                        <div className="text-center py-12 bg-white rounded-lg shadow-sm">
+                          <p className="text-gray-600 text-lg">
+                            No jobs found matching your filters
+                          </p>
+                        </div>
+                      ) : (
+                        createdJobs.map((job) => (
+                          <div
+                            key={job.id}
+                            className="bg-white rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-6"
+                          >
+                            <div className="flex items-start justify-between gap-4">
+                              {/* LEFT SIDE */}
+                              <div className="flex items-start gap-4">
+                                {/* Job Info */}
+                                <div>
+                                  {/* Title + Verified */}
+                                  <div className="flex items-center gap-2">
+                                    <h3 className="text-m font-semibold">
+                                      {getJobTitle(job)}
+                                    </h3>
+                                  </div>
+      
+                                  {/* School Name */}
+                                  <p className="text-gray-600 mt-1 text-sm items-center flex">
+                                    {job.grade_name} 
+                                    {job.grade_name && (
+                                      <div className="w-1 h-1 bg-gray-600 rounded-full inline-flex items-center mx-2" />
+                                    )}
+
+                                    {job.experience_required} years exp
+                                  </p>
+      
+                                  {/* Applicants */}
+                                  <div className="flex items-center gap-1 mt-1 text-sm text-gray-600">
+                                    <div className="text-xs font-regular text-gray-900">
+                                      {formatSalary(job.min_salary, job.max_salary)}
+                                    </div>
+
+                                    <div className="w-1 h-1 bg-gray-600 rounded-full inline-flex items-center mx-2" />
+
+                                    <span>{job.total_applicants} applicants</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+      
+                    {/* Pagination */}
+                    {!loading && createdJobs.length > 0 && totalCreatedJobs > 10 && (
+                      <div className="mt-8 flex justify-center gap-2">
+                        <button
+                          onClick={() =>
+                            setCurrentPage((prev) => Math.max(1, prev - 1))
+                          }
+                          disabled={currentPage === 1}
+                          className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                        >
+                          Previous
+                        </button>
+                        <span className="px-4 py-2 text-gray-700">
+                          Page {currentPage} of {Math.ceil(totalCreatedJobs / 10)}
+                        </span>
+                        <button
+                          onClick={() => setCurrentPage((prev) => prev + 1)}
+                          disabled={currentPage >= Math.ceil(totalCreatedJobs / 10)}
+                          className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                        >
+                          Next
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </>
             )}

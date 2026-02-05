@@ -57,9 +57,7 @@ const AppRoutes = () => {
       <Route
         path="/find-job"
         element={
-          <ProtectedRoute>
-            <FindJob />
-          </ProtectedRoute>
+          <FindJob />
         }
       />
     </Routes>
