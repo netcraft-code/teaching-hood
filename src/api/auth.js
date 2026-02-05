@@ -112,6 +112,6 @@ export const applyJobApi = (jobId) => {
   return api.post(`api/job-post/apply/${jobId}`);
 };
 
-export const getVacanies = () => {
-  return api.get("api/job-post/current/vacanies");
+export const getVacanies = (page = 1) => {
+  return api.get(`api/job-post/current/vacanies?page=${page}`);
 }

@@ -4,206 +4,141 @@ import { useNavigate } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
 import EditProfileModal from "../components/EditProfileModal";
 import ImageUploadModal from "../components/ImageUploadModal";
+import VacanciesTab from "../components/profile/VacanciesTab";
 import durationIcon from "../assets/icons/duration.svg";
 import locationIcon from "../assets/icons/location.svg";
 import aboutUsIcon from "../assets/icons/about-us.svg";
 import teachingExpertiseIcon from "../assets/icons/teaching-expertise.svg";
 import schoolStatisticIcon from "../assets/icons/school-statistic.svg";
-import schoolVacanciesIcon from "../assets/icons/school-vacancies.svg";
 import teacherBannerImage from "../assets/images/teacher-banner.png";
 import schoolBannerImage from "../assets/images/school-banner.png";
 import recruiterBannerImage from "../assets/images/recruiter-banner.png";
 import defaultAvatarImage from "../assets/images/default-avatar.png";
 import Header from "../components/Header";
 
-// Router State Management
-const routes = {
+// Constants
+const ROUTES = {
   SIGNIN: "/signin",
   PROFILE: "/profile",
 };
 
+const USER_FORM_CONFIG = {
+  1: {
+    // Teacher
+    tabs: ["overview", "experience", "education", "jobs"],
+    status: ["Unavailable", "Available"],
+  },
+  2: {
+    // School
+    tabs: ["overview", "vacancies"],
+    status: ["Unverified", "Verified"],
+  },
+  3: {
+    // Recruiter
+    tabs: ["overview"],
+    status: ["Unavailable", "Available"],
+  },
+};
+
+const BANNER_AVATAR_CONFIG = {
+  1: { bannerImage: teacherBannerImage, avatarImage: defaultAvatarImage },
+  2: { bannerImage: schoolBannerImage, avatarImage: defaultAvatarImage },
+  3: { bannerImage: recruiterBannerImage, avatarImage: defaultAvatarImage },
+};
+
 const Profile = () => {
+  // State Management
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [editOpen, setEditOpen] = useState(false);
   const [userType, setUserType] = useState(0);
   const [activeTab, setActiveTab] = useState("overview");
-  const navigate = useNavigate();
-  const hasFetched = useRef(false);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [imageType, setImageType] = useState(null);
+  
+  // Vacancies State
   const [createdJobs, setCreatedJobs] = useState([]);
   const [totalCreatedJobs, setTotalCreatedJobs] = useState(0);
-
-  const [imageModalOpen, setImageModalOpen] = useState(false);
-  const [imageType, setImageType] = useState(null); // 'avatar' | 'banner'
   const [createdJobLoading, setCreatedJobLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const USER_FORM_CONFIG = {
-    1: {
-      // Teacher
-      tabs: ["overview", "experience", "education", "jobs"],
-      status: ["Unavailable", "Available"],
-    },
+  const navigate = useNavigate();
+  const hasFetched = useRef(false);
 
-    2: {
-      // School
-      tabs: ["overview", "vacancies"],
-      status: ["Unverified", "Verified"],
-    },
-
-    3: {
-      // Recruiter
-      tabs: ["overview"],
-      status: ["Unavailable", "Available"],
-    },
-  };
-
-  const currentUser = USER_FORM_CONFIG[userType];
-
-  const FETCH_BANNER_AVATAR = {
-    1: {
-      // Teacher
-      bannerImage: teacherBannerImage,
-      avatarImage: defaultAvatarImage,
-    },
-
-    2: {
-      // School
-      bannerImage: schoolBannerImage,
-      avatarImage: defaultAvatarImage,
-    },
-
-    3: {
-      // Recruiter
-      bannerImage: recruiterBannerImage,
-      avatarImage: defaultAvatarImage,
-    },
-  };
-
+  // Helper Functions
   const getBannerAvatar = (url, userType, urlType) => {
     if (url) return url;
-
-    return FETCH_BANNER_AVATAR[userType][urlType];
+    return BANNER_AVATAR_CONFIG[userType][urlType];
   };
 
-  const formateExpectedSalary = (min, max) => {
+  const formatExpectedSalary = (min, max) => {
     if (!min && !max) return "--";
-    return "₹" + min + " - ₹" + max + "/month";
+    return `₹${min} - ₹${max}/month`;
   };
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "Present";
     const [year, month] = dateStr.split("-");
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return `${months[parseInt(month) - 1]} ${year}`;
-  };
-
-  useEffect(() => {
-    if (hasFetched.current) return;
-
-    hasFetched.current = true;
-
-    const fetchProfile = async () => {
-      try {
-        const res = await getProfile();
-        setProfile(res.data.data);
-        setUserType(res.data.data.user_type);
-      } catch (err) {
-        setError("Unauthorized or session expired");
-        localStorage.removeItem("auth_token");
-        navigate("/signin");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [navigate]);
-
-  // ✅ Send OTP - using auth.js
-  const handleLogout = async () => {
-    setError("");
-
-    try {
-      const res = await logoutUser(); // ✅ Using auth.js
-      console.log("Logout response:", res);
-      if (res.data.status) {
-        localStorage.removeItem("auth_token");
-        navigate(routes.SIGNIN);
-      } else {
-        setError(res.data?.message || "Issue in logout");
-      }
-    } catch (err) {
-      setError(
-        err.response?.data?.message || "Issue in logout. Please try again.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchTabData = async (tab) => {
-    if (tab === 'vacancies') {
-      try {
-        setCreatedJobLoading(true);
-
-        const res = await getVacanies();
-        console.log(res);
-        setCreatedJobs(res.data.data.data);
-        setTotalCreatedJobs(res.data.data.total);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Issue in fetching jobs. Please try again.');
-      } finally {
-        setCreatedJobLoading(false);
-      }
-    }
-  };
-  
-  // Get job title
-  const getJobTitle = (job) => {
-    if (job.subject_name && job.grade_name) {
-      return `${job.subject_name} (${job.grade_name})`;
-    } else if (job.subject_name) {
-      return `${job.position} - ${job.subject_name}`;
-    } else if (job.grade_name) {
-      return `${job.position} - ${job.grade_name}`;
-    }
-    return job.position;
-  };
-
-  // Format salary to LPA
-  const formatSalary = (min, max) => {
-    const minLPA = (min);
-    const maxLPA = (max);
-    return `₹${minLPA} - ₹${maxLPA}/month`;
   };
 
   const getTotalDurationCount = (totalExperience) => {
     const currentYear = new Date().getFullYear();
     if (!totalExperience || totalExperience > currentYear) return "";
-
     const years = currentYear - totalExperience;
     return `${totalExperience} (${years} years)`;
   };
 
   const getFormattedAddress = (address) => {
     if (!address?.address) return "--";
-
     return `${address?.address}, ${address?.city}, ${address?.state}, ${address?.pincode}, ${address?.country}`;
+  };
+
+  // API Calls
+  const fetchProfile = async () => {
+    try {
+      const res = await getProfile();
+      setProfile(res.data.data);
+      setUserType(res.data.data.user_type);
+    } catch (err) {
+      setError("Unauthorized or session expired");
+      localStorage.removeItem("auth_token");
+      navigate(ROUTES.SIGNIN);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchVacancies = async (page = 1) => {
+    try {
+      setCreatedJobLoading(true);
+      const res = await getVacanies(page);
+      setCreatedJobs(res.data.data.data);
+      setTotalCreatedJobs(res.data.data.total);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to fetch vacancies');
+    } finally {
+      setCreatedJobLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    setError("");
+    try {
+      const res = await logoutUser();
+      if (res.data.status) {
+        localStorage.removeItem("auth_token");
+        navigate(ROUTES.SIGNIN);
+      } else {
+        setError(res.data?.message || "Issue in logout");
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Issue in logout. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleImageUpload = async (file, type) => {
@@ -212,21 +147,50 @@ const Profile = () => {
 
     const res = await updateAvatarBanner(fd);
 
-    console.log(res);
-
     if (res.data.status) {
       setProfile((prev) => ({
         ...prev,
-        avatar_url:
-          type === "avatar_url" ? res.data.data.avatar_url : prev.avatar_url,
-        banner_image_url:
-          type === "banner_image_url"
-            ? res.data.data.banner_image_url
-            : prev.banner_image_url,
+        avatar_url: type === "avatar_url" ? res.data.data.avatar_url : prev.avatar_url,
+        banner_image_url: type === "banner_image_url" ? res.data.data.banner_image_url : prev.banner_image_url,
       }));
     }
   };
 
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === 'vacancies') {
+      setCurrentPage(1); // Reset to page 1
+      fetchVacancies(1);
+    }
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    fetchVacancies(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleEditJob = (job) => {
+    // TODO: Implement edit job functionality
+    console.log('Edit job:', job);
+  };
+
+  const handleCloseJob = (job) => {
+    // TODO: Implement close job functionality
+    console.log('Close job:', job);
+  };
+
+  // Effects
+  useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+    fetchProfile();
+  }, []);
+
+  // Get current user config
+  const currentUser = USER_FORM_CONFIG[userType];
+
+  // Loading & Error States
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -235,7 +199,7 @@ const Profile = () => {
     );
   }
 
-  if (error) {
+  if (error && !profile) {
     return (
       <div className="min-h-screen flex items-center justify-center text-red-600">
         {error}
@@ -246,27 +210,21 @@ const Profile = () => {
   return (
     <>
       <Header />
-
       <ProfileHeader onEdit={() => setEditOpen(true)} profile={profile} />
 
-      {/* Existing profile content */}
       <div className="mx-auto px-4 sm:px-8 lg:px-28 py-6 mt-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           {/* LEFT SECTION */}
           <div className="lg:col-span-2 space-y-6">
             {/* PROFILE CARD */}
             <div className="rounded-2xl relative shadow-md">
+              {/* Banner Image */}
               <div className="relative">
                 <img
-                  src={getBannerAvatar(
-                    profile.banner_image_url,
-                    userType,
-                    "bannerImage",
-                  )}
+                  src={getBannerAvatar(profile.banner_image_url, userType, "bannerImage")}
                   alt="cover"
-                  className="w-full h-32 rounded-t-2xl"
+                  className="w-full h-32 rounded-t-2xl object-cover"
                 />
-
                 <button
                   onClick={() => {
                     setImageType("banner_image_url");
@@ -278,17 +236,15 @@ const Profile = () => {
                 </button>
               </div>
 
+              {/* Profile Info */}
               <div className="flex items-start gap-4 mx-8 pb-8 relative">
+                {/* Avatar */}
                 <div className="relative">
                   <img
-                    src={getBannerAvatar(
-                      profile.avatar_url,
-                      userType,
-                      "avatarImage",
-                    )}
+                    src={getBannerAvatar(profile.avatar_url, userType, "avatarImage")}
+                    alt="avatar"
                     className="w-24 h-24 sm:w-32 sm:h-32 rounded-full -mt-16 object-cover shadow-lg"
                   />
-
                   <button
                     onClick={() => {
                       setImageType("avatar_url");
@@ -300,30 +256,26 @@ const Profile = () => {
                   </button>
                 </div>
 
+                {/* Name & Details */}
                 <div className="flex-1 mt-6">
                   <h2 className="text-xl sm:text-3xl font-semibold mb-3">
-                    {profile.first_name}{" "}
-                    {userType == 1 ? profile.last_name : ""}
+                    {profile.first_name} {userType === 1 ? profile.last_name : ""}
                   </h2>
                   <p className="text-m text-gray-500">
-                    {userType == 2 ? profile?.board : profile?.position}
+                    {userType === 2 ? profile?.board : profile?.position}
                   </p>
 
                   <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
                     <span className="flex items-center gap-1">
-                      <img src={locationIcon} alt="Duration" />
-
+                      <img src={locationIcon} alt="Location" />
                       {profile?.addresses
-                        ? profile.addresses.city +
-                          ", " +
-                          profile.addresses.state
+                        ? `${profile.addresses.city}, ${profile.addresses.state}`
                         : "Location not specified"}
                     </span>
                     <span className="flex items-center gap-1">
                       <img src={durationIcon} alt="Duration" />
-
                       {profile?.total_experience
-                        ? userType == 1
+                        ? userType === 1
                           ? `${profile.total_experience} years experience`
                           : `Est. ${getTotalDurationCount(profile.total_experience)}`
                         : "----"}
@@ -331,7 +283,8 @@ const Profile = () => {
                   </div>
                 </div>
 
-                {userType == 1 && (
+                {/* Status Badge (Teacher only) */}
+                {userType === 1 && (
                   <span
                     className={`flex items-center gap-2 px-4 py-2 mt-2 text-sm rounded-full ${
                       profile.status
@@ -344,7 +297,7 @@ const Profile = () => {
                         profile.status ? "bg-green-600" : "bg-red-600"
                       }`}
                     ></span>
-                    { currentUser?.status[profile.status] ?? ""}
+                    {currentUser?.status[profile.status] ?? ""}
                   </span>
                 )}
               </div>
@@ -352,75 +305,58 @@ const Profile = () => {
 
             {/* TABS */}
             <div className="bg-white rounded-xl shadow p-2 flex flex-wrap gap-3 sm:gap-6">
-              {currentUser.tabs.map((tab) => (
+              {currentUser?.tabs.map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => {
-                    setActiveTab(tab);
-                    fetchTabData(tab);
-                  }}
-                  className={`px-4 py-2 rounded-lg text-sm capitalize transition
-                    ${
-                      activeTab === tab
-                        ? "bg-blue-500 text-white"
-                        : "text-gray-500 hover:bg-gray-100"
-                    }`}
+                  onClick={() => handleTabChange(tab)}
+                  className={`px-4 py-2 rounded-lg text-sm capitalize transition ${
+                    activeTab === tab
+                      ? "bg-blue-500 text-white"
+                      : "text-gray-500 hover:bg-gray-100"
+                  }`}
                 >
                   {tab === "jobs" ? "Jobs Applied" : tab}
                 </button>
               ))}
             </div>
 
-            {/* OVERVIEW */}
+            {/* TAB CONTENT */}
             {activeTab === "overview" && (
               <>
-                {/* ABOUT US */}
-                <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
+                {/* About Section */}
+                <div className="bg-white rounded-xl shadow p-6">
                   <h3 className="flex items-center gap-3 font-semibold mb-5">
                     <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100">
-                      <img
-                        src={aboutUsIcon}
-                        alt="About Us"
-                        className="w-6 h-6"
-                      />
+                      <img src={aboutUsIcon} alt="About" className="w-6 h-6" />
                     </span>
                     About
                   </h3>
-
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    {profile?.additional_info?.about_us ||
-                      "No description provided."}
+                    {profile?.additional_info?.about_us || "No description provided."}
                   </p>
                 </div>
 
-                {userType == 1 && (
+                {/* Teacher Specific Sections */}
+                {userType === 1 && (
                   <>
-                    {/* TEACHING EXPERTISE */}
-                    <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
+                    {/* Teaching Expertise */}
+                    <div className="bg-white rounded-xl shadow p-6">
                       <h3 className="flex items-center gap-3 font-semibold mb-5">
                         <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100">
-                          <img
-                            src={teachingExpertiseIcon}
-                            alt="Teaching Expertise"
-                            className="w-6 h-6"
-                          />
+                          <img src={teachingExpertiseIcon} alt="Expertise" className="w-6 h-6" />
                         </span>
                         Teaching Expertise
                       </h3>
 
                       <div className="mb-4">
                         <p className="text-sm font-medium mb-2">Subjects</p>
-
                         <div className="flex flex-wrap gap-2">
                           {profile?.additional_info?.subjects
                             ? (Array.isArray(profile?.additional_info?.subjects)
                                 ? profile.additional_info.subjects
-                                : ["No Subject Selected"]
+                                : []
                               ).map((s, i) => (
-                                <span
-                                  key={i}
-                                  className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
-                                >
+                                <span key={i} className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full">
                                   {s.name}
                                 </span>
                               ))
@@ -429,20 +365,14 @@ const Profile = () => {
                       </div>
 
                       <div>
-                        <p className="text-sm mb-2">Grade Levels</p>
-
+                        <p className="text-sm font-medium mb-2">Grade Levels</p>
                         <div className="flex flex-wrap gap-2">
                           {profile?.additional_info?.grade_levels
-                            ? (Array.isArray(
-                                profile?.additional_info?.grade_levels,
-                              )
+                            ? (Array.isArray(profile?.additional_info?.grade_levels)
                                 ? profile.additional_info.grade_levels
                                 : []
                               ).map((s, i) => (
-                                <span
-                                  key={i}
-                                  className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
-                                >
+                                <span key={i} className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full">
                                   {s.name}
                                 </span>
                               ))
@@ -451,37 +381,22 @@ const Profile = () => {
                       </div>
                     </div>
 
-                    {/* CERTIFICATIONS & ACHIEVEMENTS */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                      <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-                        <h1 className="flex items-center font-semibold mb-5">
-                          <span className="inline-flex items-center w-10 h-10">
-                            📜
-                          </span>
+                    {/* Certifications & Achievements */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Certifications */}
+                      <div className="bg-white rounded-xl shadow p-6">
+                        <h3 className="flex items-center font-semibold mb-5">
+                          <span className="text-2xl mr-2">📜</span>
                           Certifications
-                        </h1>
-
+                        </h3>
                         <ul className="text-sm text-gray-600 space-y-2">
                           {profile?.additional_info?.certification
-                            ? (profile?.additional_info?.certification)
+                            ? profile.additional_info.certification
                                 .split(",")
                                 .filter(Boolean)
-                                .map((item, index) => (
-                                  <li
-                                    key={index}
-                                    className="flex items-start gap-2"
-                                  >
-                                    <span
-                                      className="text-green-600 relative"
-                                      style={{
-                                        width: "10.5px",
-                                        height: "21px",
-                                        top: "-0.38px",
-                                        opacity: 1,
-                                      }}
-                                    >
-                                      ✓
-                                    </span>
+                                .map((item, i) => (
+                                  <li key={i} className="flex items-start gap-2">
+                                    <span className="text-green-600">✓</span>
                                     <span>{item.trim()}</span>
                                   </li>
                                 ))
@@ -489,35 +404,20 @@ const Profile = () => {
                         </ul>
                       </div>
 
-                      <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-                        <h1 className="flex items-center font-semibold mb-5">
-                          <span className="inline-flex items-center w-10 h-10">
-                            🏆
-                          </span>
+                      {/* Achievements */}
+                      <div className="bg-white rounded-xl shadow p-6">
+                        <h3 className="flex items-center font-semibold mb-5">
+                          <span className="text-2xl mr-2">🏆</span>
                           Achievements
-                        </h1>
-
+                        </h3>
                         <ul className="text-sm text-gray-600 space-y-2">
                           {profile?.additional_info?.achievement
-                            ? (profile?.additional_info?.achievement)
+                            ? profile.additional_info.achievement
                                 .split(",")
                                 .filter(Boolean)
-                                .map((item, index) => (
-                                  <li
-                                    key={index}
-                                    className="flex items-start gap-2"
-                                  >
-                                    <span
-                                      className="text-yellow-500 relative"
-                                      style={{
-                                        width: "10.5px",
-                                        height: "21px",
-                                        top: "-0.38px",
-                                        opacity: 1,
-                                      }}
-                                    >
-                                      ★
-                                    </span>
+                                .map((item, i) => (
+                                  <li key={i} className="flex items-start gap-2">
+                                    <span className="text-yellow-500">★</span>
                                     <span>{item.trim()}</span>
                                   </li>
                                 ))
@@ -528,194 +428,130 @@ const Profile = () => {
                   </>
                 )}
 
-                {userType == 2 && (
+                {/* School Specific Sections */}
+                {userType === 2 && (
                   <>
                     {/* School Statistics */}
-                    <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
+                    <div className="bg-white rounded-xl shadow p-6">
                       <h3 className="flex items-center gap-3 font-semibold mb-5">
                         <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100">
-                          <img
-                            src={schoolStatisticIcon}
-                            alt="School Statistics"
-                            className="w-6 h-6"
-                          />
+                          <img src={schoolStatisticIcon} alt="Statistics" className="w-6 h-6" />
                         </span>
                         School Statistics
                       </h3>
 
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="border p-6 bg-[#EFF6FF] text-xs rounded-xl">
+                        <div className="border p-6 bg-blue-50 rounded-xl">
                           <div className="text-blue-500 text-2xl font-semibold">
                             {profile?.additional_info?.students || 0}+
                           </div>
-                          Students
+                          <p className="text-sm text-gray-600 mt-1">Students</p>
                         </div>
-                        <div className="border p-6 bg-[#F0FDF4] text-xs rounded-xl">
+                        <div className="border p-6 bg-green-50 rounded-xl">
                           <div className="text-green-500 text-2xl font-semibold">
                             {profile?.additional_info?.teachers || 0}+
                           </div>
-                          Teachers
+                          <p className="text-sm text-gray-600 mt-1">Teachers</p>
                         </div>
-                        <div className="border p-6 bg-[#FEF2F2] text-xs rounded-xl">
+                        <div className="border p-6 bg-red-50 rounded-xl">
                           <div className="text-red-500 text-2xl font-semibold">
-                            {profile?.additional_info?.length || 0}
+                            {totalCreatedJobs || 0}
                           </div>
-                          Open Positions
+                          <p className="text-sm text-gray-600 mt-1">Open Positions</p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Why Join US */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                      <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-                        <h1 className="flex items-center font-semibold mb-5">
-                          <span className="inline-flex items-center w-10 h-10">
-                            🌟
-                          </span>
-                          Why Join Us
-                        </h1>
-
-                        <ul className="text-sm text-gray-600 space-y-2">
-                          {profile?.additional_info?.why_join_us
-                            ? (profile?.additional_info?.why_join_us)
-                                .split(",")
-                                .filter(Boolean)
-                                .map((item, index) => (
-                                  <li
-                                    key={index}
-                                    className="flex items-start gap-2"
-                                  >
-                                    <span
-                                      className="text-yellow-500 relative"
-                                      style={{
-                                        width: "10.5px",
-                                        height: "21px",
-                                        top: "-0.38px",
-                                        opacity: 1,
-                                      }}
-                                    >
-                                      ★
-                                    </span>
-                                    <span>{item.trim()}</span>
-                                  </li>
-                                ))
-                            : "----"}
-                        </ul>
-                      </div>
+                    {/* Why Join Us */}
+                    <div className="bg-white rounded-xl shadow p-6">
+                      <h3 className="flex items-center font-semibold mb-5">
+                        <span className="text-2xl mr-2">🌟</span>
+                        Why Join Us
+                      </h3>
+                      <ul className="text-sm text-gray-600 space-y-2">
+                        {profile?.additional_info?.why_join_us
+                          ? profile.additional_info.why_join_us
+                              .split(",")
+                              .filter(Boolean)
+                              .map((item, i) => (
+                                <li key={i} className="flex items-start gap-2">
+                                  <span className="text-yellow-500">★</span>
+                                  <span>{item.trim()}</span>
+                                </li>
+                              ))
+                          : "----"}
+                      </ul>
                     </div>
                   </>
                 )}
               </>
             )}
 
-            {/* Experience */}
-            {activeTab === "experience" && (
+            {/* Experience Tab */}
+            {activeTab === "experience" && profile?.additional_info?.experience && (
               <>
-                {profile?.additional_info?.experience
+                {profile.additional_info.experience
+                  .slice()
                   .reverse()
                   .map((exp, index) => (
-                    <div
-                      key={index}
-                      className="bg-white rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition mb-4"
-                    >
+                    <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
                       <div className="flex justify-between items-start mb-3">
-                        <div className="flex-1">
-                          <div className="flex justify-between">
-                            <div className="flex items-center gap-5 mb-2">
-                              <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
-                                🏫
-                              </div>
-                              <div>
-                                <h3 className="text-xl text-gray-800">
-                                  {exp.position}
-                                </h3>
-                                <p className="text-blue-500 font-medium">
-                                  {exp.school}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div>
-                              <h3 className="px-2 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
-                                {exp.to ? "Past" : "Current"}
-                              </h3>
-                            </div>
+                        <div className="flex items-center gap-5">
+                          <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
+                            🏫
                           </div>
-
-                          <p className="text-sm text-gray-600 mb-3 pl-20">
-                            {formatDate(exp.from)} - {formatDate(exp.to)}
-                            {typeof exp.to === "string" &&
-                              exp.to.toLowerCase() === "present" && (
-                                <span className="ml-2 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
-                                  Current
-                                </span>
-                              )}
-                          </p>
+                          <div>
+                            <h3 className="text-xl text-gray-800">{exp.position}</h3>
+                            <p className="text-blue-500 font-medium">{exp.school}</p>
+                          </div>
                         </div>
+                        <span className="px-3 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
+                          {exp.to ? "Past" : "Current"}
+                        </span>
                       </div>
 
-                      <div className="pl-20">
-                        <p className="text-sm font-medium text-gray-700 mb-2">
-                          Key Responsibilities:
-                        </p>
-                        <ul className="space-y-3">
-                          {Array.isArray(exp.key_responsibilities) &&
-                            exp.key_responsibilities.map((resp, idx) => (
-                              <li
-                                key={idx}
-                                className="text-gray-700 text-sm flex items-start"
-                              >
-                                <span className="text-blue-500 mr-2">•</span>
-                                <span>{resp}</span>
-                              </li>
-                            ))}
-                        </ul>
-                      </div>
+                      <p className="text-sm text-gray-600 mb-3 pl-20">
+                        {formatDate(exp.from)} - {formatDate(exp.to)}
+                      </p>
+
+                      {exp.key_responsibilities && (
+                        <div className="pl-20">
+                          <p className="text-sm font-medium text-gray-700 mb-2">Key Responsibilities:</p>
+                          <ul className="space-y-2">
+                            {Array.isArray(exp.key_responsibilities) &&
+                              exp.key_responsibilities.map((resp, idx) => (
+                                <li key={idx} className="text-gray-700 text-sm flex items-start">
+                                  <span className="text-blue-500 mr-2">•</span>
+                                  <span>{resp}</span>
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   ))}
               </>
             )}
 
-            {/* Education */}
-            {activeTab === "education" && (
+            {/* Education Tab */}
+            {activeTab === "education" && profile?.additional_info?.education && (
               <>
-                {profile?.additional_info?.education
+                {profile.additional_info.education
+                  .slice()
                   .reverse()
                   .map((edu, index) => (
-                    <div
-                      key={index}
-                      className="bg-white rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition mb-4"
-                    >
-                      <div className="flex justify-between items-start mb-3">
+                    <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                      <div className="flex items-center gap-5 mb-3">
+                        <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
+                          🎓
+                        </div>
                         <div className="flex-1">
-                          <div className="flex justify-between">
-                            <div className="flex items-center gap-5 mb-2">
-                              <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
-                                🎓
-                              </div>
-                              <div>
-                                <h3 className="text-xl text-gray-800">
-                                  {edu.degree}
-                                </h3>
-                                <p className="text-green-500 font-medium">
-                                  {edu.college_university}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-
-                          <p className="text-sm text-gray-600 mb-3 pl-20">
+                          <h3 className="text-xl text-gray-800">{edu.degree}</h3>
+                          <p className="text-green-500 font-medium">{edu.college_university}</p>
+                          <p className="text-sm text-gray-600 mt-1">
                             {formatDate(edu.from)} - {formatDate(edu.to)}
-                            {typeof edu.to === "string" &&
-                              edu.to.toLowerCase() === "present" && (
-                                <span className="ml-2 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
-                                  Current
-                                </span>
-                              )}
-                            <span className="text-black-500 mx-5">•</span>
-                            <span className="text-blue-400">
-                              {edu.percentage}%
-                            </span>
+                            <span className="text-gray-500 mx-3">•</span>
+                            <span className="text-blue-400">{edu.percentage}%</span>
                           </p>
                         </div>
                       </div>
@@ -724,230 +560,108 @@ const Profile = () => {
               </>
             )}
 
-            {/* Jobs Applied */}
+            {/* Jobs Applied Tab */}
             {activeTab === "jobs" && (
-              <div className="bg-white rounded-xl shadow p-4 sm:p-6 mb-8">
+              <div className="bg-white rounded-xl shadow p-6">
                 <h3 className="font-semibold mb-4">Jobs Applied</h3>
-                <p className="text-sm text-gray-600">
-                  List of jobs applied would be displayed here.
-                </p>
+                <p className="text-sm text-gray-600">List of jobs applied would be displayed here.</p>
               </div>
             )}
 
+            {/* Vacancies Tab */}
             {activeTab === "vacancies" && (
-              <>
-                <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-                  <div className="grid grid-cols-2 items-center mb-8">
-                    {/* LEFT */}
-                    <div className="flex items-center gap-4 font-regular justify-start">
-                      <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-yellow-100">
-                        <img
-                          src={schoolVacanciesIcon}
-                          alt="About Us"
-                          className="w-6 h-6"
-                        />
-                      </span>
-                      Current Vacancies
-                    </div>
-
-                    {/* RIGHT BADGE */}
-                    <div className="flex justify-end">
-                      <span className="inline-flex items-center bg-green-100 text-green-600 text-xs font-medium rounded-full px-4 py-1.5">
-                        {totalCreatedJobs} Active Position
-                        {totalCreatedJobs !== 1 ? "s" : ""}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex-1">
-                    {/* Job Cards */}
-                    <div className="space-y-4">
-                      {createdJobLoading ? (
-                        <div className="text-center py-12">
-                          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                          <p className="mt-4 text-gray-600">Loading jobs...</p>
-                        </div>
-                      ) : createdJobs.length === 0 ? (
-                        <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-                          <p className="text-gray-600 text-lg">
-                            No jobs found matching your filters
-                          </p>
-                        </div>
-                      ) : (
-                        createdJobs.map((job) => (
-                          <div
-                            key={job.id}
-                            className="bg-white rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-6"
-                          >
-                            <div className="flex items-start justify-between gap-4">
-                              {/* LEFT SIDE */}
-                              <div className="flex items-start gap-4">
-                                {/* Job Info */}
-                                <div>
-                                  {/* Title + Verified */}
-                                  <div className="flex items-center gap-2">
-                                    <h3 className="text-m font-semibold">
-                                      {getJobTitle(job)}
-                                    </h3>
-                                  </div>
-      
-                                  {/* School Name */}
-                                  <p className="text-gray-600 mt-1 text-sm items-center flex">
-                                    {job.grade_name} 
-                                    {job.grade_name && (
-                                      <div className="w-1 h-1 bg-gray-600 rounded-full inline-flex items-center mx-2" />
-                                    )}
-
-                                    {job.experience_required} years exp
-                                  </p>
-      
-                                  {/* Applicants */}
-                                  <div className="flex items-center gap-1 mt-1 text-sm text-gray-600">
-                                    <div className="text-xs font-regular text-gray-900">
-                                      {formatSalary(job.min_salary, job.max_salary)}
-                                    </div>
-
-                                    <div className="w-1 h-1 bg-gray-600 rounded-full inline-flex items-center mx-2" />
-
-                                    <span>{job.total_applicants} applicants</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </div>
-      
-                    {/* Pagination */}
-                    {!loading && createdJobs.length > 0 && totalCreatedJobs > 10 && (
-                      <div className="mt-8 flex justify-center gap-2">
-                        <button
-                          onClick={() =>
-                            setCurrentPage((prev) => Math.max(1, prev - 1))
-                          }
-                          disabled={currentPage === 1}
-                          className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-                        >
-                          Previous
-                        </button>
-                        <span className="px-4 py-2 text-gray-700">
-                          Page {currentPage} of {Math.ceil(totalCreatedJobs / 10)}
-                        </span>
-                        <button
-                          onClick={() => setCurrentPage((prev) => prev + 1)}
-                          disabled={currentPage >= Math.ceil(totalCreatedJobs / 10)}
-                          className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-                        >
-                          Next
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </>
+              <VacanciesTab
+                jobs={createdJobs}
+                totalJobs={totalCreatedJobs}
+                loading={createdJobLoading}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+                onEditJob={handleEditJob}
+                onCloseJob={handleCloseJob}
+              />
             )}
           </div>
 
-          {/* RIGHT SECTION */}
+          {/* RIGHT SIDEBAR */}
           <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-              {userType == 1 && (
+            <div className="bg-white rounded-xl shadow p-6">
+              {userType === 1 ? (
                 <>
                   <h3 className="font-semibold mb-4">Quick Information</h3>
-
                   <div className="space-y-3 text-sm">
                     <div>
                       <p className="text-gray-400">Availability</p>
                       <p>{profile?.additional_info?.availability ?? "--"}</p>
                     </div>
-
                     <div>
                       <p className="text-gray-400">Expected Salary</p>
                       <p className="text-green-600 font-semibold">
-                        {formateExpectedSalary(
+                        {formatExpectedSalary(
                           profile?.additional_info?.min_salary,
-                          profile?.additional_info?.max_salary,
+                          profile?.additional_info?.max_salary
                         )}
                       </p>
                     </div>
-
                     <div>
                       <p className="text-gray-400">Notice Period</p>
                       <p>{profile?.additional_info?.notice_period ?? "--"}</p>
                     </div>
-
                     <div>
                       <p className="text-gray-400">Preferred Location</p>
-                      <p>
-                        {profile?.additional_info?.preferred_location ?? "--"}
-                      </p>
+                      <p>{profile?.additional_info?.preferred_location ?? "--"}</p>
                     </div>
                   </div>
-
-                  <button className="w-full mt-4 border rounded-lg py-2 text-sm">
+                  <button className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition">
                     Upload Latest Resume
                   </button>
-
                   <button
                     onClick={handleLogout}
-                    className="w-full mt-4 border rounded-lg py-2 text-sm"
+                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition"
                   >
                     Logout
                   </button>
                 </>
-              )}
-
-              {(userType == 2 || userType == 3) && (
+              ) : (
                 <>
                   <h3 className="font-semibold mb-4">Contact Information</h3>
-
                   <div className="space-y-3 text-sm">
                     <div>
                       <p className="text-gray-400">Email</p>
-                      <p className="text-xs">{profile?.email ?? "--"}</p>
+                      <p className="text-xs break-all">{profile?.email ?? "--"}</p>
                     </div>
-
                     <div>
                       <p className="text-gray-400">Phone</p>
                       <p className="text-xs">{"+91 " + profile.phone}</p>
                     </div>
-
-                    {userType == 2 && (
+                    {userType === 2 && (
                       <div>
                         <p className="text-gray-400">Website</p>
                         {profile?.additional_info?.website ? (
                           <a
                             href={
-                              profile?.additional_info?.website.startsWith(
-                                "http",
-                              )
+                              profile.additional_info.website.startsWith("http")
                                 ? profile.additional_info.website
-                                : `https://${profile?.additional_info?.website}`
+                                : `https://${profile.additional_info.website}`
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-blue-600 hover:text-blue-800 hover:underline break-all"
+                            className="text-xs text-blue-600 hover:underline break-all"
                           >
-                            {profile?.additional_info?.website}
+                            {profile.additional_info.website}
                           </a>
                         ) : (
                           <p className="text-xs text-gray-400">--</p>
                         )}
                       </div>
                     )}
-
                     <div>
                       <p className="text-gray-400">Address</p>
-                      <p className="text-xs">
-                        {getFormattedAddress(profile?.addresses)}
-                      </p>
+                      <p className="text-xs">{getFormattedAddress(profile?.addresses)}</p>
                     </div>
                   </div>
-
                   <button
                     onClick={handleLogout}
-                    className="w-full mt-4 border rounded-lg py-2 text-sm"
+                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition"
                   >
                     Logout
                   </button>
@@ -958,6 +672,7 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* Modals */}
       <EditProfileModal
         open={editOpen}
         onClose={() => setEditOpen(false)}
