@@ -334,41 +334,41 @@ const PostJob = () => {
                       Position <span className="text-red-500">*</span>
                     </label>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      {[
-                        "Teacher",
-                        "Principal",
-                        "Coordinator",
-                        "Vice Principal",
-                      ].map((position) => (
-                        <label
-                          key={position}
-                          className={`flex items-center space-x-3 p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                  <div className="grid grid-cols-4 gap-3">
+                    {[
+                      "Teacher",
+                      "Principal",
+                      "Co-ordinator",
+                      "Vice Principal",
+                    ].map((position) => (
+                      <label
+                        key={position}
+                        className={`flex items-center space-x-3 p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          formData.position === position
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-gray-200 bg-gray-50 hover:border-gray-300"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="position"
+                          value={position}
+                          checked={formData.position === position}
+                          onChange={handleInputChange}
+                          className="w-3 h-3 text-blue-500 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                        />
+                        <span
+                          className={`font-regular ${
                             formData.position === position
-                              ? "border-blue-500 bg-blue-50"
-                              : "border-gray-200 bg-gray-50 hover:border-gray-300"
+                              ? "text-blue-700"
+                              : "text-gray-700"
                           }`}
                         >
-                          <input
-                            type="radio"
-                            name="position"
-                            value={position}
-                            checked={formData.position === position}
-                            onChange={handleInputChange}
-                            className="w-3 h-3 text-blue-500 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                          />
-                          <span
-                            className={`font-regular ${
-                              formData.position === position
-                                ? "text-blue-700"
-                                : "text-gray-700"
-                            }`}
-                          >
-                            {position}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
+                          {position}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
 
                     {errors.position && (
                       <p className="text-sm text-red-500 mt-2">
