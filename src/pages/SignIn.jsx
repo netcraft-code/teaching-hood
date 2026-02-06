@@ -10,7 +10,7 @@ const routes = {
   HOME: "/",
   SIGNUP: "/signup",
   PROFILE: "/profile",
-  TERMS: "/terms",
+  TERMS: "/term-condition",
   PRIVACY: "/privacy",
   HELP: "/help",
 };

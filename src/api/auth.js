@@ -119,3 +119,7 @@ export const getVacanies = (page = 1) => {
 export const getAppliedJobs = (params = {}) => {
   return api.get("api/job-post/applied", { params });
 }
+
+export const closeJob = (jobId) => {
+  return api.post(`api/job-post/close/${jobId}`);
+};

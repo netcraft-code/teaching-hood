@@ -11,7 +11,7 @@ const routes = {
   HOME: "/",
   SIGNIN: "/signin",
   PROFILE: "/profile",
-  TERMS: "/terms",
+  TERMS: "/term-condition",
   PRIVACY: "/privacy",
   HELP: "/help",
 };

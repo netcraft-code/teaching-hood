@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getProfile, logoutUser, updateAvatarBanner, getVacanies, getAppliedJobs } from "../api/auth";
+import { getProfile, logoutUser, updateAvatarBanner, getVacanies, getAppliedJobs, closeJob } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
 import EditProfileModal from "../components/EditProfileModal";
@@ -215,9 +215,25 @@ const Profile = () => {
     console.log('Edit job:', job);
   };
 
-  const handleCloseJob = (job) => {
-    // TODO: Implement close job functionality
-    console.log('Close job:', job);
+  const handleCloseJob = async (jobId) => {
+  try {
+    const response = await closeJob(jobId);
+
+    if (response.data.status) {
+      alert(response.data.data.message);
+
+      setCreatedJobs((createdJobs) =>
+        createdJobs.map((job) =>
+          job.id === jobId
+            ? { ...job, is_closed: 1 } // or true (API ke according)
+            : job
+        )
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Failed to close job");
+  }
   };
 
   // Effects
@@ -252,7 +268,7 @@ const Profile = () => {
       <Header />
       <ProfileHeader onEdit={() => setEditOpen(true)} profile={profile} />
 
-      <div className="mx-auto px-4 sm:px-8 lg:px-28 py-6 mt-6">
+      <div className="mx-auto py-6 mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           {/* LEFT SECTION */}
           <div className="lg:col-span-2 space-y-6">

@@ -19,9 +19,7 @@ const VacanciesTab = ({
   };
 
   const handleClose = (job) => {
-    console.log('Close job:', job);
-    // Yaha close/delete functionality implement karenge
-    if (onCloseJob) onCloseJob(job);
+    if (onCloseJob) onCloseJob(job.id);
   };
 
   return (
