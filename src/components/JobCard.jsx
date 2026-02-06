@@ -750,13 +750,14 @@ const JobCard = () => {
                           <div className="text-2xl font-semibold text-gray-900">
                             {formatSalary(job.min_salary, job.max_salary)}
                           </div>
-                          <button
-                            className="px-6 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 transition-colors flex items-center gap-2"
-                            onClick={() => applyJob(job.id)}
-                          >
-                            Apply Now
-                            <ChevronRight className="w-4 h-4" />
-                          </button>
+                          { job.is_apply ? <span className="font-regular bg-red-100 text-red-500 p-2 rounded-full">Applied</span> : <button
+                              className="px-6 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 transition-colors flex items-center gap-2"
+                              onClick={() => applyJob(job.id)}
+                            >
+                              Apply Now
+                              <ChevronRight className="w-4 h-4" />
+                            </button>
+                          }
                         </div>
                       </div>
                     </div>

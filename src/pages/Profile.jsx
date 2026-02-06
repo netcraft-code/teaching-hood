@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getProfile, logoutUser, updateAvatarBanner, getVacanies } from "../api/auth";
+import { getProfile, logoutUser, updateAvatarBanner, getVacanies, getAppliedJobs } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
 import EditProfileModal from "../components/EditProfileModal";
 import ImageUploadModal from "../components/ImageUploadModal";
 import VacanciesTab from "../components/profile/VacanciesTab";
+import AppliedTab from "../components/profile/AppliedTab";
 import durationIcon from "../assets/icons/duration.svg";
 import locationIcon from "../assets/icons/location.svg";
 import aboutUsIcon from "../assets/icons/about-us.svg";
@@ -35,7 +36,7 @@ const USER_FORM_CONFIG = {
   },
   3: {
     // Recruiter
-    tabs: ["overview"],
+    tabs: ["overview", "vacancies"],
     status: ["Unavailable", "Available"],
   },
 };
@@ -59,9 +60,13 @@ const Profile = () => {
   
   // Vacancies State
   const [createdJobs, setCreatedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
   const [totalCreatedJobs, setTotalCreatedJobs] = useState(0);
   const [createdJobLoading, setCreatedJobLoading] = useState(false);
+  const [totalAppliedJobs, setTotalAppliedJobs] = useState(0);
+  const [appliedJobLoading, setAppliedJobLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
   const hasFetched = useRef(false);
@@ -124,6 +129,35 @@ const Profile = () => {
     }
   };
 
+  const buildFilters = (page = 1) => ({
+    page,
+    search: searchQuery,
+  });
+
+  const fetchJobs = async (page = 1) => {
+    try {
+      setAppliedJobLoading(true);
+      const res = await getAppliedJobs(buildFilters(page));
+      setAppliedJobs(res.data.data.data);
+      console.log(res);
+      setTotalAppliedJobs(res.data.data.total);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch jobs");
+    } finally {
+      setAppliedJobLoading(false);
+    }
+  };
+
+  const handleAppliedJobPageChange = (page) => {
+    setCurrentPage(page);
+    fetchJobs(page);
+  };
+
+  const handleJobSearch = () => {
+    setCurrentPage(1);
+    fetchJobs(1);
+  };
+
   const handleLogout = async () => {
     setError("");
     try {
@@ -158,9 +192,15 @@ const Profile = () => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+    
     if (tab === 'vacancies') {
       setCurrentPage(1); // Reset to page 1
       fetchVacancies(1);
+    }
+
+    if (tab === 'jobs') {
+      setCurrentPage(1); // Reset to page 1
+      fetchJobs();
     }
   };
 
@@ -562,9 +602,17 @@ const Profile = () => {
 
             {/* Jobs Applied Tab */}
             {activeTab === "jobs" && (
-              <div className="bg-white rounded-xl shadow p-6">
-                <h3 className="font-semibold mb-4">Jobs Applied</h3>
-                <p className="text-sm text-gray-600">List of jobs applied would be displayed here.</p>
+              <div>
+                <AppliedTab
+                  jobs={appliedJobs}
+                  totalJobs={totalAppliedJobs}
+                  loading={appliedJobLoading}
+                  currentPage={currentPage}
+                  onPageChange={handleAppliedJobPageChange}
+                  onSearch={handleJobSearch}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                />
               </div>
             )}
 
