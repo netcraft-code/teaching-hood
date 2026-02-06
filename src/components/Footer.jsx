@@ -159,9 +159,9 @@ const Footer = () => {
             <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
               Contact Us
             </span>
-            <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+            {/* <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
               Privacy Policy
-            </span>
+            </span> */}
             <button
               onClick={() => navigate(routes.TERM_CONDITION)}
               className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer"

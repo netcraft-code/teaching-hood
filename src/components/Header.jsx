@@ -65,7 +65,7 @@ const Header = () => {
           {/* Logo */}
           <div
             onClick={() => goTo(routes.HOME)}
-            className="cursor-pointer w-[160px]"
+            className="cursor-pointer w-[170px]"
           >
             <img src={logo} alt="Logo" />
           </div>
