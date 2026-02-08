@@ -334,7 +334,7 @@ const PostJob = () => {
                       Position <span className="text-red-500">*</span>
                     </label>
 
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid md:grid-cols-4 grid-cols-2 gap-3">
                     {[
                       "Teacher",
                       "Principal",
@@ -377,116 +377,118 @@ const PostJob = () => {
                     )}
                   </div>
 
-                  {/* 👇 CONDITIONAL: Subject - Only show for Teacher */}
-                  {formData.position === "Teacher" && (
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Subject <span className="text-red-500">*</span>
-                      </label>
+                  <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
+                    {/* 👇 CONDITIONAL: Subject - Only show for Teacher */}
+                    {formData.position === "Teacher" && (
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Subject <span className="text-red-500">*</span>
+                        </label>
 
-                      <Select
-                        options={subjects.map((s) => ({
-                          value: s.id,
-                          label: s.name,
-                        }))}
-                        value={
-                          subjects.find((s) => s.id === formData.subject_id)
-                            ? {
-                                value: formData.subject_id,
-                                label: subjects.find(
-                                  (s) => s.id === formData.subject_id,
-                                ).name,
-                              }
-                            : null
-                        }
-                        onChange={(selected) => {
-                          setFormData((prev) => ({
-                            ...prev,
-                            subject_id: selected.value,
-                          }));
-                          setErrors((prev) => ({ ...prev, subject_id: "" }));
-                        }}
-                        placeholder="Select subject"
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
-                      />
+                        <Select
+                          options={subjects.map((s) => ({
+                            value: s.id,
+                            label: s.name,
+                          }))}
+                          value={
+                            subjects.find((s) => s.id === formData.subject_id)
+                              ? {
+                                  value: formData.subject_id,
+                                  label: subjects.find(
+                                    (s) => s.id === formData.subject_id,
+                                  ).name,
+                                }
+                              : null
+                          }
+                          onChange={(selected) => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              subject_id: selected.value,
+                            }));
+                            setErrors((prev) => ({ ...prev, subject_id: "" }));
+                          }}
+                          placeholder="Select subject"
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                        />
 
-                      {errors.subject_id && (
-                        <p className="text-sm text-red-500 mt-1">
-                          {errors.subject_id}
-                        </p>
-                      )}
-                    </div>
-                  )}
-
-                  {/* 👇 CONDITIONAL: Grade - Only show for Teacher */}
-                  {formData.position === "Teacher" && (
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Grade <span className="text-red-500">*</span>
-                      </label>
-
-                      <Select
-                        options={grades.map((g) => ({
-                          value: g.id,
-                          label: g.name,
-                        }))}
-                        value={
-                          grades.find((g) => g.id === formData.grade_id)
-                            ? {
-                                value: formData.grade_id,
-                                label: grades.find(
-                                  (g) => g.id === formData.grade_id,
-                                ).name,
-                              }
-                            : null
-                        }
-                        onChange={(selected) => {
-                          setFormData((prev) => ({
-                            ...prev,
-                            grade_id: selected.value,
-                          }));
-                          setErrors((prev) => ({ ...prev, grade_id: "" }));
-                        }}
-                        placeholder="Select grade"
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
-                      />
-
-                      {errors.grade_id && (
-                        <p className="text-sm text-red-500 mt-1">
-                          {errors.grade_id}
-                        </p>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Location */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Location <span className="text-red-500">*</span>
-                    </label>
-
-                    <AsyncSelect
-                      cacheOptions
-                      defaultOptions
-                      loadOptions={loadCities}
-                      value={selectedCity}
-                      onChange={(option) => {
-                        setSelectedCity(option);
-                        setFormData((prev) => ({
-                          ...prev,
-                          city_id: option ? option.value : "",
-                        }));
-                        setErrors((prev) => ({ ...prev, city_id: "" }));
-                      }}
-                      placeholder="Search city"
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
-                    />
-
-                    {errors.city_id && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.city_id}
-                      </p>
+                        {errors.subject_id && (
+                          <p className="text-sm text-red-500 mt-1">
+                            {errors.subject_id}
+                          </p>
+                        )}
+                      </div>
                     )}
+
+                    {/* 👇 CONDITIONAL: Grade - Only show for Teacher */}
+                    {formData.position === "Teacher" && (
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Grade <span className="text-red-500">*</span>
+                        </label>
+
+                        <Select
+                          options={grades.map((g) => ({
+                            value: g.id,
+                            label: g.name,
+                          }))}
+                          value={
+                            grades.find((g) => g.id === formData.grade_id)
+                              ? {
+                                  value: formData.grade_id,
+                                  label: grades.find(
+                                    (g) => g.id === formData.grade_id,
+                                  ).name,
+                                }
+                              : null
+                          }
+                          onChange={(selected) => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              grade_id: selected.value,
+                            }));
+                            setErrors((prev) => ({ ...prev, grade_id: "" }));
+                          }}
+                          placeholder="Select grade"
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                        />
+
+                        {errors.grade_id && (
+                          <p className="text-sm text-red-500 mt-1">
+                            {errors.grade_id}
+                          </p>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Location */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Location <span className="text-red-500">*</span>
+                      </label>
+
+                      <AsyncSelect
+                        cacheOptions
+                        defaultOptions
+                        loadOptions={loadCities}
+                        value={selectedCity}
+                        onChange={(option) => {
+                          setSelectedCity(option);
+                          setFormData((prev) => ({
+                            ...prev,
+                            city_id: option ? option.value : "",
+                          }));
+                          setErrors((prev) => ({ ...prev, city_id: "" }));
+                        }}
+                        placeholder="Search city"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                      />
+
+                      {errors.city_id && (
+                        <p className="text-sm text-red-500 mt-1">
+                          {errors.city_id}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   {/* Job Type - Tabs */}

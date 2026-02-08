@@ -86,7 +86,7 @@ const Footer = () => {
                   <a href="/signup">Create Profile</a>
                 </li>
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
-                  Track Application
+                  <a href="/profile">Track Application</a>
                 </li>
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Learning Resources
