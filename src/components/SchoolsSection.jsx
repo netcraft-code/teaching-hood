@@ -1,24 +1,5 @@
 import React, { useState } from "react";
-import {
-  Users,
-  TrendingUp,
-  Target,
-  Award,
-  Check,
-  Bell,
-  Megaphone,
-  FileText,
-  Sparkles,
-  Shield,
-  Star,
-  ChevronDown,
-  ChevronUp,
-  Mail,
-  Phone,
-  MapPin,
-  MessageCircle,
-  Send,
-} from "lucide-react";
+import schoolSectionLeftImage from "./../assets/images/school-section.jpeg";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
 
 // 5. For Schools Section
@@ -122,9 +103,8 @@ const SchoolsSection = () => {
           </div>
 
           {/* Right Side - Dashboard Preview */}
-          <div className="relative">
+          {/* <div className="relative">
             <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 w-[95%]">
-              {/* Dashboard Header */}
               <div className="flex items-center justify-between mb-12">
                 <div
                   className="
@@ -142,7 +122,6 @@ const SchoolsSection = () => {
                 </div>
 
                 <div className="flex items-center justify-between w-full">
-                  {/* Left content */}
                   <div className="justify-start">
                     <div className="text-lg font-medium text-gray-700">
                       Hiring Dashboard
@@ -152,14 +131,12 @@ const SchoolsSection = () => {
                     </div>
                   </div>
 
-                  {/* Right badge */}
                   <span className="justify-end px-4 py-2 bg-green-50 text-green-500 text-sm font-normal rounded-lg whitespace-nowrap">
                     12 Active
                   </span>
                 </div>
               </div>
 
-              {/* Stats */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-blue-50 rounded-xl p-4">
                   <div className="text-3xl font-normal text-blue-600 mb-1">
@@ -177,7 +154,6 @@ const SchoolsSection = () => {
                 </div>
               </div>
 
-              {/* Recent Applications */}
               <div>
                 <div className="text-sm font-semibold text-gray-700 mb-3">
                   Recent Applications
@@ -212,8 +188,12 @@ const SchoolsSection = () => {
               </div>
             </div>
 
-            {/* Decorative Element */}
             <div className="absolute -z-10 -top-4 -right-4 w-32 h-32 bg-green-100 rounded-full opacity-50"></div>
+          </div> */}
+
+          <div className="relative">
+            <img src={schoolSectionLeftImage} className="rounded-2xl" />
+
           </div>
         </div>
       </div>

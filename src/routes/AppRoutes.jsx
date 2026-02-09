@@ -11,6 +11,8 @@ import TermCondition from "../pages/TermCondition";
 import AuthRedirect from "../pages/AuthRedirect";
 import EditJob from "../pages/EditJob";
 import ContactUs from "../pages/ContactUs";
+import JobViewPage from "../pages/JobViewPage";
+import Pricing from "../pages/Pricing";
 
 const AppRoutes = () => {
   return (
@@ -65,6 +67,12 @@ const AppRoutes = () => {
           <FindJob />
         }
       />
+
+      {/* Job View Page - single job details */}
+      <Route path="/job/:id" element={<JobViewPage />} />
+      
+      {/* Pricing Page - subscription plans */}
+      <Route path="/pricing" element={<Pricing />} />
     </Routes>
   );
 };

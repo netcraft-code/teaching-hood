@@ -127,3 +127,7 @@ export const closeJob = (jobId) => {
 export const updateJob = (jobId, payload) => {
   return api.put(`/api/job-posts/${jobId}`, payload);
 };
+
+export const viewJob = (id) => {
+  return api.get(`/api/job-posts/${id}`);
+};

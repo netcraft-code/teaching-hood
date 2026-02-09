@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import { HeroImages } from "../assets/images/HeroImages";
 import { contactUsIcons } from "../assets/icons/contact-us/ContactUs";
 import { Mail, Phone, Send } from 'lucide-react';
+import { sendMessage } from "../api/auth";
 
 const ContactUs = () => {
     const stats = [
@@ -295,20 +296,20 @@ const ContactUs = () => {
 
                 {/* Paragraph */}
                 <p className="text-xs text-gray-600 w-full leading-6 mb-4">
-                    <div className="flex justify-between">
+                    <span className="flex justify-between">
                         <span>Monday–Friday</span>
                         <span>9:00 AM – 6:00 PM</span>
-                    </div>
+                    </span>
 
-                    <div className="flex justify-between">
+                    <span className="flex justify-between">
                         <span>Saturday</span>
                         <span>10:00 AM - 4:00 PM</span>
-                    </div>
+                    </span>
 
-                    <div className="flex justify-between">
+                    <span className="flex justify-between">
                         <span>Sunday</span>
                         <span className='text-red-500'>Closed</span>
-                    </div>
+                    </span>
                 </p>
 
                 <hr />

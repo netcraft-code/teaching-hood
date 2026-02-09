@@ -1,24 +1,4 @@
 import React, { useState } from "react";
-import {
-  Users,
-  TrendingUp,
-  Target,
-  Award,
-  Check,
-  Bell,
-  Megaphone,
-  FileText,
-  Sparkles,
-  Shield,
-  Star,
-  ChevronDown,
-  ChevronUp,
-  Mail,
-  Phone,
-  MapPin,
-  MessageCircle,
-  Send,
-} from "lucide-react";
 import trecruiterSectionLeftImage from "./../assets/images/recruiter-section-left.png";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
 
@@ -69,17 +49,17 @@ const RecruitersSection = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Side - Image with Stats */}
-          <div className="relative">
+          <div className="relative mb-8">
             <div className="rounded-2xl overflow-hidden">
               <img
                 src={trecruiterSectionLeftImage}
                 alt="Recruiter meeting"
-                className="w-full object-cover h-[400px] sm:h-[500px] md:h-[640px]"
+                className="w-full object-cover h-[400px] sm:h-[500px] md:h-[500px]"
               />
 
               {/* Stats Overlay */}
               <div
-                className="absolute left-1/2 bottom-8 md:bottom-16 transform -translate-x-1/2 translate-y-1/2 
+                className="absolute left-1/2 bottom-0 md:bottom-0 transform -translate-x-1/2 translate-y-1/2 
                               bg-white rounded-xl shadow-xl p-3 sm:p-4 flex items-center justify-center"
               >
                 <div className="grid grid-cols-1 gap-3 text-center">

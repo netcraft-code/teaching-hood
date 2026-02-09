@@ -4,6 +4,7 @@ import {
   X,
   Menu,
 } from "lucide-react";
+import { Link } from 'react-router-dom';
 import { HeroImages } from "../assets/images/HeroImages";
 import { getCities, getJobs, likeUnlikeJobApi, applyJobApi } from "../api/auth";
 import { findJobIcons } from "./../assets/icons/findJobIcons";
@@ -163,8 +164,6 @@ const JobCard = () => {
       });
 
       if (response.data.status) {
-        alert(response.data.data.message);
-
         setJobs((jobs) =>
           jobs.map((job) =>
             job.id === jobId
@@ -710,49 +709,51 @@ const JobCard = () => {
                     >
                       <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
                         {/* LEFT SIDE */}
-                        <div className="flex items-start gap-3 md:gap-4 w-full sm:w-auto">
-                          {/* School Icon */}
-                          <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-                            <img
-                              src={findJobIcons.schoolIcon}
-                              className="w-6 h-6 md:w-8 md:h-8"
-                            />
-                          </div>
+                        <Link to={`/job/${job.id}`}>
+                          <div className="flex items-start gap-3 md:gap-4 w-full sm:w-auto">
+                            {/* School Icon */}
+                            <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                              <img
+                                src={findJobIcons.schoolIcon}
+                                className="w-6 h-6 md:w-8 md:h-8"
+                              />
+                            </div>
 
-                          {/* Job Info */}
-                          <div className="flex-1">
-                            {/* Title + Verified */}
-                            <div className="flex flex-wrap items-center gap-2">
-                              <h3 className="text-lg md:text-xl font-semibold">
-                                {getJobTitle(job)}
-                              </h3>
+                            {/* Job Info */}
+                            <div className="flex-1">
+                              {/* Title + Verified */}
+                              <div className="flex flex-wrap items-center gap-2">
+                                <h3 className="text-lg md:text-xl font-semibold">
+                                  {getJobTitle(job)}
+                                </h3>
 
-                              <span className="px-2 py-1 bg-green-50 text-green-700 text-xs flex items-center gap-1 font-medium rounded-full">
+                                <span className="px-2 py-1 bg-green-50 text-green-700 text-xs flex items-center gap-1 font-medium rounded-full">
+                                  <img
+                                    src={findJobIcons.verified}
+                                    className="w-4 h-4"
+                                  />
+                                  Verified
+                                </span>
+                              </div>
+
+                              {/* School Name */}
+                              <p className="text-sm md:text-base text-gray-600 mt-1">
+                                {job.school_name}
+                              </p>
+
+                              {/* Applicants */}
+                              <div className="flex items-center gap-1 mt-1 text-xs md:text-sm text-gray-600">
                                 <img
-                                  src={findJobIcons.verified}
+                                  src={findJobIcons.applicant}
                                   className="w-4 h-4"
                                 />
-                                Verified
-                              </span>
-                            </div>
-
-                            {/* School Name */}
-                            <p className="text-sm md:text-base text-gray-600 mt-1">
-                              {job.school_name}
-                            </p>
-
-                            {/* Applicants */}
-                            <div className="flex items-center gap-1 mt-1 text-xs md:text-sm text-gray-600">
-                              <img
-                                src={findJobIcons.applicant}
-                                className="w-4 h-4"
-                              />
-                              <span>
-                                {job.total_applicants} applicant{job.total_applicants > 1 ? "s" : ""}
-                              </span>
+                                <span>
+                                  {job.total_applicants} applicant{job.total_applicants > 1 ? "s" : ""}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        </Link>
 
                         {/* RIGHT SIDE */}
                         <button
