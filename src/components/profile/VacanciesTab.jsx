@@ -14,7 +14,6 @@ const VacanciesTab = ({
 }) => {
   const handleEdit = (job) => {
     console.log('Edit job:', job);
-    // Yaha edit functionality implement karenge
     if (onEditJob) onEditJob(job);
   };
 

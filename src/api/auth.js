@@ -123,3 +123,7 @@ export const getAppliedJobs = (params = {}) => {
 export const closeJob = (jobId) => {
   return api.post(`api/job-post/close/${jobId}`);
 };
+
+export const updateJob = (jobId, payload) => {
+  return api.put(`/api/job-posts/${jobId}`, payload);
+};

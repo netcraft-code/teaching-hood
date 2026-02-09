@@ -5,35 +5,28 @@ import { aboutUsIcons } from "./../assets/icons/about-us/aboutUs"
 
 const AboutUsSection = () => {
   const stats = [
-    {
-      icon: <img src={aboutUsIcons.teacherConnected} className='w-6 h-6 sm:w-7 sm:h-7' />,
-      value: '50,000+',
-      label: 'Teachers Connected',
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-50'
-    },
-    {
-      icon: <img src={aboutUsIcons.schoolRegister} className='w-6 h-6 sm:w-7 sm:h-7' />,
-      value: '2,500+',
-      label: 'Schools Registered',
-      color: 'text-green-500',
-      bgColor: 'bg-green-50'
-    },
-    {
-      icon: <img src={aboutUsIcons.recruiterActive} className='w-6 h-6 sm:w-7 sm:h-7' />,
-      value: '1,000+',
-      label: 'Recruiters Active',
-      color: 'text-yellow-500',
-      bgColor: 'bg-yellow-50'
-    },
-    {
-      icon: <img src={aboutUsIcons.placementSuccess} className='w-6 h-6 sm:w-7 sm:h-7' />,
-      value: '95%',
-      label: 'Placement Success',
-      color: 'text-red-500',
-      bgColor: 'bg-red-50'
-    }
-  ];
+        {
+          icon: <img src={aboutUsIcons.teacherConnected} className='w-6 h-6 sm:w-7 sm:h-7' />,
+          value: '10,000+',
+          label: 'Teachers Connected',
+          color: 'text-blue-500',
+          bgColor: 'bg-blue-50'
+        },
+        {
+          icon: <img src={aboutUsIcons.schoolRegister} className='w-6 h-6 sm:w-7 sm:h-7' />,
+          value: '500+',
+          label: 'Schools Registered',
+          color: 'text-green-500',
+          bgColor: 'bg-green-50'
+        },
+        {
+          icon: <img src={aboutUsIcons.recruiterActive} className='w-6 h-6 sm:w-7 sm:h-7' />,
+          value: '50+',
+          label: 'Recruiters Active',
+          color: 'text-yellow-500',
+          bgColor: 'bg-yellow-50'
+        },
+    ];
 
   const missionPoints = [
     'Simplify teacher recruitment',
@@ -190,12 +183,12 @@ const AboutUsSection = () => {
             {/* Stats Cards - Half overlap with background image */}
             <div className="relative -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-28 bg-transparent">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mx-12">
+                    <div className="grid grid-cols-1 justify-center sm:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6 mx-12">
                         {stats.map((stat, index) => {
                             return (
                                 <div
                                     key={index}
-                                    className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                                    className="bg-white rounded-2xl justify-center p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                                 >
                                     <div className={`${stat.bgColor} ${stat.color} w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4`}>
                                         {stat.icon}
@@ -354,9 +347,8 @@ const AboutUsSection = () => {
             </div>
         </div>
 
-        <div className="py-20 bg-white">
+        {/* <div className="py-20 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Section Header */}
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 rounded-full px-4 py-2 mb-4">
                         <img src={aboutUsIcons.meetTheTeam} className="w-4 h-4" />
@@ -372,14 +364,12 @@ const AboutUsSection = () => {
                     </p>
                 </div>
 
-                {/* Team Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {team.map((member, index) => (
                         <div
                             key={index}
                             className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                         >
-                            {/* Image Container */}
                             <div className="relative overflow-hidden aspect-square">
                                 <img
                                     src={member.image}
@@ -390,7 +380,6 @@ const AboutUsSection = () => {
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             </div>
 
-                            {/* Content */}
                             <div className="p-6">
                                 <h3 className="text-xl font-bold text-gray-900 mb-1">
                                     {member.name}
@@ -408,11 +397,10 @@ const AboutUsSection = () => {
                     ))}
                 </div>
             </div>
-        </div>
+        </div> */}
 
-        <div className="py-20 bg-[linear-gradient(135deg,_#F9FAFB_0%,_rgba(239,246,255,0.5)_100%)]">
+        {/* <div className="py-20 bg-[linear-gradient(135deg,_#F9FAFB_0%,_rgba(239,246,255,0.5)_100%)]">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Section Header */}
                 <div className="text-center mb-20">
                     <div className="inline-flex items-center gap-2 bg-white text-green-500 rounded-full px-4 py-2 mb-4">
                         <img src={aboutUsIcons.ourJourney} className="w-4 h-4" />
@@ -428,12 +416,9 @@ const AboutUsSection = () => {
                     </p>
                 </div>
 
-                {/* Timeline */}
                 <div className="relative">
-                    {/* Center Line */}
                     <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-blue-200 via-blue-400 to-yellow-400" />
 
-                    {/* Timeline Items */}
                     <div className="space-y-12">
                         {milestones.map((milestone, index) => (
                             <div
@@ -444,8 +429,6 @@ const AboutUsSection = () => {
                                     : 'justify-end'
                                 }`}
                             >
-
-                                {/* Content Card */}
                                 <div
                                     className={`w-6/12 ${
                                         milestone.position === 'left' ? 'pr-12' : 'pl-12'
@@ -459,7 +442,6 @@ const AboutUsSection = () => {
                                             ${milestone.position === 'left' ? 'items-end text-right' : 'items-start text-left'}
                                         `}
                                     >
-                                        {/* Year Badge */}
                                         <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-500 rounded-full px-3 py-2 mb-3">
                                             <img src={aboutUsIcons.calender} className="w-3 h-3" />
                                             <span className="text-sm font-regular">{milestone.year}</span>
@@ -475,14 +457,13 @@ const AboutUsSection = () => {
                                     </div>
                                 </div>
 
-                                {/* Center Dot */}
                                 <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow-lg z-10" />
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
-        </div>
+        </div> */}
     </div>
   );
 };

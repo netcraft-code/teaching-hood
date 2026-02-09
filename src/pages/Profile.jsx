@@ -211,8 +211,9 @@ const Profile = () => {
   };
 
   const handleEditJob = (job) => {
-    // TODO: Implement edit job functionality
-    console.log('Edit job:', job);
+    navigate(`/edit-job/${job.id}`, {
+      state: { job }  // Pass the entire job object
+    });
   };
 
   const handleCloseJob = async (jobId) => {

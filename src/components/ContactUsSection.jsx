@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, MessageCircle, Send, ChevronDown, ChevronUp } from 'lucide-react';
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import contactUsEmailIcon from "./../assets/icons/contact-us-email.svg"
 import { sendMessage } from "../api/auth";
 import schoolFindRightIcon from "./../assets/icons/school-find-right.svg"
 
 const ContactUsSection = () => {
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',

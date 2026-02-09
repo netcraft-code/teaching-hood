@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, HelpCircle, Users, Briefcase } from "lucide-react";
+import { ChevronDown, HelpCircle, Users, Briefcase, ArrowLeft } from "lucide-react";
 import {
   getCities,
   getGradeLevels,
   getSubjects,
   getProfile,
-  postJob,
+  updateJob, // You'll need to create this API function
 } from "../api/auth";
 import AsyncSelect from "react-select/async";
 import Select from "react-select";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { postJobIcons } from "../assets/icons/postJobIcons";
 import Header from "../components/Header";
 
-const PostJob = () => {
+const EditJob = () => {
   const [subjects, setSubjects] = useState([]);
   const [grades, setGrades] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -21,11 +21,12 @@ const PostJob = () => {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { id } = useParams(); // Get job ID from URL params
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchDropdowns();
-  }, []);
+  // Get job data from location state or fetch from API
+  const jobData = location.state?.job;
 
   const [formData, setFormData] = useState({
     school_name: "",
@@ -48,6 +49,44 @@ const PostJob = () => {
     contact_phone: "",
   });
 
+  useEffect(() => {
+    fetchDropdowns();
+  }, []);
+
+  // Pre-fill form with job data
+  useEffect(() => {
+    if (jobData) {
+      setFormData({
+        school_name: jobData.school_name || "",
+        board: jobData.board || "",
+        position: jobData.position || "",
+        subject_id: jobData.subject_id || "",
+        grade_id: jobData.grade_id || "",
+        city_id: jobData.city_id || "",
+        job_type: jobData.job_type || "",
+        min_salary: jobData.min_salary || "",
+        max_salary: jobData.max_salary || "",
+        experience_required: jobData.experience_required || "",
+        food: jobData.food === 1 || jobData.food === true,
+        accommodation: jobData.accommodation === 1 || jobData.accommodation === true,
+        job_description: jobData.job_description || "",
+        qualification_requirements: jobData.qualification_requirements || "",
+        application_deadline: jobData.application_deadline || "",
+        status: jobData.status === 1 || jobData.status === true,
+        contact_email: jobData.contact_email || "",
+        contact_phone: jobData.contact_phone || "",
+      });
+
+      // Set selected city for AsyncSelect
+      if (jobData.city) {
+        setSelectedCity({
+          value: jobData.city.id,
+          label: jobData.city.name,
+        });
+      }
+    }
+  }, [jobData]);
+
   const fetchDropdowns = async () => {
     setLoading(true);
 
@@ -61,19 +100,10 @@ const PostJob = () => {
       setSubjects(subjectsRes?.data?.data || []);
       setGrades(gradesRes?.data?.data || []);
       setProfile(profileRes?.data?.data || null);
-      
-      // Pre-fill contact info
-      setFormData((prev) => ({
-        ...prev,
-        contact_email: profileRes?.data?.data?.email || "",
-        contact_phone: profileRes?.data?.data?.phone || "",
-        school_name: profileRes?.data?.data?.first_name || "",
-        board: profileRes?.data?.data?.board || "",
-      }));
     } catch (error) {
       console.error("Dropdown API error", error);
     } finally {
-      setLoading(false); // ✅ VERY IMPORTANT
+      setLoading(false);
     }
   };
 
@@ -86,7 +116,7 @@ const PostJob = () => {
         [name]: type === "checkbox" ? checked : value,
       };
 
-      // 👇 Clear subject/grade when switching away from Teacher
+      // Clear subject/grade when switching away from Teacher
       if (name === "position" && value !== "Teacher") {
         updated.subject_id = "";
         updated.grade_id = "";
@@ -101,12 +131,12 @@ const PostJob = () => {
       // clear field specific error
       newErrors[name] = "";
 
-      // 🔥 SPECIAL CASE: salary range
+      // SPECIAL CASE: salary range
       if (name === "min_salary" || name === "max_salary") {
         newErrors.salary = "";
       }
 
-      // 👇 Clear subject/grade errors when switching position
+      // Clear subject/grade errors when switching position
       if (name === "position") {
         newErrors.subject_id = "";
         newErrors.grade_id = "";
@@ -139,14 +169,14 @@ const PostJob = () => {
   const validateForm = () => {
     let newErrors = {};
 
-    if (!formData.position) newErrors.position = "Position type is required"; // 👈 New validation
+    if (!formData.position) newErrors.position = "Position type is required";
 
     if (formData.position === "Teacher") {
       if (!formData.subject_id) newErrors.subject_id = "Subject is required";
       if (!formData.grade_id) newErrors.grade_id = "Grade is required";
     }
 
-    if (profile.user_type == 3) {
+    if (profile?.user_type == 3) {
       if (!formData.board) newErrors.board = "Board is required";
     }
 
@@ -194,24 +224,25 @@ const PostJob = () => {
         status, // 0 = draft, 1 = publish
       };
 
-      const response = await postJob(payload);
+      // Call update API with job ID
+      const response = await updateJob(jobData.id, payload);
 
-      console.log("Job saved successfully:", response.data);
+      console.log("Job updated successfully:", response.data);
 
-      // ✅ Success UX
+      // Success UX
       alert(
-        status === 1 ? "Job published successfully!" : "Job saved as draft!",
+        status === 1 ? "Job updated and published successfully!" : "Job updated and saved as draft!",
       );
 
       if (response?.data?.status === true) {
-        navigate("/profile"); // 👈 redirect here
+        navigate("/profile"); // redirect to profile or job listing page
       } else {
-        alert("Job saved but something looks wrong.");
+        alert("Job updated but something looks wrong.");
       }
     } catch (error) {
-      console.error("Job save failed:", error);
+      console.error("Job update failed:", error);
 
-      // ✅ Backend validation handling (Laravel)
+      // Backend validation handling (Laravel)
       if (error.response?.status === 422) {
         setErrors(error.response.data.errors || {});
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -226,7 +257,26 @@ const PostJob = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        Loading ...
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!jobData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 text-lg">Job not found</p>
+          <button
+            onClick={() => navigate("/profile")}
+            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg"
+          >
+            Go Back
+          </button>
+        </div>
       </div>
     );
   }
@@ -240,14 +290,20 @@ const PostJob = () => {
         <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div className="flex items-center space-x-3">
+              <button
+                onClick={() => navigate(-1)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
                 <Briefcase className="w-5 h-5 text-white" />
               </div>
               <h1 className="text-xl sm:text-2xl font-regular">
-                Post a Job
+                Edit Job Post
               </h1>
             </div>
-            <div className="flex space-x-2 sm:space-x-3">
+            <div className="hidden sm:flex space-x-2 sm:space-x-3">
               <button
                 onClick={() => handleSubmit(0)}
                 disabled={submitting}
@@ -261,7 +317,7 @@ const PostJob = () => {
                 disabled={submitting}
                 className="px-4 px-6 py-2 text-white rounded-lg disabled:opacity-50 rounded-[1000px] w-[117px] bg-[rgba(0,_127,_255,_1)]"
               >
-                {submitting ? "Publishing..." : "Publish"}
+                {submitting ? "Updating..." : "Update"}
               </button>
             </div>
           </div>
@@ -273,7 +329,7 @@ const PostJob = () => {
             {/* Left Column - Form */}
             <div className="lg:col-span-2 space-y-6">
               {/* Basic Information Card */}
-              <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 transition-shadow duration-300">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
                     <img
@@ -281,7 +337,7 @@ const PostJob = () => {
                       className="w-5 h-5 text-blue-600"
                     />
                   </div>
-                  <h2 className="text-xl font-bold text-gray-800">
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-800">
                     Basic Information
                   </h2>
                 </div>
@@ -291,8 +347,8 @@ const PostJob = () => {
                     Tell us about the position
                   </p>
 
-                  {profile.user_type == 3 && (
-                    <div>
+                  {profile?.user_type == 3 && (
+                    <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                           School Name
@@ -303,7 +359,7 @@ const PostJob = () => {
                           name="school_name"
                           value={formData.school_name}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-3 mb-6 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                         />
                       </div>
 
@@ -334,41 +390,41 @@ const PostJob = () => {
                       Position <span className="text-red-500">*</span>
                     </label>
 
-                  <div className="grid md:grid-cols-4 grid-cols-2 gap-3">
-                    {[
-                      "Teacher",
-                      "Principal",
-                      "Co-ordinator",
-                      "Vice Principal",
-                    ].map((position) => (
-                      <label
-                        key={position}
-                        className={`flex items-center space-x-3 p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                          formData.position === position
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-200 bg-gray-50 hover:border-gray-300"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="position"
-                          value={position}
-                          checked={formData.position === position}
-                          onChange={handleInputChange}
-                          className="w-3 h-3 text-blue-500 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                        />
-                        <span
-                          className={`font-regular ${
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      {[
+                        "Teacher",
+                        "Principal",
+                        "Co-ordinator",
+                        "Vice Principal",
+                      ].map((position) => (
+                        <label
+                          key={position}
+                          className={`flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
                             formData.position === position
-                              ? "text-blue-700"
-                              : "text-gray-700"
+                              ? "border-blue-500 bg-blue-50"
+                              : "border-gray-200 bg-gray-50 hover:border-gray-300"
                           }`}
                         >
-                          {position}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
+                          <input
+                            type="radio"
+                            name="position"
+                            value={position}
+                            checked={formData.position === position}
+                            onChange={handleInputChange}
+                            className="w-3 h-3 text-blue-500 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                          />
+                          <span
+                            className={`font-regular text-sm ${
+                              formData.position === position
+                                ? "text-blue-700"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            {position}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
 
                     {errors.position && (
                       <p className="text-sm text-red-500 mt-2">
@@ -377,8 +433,8 @@ const PostJob = () => {
                     )}
                   </div>
 
-                  <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
-                    {/* 👇 CONDITIONAL: Subject - Only show for Teacher */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* CONDITIONAL: Subject - Only show for Teacher */}
                     {formData.position === "Teacher" && (
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -408,7 +464,7 @@ const PostJob = () => {
                             setErrors((prev) => ({ ...prev, subject_id: "" }));
                           }}
                           placeholder="Select subject"
-                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                          className="w-full"
                         />
 
                         {errors.subject_id && (
@@ -419,7 +475,7 @@ const PostJob = () => {
                       </div>
                     )}
 
-                    {/* 👇 CONDITIONAL: Grade - Only show for Teacher */}
+                    {/* CONDITIONAL: Grade - Only show for Teacher */}
                     {formData.position === "Teacher" && (
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -449,7 +505,7 @@ const PostJob = () => {
                             setErrors((prev) => ({ ...prev, grade_id: "" }));
                           }}
                           placeholder="Select grade"
-                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                          className="w-full"
                         />
 
                         {errors.grade_id && (
@@ -480,7 +536,7 @@ const PostJob = () => {
                           setErrors((prev) => ({ ...prev, city_id: "" }));
                         }}
                         placeholder="Search city"
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                        className="w-full"
                       />
 
                       {errors.city_id && (
@@ -525,7 +581,7 @@ const PostJob = () => {
               </div>
 
               {/* Job Details Card */}
-              <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 transition-shadow duration-300">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
                     <img
@@ -533,7 +589,7 @@ const PostJob = () => {
                       className="w-5 h-5 text-green-600"
                     />
                   </div>
-                  <h2 className="text-xl font-bold text-gray-800">Job Details</h2>
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-800">Job Details</h2>
                 </div>
 
                 <div className="space-y-5">
@@ -565,7 +621,6 @@ const PostJob = () => {
                         className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                       />
                     </div>
-                    {/* <p className="text-xs text-gray-500 mt-2">💡 Tip: Jobs with salary info get 3x more applications.</p> */}
 
                     {errors.salary && (
                       <p className="text-sm text-red-500 mt-1">{errors.salary}</p>
@@ -606,17 +661,17 @@ const PostJob = () => {
                       Benefits (Food & Accommodation)
                     </label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 grid grid-cols-1 md:grid-cols-2 items-center border">
+                      <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 border">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2">
                             <div className="bg-orange-50 flex items-center justify-center w-10 h-10 rounded-full">
                               <img src={postJobIcons.food} className="w-5 h-5" />
                             </div>
-                            <span className="font-medium text-gray-800">
+                            <span className="font-medium text-gray-800 text-sm sm:text-base">
                               Food Provided
                             </span>
                           </div>
-                          <p className="text-xs text-gray-600 mt-1">
+                          <p className="text-xs text-gray-600 mt-1 ml-12">
                             Meals included for staff
                           </p>
                         </div>
@@ -631,7 +686,7 @@ const PostJob = () => {
                         </div>
                       </label>
 
-                      <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 grid grid-cols-1 md:grid-cols-2 gap-3 items-center border">
+                      <label className="flex items-start p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-200 border">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 rounded-full">
                             <div className="bg-purple-100 flex items-center justify-center w-10 h-10 rounded-full">
@@ -640,11 +695,11 @@ const PostJob = () => {
                                 className="w-5 h-5"
                               />
                             </div>
-                            <span className="font-medium text-gray-800">
+                            <span className="font-medium text-gray-800 text-sm sm:text-base">
                               Accommodation
                             </span>
                           </div>
-                          <p className="text-sm text-gray-600 mt-1">
+                          <p className="text-xs text-gray-600 mt-1 ml-12">
                             Living Quarters available
                           </p>
                         </div>
@@ -664,7 +719,7 @@ const PostJob = () => {
               </div>
 
               {/* Requirements & Description Card */}
-              <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 transition-shadow duration-300">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
                     <img
@@ -672,7 +727,7 @@ const PostJob = () => {
                       className="w-5 h-5"
                     />
                   </div>
-                  <h2 className="text-xl font-bold text-gray-800">
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-800">
                     Requirements & Description
                   </h2>
                 </div>
@@ -743,7 +798,7 @@ const PostJob = () => {
               </div>
 
               {/* Contact Information Card */}
-              <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 transition-shadow duration-300">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
                     <img
@@ -751,7 +806,7 @@ const PostJob = () => {
                       className="w-5 h-5"
                     />
                   </div>
-                  <h2 className="text-xl font-bold text-gray-800">
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-800">
                     Contact Information
                   </h2>
                 </div>
@@ -784,7 +839,7 @@ const PostJob = () => {
                   {/* Contact Phone */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Contact Phone
+                      Contact Phone <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="tel"
@@ -805,26 +860,27 @@ const PostJob = () => {
               </div>
 
               {/* Action Buttons - Mobile */}
-              <div className="grid grid-cols-2 gap-12">
+              <div className="grid grid-cols-2 gap-4 sm:hidden">
                 <button
-                  onClick={() => navigate("/")}
-                  className="flex-1 px-2 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 font-medium"
+                  onClick={() => navigate(-1)}
+                  className="px-4 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => handleSubmit(1)}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg shadow-blue-500/30"
+                  disabled={submitting}
+                  className="px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg shadow-blue-500/30 disabled:opacity-50"
                 >
-                  {submitting ? "Publishing..." : "Publish Job Post"}
+                  {submitting ? "Updating..." : "Update Job"}
                 </button>
               </div>
             </div>
 
             {/* Right Column - Tips & Stats */}
-            <div className="space-y-6">
+            <div className="hidden lg:block space-y-6">
               {/* Tips for Success Card */}
-              <div className="bg-blue-50 rounded-3xl p-6 top-24">
+              <div className="bg-blue-50 rounded-3xl p-6 sticky top-24">
                 <div className="flex items-center space-x-3 mb-4">
                   <div className="w-10 h-10 bg-white backdrop-blur-sm rounded-lg flex items-center justify-center">
                     <img src={postJobIcons.tipsForSuccess} className="w-5 h-5" />
@@ -863,7 +919,7 @@ const PostJob = () => {
               {/* Stats Card */}
               <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
                 <h3 className="text-lg font-medium text-gray-800 mb-4">
-                  Why Post on Teachinghood?
+                  Job Performance
                 </h3>
 
                 <div className="space-y-4">
@@ -873,24 +929,24 @@ const PostJob = () => {
                     </div>
                     <div>
                       <div className="font-normal text-xl text-blue-400">
-                        500+
+                        {jobData.total_applicants || 0}
                       </div>
                       <div className="text-sm font-normal text-gray-600">
-                        Active Teachers
+                        Total Applicants
                       </div>
                     </div>
                   </div>
 
                   <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <img src={postJobIcons.hireTime} className="w-4 h-4" />
+                    <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Briefcase className="w-6 h-6 text-green-600" />
                     </div>
                     <div>
                       <div className="font-normal text-xl text-green-400">
-                        7 Days
+                        {jobData.status === 1 ? "Active" : "Draft"}
                       </div>
                       <div className="text-sm font-normal text-gray-600">
-                        Avg. Time to Hire
+                        Job Status
                       </div>
                     </div>
                   </div>
@@ -924,4 +980,4 @@ const PostJob = () => {
   );
 };
 
-export default PostJob;
+export default EditJob;

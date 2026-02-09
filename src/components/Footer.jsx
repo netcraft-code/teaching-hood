@@ -9,6 +9,7 @@ const Footer = () => {
     HOME: "/",
     ABOUT_US: "/about-us",
     TERM_CONDITION: "/term-condition",
+    CONTACT_US: "/contact-us"
   };
 
   return (
@@ -156,9 +157,12 @@ const Footer = () => {
               About Us
             </button>
 
-            <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
+            <button
+              onClick={() => navigate(routes.CONTACT_US)}
+              className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer"
+            >
               Contact Us
-            </span>
+            </button>
             {/* <span className="font-normal text-[14px] leading-[100%] tracking-[0] text-gray-400 hover:text-white cursor-pointer">
               Privacy Policy
             </span> */}
