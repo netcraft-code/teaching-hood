@@ -33,7 +33,7 @@ const QuickLinksSection = () => {
         </p>
       </div>
 
-      <p className="font-medium flex justify-center text-[20px] leading-[29.25px] tracking-[0px] text-red-500 mb-12">
+      <p className="font-medium flex justify-center text-[28px] leading-[29.25px] tracking-[0px] text-blue-500 mb-5 mt-10">
         Quick Links
       </p>
 

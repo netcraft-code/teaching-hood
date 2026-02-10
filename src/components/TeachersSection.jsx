@@ -92,14 +92,14 @@ const TeachersSection = () => {
           {/* Right Side - Content */}
           <div>
             {/* Badge */}
-            <div className="inline-flex items-center space-x-2 bg-red-50 px-4 py-2 rounded-full mb-6">
-              <span className="text-lg text-red-600 font-semibold text-[21.39px]">
+            <div className="inline-flex items-center space-x-2 bg-red-50 px-4 rounded-full mb-6 py-2">
+              <span className="text-lg text-red-600 font-semibold text-[22px]">
                 For Teachers
               </span>
             </div>
             <a
               href="/signup"
-              className="inline-flex items-center space-x-2 px-4 py-2 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white"
+              className="inline-flex items-center space-x-2 px-4 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white py-1"
             >
               Create Profile
             </a>

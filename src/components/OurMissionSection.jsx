@@ -41,7 +41,7 @@ const OurMissionSection = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 text-center">
               <div>
-                <div className="font-sf font-normal text-[30px] leading-[36px] text-orange-600 mb-2">4000+</div>
+                <div className="font-sf font-normal text-[30px] leading-[36px] text-orange-600 mb-2">6000+</div>
                 <div className="font-sf font-normal text-[14px] leading-[20px] text-gray-900">Jobs Posted</div>
               </div>
               <div>

@@ -262,6 +262,10 @@ const HeroSection = () => {
                 </button>
               </div>
             </div>
+            <p className="mt-4 text-[16px] sm:text-[18px] md:text-[20px] font-medium font-sf leading-[28px] text-center text-[#404145] mb-8 md:mb-12 px-4">
+              If you are looking for a Principal / Vice Principal / Co-ordinator
+              role, search in the Grade and Location sections
+            </p>
           </div>
         </div>
       </div>

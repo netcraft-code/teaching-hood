@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, MessageCircle } from 'lucide-react';
+import React, { useState } from "react";
+import { ChevronDown, ChevronUp, MessageCircle } from "lucide-react";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
 
 const Faqs = () => {
@@ -65,7 +65,10 @@ const Faqs = () => {
         <div className="text-center mb-12">
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full mb-6">
-            <img src={homePageIcons.faqIcon} className="w-4 h-4 text-blue-600" />
+            <img
+              src={homePageIcons.faqIcon}
+              className="w-4 h-4 text-blue-600"
+            />
             <span className="text-sm text-blue-600 font-semibold">FAQ</span>
           </div>
 
@@ -89,7 +92,9 @@ const Faqs = () => {
                 onClick={() => toggleFAQ(index)}
                 className="w-full flex items-center justify-between p-6 text-left bg-gray-50"
               >
-                <span className="font-semibold text-[18px] text-gray-900 pr-4">{faq.question}</span>
+                <span className="font-semibold text-[18px] text-gray-900 pr-4">
+                  {faq.question}
+                </span>
                 {openIndex === index ? (
                   <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" />
                 ) : (
@@ -108,7 +113,9 @@ const Faqs = () => {
         {/* Still Have Questions Box */}
         <div className="max-w-3xl mx-auto mt-12">
           <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8 text-center border-2 border-blue-100">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Still have questions?</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              Still have questions?
+            </h3>
             <p className="text-gray-600 mb-6">
               Our support team is here to help you get the answers you need.
             </p>

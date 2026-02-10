@@ -61,7 +61,7 @@ const PostJob = () => {
       setSubjects(subjectsRes?.data?.data || []);
       setGrades(gradesRes?.data?.data || []);
       setProfile(profileRes?.data?.data || null);
-      
+
       // Pre-fill contact info
       setFormData((prev) => ({
         ...prev,
@@ -243,9 +243,7 @@ const PostJob = () => {
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
                 <Briefcase className="w-5 h-5 text-white" />
               </div>
-              <h1 className="text-xl sm:text-2xl font-regular">
-                Post a Job
-              </h1>
+              <h1 className="text-xl sm:text-2xl font-regular">Post a Job</h1>
             </div>
             <div className="flex space-x-2 sm:space-x-3">
               <button
@@ -334,41 +332,41 @@ const PostJob = () => {
                       Position <span className="text-red-500">*</span>
                     </label>
 
-                  <div className="grid md:grid-cols-4 grid-cols-2 gap-3">
-                    {[
-                      "Teacher",
-                      "Principal",
-                      "Co-ordinator",
-                      "Vice Principal",
-                    ].map((position) => (
-                      <label
-                        key={position}
-                        className={`flex items-center space-x-3 p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                          formData.position === position
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-200 bg-gray-50 hover:border-gray-300"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="position"
-                          value={position}
-                          checked={formData.position === position}
-                          onChange={handleInputChange}
-                          className="w-3 h-3 text-blue-500 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                        />
-                        <span
-                          className={`font-regular ${
+                    <div className="grid md:grid-cols-4 grid-cols-2 gap-3">
+                      {[
+                        "Teacher",
+                        "Principal",
+                        "Co-ordinator",
+                        "Vice Principal",
+                      ].map((position) => (
+                        <label
+                          key={position}
+                          className={`flex items-center space-x-3 p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
                             formData.position === position
-                              ? "text-blue-700"
-                              : "text-gray-700"
+                              ? "border-blue-500 bg-blue-50"
+                              : "border-gray-200 bg-gray-50 hover:border-gray-300"
                           }`}
                         >
-                          {position}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
+                          <input
+                            type="radio"
+                            name="position"
+                            value={position}
+                            checked={formData.position === position}
+                            onChange={handleInputChange}
+                            className="w-3 h-3 text-blue-500 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                          />
+                          <span
+                            className={`font-regular ${
+                              formData.position === position
+                                ? "text-blue-700"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            {position}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
 
                     {errors.position && (
                       <p className="text-sm text-red-500 mt-2">
@@ -501,7 +499,10 @@ const PostJob = () => {
                         <button
                           key={type}
                           onClick={() => {
-                            setFormData((prev) => ({ ...prev, job_type: type }));
+                            setFormData((prev) => ({
+                              ...prev,
+                              job_type: type,
+                            }));
                             setErrors((prev) => ({ ...prev, job_type: "" }));
                           }}
                           className={`py-3 px-4 rounded-xl font-medium transition-all duration-200 text-sm sm:text-base ${
@@ -533,7 +534,9 @@ const PostJob = () => {
                       className="w-5 h-5 text-green-600"
                     />
                   </div>
-                  <h2 className="text-xl font-bold text-gray-800">Job Details</h2>
+                  <h2 className="text-xl font-bold text-gray-800">
+                    Job Details
+                  </h2>
                 </div>
 
                 <div className="space-y-5">
@@ -568,14 +571,17 @@ const PostJob = () => {
                     {/* <p className="text-xs text-gray-500 mt-2">💡 Tip: Jobs with salary info get 3x more applications.</p> */}
 
                     {errors.salary && (
-                      <p className="text-sm text-red-500 mt-1">{errors.salary}</p>
+                      <p className="text-sm text-red-500 mt-1">
+                        {errors.salary}
+                      </p>
                     )}
                   </div>
 
                   {/* Experience Required */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Experience Required <span className="text-red-500">*</span>
+                      Experience Required (No. of years){" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <select
@@ -610,7 +616,10 @@ const PostJob = () => {
                         <div className="flex-1">
                           <div className="flex items-center space-x-2">
                             <div className="bg-orange-50 flex items-center justify-center w-10 h-10 rounded-full">
-                              <img src={postJobIcons.food} className="w-5 h-5" />
+                              <img
+                                src={postJobIcons.food}
+                                className="w-5 h-5"
+                              />
                             </div>
                             <span className="font-medium text-gray-800">
                               Food Provided
@@ -827,7 +836,10 @@ const PostJob = () => {
               <div className="bg-blue-50 rounded-3xl p-6 top-24">
                 <div className="flex items-center space-x-3 mb-4">
                   <div className="w-10 h-10 bg-white backdrop-blur-sm rounded-lg flex items-center justify-center">
-                    <img src={postJobIcons.tipsForSuccess} className="w-5 h-5" />
+                    <img
+                      src={postJobIcons.tipsForSuccess}
+                      className="w-5 h-5"
+                    />
                   </div>
                   <h3 className="font-medium">Tips for Success</h3>
                 </div>

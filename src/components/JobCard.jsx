@@ -133,7 +133,7 @@ const JobCard = () => {
   const formatSalary = (min, max) => {
     const minLPA = (min / 100000).toFixed(1);
     const maxLPA = (max / 100000).toFixed(1);
-    return `₹${minLPA}-${maxLPA} LPA`;
+    return `₹${minLPA}-${maxLPA} Per Month`;
   };
 
   // Get job title
@@ -448,7 +448,7 @@ const JobCard = () => {
               }
               className="w-16 px-2 py-1 border border-gray-300 rounded text-sm"
             />
-            <span className="text-sm">LPA</span>
+            <span className="text-sm">Per Month</span>
           </div>
 
           <span className="text-gray-500">-</span>
@@ -462,7 +462,7 @@ const JobCard = () => {
               }
               className="w-16 px-2 py-1 border border-gray-300 rounded text-sm"
             />
-            <span className="text-sm">LPA</span>
+            <span className="text-sm">Per Month</span>
           </div>
         </div>
       </div>

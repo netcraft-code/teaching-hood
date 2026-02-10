@@ -69,13 +69,13 @@ const SchoolsSection = () => {
           <div className="mx-8">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-green-100 px-4 py-2 rounded-full mb-6">
-              <span className="text-lg text-green-600 font-semibold text-[21.39px]">
+              <span className="text-lg text-green-600 font-semibold text-[22px]">
                 For Schools
               </span>
             </div>
             <a
               href="/signup"
-              className="inline-flex items-center space-x-2 px-4 py-2 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white"
+              className="inline-flex items-center space-x-2 px-4 py-1 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white"
             >
               Post a Job
             </a>
@@ -193,7 +193,6 @@ const SchoolsSection = () => {
 
           <div className="relative">
             <img src={schoolSectionLeftImage} className="rounded-2xl" />
-
           </div>
         </div>
       </div>
