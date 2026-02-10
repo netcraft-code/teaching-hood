@@ -48,7 +48,10 @@ const Faqs = () => {
     }, {
         question: "How do I get started with Teachinghood?",
         answer: "Simply sign up, create your profile (teacher or school), and start exploring opportunities. No long forms, no middlemen—just a clear, structured hiring journey.",
-    } 
+    }, {
+      question: "When applying for jobs, what is the difference between ‘Apply’ vs ‘Express Interest’?",
+      answer: "You can ‘Apply’ for jobs that are recently posted by schools, i.e., posted less than 30 days ago. Jobs that are posted by schools more than 30 days ago may have been finalized or schools may not be actively looking for. In that case, you can ‘Express Interest’ to let your profile reach the school for any future opportunities.",
+    }
   ];
 
   const toggleFAQ = (index) => {

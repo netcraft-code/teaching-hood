@@ -7,6 +7,8 @@ import { likeUnlikeJobApi, applyJobApi } from "../api/auth";
 const JobView = ({ jobData }) => {
   const [isApplied, setIsApplied] = useState(jobData?.is_applied || false);
   const [isLiked, setIsLiked] = useState(jobData?.is_liked || false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
 
   const job = jobData;
 
@@ -59,18 +61,25 @@ const JobView = ({ jobData }) => {
 
   const handleApply = async (id) => {
     if (!isApplied) {
-      if (localStorage.getItem("auth_token")) {
+      if (!localStorage.getItem("auth_token")) {
+        setPopupMessage("You need to login first");
+        setShowPopup(true);
+
+        return;
+      }
+      
+      try {
         const response = await applyJobApi(id);
 
         if (response.data.status) {
-          alert(response.data.data.message);
-
+          setPopupMessage(response.data.data.message);
           setIsApplied(true);
+          setShowPopup(true);
         }
-      } else {
-        alert("You need to login first");
+      } catch (err) {
+        setPopupMessage("Something went wrong. Please try again.");
 
-        return;
+        setShowPopup(true);
       }
     }
   };
@@ -385,6 +394,40 @@ const JobView = ({ jobData }) => {
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-md p-6 text-center">
+            <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            <p className="text-gray-800 text-sm mb-6">
+              {popupMessage}
+            </p>
+
+            <button
+              onClick={() => setShowPopup(false)}
+              className="px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
 
     <Footer />

@@ -28,6 +28,7 @@ const Header = () => {
         setUserType(Number(res.data.data.user_type));
       } catch (err) {
         localStorage.removeItem("auth_token");
+        localStorage.removeItem("user_type");
         navigate("/signin");
       }
     };
@@ -75,7 +76,7 @@ const Header = () => {
             {menuItems.map((item) => {
               if (
                 item.path === "/post-job" &&
-                !(userType === 2 || userType === 3)
+                userType === 1
               ) {
                 return null;
               }
@@ -91,7 +92,6 @@ const Header = () => {
               );
             })}
           </div>
-
 
           {/* Desktop Right Section */}
           <div className="hidden lg:flex items-center gap-6">
@@ -148,15 +148,21 @@ const Header = () => {
           }`}
         >
           <div className="flex flex-col gap-4">
-            {menuItems.map((item) => (
-              <a
-                key={item.path}
-                onClick={() => goTo(item.path)}
-                className={`text-[16px] font-normal leading-[24px] tracking-[0] align-middle cursor-pointer flex justify-center items-center ${isActive(item.path)}`}
-              >
-                {item.name}
-              </a>
-            ))}
+            {menuItems.map((item) => {
+              if (item.path === "/post-job" && userType === 1) {
+                return null;
+              }
+
+              return (
+                <a
+                  key={item.path}
+                  onClick={() => goTo(item.path)}
+                  className={`text-[16px] font-normal leading-[24px] tracking-[0] align-middle cursor-pointer flex justify-center items-center ${isActive(item.path)}`}
+                >
+                  {item.name}
+                </a>
+              );
+            })}
 
             {!isLoggedIn ? (
               <>

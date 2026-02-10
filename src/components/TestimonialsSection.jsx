@@ -6,43 +6,47 @@ const TestimonialsSection = () => {
     const testimonials = [
     {
       quote: "Teachinghood helped me find the perfect role in less than two weeks.",
-      name: "Ritu B.",
-      role: "English Teacher",
-      avatar: "R",
+      name: "Lavanya Srivastava",
+      role: "TGT English Teacher",
+      avatar: "L",
       color: "bg-blue",
       bgColor: "bg-blue-500",
       borderColor: "border-blue-400",
-      reviewQuote: homePageIcons.reviewBlue
+      reviewQuote: homePageIcons.reviewBlue,
+      rating: 5
     },
     {
-      quote: "We filled multiple vacancies quickly. The candidate quality is unmatched.",
-      name: "Sandeep M.",
+      quote: "We filled most of our vacancies sooner with the free plan",
+      name: "Sandeep Modhak",
       role: "Principal",
       avatar: "S",
       color: "bg-green",
       bgColor: "bg-green-500",
       borderColor: "border-green-400",
-      reviewQuote: homePageIcons.reviewGreen
+      reviewQuote: homePageIcons.reviewGreen,
+      rating: 4.5
     },
     {
-      quote: "The free trainings boosted my confidence. Very smooth experience.",
-      name: "Anjali P.",
-      role: "Primary Teacher",
+      quote: "I applied for jobs relevant to me and landed in to the school my choice finally. Thank you Teachinghood",
+      name: "Anjali Patel",
+      role: "PRT Teacher",
       avatar: "A",
       color: "bg-yellow",
       bgColor: "bg-yellow-500",
       borderColor: "border-yellow-400",
-      reviewQuote: homePageIcons.reviewYellow
+      reviewQuote: homePageIcons.reviewYellow,
+      rating: 5
     },
     {
-      quote: "Shortlisting candidates is now faster and far more effective.",
-      name: "Rajesh T.",
+      quote: "Uploading jobs is actually simplified and i am happy with the quality of applications we receive.",
+      name: "Rajesh Tokekar",
       role: "HR Manager",
       avatar: "R",
       color: "bg-red",
       bgColor: "bg-red-500",
       borderColor: "border-red-400",
-      reviewQuote: homePageIcons.reviewRed
+      reviewQuote: homePageIcons.reviewRed,
+      rating: 4
     }
   ];
 
@@ -86,9 +90,30 @@ const TestimonialsSection = () => {
 
               {/* Stars */}
               <div className="flex space-x-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                ))}
+                {[...Array(5)].map((_, i) => {
+                  const rating = testimonial.rating;
+                  const isFull = rating >= i + 1;
+                  const isHalf = rating >= i + 0.5 && rating < i + 1;
+
+                  return (
+                    <div key={i} className="relative w-4 h-4">
+                      {/* Empty star */}
+                      <Star className="w-4 h-4 text-gray-300" />
+
+                      {/* Full star */}
+                      {isFull && (
+                        <Star className="absolute top-0 left-0 w-4 h-4 text-yellow-400 fill-yellow-400" />
+                      )}
+
+                      {/* Half star */}
+                      {isHalf && (
+                        <div className="absolute top-0 left-0 w-1/2 h-full overflow-hidden">
+                          <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Quote */}

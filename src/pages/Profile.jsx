@@ -106,10 +106,12 @@ const Profile = () => {
     try {
       const res = await getProfile();
       setProfile(res.data.data);
+      localStorage.setItem("user_type", res.data.data.user_type);
       setUserType(res.data.data.user_type);
     } catch (err) {
       setError("Unauthorized or session expired");
       localStorage.removeItem("auth_token");
+      localStorage.removeItem("user_type");
       navigate(ROUTES.SIGNIN);
     } finally {
       setLoading(false);
@@ -164,6 +166,7 @@ const Profile = () => {
       const res = await logoutUser();
       if (res.data.status) {
         localStorage.removeItem("auth_token");
+        localStorage.removeItem("user_type");
         navigate(ROUTES.SIGNIN);
       } else {
         setError(res.data?.message || "Issue in logout");

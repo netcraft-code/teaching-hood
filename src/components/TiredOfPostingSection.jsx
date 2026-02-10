@@ -2,21 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Book, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import { getCities, getGradeLevels, getSubjects } from "../api/auth";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
+import { useParams, useNavigate } from 'react-router-dom';
 
 const TiredOfPostingSection = () => {
-    const [subjects, setSubjects] = useState([]);
-    const [grades, setGrades] = useState([]);
-    const [cities, setCities] = useState([]);
+    const navigate = useNavigate();
 
-    const [subject, setSubject] = useState('');
-    const [grade, setGrade] = useState('');
-    const [location, setLocation] = useState('');
+    // const [subjects, setSubjects] = useState([]);
+    // const [grades, setGrades] = useState([]);
+    // const [cities, setCities] = useState([]);
 
-    const [open, setOpen] = useState({
-        subject: false,
-        grade: false,
-        location: false,
-    });
+    // const [subject, setSubject] = useState('');
+    // const [grade, setGrade] = useState('');
+    // const [location, setLocation] = useState('');
+
+    // const [open, setOpen] = useState({
+    //     subject: false,
+    //     grade: false,
+    //     location: false,
+    // });
 
     const features = [
         { icon: "📈", title: 'Better Reach', description: 'Access thousands of verified educators' },
@@ -24,36 +27,36 @@ const TiredOfPostingSection = () => {
         { icon: "⚡", title: 'Better Outcomes', description: 'Hire 3x faster than traditional methods' },
     ];
 
-    useEffect(() => {
-        fetchDropdowns();
-    }, []);
+    // useEffect(() => {
+    //     fetchDropdowns();
+    // }, []);
 
-    const fetchDropdowns = async () => {
-        try {
-            const [subjectsRes, gradesRes, citiesRes] = await Promise.all([
-                getSubjects(),
-                getGradeLevels(),
-                getCities(),
-            ]);
+    // const fetchDropdowns = async () => {
+    //     try {
+    //         const [subjectsRes, gradesRes, citiesRes] = await Promise.all([
+    //             getSubjects(),
+    //             getGradeLevels(),
+    //             getCities(),
+    //         ]);
 
-            setSubjects(subjectsRes?.data?.data || []);
-            setGrades(gradesRes?.data?.data || []);
-            setCities(citiesRes?.data?.data || []);
-        } catch (error) {
-        console.error("Dropdown API error", error);
-        }
-    };
+    //         setSubjects(subjectsRes?.data?.data || []);
+    //         setGrades(gradesRes?.data?.data || []);
+    //         setCities(citiesRes?.data?.data || []);
+    //     } catch (error) {
+    //     console.error("Dropdown API error", error);
+    //     }
+    // };
 
-    const handleSearch = () => {
-        if (!subject || !grade || !location) {
-            alert("Please select Subject, Grade and Location");
-            return;
-        }
+    // const handleSearch = () => {
+    //     if (!subject || !grade || !location) {
+    //         alert("Please select Subject, Grade and Location");
+    //         return;
+    //     }
 
-        alert(
-            `Searching profiles for:\nSubject: ${subject}\nGrade: ${grade}\nLocation: ${location}`
-        );
-    };
+    //     alert(
+    //         `Searching profiles for:\nSubject: ${subject}\nGrade: ${grade}\nLocation: ${location}`
+    //     );
+    // };
 
     return (
     <section className="py-16 md:py-24 bg-[linear-gradient(135deg,rgba(239,246,255,0.7)_0%,#FFFFFF_50%,rgba(240,253,244,0.3)_100%)]">
@@ -67,6 +70,13 @@ const TiredOfPostingSection = () => {
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Getting the best teachers is now easier and faster with Teachinghood's free plan
           </p>
+
+          <button
+            className='bg-blue-500 font-regular text-xl mt-8 p-4 rounded-full text-white hover:bg-blue-600'
+            onClick={() => navigate('/post-job')}
+          >
+            Post a free job today
+          </button>
         </div>
 
         {/* Features */}
@@ -84,10 +94,9 @@ const TiredOfPostingSection = () => {
         </div>
 
         {/* Search Bar */}
-        <div className="bg-white rounded-2xl shadow-xl p-2 md:p-3 max-w-5xl mx-auto">
+        {/* <div className="bg-white rounded-2xl shadow-xl p-2 md:p-3 max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row gap-2">
-
-            {/* Subject */}
+            
             <div className="flex-1 relative">
               <img src={homePageIcons.subjectIcon} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
 
@@ -108,8 +117,7 @@ const TiredOfPostingSection = () => {
                 {open.subject ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </div>
             </div>
-
-            {/* Grade */}
+            
             <div className="flex-1 relative">
               <img src={homePageIcons.gradeIcon} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
 
@@ -131,8 +139,7 @@ const TiredOfPostingSection = () => {
                 {open.grade ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </div>
             </div>
-
-            {/* Location */}
+            
             <div className="flex-1 relative">
               <img src={homePageIcons.locationIcon} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]" size={20} />
 
@@ -154,8 +161,7 @@ const TiredOfPostingSection = () => {
                 {open.location ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </div>
             </div>
-
-            {/* Button */}
+            
             <button
               onClick={handleSearch}
               className="bg-blue-500 hover:bg-blue-700 text-white px-8 py-4 rounded-lg
@@ -165,7 +171,7 @@ const TiredOfPostingSection = () => {
             </button>
 
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );
