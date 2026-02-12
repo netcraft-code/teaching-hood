@@ -147,7 +147,7 @@ const ContactUs = () => {
         </div>
       </section>
       
-      <div className="max-w-6xl grid grid-cols-2 lg:grid-cols-3 gap-4 mt-36 mx-20">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-36 mx-20">
           {/* Contact Form */}
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 lg:col-span-2 col-span-1">
             <div className="space-y-6">

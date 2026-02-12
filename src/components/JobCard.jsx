@@ -397,7 +397,7 @@ const JobCard = () => {
       </div>
 
       {/* Salary Range Filter */}
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
           <img src={findJobIcons.salaryRange} className="w-5 h-5" />
           <h3 className="font-medium">Salary Range</h3>
@@ -465,7 +465,7 @@ const JobCard = () => {
             <span className="text-sm">Per Month</span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Posted Date Filter */}
       <div className="mb-6">

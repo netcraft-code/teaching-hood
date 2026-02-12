@@ -20,16 +20,16 @@ const JobView = ({ jobData }) => {
 
   const userProfile = jobData.user;
 
-  // const formatSalary = (min, max) => {
-  //   return `₹${(min / 1000).toFixed(0)},000 - ₹${(max / 1000).toFixed(0)},000`;
-  // };
-
-  const formatSalary = (minMonthly, maxMonthly) => {
-    const minYearly = minMonthly * 12;
-    const maxYearly = maxMonthly * 12;
-
-    return `₹${minYearly}-₹${maxYearly}`;
+  const formatSalary = (min, max) => {
+    return `₹${(min / 1000).toFixed(0)},000 - ₹${(max / 1000).toFixed(0)},000`;
   };
+
+  // const formatSalary = (minMonthly, maxMonthly) => {
+  //   const minYearly = minMonthly * 12;
+  //   const maxYearly = maxMonthly * 12;
+
+  //   return `₹${minYearly}-₹${maxYearly}`;
+  // };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -322,7 +322,7 @@ const JobView = ({ jobData }) => {
                 <h3 className="text-2xl font-semibold mb-1 flex items-center justify-center">
                   {formatSalary(job.min_salary, job.max_salary)}
                 </h3>
-                <p className="text-sm opacity-90 mb-5 flex items-center justify-center">per annum</p>
+                <p className="text-sm opacity-90 mb-5 flex items-center justify-center">per month</p>
                 
                 <button
                   onClick={() => handleApply(job.id)}
@@ -401,7 +401,7 @@ const JobView = ({ jobData }) => {
               </span>
 
               <p className='mb-6'>
-                {userProfile?.additional_info.about_us}
+                {userProfile?.additional_info?.about_us}
               </p>
 
               {userProfile.userType == 2 && (
