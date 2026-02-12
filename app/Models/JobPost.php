@@ -26,11 +26,17 @@ class JobPost extends Model
         'position',
         'user_id',
         'is_applied',
+        'is_closed',
     ];
 
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function grade()
@@ -45,6 +51,18 @@ class JobPost extends Model
 
     public function like()
     {
-        return $this->belongsTo(LikedJob::class, 'user_id', 'user_id');
+        return $this->belongsTo(LikedJob::class, 'id', 'job_post_id')
+            ->where('user_id', auth()->id());
+    }
+
+    public function appliedJobs()
+    {
+        return $this->hasMany(AppliedJob::class, 'job_post_id');
+    }
+
+    public function applied()
+    {
+        return $this->hasOne(AppliedJob::class, 'job_post_id', 'id')
+            ->where('user_id', auth()->id());
     }
 }

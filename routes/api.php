@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HelperController;
 use App\Http\Controllers\Api\JobPostController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\RazorpayController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register']);
@@ -17,6 +18,8 @@ Route::post('send-otp', [AuthController::class, 'sendOTP']);
 Route::post('verify-otp', [AuthController::class, 'verifyOTP']);
 Route::get('subjects', [HelperController::class, 'getSubjects']);
 Route::get('gradelevels', [HelperController::class, 'getGradeLevel']);
+
+Route::get('create-payment-link', [RazorpayController::class, 'createPaymentLink']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('image/update', [ProfileController::class, 'updateImage']);
@@ -44,3 +47,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('send-message', [AuthController::class, 'sendMessage']);
 });
+
+Route::get('job-posts', [JobPostController::class, 'index']);
+Route::get('job-posts/{job_post}', [JobPostController::class, 'show']);

@@ -18,7 +18,15 @@ class JobPostController extends Controller
         $offset  = (int) request()->get('offset', 0);
 
         $jobs = JobPost::withCount('appliedJobs')
-            ->with('city', 'grade', 'subject')
+            ->with('city', 'grade', 'subject', 'like', 'applied')
+            ->where('is_closed', false)
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('school_name', 'like', '%' . $request->search . '%')
+                        ->orWhere('job_description', 'like', '%' . $request->search . '%')
+                        ->orWhere('position', 'like', '%' . $request->search . '%');
+                });
+            })
             ->when($request->school_name, function ($query) use ($request) {
                 $query->where('school_name', 'like', '%' . $request->school_name . '%');
             })
@@ -45,7 +53,7 @@ class JobPostController extends Controller
             })
             ->when($request->posted_date != 'any', function ($query) use ($request) {
                 match ($request->posted_date) {
-                    '24h' => $query->where('created_at', '>=', Carbon::now()->subHours(24)),
+                    '24h'      => $query->where('created_at', '>=', Carbon::now()->subHours(24)),
                     'week'     => $query->where('created_at', '>=', Carbon::now()->subWeek()),
                     'month'    => $query->where('created_at', '>=', Carbon::now()->subMonth()),
                     default    => null,
@@ -62,6 +70,8 @@ class JobPostController extends Controller
             $job->subject_name = $job->subject?->name;
             $job->grade_name = $job->grade?->name;
             $job->is_liked = $job->like ? true : false;
+            $job->is_applied = $job->applied ? true : false;
+            $job->is_closed = $job->is_closed;
 
             $job->total_applicants = $job->applied_jobs_count;
         });
@@ -71,12 +81,11 @@ class JobPostController extends Controller
         return response_formatter(DEFAULT_200, $jobs, $extraData);
     }
 
-    // CREATE JOB POST
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             // School details
-            'school_name' => 'required|string|max:255|unique:job_posts,school_name',
+            'school_name' => 'required|string|max:255',
             'city_id'     => 'required|integer|exists:cities,id',
 
             'position'  => 'required|string',
@@ -137,7 +146,12 @@ class JobPostController extends Controller
     // 📌 JOB POST DETAIL
     public function show($id)
     {
-        $job = JobPost::findOrFail($id);
+        $job = JobPost::with('city', 'grade', 'subject', 'user.addresses', 'user.additional_info')
+            ->findOrFail($id);
+
+        $job->city_name = $job->city->name;
+        $job->subject_name = $job->subject?->name;
+        $job->grade_name = $job->grade?->name;
 
         return response_formatter(DEFAULT_200, $job);
     }
@@ -149,17 +163,17 @@ class JobPostController extends Controller
 
         $validator = Validator::make($request->all(), [
             // School details
-            'school_name' => 'required|string|max:255|unique:job_posts,school_name,' . $job->id,
+            'school_name' => 'required|string|max:255',
             'city_id'     => 'required|integer|exists:cities,id',
 
-            'position' => 'required|string',
+            'position'  => 'required|string',
 
             // Job details
-            'subject_id' => 'nullable|integer|exists:subjects,id',
-            'grade_id'   => 'nullable|integer|exists:grade_levels,id',
+            'subject_id'  => 'nullable|integer|exists:subjects,id',
+            'grade_id'    => 'nullable|integer|exists:grade_levels,id',
 
             // Facilities
-            'food'          => 'nullable|boolean',
+            'food'         => 'nullable|boolean',
             'accommodation' => 'nullable|boolean',
 
             // Job info
@@ -169,15 +183,11 @@ class JobPostController extends Controller
             'experience_required' => 'required|string|max:100',
 
             // Descriptions
-            'job_description'            => 'required|string',
-            'qualification_requirements' => 'required|string',
+            'job_description'             => 'required|string',
+            'qualification_requirements'  => 'required|string',
 
             // Dates
             'application_deadline' => 'required|date|after:today',
-
-            // Contact
-            'contact_email' => 'required|email|max:255',
-            'contact_phone' => 'required|string|max:20',
 
             // Status
             'status' => 'nullable|boolean',
@@ -205,6 +215,7 @@ class JobPostController extends Controller
             'contact_email'             => $request->contact_email,
             'contact_phone'             => $request->contact_phone,
             'status'                    => $request->status ?? false,
+            'is_closed'                 => false,
         ]);
 
         return response_formatter(DEFAULT_UPDATED_200, $job);
@@ -276,7 +287,7 @@ class JobPostController extends Controller
     public function close($id)
     {
         $jobsPost = JobPost::find($id);
-        $jobsPost->update(['status' => false]);
+        $jobsPost->update(['is_closed' => true]);
 
         return response_formatter(DEFAULT_200, [
             'liked' => true,
@@ -291,6 +302,7 @@ class JobPostController extends Controller
             $offset  = (int) request()->get('offset', 0);
 
             $jobs = JobPost::with('city', 'grade', 'subject')
+                ->where('user_id', auth()->user()->id)
                 ->latest()
                 ->skip($offset)
                 ->paginate($perPage);
@@ -336,7 +348,28 @@ class JobPostController extends Controller
 
         return response_formatter(DEFAULT_200, [
             'applied' => true,
-            'message' => 'Job applied successfully'
+            'message' => 'This job has been applied successfully, Your interest has been expressed to the school'
         ]);
+    }
+
+    public function appliedJobs(Request $request)
+    {
+        $perPage = (int) request()->get('perPage', 10);
+        $offset  = (int) request()->get('offset', 0);
+
+        $appliedJobs = AppliedJob::with('user', 'job_posted')
+            ->where('user_id', auth()->user()->id)
+            ->when($request->search, function ($query) use ($request) {
+                $query->whereHas('job_posted', function ($q) use ($request) {
+                    $q->where('school_name', 'like', '%' . $request->search . '%')
+                        ->orWhere('job_description', 'like', '%' . $request->search . '%')
+                        ->orWhere('position', 'like', '%' . $request->search . '%');
+                });
+            })
+            ->latest()
+            ->skip($offset)
+            ->paginate($perPage);
+
+        return response_formatter(DEFAULT_200, $appliedJobs);
     }
 }

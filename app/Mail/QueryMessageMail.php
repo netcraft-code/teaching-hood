@@ -40,7 +40,7 @@ class QueryMessageMail extends Mailable
         $mail = $this->subject('New Query Message')
             ->view('emails.query-message');
 
-        if ($this->data['attachment']) {
+        if (isset($this->data['attachment'])) {
             if ($this->data['attachment']) {
                 $this->data['attachment']->store('attachment', 'public');
             }
