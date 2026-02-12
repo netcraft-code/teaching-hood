@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Profile from "../pages/Profile";
+import ProfileView from "../pages/ProfileView";
 import PostJob from "../pages/PostJob";
 import FindJob from "../pages/FindJob";
 import ProtectedRoute from "../pages/ProtectedRoute";
@@ -21,6 +22,8 @@ const AppRoutes = () => {
       <Route path="/about-us" element={<AboutUs />} />
       <Route path="/term-condition" element={<TermCondition />} />
       <Route path="/contact-us" element={<ContactUs />} />
+
+      <Route path="/view-profile/:id" element={<ProfileView />} />
 
       {/* Auth pages */}
       <Route

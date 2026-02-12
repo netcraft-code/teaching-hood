@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getProfile, logoutUser, updateAvatarBanner, getVacanies, getAppliedJobs, closeJob } from "../api/auth";
-import { useNavigate } from "react-router-dom";
-import ProfileHeader from "../components/ProfileHeader";
-import EditProfileModal from "../components/EditProfileModal";
-import ImageUploadModal from "../components/ImageUploadModal";
-import VacanciesTab from "../components/profile/VacanciesTab";
-import AppliedTab from "../components/profile/AppliedTab";
+import { viewProfile } from "../api/auth";
 import durationIcon from "../assets/icons/duration.svg";
 import locationIcon from "../assets/icons/location.svg";
 import aboutUsIcon from "../assets/icons/about-us.svg";
@@ -16,6 +10,7 @@ import schoolBannerImage from "../assets/images/school-banner.png";
 import recruiterBannerImage from "../assets/images/recruiter-banner.png";
 import defaultAvatarImage from "../assets/images/default-avatar.png";
 import Header from "../components/Header";
+import { useParams } from 'react-router-dom';
 
 // Constants
 const ROUTES = {
@@ -26,17 +21,17 @@ const ROUTES = {
 const USER_FORM_CONFIG = {
   1: {
     // Teacher
-    tabs: ["overview", "experience", "education", "jobs"],
+    tabs: ["overview", "experience", "education"],
     status: ["Unavailable", "Available"],
   },
   2: {
     // School
-    tabs: ["overview", "vacancies"],
+    tabs: ["overview"],
     status: ["Unverified", "Verified"],
   },
   3: {
     // Recruiter
-    tabs: ["overview", "vacancies"],
+    tabs: ["overview"],
     status: ["Unavailable", "Available"],
   },
 };
@@ -47,32 +42,15 @@ const BANNER_AVATAR_CONFIG = {
   3: { bannerImage: recruiterBannerImage, avatarImage: defaultAvatarImage },
 };
 
-const Profile = () => {
+const ProfileView = () => {
+  const { id } = useParams(); // Get job ID from URL
+
   // State Management
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [editOpen, setEditOpen] = useState(false);
   const [userType, setUserType] = useState(0);
-  const [activeTab, setActiveTab] = useState("overview");
-  const [imageModalOpen, setImageModalOpen] = useState(false);
-  const [imageType, setImageType] = useState(null);
-  
-  // Vacancies State
-  const [createdJobs, setCreatedJobs] = useState([]);
-  const [appliedJobs, setAppliedJobs] = useState([]);
-  const [totalCreatedJobs, setTotalCreatedJobs] = useState(0);
-  const [createdJobLoading, setCreatedJobLoading] = useState(false);
-  const [totalAppliedJobs, setTotalAppliedJobs] = useState(0);
-  const [appliedJobLoading, setAppliedJobLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const navigate = useNavigate();
   const hasFetched = useRef(false);
-  
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
 
   // Helper Functions
   const getBannerAvatar = (url, userType, urlType) => {
@@ -105,153 +83,23 @@ const Profile = () => {
   };
 
   // API Calls
-  const fetchProfile = async () => {
+  const fetchProfile = async (id) => {
     try {
-      const res = await getProfile();
+      const res = await viewProfile(id);
       setProfile(res.data.data);
-      localStorage.setItem("user_type", res.data.data.user_type);
       setUserType(Number(res.data.data.user_type));
     } catch (err) {
-      setError("Unauthorized or session expired");
-      localStorage.removeItem("auth_token");
-      localStorage.removeItem("user_type");
-      navigate(ROUTES.SIGNIN);
+      console.log(err);
     } finally {
       setLoading(false);
     }
-  };
-
-  const fetchVacancies = async (page = 1) => {
-    try {
-      setCreatedJobLoading(true);
-      const res = await getVacanies(page);
-      setCreatedJobs(res.data.data.data);
-      setTotalCreatedJobs(res.data.data.total);
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch vacancies');
-    } finally {
-      setCreatedJobLoading(false);
-    }
-  };
-
-  const buildFilters = (page = 1) => ({
-    page,
-    search: searchQuery,
-  });
-
-  const fetchJobs = async (page = 1) => {
-    try {
-      setAppliedJobLoading(true);
-      const res = await getAppliedJobs(buildFilters(page));
-      setAppliedJobs(res.data.data.data);
-      console.log(res);
-      setTotalAppliedJobs(res.data.data.total);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch jobs");
-    } finally {
-      setAppliedJobLoading(false);
-    }
-  };
-
-  const handleAppliedJobPageChange = (page) => {
-    setCurrentPage(page);
-    fetchJobs(page);
-  };
-
-  const handleJobSearch = () => {
-    setCurrentPage(1);
-    fetchJobs(1);
-  };
-
-  const handleLogout = async () => {
-    setError("");
-    try {
-      const res = await logoutUser();
-      if (res.data.status) {
-        localStorage.removeItem("auth_token");
-        localStorage.removeItem("user_type");
-        navigate(ROUTES.SIGNIN);
-      } else {
-        setError(res.data?.message || "Issue in logout");
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || "Issue in logout. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleImageUpload = async (file, type) => {
-    const fd = new FormData();
-    fd.append(type, file);
-
-    const res = await updateAvatarBanner(fd);
-
-    if (res.data.status) {
-      setProfile((prev) => ({
-        ...prev,
-        avatar_url: type === "avatar_url" ? res.data.data.avatar_url : prev.avatar_url,
-        banner_image_url: type === "banner_image_url" ? res.data.data.banner_image_url : prev.banner_image_url,
-      }));
-    }
-  };
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    
-    if (tab === 'vacancies') {
-      setCurrentPage(1); // Reset to page 1
-      fetchVacancies(1);
-    }
-
-    if (tab === 'jobs') {
-      setCurrentPage(1); // Reset to page 1
-      fetchJobs();
-    }
-  };
-
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-    fetchVacancies(newPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleEditJob = (job) => {
-    navigate(`/edit-job/${job.id}`, {
-      state: { job }  // Pass the entire job object
-    });
-  };
-
-  const handleCloseJob = async (jobId) => {
-  try {
-    const response = await closeJob(jobId);
-
-    if (response.data.status) {
-      setPopupMessage(response.data.data.message);
-
-      setShowPopup(true);
-
-      setCreatedJobs((createdJobs) =>
-        createdJobs.map((job) =>
-          job.id === jobId
-            ? { ...job, is_closed: 1 } // or true (API ke according)
-            : job
-        )
-      );
-    }
-  } catch (error) {
-    console.error(error);
-    setPopupMessage("Failed to close job");
-
-    setShowPopup(true);
-  }
   };
 
   // Effects
   useEffect(() => {
     if (hasFetched.current) return;
     hasFetched.current = true;
-    fetchProfile();
+    fetchProfile(id);
   }, []);
 
   // Get current user config
@@ -266,19 +114,9 @@ const Profile = () => {
     );
   }
 
-  if (error && !profile) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-600">
-        {error}
-      </div>
-    );
-  }
-
   return (
     <>
       <Header />
-      
-      <ProfileHeader onEdit={() => setEditOpen(true)} profile={profile} />
 
       <div className="mx-auto py-6 mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
@@ -293,15 +131,6 @@ const Profile = () => {
                   alt="cover"
                   className="w-full h-32 rounded-t-2xl object-cover"
                 />
-                <button
-                  onClick={() => {
-                    setImageType("banner_image_url");
-                    setImageModalOpen(true);
-                  }}
-                  className="absolute top-3 right-3 bg-white p-1 rounded-full shadow hover:bg-gray-100 w-[30px] h-[30px]"
-                >
-                  ✏️
-                </button>
               </div>
 
               {/* Profile Info */}
@@ -313,15 +142,6 @@ const Profile = () => {
                     alt="avatar"
                     className="w-24 h-24 sm:w-32 sm:h-32 rounded-full -mt-16 object-cover shadow-lg"
                   />
-                  <button
-                    onClick={() => {
-                      setImageType("avatar_url");
-                      setImageModalOpen(true);
-                    }}
-                    className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow hover:bg-gray-100 w-[30px] h-[30px]"
-                  >
-                    ✏️
-                  </button>
                 </div>
 
                 {/* Name & Details */}
@@ -376,7 +196,6 @@ const Profile = () => {
               {currentUser?.tabs.map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => handleTabChange(tab)}
                   className={`px-4 py-2 rounded-lg text-sm capitalize transition ${
                     activeTab === tab
                       ? "bg-blue-500 text-white"
@@ -627,35 +446,6 @@ const Profile = () => {
                   ))}
               </>
             )}
-
-            {/* Jobs Applied Tab */}
-            {activeTab === "jobs" && (
-              <div>
-                <AppliedTab
-                  jobs={appliedJobs}
-                  totalJobs={totalAppliedJobs}
-                  loading={appliedJobLoading}
-                  currentPage={currentPage}
-                  onPageChange={handleAppliedJobPageChange}
-                  onSearch={handleJobSearch}
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                />
-              </div>
-            )}
-
-            {/* Vacancies Tab */}
-            {activeTab === "vacancies" && (
-              <VacanciesTab
-                jobs={createdJobs}
-                totalJobs={totalCreatedJobs}
-                loading={createdJobLoading}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-                onEditJob={handleEditJob}
-                onCloseJob={handleCloseJob}
-              />
-            )}
           </div>
 
           {/* RIGHT SIDEBAR */}
@@ -687,15 +477,6 @@ const Profile = () => {
                       <p>{profile?.additional_info?.preferred_location ?? "--"}</p>
                     </div>
                   </div>
-                  <button className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition">
-                    Upload Latest Resume
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition"
-                  >
-                    Logout
-                  </button>
                 </>
               ) : (
                 <>
@@ -735,71 +516,14 @@ const Profile = () => {
                       <p className="text-xs">{getFormattedAddress(profile?.addresses)}</p>
                     </div>
                   </div>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition"
-                  >
-                    Logout
-                  </button>
                 </>
               )}
             </div>
           </div>
         </div>
       </div>
-
-      {showPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-md p-6 text-center">
-            <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
-              <svg
-                className="w-6 h-6 text-green-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-
-            <p className="text-gray-800 text-sm mb-6">
-              {popupMessage}
-            </p>
-
-            <button
-              onClick={() => setShowPopup(false)}
-              className="px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition"
-            >
-              OK
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Modals */}
-      <EditProfileModal
-        open={editOpen}
-        onClose={() => setEditOpen(false)}
-        profile={profile}
-        onUpdate={(updatedProfile) => setProfile(updatedProfile)}
-      />
-
-      <ImageUploadModal
-        open={imageModalOpen}
-        type={imageType}
-        onClose={() => {
-          setImageModalOpen(false);
-          setImageType(null);
-        }}
-        onUpload={handleImageUpload}
-      />
     </>
   );
 };
 
-export default Profile;
+export default ProfileView;

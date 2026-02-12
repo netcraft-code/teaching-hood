@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import backIcon from "../assets/icons/back.svg";
 import editIcon from "../assets/icons/edit.svg";
@@ -8,6 +9,9 @@ const routes = {
 
 const ProfileHeader = ({ onEdit, profile }) => {
   const navigate = useNavigate();
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
 
   const USER_FORM_CONFIG = {
     1: { // Teacher
@@ -24,9 +28,11 @@ const ProfileHeader = ({ onEdit, profile }) => {
   };
 
   const handleShare = async () => {
-    const profileRoute = `${window.location.origin}${routes.VIEW_PROFILE}${id ? `/${profile.id}` : ""}`;
+    const profileRoute = `${window.location.origin}${routes.VIEW_PROFILE}/${profile.id}`;
     await navigator.clipboard.writeText(profileRoute);
-    alert("Profile link copied!");
+
+    setPopupMessage("Profile link copied!");
+    setShowPopup(true);
   };
 
   return (
@@ -75,6 +81,39 @@ const ProfileHeader = ({ onEdit, profile }) => {
         </div>
 
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-md p-6 text-center">
+            <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            <p className="text-gray-800 text-sm mb-6">
+              {popupMessage}
+            </p>
+
+            <button
+              onClick={() => setShowPopup(false)}
+              className="px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

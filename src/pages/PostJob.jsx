@@ -22,6 +22,8 @@ const PostJob = () => {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
 
   useEffect(() => {
     fetchDropdowns();
@@ -199,14 +201,16 @@ const PostJob = () => {
       console.log("Job saved successfully:", response.data);
 
       // ✅ Success UX
-      alert(
-        status === 1 ? "Job published successfully!" : "Job saved as draft!",
-      );
+      setPopupMessage(status === 1 ? "Job published successfully!" : "Job saved as draft!");
+
+      setShowPopup(true);
 
       if (response?.data?.status === true) {
         navigate("/profile"); // 👈 redirect here
       } else {
-        alert("Job saved but something looks wrong.");
+        setPopupMessage("Job saved but something looks wrong.");
+
+        setShowPopup(true);
       }
     } catch (error) {
       console.error("Job save failed:", error);
@@ -216,7 +220,9 @@ const PostJob = () => {
         setErrors(error.response.data.errors || {});
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
-        alert("Something went wrong. Please try again.");
+        setPopupMessage("Something went wrong. Please try again.");
+
+        setShowPopup(true);
       }
     } finally {
       setSubmitting(false);
@@ -932,6 +938,39 @@ const PostJob = () => {
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-md p-6 text-center">
+            <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            <p className="text-gray-800 text-sm mb-6">
+              {popupMessage}
+            </p>
+
+            <button
+              onClick={() => setShowPopup(false)}
+              className="px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

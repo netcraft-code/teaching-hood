@@ -10,7 +10,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const[pageLoading, setPageLoading] = useState(true)
+  const [pageLoading, setPageLoading] = useState(true)
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
   const [userType, setUserType] = useState(0);
   const [form, setForm] = useState({
     first_name: "",
@@ -89,6 +91,15 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       avatarUrl: "Bussiness Profile",
       firstNameLabel: "Bussiness Name",
     },
+  };
+
+  const isValidDateRange = (from, to) => {
+    if (!from || !to) return true;
+
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
+    
+    return fromDate <= toDate;
   };
 
   /* ---------------- LOAD DATA ---------------- */
@@ -280,6 +291,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     const e = {};
 
     if (!form.first_name) e.first_name = "Name is required";
+
     if (!form.phone) e.phone = "Phone is required";
     
     if (userType == 1) {      
@@ -310,6 +322,20 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       ) {
         e.max_salary = "Max salary must be greater than Min salary";
       }
+
+      form.additional_info.experience.forEach((exp, index) => {
+        if (!isValidDateRange(exp.from, exp.to)) {
+          e[`experience_${index}`] =
+            "From date cannot be greater than To date";
+        }
+      });
+      
+      form.additional_info.education.forEach((edu, index) => {
+        if (!isValidDateRange(edu.from, edu.to)) {
+          e[`education_${index}`] =
+            "From date cannot be greater than To date";
+        }
+      });
     }
 
     if(userType == 2) {
@@ -331,7 +357,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!form.country) e.country = "Country required";
 
     setErrors(e);
-    console.log(e);
+    
     return Object.keys(e).length === 0;
   };
 
@@ -432,6 +458,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
       // FILES
       if (form.avatar_url) fd.append("avatar_url", form.avatar_url);
+
       if (form.banner_image_url) fd.append("banner_image_url", form.banner_image_url);
 
       await updateProfile(fd);
@@ -440,13 +467,14 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       
       onUpdate(res.data.data);
 
-      alert("Profile updated successfully ✅");
-      onClose();
+      setPopupMessage("Profile updated successfully ✅");
+      setShowPopup(true);
     } catch (error) {
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
       } else {
-        alert("Server error, try again later");
+        setPopupMessage("Server error, try again later");
+        setShowPopup(true);
       }
     } finally {
       setLoading(false);
@@ -1024,6 +1052,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     >
                       + Add Experience
                     </button>
+
+                    <ErrorText error={errors[`experience_${index}`]} />
                   </div>
                 ))}
               </Section>
@@ -1126,6 +1156,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     >
                       + Add Education
                     </button>
+
+                    <ErrorText error={errors[`education_${index}`]} />
                   </div>
                 ))}
               </Section>
@@ -1264,6 +1296,42 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           padding: 0.5rem;
         }
       `}</style>
+
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-md p-6 text-center">
+            <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            <p className="text-gray-800 text-sm mb-6">
+              {popupMessage}
+            </p>
+
+            <button
+              onClick={() => {
+                setShowPopup(false);
+                onClose();   // 👉 modal yaha close hoga
+              }}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

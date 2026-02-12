@@ -5,6 +5,9 @@ import { sendMessage } from "../api/auth";
 import schoolFindRightIcon from "./../assets/icons/school-find-right.svg"
 
 const ContactUsSection = () => {
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -38,7 +41,8 @@ const ContactUsSection = () => {
 
       await sendMessage(payload);
 
-      alert("Message sent successfully!");
+      setPopupMessage("Message sent successfully!");
+      setShowPopup(true);
 
       setFormData({
         name: '',
@@ -48,7 +52,9 @@ const ContactUsSection = () => {
       });
     } catch (error) {
       console.error("Contact form error:", error);
-      alert("Something went wrong. Please try again.");
+      
+      setPopupMessage("Something went wrong. Please try again.");
+      setShowPopup(true);
     }
   };
 
@@ -102,7 +108,7 @@ const ContactUsSection = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="your.email@example.com"
+                  placeholder="Your.email@example.com"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                 />
               </div>
@@ -215,6 +221,39 @@ const ContactUsSection = () => {
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-md p-6 text-center">
+            <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            <p className="text-gray-800 text-sm mb-6">
+              {popupMessage}
+            </p>
+
+            <button
+              onClick={() => setShowPopup(false)}
+              className="px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

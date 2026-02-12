@@ -3,14 +3,22 @@ import { jobViewIcons } from "./../assets/icons/view-job/ViewJob";
 import Header from "./Header";
 import Footer from "./Footer";
 import { likeUnlikeJobApi, applyJobApi } from "../api/auth";
+import { useNavigate } from "react-router-dom";
+
+const routes = {
+  VIEW_PROFILE: "/view-profile",
+};
 
 const JobView = ({ jobData }) => {
   const [isApplied, setIsApplied] = useState(jobData?.is_applied || false);
   const [isLiked, setIsLiked] = useState(jobData?.is_liked || false);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
+  const navigate = useNavigate();
 
   const job = jobData;
+
+  const userProfile = jobData.user;
 
   // const formatSalary = (min, max) => {
   //   return `₹${(min / 1000).toFixed(0)},000 - ₹${(max / 1000).toFixed(0)},000`;
@@ -119,7 +127,9 @@ const JobView = ({ jobData }) => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+      setPopupMessage("Link copied to clipboard!");
+
+      setShowPopup(true);
     }
   };
 
@@ -196,8 +206,8 @@ const JobView = ({ jobData }) => {
                       <img src={jobViewIcons.location} className="w-4 h-4" />
                     </div>
                     <span>
-                      <span className="text-xs text-gray-400">Location</span>
-                      <span className="text-xs text-gray-700">{job.city_name}</span>
+                      <div className="text-xs text-gray-400">Location</div>
+                      <div className="text-xs text-gray-700">{job.city_name}</div>
                     </span>
                   </div>
 
@@ -247,8 +257,8 @@ const JobView = ({ jobData }) => {
               </div>
             </div>
 
-            {/* Job Description */}
-            <div className="rounded-3xl shadow-lg p-6 mt-8">
+            {/* Key Responsibilities */}
+            {/* <div className="rounded-3xl shadow-lg p-6 mt-8">
               <div className="flex items-center gap-3 mb-5">
                 <div className="w-10 h-10 bg-gradient-to-b from-[#34A853] to-[#F6C23E] rounded-lg flex items-center justify-center">
                   <img src={jobViewIcons.keyResponsibility} alt="Description" className="w-6 h-6" />
@@ -273,7 +283,7 @@ const JobView = ({ jobData }) => {
                     ))}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Job Requirement */}
             <div className="rounded-3xl shadow-lg p-6 mt-8">
@@ -382,14 +392,40 @@ const JobView = ({ jobData }) => {
             <div className='mt-8 shadow-xl p-6 rounded-xl'>
               <span className='font-semibold'>About the School</span>
 
-              <div className='w-16 h-16 flex items-center justify-center bg-blue-100 rounded-xl'>
+              <div className='w-16 h-16 my-4 flex items-center justify-center bg-blue-100 rounded-xl'>
                 <img src={jobViewIcons.school} className='w-10 h-10' />
               </div>
 
               <span>
-                
+                {userProfile.first_name}
               </span>
 
+              <p className='mb-6'>
+                {userProfile?.additional_info.about_us}
+              </p>
+
+              {userProfile.userType == 2 && (
+                <div>
+                  <div className='mb-2'>
+                    {userProfile?.address?.students + ' ' + userProfile?.address?.city + ' ' + userProfile?.address?.state}
+                  </div>
+
+                  {userProfile?.additional_info?.students && (
+                    <div className='mb-6'>
+                      {userProfile?.additional_info?.students || 0}+
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <button
+                onClick={() =>
+                  navigate(`${routes.VIEW_PROFILE}${id ? `/${userProfile.id}` : ""}`)
+                }
+                className="w-full py-2 text-blue-500 rounded-xl border-2 border-blue-500"
+              >
+                View {userProfile.user_type == 2 ? "School" : "Recruiter"} Profile
+              </button>
             </div>
           </div>
         </div>
@@ -427,7 +463,6 @@ const JobView = ({ jobData }) => {
           </div>
         </div>
       )}
-
     </div>
 
     <Footer />

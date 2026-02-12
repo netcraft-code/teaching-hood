@@ -7,6 +7,9 @@ import { Mail, Phone, Send } from 'lucide-react';
 import { sendMessage } from "../api/auth";
 
 const ContactUs = () => {
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
+
     const stats = [
         {
           icon: <Mail className="w-4 h-4 text-blue-600" />,
@@ -51,7 +54,9 @@ const ContactUs = () => {
     
           await sendMessage(payload);
     
-          alert("Message sent successfully!");
+          
+          setPopupMessage("Message sent successfully!");
+          setShowPopup(true);
     
           setFormData({
             name: '',
@@ -63,9 +68,11 @@ const ContactUs = () => {
           });
         } catch (error) {
           console.error("Contact form error:", error);
-          alert("Something went wrong. Please try again.");
+
+          setPopupMessage("Something went wrong. Please try again.");
+          setShowPopup(true);
         }
-      };
+    };
 
   return (
     <>
@@ -82,7 +89,7 @@ const ContactUs = () => {
                 <div className="flex justify-center mb-6 sm:mb-8">
                     <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-md">
                         <span className="bg-green-500 w-2 h-2 rounded-full"></span>
-                        <span className="text-sm font-regular text-gray-700">About Teachinghood</span>
+                        <span className="text-sm font-regular text-gray-700">We're here to help</span>
                     </div>
                 </div>
                 
@@ -99,20 +106,12 @@ const ContactUs = () => {
                             `
                         }}
                     >
-                        Transforming Education
+                        Get in Touch
                     </h1>
                     <h2
-                        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-white tracking-tight px-4"
-                        style={{ 
-                            textShadow: `
-                                0px 0px 0px rgba(0, 0, 0, 0.10),
-                                3px 3px 3px rgba(0, 0, 0, 0.10),
-                                3px 4px 4px rgba(0, 0, 0, 0.10),
-                                3px 4px 4px rgba(0, 0, 0, 0.10)
-                            `
-                        }}
+                        className="text-lg font-semibold tracking-tight px-4"
                     >
-                        Hiring in India
+                        Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
                     </h2>
                 </div>
             </div>
@@ -324,12 +323,12 @@ const ContactUs = () => {
             {/* Connect */}
             <div className="flex rounded-2xl p-6 shadow-md w-full">
               <div className='w-full'>
-                <div className="flex items-center space-x-2 mb-1">
+                <div className="flex items-center mb-1">
                     <h4 className="font-semibold text-sm">Connect With Us</h4>
                 </div>
 
                 {/* Paragraph */}
-                <p className="grid grid-cols-3 gap-2 text-xs text-gray-600 w-full leading-6 mt-4">
+                <div className="flex justify-evenly items-center w-full mt-4">
                     {[
                         {
                         Icon: contactUsIcons.fb,
@@ -345,16 +344,16 @@ const ContactUs = () => {
                         },
                     ].map(({ Icon, url }, i) => (
                         <a
-                            key={i}
-                            href={url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-9 h-9 rounded-md bg-blue-100 flex items-center justify-center hover:bg-[#1e3a52] transition cursor-pointer"
+                        key={i}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 rounded-md bg-blue-100 flex items-center justify-center hover:bg-[#1e3a52] transition"
                         >
-                            <img src={Icon} size={14} />
+                        <img src={Icon} className="w-4 h-4" alt="" />
                         </a>
                     ))}
-                </p>
+                </div>
               </div>
             </div>
 
@@ -434,6 +433,39 @@ const ContactUs = () => {
             </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-md p-6 text-center">
+            <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            <p className="text-gray-800 text-sm mb-6">
+              {popupMessage}
+            </p>
+
+            <button
+              onClick={() => setShowPopup(false)}
+              className="px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>
