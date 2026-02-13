@@ -79,7 +79,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     2: {
       positionLabel: "Educational Board",
       positionPlaceHolder: "e.g., CBSE Affiliated School",
-      totalExperience: "Year Established",
+      totalExperience: "Years since establishment",
       avatarUrl: "School Profile Picture",
       firstNameLabel: "School Name",
     },

@@ -556,24 +556,28 @@ const PostJob = () => {
                       Salary Range (per month){" "}
                       <span className="text-red-500">*</span>
                     </label>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="flex gap-3 items-center w-full">
                       <input
                         type="text"
                         name="min_salary"
                         value={formData.min_salary}
                         onChange={handleInputChange}
                         placeholder="₹25,000"
-                        className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                       />
+
+                      <span className="text-gray-400 font-medium whitespace-nowrap">to</span>
+
                       <input
                         type="text"
                         name="max_salary"
                         value={formData.max_salary}
                         onChange={handleInputChange}
                         placeholder="₹35,000"
-                        className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                       />
                     </div>
+
                     {/* <p className="text-xs text-gray-500 mt-2">💡 Tip: Jobs with salary info get 3x more applications.</p> */}
 
                     {errors.salary && (
