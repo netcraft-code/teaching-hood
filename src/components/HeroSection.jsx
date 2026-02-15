@@ -14,7 +14,7 @@ const HeroSection = () => {
   const [location, setLocation] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
 
   const [open, setOpen] = useState({
     subject: false,
@@ -50,9 +50,10 @@ const HeroSection = () => {
       return;
     }
 
-    setPopupMessage(`Searching profiles for:\nSubject: ${subject}\nGrade: ${grade}\nLocation: ${location}`),
-
-    setShowPopup(true);
+    (setPopupMessage(
+      `Searching profiles for:\nSubject: ${subject}\nGrade: ${grade}\nLocation: ${location}`,
+    ),
+      setShowPopup(true));
   };
 
   return (
@@ -143,8 +144,8 @@ const HeroSection = () => {
 
               {/* Subheading */}
               <p className="text-[16px] sm:text-[18px] md:text-[20px] font-medium font-sf leading-[28px] text-center text-[#404145] mb-8 md:mb-12 px-4">
-                Find your next teaching job by simply entering Subject, Grade and
-                Location below
+                Find your next teaching job by simply entering Subject, Grade
+                and Location below
               </p>
 
               {/* Search Form - Better responsive */}
@@ -169,7 +170,11 @@ const HeroSection = () => {
                         Subject (e.g., Mathematics)
                       </option>
                       {subjects.map((s) => (
-                        <option key={s.id} value={s.name} className="text-black">
+                        <option
+                          key={s.id}
+                          value={s.name}
+                          className="text-black"
+                        >
                           {s.name}
                         </option>
                       ))}
@@ -204,7 +209,11 @@ const HeroSection = () => {
                         Grade (e.g., Primary)
                       </option>
                       {grades.map((g) => (
-                        <option key={g.id} value={g.name} className="text-black">
+                        <option
+                          key={g.id}
+                          value={g.name}
+                          className="text-black"
+                        >
                           {g.name}
                         </option>
                       ))}
@@ -268,11 +277,11 @@ const HeroSection = () => {
                   </button>
                 </div>
               </div>
-              <p className="mt-4 text-[16px] sm:text-[18px] md:text-[20px] font-medium font-sf leading-[28px] text-center text-[#404145] mb-8 md:mb-12 px-4">
-                If you are looking for a Principal / Vice Principal / Co-ordinator
-                role, search in the Grade and Location sections
-              </p>
             </div>
+            <p className="mt-4 text-[16px] sm:text-[18px] md:text-[18px] font-medium font-sf leading-[28px] text-center text-[#404145] mb-8 md:mb-12 px-4">
+              If you are looking for a Principal / Vice Principal / Co-ordinator
+              role, search in the Grade and Location sections
+            </p>
           </div>
         </div>
       </section>
@@ -296,9 +305,7 @@ const HeroSection = () => {
               </svg>
             </div>
 
-            <p className="text-gray-800 text-sm mb-6">
-              {popupMessage}
-            </p>
+            <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>
 
             <button
               onClick={() => setShowPopup(false)}

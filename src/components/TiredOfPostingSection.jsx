@@ -72,7 +72,7 @@ const TiredOfPostingSection = () => {
           </p>
 
           <button
-            className='bg-blue-500 font-regular text-xl mt-8 p-4 rounded-full text-white hover:bg-blue-600'
+            className='bg-blue-500 font-regular text-xl mt-8 p-2 rounded-full text-white hover:bg-blue-600'
             onClick={() => navigate('/post-job')}
           >
             Post a free job today

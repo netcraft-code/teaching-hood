@@ -75,7 +75,7 @@ const SchoolsSection = () => {
             </div>
             <a
               href="/signup"
-              className="inline-flex items-center space-x-2 px-4 py-1 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white"
+              className="relative top-[7px] h-[25px] inline-flex items-center space-x-2 px-4 py-1 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white"
             >
               Post a Job
             </a>
