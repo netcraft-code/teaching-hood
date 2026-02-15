@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Book, MapPin, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { HeroImages } from "../assets/images/HeroImages";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
 import { getCities, getGradeLevels, getSubjects } from "../api/auth";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const [subjects, setSubjects] = useState([]);
@@ -15,6 +16,8 @@ const HeroSection = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
+
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState({
     subject: false,
@@ -50,9 +53,9 @@ const HeroSection = () => {
       return;
     }
 
-    setPopupMessage(`Searching profiles for:\nSubject: ${subject}\nGrade: ${grade}\nLocation: ${location}`),
-
-    setShowPopup(true);
+    navigate(
+      `/find-job?subject=${subject}&grade=${grade}&city=${location}`
+    );
   };
 
   return (
@@ -169,7 +172,7 @@ const HeroSection = () => {
                         Subject (e.g., Mathematics)
                       </option>
                       {subjects.map((s) => (
-                        <option key={s.id} value={s.name} className="text-black">
+                        <option key={s.id} value={s.id} className="text-black">
                           {s.name}
                         </option>
                       ))}
@@ -204,7 +207,7 @@ const HeroSection = () => {
                         Grade (e.g., Primary)
                       </option>
                       {grades.map((g) => (
-                        <option key={g.id} value={g.name} className="text-black">
+                        <option key={g.id} value={g.id} className="text-black">
                           {g.name}
                         </option>
                       ))}
@@ -241,7 +244,7 @@ const HeroSection = () => {
                       {cities.map((city) => (
                         <option
                           key={city.id}
-                          value={city.name}
+                          value={city.id}
                           className="text-black"
                         >
                           {city.name}

@@ -339,7 +339,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     }
 
     if(userType == 2) {
-      if (!form.additional_info.website) e.website = "Website required";
+      // if (!form.additional_info.website) e.website = "Website required";
       if (!form.additional_info.students) e.students = "Students required";
       if (!form.additional_info.teachers) e.teachers = "Teachers required";
       if (!form.board) e.board = "Board required";
@@ -547,7 +547,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             {/* Phone Number, Position, Board, Total Experience */}
             <Grid>
               {/* Phone Number */}
-              <Field label="Phone Number">
+              <Field label="Phone Number" required>
                 <div className="grid grid-cols-5 gap-2">
                   <input
                     type="text"
@@ -888,7 +888,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
                 {/* Students, Teachers, Website */}
                 <Grid>
-                  <Field label="Total No. of Students">
+                  <Field label="Total No. of Students" required>
                     <div className="flex items-center gap-2">
                       <input
                         type="number"
@@ -902,7 +902,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     <ErrorText error={errors.students} />
                   </Field>
 
-                  <Field label="Total No. of Teachers">
+                  <Field label="Total No. of Teachers" required>
                     <div className="flex items-center gap-2">
                       <input
                         type="number"

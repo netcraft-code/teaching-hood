@@ -75,7 +75,7 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border-t-4 ${testimonial.borderColor}`}
+              className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border-t-4 ${testimonial.borderColor} flex flex-col`}
             >
               {/* Quote Icon */}
               <div className="mb-4">
@@ -117,7 +117,7 @@ const TestimonialsSection = () => {
               </div>
 
               {/* Quote */}
-              <p className="text-gray-700 mb-6 leading-relaxed">
+              <p className="text-gray-700 mb-6 leading-relaxed flex-grow">
                 "{testimonial.quote}"
               </p>
 

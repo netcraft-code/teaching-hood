@@ -79,8 +79,8 @@ export const getStates = () => {
 };
 
 // Cities
-export const getCities = () => {
-  return api.get("/api/city");
+export const getCities = (params = {}) => {
+  return api.get("/api/city",  { params });
 };
 
 // View profile by ID

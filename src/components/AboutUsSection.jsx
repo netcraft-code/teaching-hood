@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Home, Briefcase, CheckCircle, Eye, Star, Lightbulb, Zap, Layers, Check, Calendar } from 'lucide-react';
+import { Eye, Layers, } from 'lucide-react';
 import { HeroImages } from "../assets/images/HeroImages";
 import { aboutUsIcons } from "./../assets/icons/about-us/aboutUs"
 

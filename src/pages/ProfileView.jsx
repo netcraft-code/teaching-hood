@@ -127,7 +127,7 @@ const ProfileView = () => {
               {/* Banner Image */}
               <div className="relative">
                 <img
-                  src={getBannerAvatar(profile.banner_image_url, userType, "bannerImage")}
+                  src={getBannerAvatar(profile?.banner_image_url, userType, "bannerImage")}
                   alt="cover"
                   className="w-full h-32 rounded-t-2xl object-cover"
                 />

@@ -4,11 +4,10 @@ import {
   X,
   Menu,
 } from "lucide-react";
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { HeroImages } from "../assets/images/HeroImages";
 import { getCities, getJobs, likeUnlikeJobApi, applyJobApi } from "../api/auth";
 import { findJobIcons } from "./../assets/icons/findJobIcons";
-import { Range, getTrackBackground } from "react-range";
 
 const JobCard = () => {
   const [jobs, setJobs] = useState([]);
@@ -31,14 +30,21 @@ const JobCard = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
 
+  const [searchParams] = useSearchParams();
+
+  const subjectParam = searchParams.get("subject");
+  const gradeParam = searchParams.get("grade");
+  const cityParam = searchParams.get("city");
+
   const MIN = 0;
   const MAX = 50;
   const STEP = 1;
 
   const buildFilters = () => {
+    setSelectedCity(cityParam || "all");
     return {
       page: currentPage,
-      city_id: selectedCity !== "all" ? selectedCity : "all",
+      city_id: cityParam || "all",
       job_type: selectedJobType !== "all" ? selectedJobType : "all",
       experience: selectedExperience !== "0-1" ? selectedExperience : "0-1",
       min_salary: salaryRange[0] > 0 ? salaryRange[0] * 100000 : 0,
@@ -46,6 +52,8 @@ const JobCard = () => {
       posted: postedDate !== "any" ? postedDate : "any",
       search: searchQuery || "",
       radius: searchRadius > 0 ? searchRadius : 0,
+      subject_id: subjectParam || "all",
+      grade_id: gradeParam || "all",
     };
   };
 

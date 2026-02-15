@@ -25,6 +25,12 @@ const PostJob = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
 
+  const [allCities, setAllCities] = useState([]);
+  const [displayedCities, setDisplayedCities] = useState([]);
+  const [cityPage, setCityPage] = useState(1);
+  const [citySearch, setCitySearch] = useState("");
+  const ITEMS_PER_PAGE = 20;
+
   useEffect(() => {
     fetchDropdowns();
   }, []);

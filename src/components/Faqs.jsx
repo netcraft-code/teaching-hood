@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronDown, ChevronUp, MessageCircle } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
 
 const Faqs = () => {
