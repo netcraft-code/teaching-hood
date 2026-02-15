@@ -1,5 +1,12 @@
 import { use, useEffect, useState } from "react";
-import { getSubjects, getGradeLevels, getCities, updateProfile, getProfile, getStates } from "../api/auth";
+import {
+  getSubjects,
+  getGradeLevels,
+  getCities,
+  updateProfile,
+  getProfile,
+  getStates,
+} from "../api/auth";
 
 const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [subjects, setSubjects] = useState([]);
@@ -10,9 +17,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [pageLoading, setPageLoading] = useState(true)
+  const [pageLoading, setPageLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
   const [userType, setUserType] = useState(0);
   const [form, setForm] = useState({
     first_name: "",
@@ -45,8 +52,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           college_university: "",
           from: "",
           to: "",
-          percentage: ""
-        }
+          percentage: "",
+        },
       ],
       experience: [
         {
@@ -54,15 +61,15 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           school: "",
           from: "",
           to: "",
-          key_responsibilities: [""]
-        }
+          key_responsibilities: [""],
+        },
       ],
       preferred_location: "",
       students: "",
       teachers: "",
       why_join_us: [""],
-      website: ""
-    }
+      website: "",
+    },
   });
 
   const selectedLocations = form.additional_info.preferred_location || [];
@@ -98,7 +105,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
     const fromDate = new Date(from);
     const toDate = new Date(to);
-    
+
     return fromDate <= toDate;
   };
 
@@ -112,7 +119,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           getSubjects(),
           getGradeLevels(),
           getStates(),
-          getCities()
+          getCities(),
         ]);
 
         setSubjects(subjectsRes.data.data);
@@ -122,7 +129,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
         if (profile) {
           setUserType(profile.user_type);
-          
+
           setForm({
             first_name: profile.first_name || "",
             last_name: profile.last_name || "",
@@ -141,17 +148,21 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             country: profile?.addresses?.country || "India",
             additional_info: {
               about_us: profile.additional_info?.about_us || "",
-              subjects: Array.isArray(profile.additional_info?.subjects) 
+              subjects: Array.isArray(profile.additional_info?.subjects)
                 ? profile.additional_info.subjects
                 : [],
               grade_levels: Array.isArray(profile.additional_info?.grade_levels)
                 ? profile.additional_info.grade_levels
                 : [],
               achievement: profile.additional_info?.achievement
-                ? profile.additional_info.achievement.split(",").map(a => a.trim())
+                ? profile.additional_info.achievement
+                    .split(",")
+                    .map((a) => a.trim())
                 : [""],
               certification: profile.additional_info?.certification
-                ? profile.additional_info.certification.split(",").map(c => c.trim())
+                ? profile.additional_info.certification
+                    .split(",")
+                    .map((c) => c.trim())
                 : [""],
               availability: profile.additional_info?.availability || "",
               min_salary: profile.additional_info?.min_salary || "",
@@ -165,8 +176,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       college_university: "",
                       from: "",
                       to: "",
-                      percentage: ""
-                    }
+                      percentage: "",
+                    },
                   ],
 
               experience: Array.isArray(profile.additional_info?.experience)
@@ -177,21 +188,25 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       school: "",
                       from: "",
                       to: "",
-                      key_responsibilities: [""]
-                    }
+                      key_responsibilities: [""],
+                    },
                   ],
 
               preferred_location: profile.additional_info?.preferred_location
-                ? profile.additional_info.preferred_location.split(",").map(l => l.trim())
+                ? profile.additional_info.preferred_location
+                    .split(",")
+                    .map((l) => l.trim())
                 : "",
-              
+
               students: profile?.additional_info?.students || 0,
               teachers: profile?.additional_info?.teachers || 0,
               why_join_us: profile?.additional_info?.why_join_us
-                ? profile.additional_info.why_join_us.split(",").map(c => c.trim())
+                ? profile.additional_info.why_join_us
+                    .split(",")
+                    .map((c) => c.trim())
                 : [""],
-              website: profile?.additional_info?.website || ""
-            }
+              website: profile?.additional_info?.website || "",
+            },
           });
         }
       } finally {
@@ -207,19 +222,19 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     const { name, value, type, files } = e.target;
     setForm({ ...form, [name]: type === "file" ? files[0] : value });
 
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [name]: ""
+      [name]: "",
     }));
   };
 
   const handleAdditional = (name, value) => {
     setForm({
       ...form,
-      additional_info: { ...form.additional_info, [name]: value }
+      additional_info: { ...form.additional_info, [name]: value },
     });
 
-    setErrors(prev => {
+    setErrors((prev) => {
       const updated = { ...prev };
 
       // normal field
@@ -230,15 +245,15 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   };
 
   const handleMulti = (e, field, source) => {
-    const ids = Array.from(e.target.selectedOptions, o => Number(o.value));
+    const ids = Array.from(e.target.selectedOptions, (o) => Number(o.value));
     const data = source
-      .filter(i => ids.includes(i.id))
-      .map(i => ({ id: i.id, name: i.name }));
+      .filter((i) => ids.includes(i.id))
+      .map((i) => ({ id: i.id, name: i.name }));
     handleAdditional(field, data);
 
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [field]: ""
+      [field]: "",
     }));
   };
 
@@ -260,22 +275,19 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   };
 
   const filteredLocations = locations.filter((loc) =>
-    loc.name.toLowerCase().includes(search.toLowerCase())
+    loc.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   const addLocation = (location) => {
     if (!selectedLocations.includes(location)) {
-      handleAdditional(
-        "preferred_location",
-        [...selectedLocations, location]
-      );
+      handleAdditional("preferred_location", [...selectedLocations, location]);
     }
 
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      preferred_location: ""
+      preferred_location: "",
     }));
-    
+
     setSearch("");
     setShowDropdown(false);
   };
@@ -293,29 +305,29 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!form.first_name) e.first_name = "Name is required";
 
     if (!form.phone) e.phone = "Phone is required";
-    
-    if (userType == 1) {      
+
+    if (userType == 1) {
       if (!form.additional_info.subjects.length)
         e.subjects = "At least one subject required";
-  
+
       if (!form.additional_info.grade_levels.length)
         e.grade_levels = "At least one grade level required";
-  
+
       if (!form.additional_info.education[0]?.degree)
         e.education = "Education details required";
-  
+
       if (!form.additional_info.experience[0]?.position)
         e.experience = "Experience details required";
-  
+
       if (!form.additional_info.preferred_location.length)
         e.preferred_location = "Preferred location required";
-  
+
       if (!form.additional_info.min_salary)
         e.min_salary = "Min salary required";
-  
+
       if (!form.additional_info.max_salary)
         e.max_salary = "Max salary required";
-  
+
       if (
         Number(form.additional_info.max_salary) <
         Number(form.additional_info.min_salary)
@@ -325,27 +337,25 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
       form.additional_info.experience.forEach((exp, index) => {
         if (!isValidDateRange(exp.from, exp.to)) {
-          e[`experience_${index}`] =
-            "From date cannot be greater than To date";
+          e[`experience_${index}`] = "From date cannot be greater than To date";
         }
       });
-      
+
       form.additional_info.education.forEach((edu, index) => {
         if (!isValidDateRange(edu.from, edu.to)) {
-          e[`education_${index}`] =
-            "From date cannot be greater than To date";
+          e[`education_${index}`] = "From date cannot be greater than To date";
         }
       });
     }
 
-    if(userType == 2) {
+    if (userType == 2) {
       if (!form.additional_info.website) e.website = "Website required";
       if (!form.additional_info.students) e.students = "Students required";
       if (!form.additional_info.teachers) e.teachers = "Teachers required";
       if (!form.board) e.board = "Board required";
     }
 
-    if(userType == 1 || userType == 3) {
+    if (userType == 1 || userType == 3) {
       if (!form.position) e.position = "Position is required";
     }
 
@@ -357,18 +367,15 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!form.country) e.country = "Country required";
 
     setErrors(e);
-    
+
     return Object.keys(e).length === 0;
   };
 
   const ErrorText = ({ error }) =>
-    error ? (
-      <p className="text-red-500 text-xs mt-1">{error}</p>
-    ) : null;
+    error ? <p className="text-red-500 text-xs mt-1">{error}</p> : null;
 
   const inputClass = (err) =>
-  `input ${err ? "border-red-500 focus:border-red-500 focus:ring-red-200" : ""}`;
-
+    `input ${err ? "border-red-500 focus:border-red-500 focus:ring-red-200" : ""}`;
 
   const handleSubmit = async () => {
     if (!validate()) return;
@@ -378,22 +385,25 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       setErrors({});
 
       const fd = new FormData();
-      
+
       if (userType == 1) {
         // SUBJECTS
         form.additional_info.subjects.forEach((s, i) =>
-          fd.append(`subjects[${i}]`, s.id)
+          fd.append(`subjects[${i}]`, s.id),
         );
 
         // GRADE LEVELS
         form.additional_info.grade_levels.forEach((g, i) =>
-          fd.append(`grade_levels[${i}]`, g.id)
+          fd.append(`grade_levels[${i}]`, g.id),
         );
 
         // EDUCATION
         form.additional_info.education.forEach((edu, i) => {
           fd.append(`education[${i}][degree]`, edu.degree);
-          fd.append(`education[${i}][college_university]`, edu.college_university);
+          fd.append(
+            `education[${i}][college_university]`,
+            edu.college_university,
+          );
           fd.append(`education[${i}][from]`, edu.from);
           fd.append(`education[${i}][to]`, edu.to);
           fd.append(`education[${i}][percentage]`, edu.percentage);
@@ -413,7 +423,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
         // PREFERRED LOCATION (as string)
         const preferredLocation = form.additional_info.preferred_location
-          .filter(l => l.trim() !== "")
+          .filter((l) => l.trim() !== "")
           .join(", ");
 
         fd.append("preferred_location", preferredLocation);
@@ -423,18 +433,33 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
         fd.append("min_salary", form.additional_info.min_salary);
         fd.append("max_salary", form.additional_info.max_salary);
 
-        fd.append("achievement", form.additional_info.achievement .filter(a => a.trim() !== "") .join(","));
-        fd.append("certification", form.additional_info.certification .filter(c => c.trim() !== "") .join(","));
+        fd.append(
+          "achievement",
+          form.additional_info.achievement
+            .filter((a) => a.trim() !== "")
+            .join(","),
+        );
+        fd.append(
+          "certification",
+          form.additional_info.certification
+            .filter((c) => c.trim() !== "")
+            .join(","),
+        );
 
         fd.append("last_name", form.last_name);
-        
+
         if (form.resume) fd.append("resume", form.resume);
       }
 
       if (userType == 2) {
         fd.append("students", form.additional_info.students);
         fd.append("teachers", form.additional_info.teachers);
-        fd.append("why_join_us", form.additional_info.why_join_us .filter(c => c.trim() !== "") .join(","));
+        fd.append(
+          "why_join_us",
+          form.additional_info.why_join_us
+            .filter((c) => c.trim() !== "")
+            .join(","),
+        );
         fd.append("website", form.additional_info.website);
         fd.append("board", form.board);
       }
@@ -459,12 +484,13 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       // FILES
       if (form.avatar_url) fd.append("avatar_url", form.avatar_url);
 
-      if (form.banner_image_url) fd.append("banner_image_url", form.banner_image_url);
+      if (form.banner_image_url)
+        fd.append("banner_image_url", form.banner_image_url);
 
       await updateProfile(fd);
 
       const res = await getProfile();
-      
+
       onUpdate(res.data.data);
 
       setPopupMessage("Profile updated successfully ✅");
@@ -497,14 +523,17 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
         <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-6 rounded-t-2xl z-10">
           <Header title="Edit Profile" onClose={onClose} />
         </div>
-        
+
         <div className="px-8 py-6">
           {/* Personal Information */}
           <Section title="Personal Information" icon="👤">
             {/* Name, Email Address */}
             <Grid>
               {/* First Name Input */}
-              <Field label={USER_BASE_DETAILS[userType]?.firstNameLabel} required>
+              <Field
+                label={USER_BASE_DETAILS[userType]?.firstNameLabel}
+                required
+              >
                 <input
                   type="text"
                   name="first_name"
@@ -573,14 +602,19 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               {/* Position */}
               {userType == 1 && (
                 <>
-                  <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
+                  <Field
+                    label={USER_BASE_DETAILS[userType]?.positionLabel}
+                    required
+                  >
                     <input
                       type="text"
                       name="position"
                       className={inputClass(errors.position)}
                       value={form.position}
                       onChange={handleChange}
-                      placeholder={USER_BASE_DETAILS[userType]?.positionPlaceHolder}
+                      placeholder={
+                        USER_BASE_DETAILS[userType]?.positionPlaceHolder
+                      }
                     />
 
                     <ErrorText error={errors.position} />
@@ -591,14 +625,19 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               {/* Board */}
               {userType == 2 && (
                 <>
-                  <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
+                  <Field
+                    label={USER_BASE_DETAILS[userType]?.positionLabel}
+                    required
+                  >
                     <input
                       type="text"
                       name="board"
                       className={inputClass(errors.board)}
                       value={form.board}
                       onChange={handleChange}
-                      placeholder={USER_BASE_DETAILS[userType]?.positionPlaceHolder}
+                      placeholder={
+                        USER_BASE_DETAILS[userType]?.positionPlaceHolder
+                      }
                     />
 
                     <ErrorText error={errors.board} />
@@ -671,7 +710,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   className={inputClass(errors.pincode)}
                   value={form.pincode}
                   onChange={(e) =>
-                    setForm({ ...form, pincode: e.target.value.replace(/\D/g, "") })
+                    setForm({
+                      ...form,
+                      pincode: e.target.value.replace(/\D/g, ""),
+                    })
                   }
                   placeholder="6-digit pincode"
                 />
@@ -747,16 +789,20 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     <select
                       multiple
                       className={`h-40 overflow-y-auto ${inputClass(errors.subjects)}`}
-                      value={form.additional_info.subjects.map(s => String(s.id))}
+                      value={form.additional_info.subjects.map((s) =>
+                        String(s.id),
+                      )}
                       onChange={(e) => handleMulti(e, "subjects", subjects)}
                     >
-                      {subjects.map(s => (
+                      {subjects.map((s) => (
                         <option key={s.id} value={s.id} className="py-2">
                           {s.name}
                         </option>
                       ))}
                     </select>
-                    <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Hold Ctrl/Cmd to select multiple
+                    </p>
 
                     <ErrorText error={errors.subjects} />
                   </Field>
@@ -765,16 +811,20 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     <select
                       multiple
                       className={`h-40 overflow-y-auto ${inputClass(errors.grade_levels)}`}
-                      value={form.additional_info.grade_levels.map(g => String(g.id))}
+                      value={form.additional_info.grade_levels.map((g) =>
+                        String(g.id),
+                      )}
                       onChange={(e) => handleMulti(e, "grade_levels", grades)}
                     >
-                      {grades.map(g => (
+                      {grades.map((g) => (
                         <option key={g.id} value={g.id} className="py-2">
                           {g.name}
                         </option>
                       ))}
                     </select>
-                    <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Hold Ctrl/Cmd to select multiple
+                    </p>
 
                     <ErrorText error={errors.grade_levels} />
                   </Field>
@@ -805,7 +855,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     <select
                       className="input"
                       value={form.additional_info.availability}
-                      onChange={(e) => handleAdditional("availability", e.target.value)}
+                      onChange={(e) =>
+                        handleAdditional("availability", e.target.value)
+                      }
                     >
                       <option value="">Select Employment Type</option>
                       <option value="Full Time">Full Time</option>
@@ -818,7 +870,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     <select
                       className="input"
                       value={form.additional_info.notice_period}
-                      onChange={(e) => handleAdditional("notice_period", e.target.value)}
+                      onChange={(e) =>
+                        handleAdditional("notice_period", e.target.value)
+                      }
                     >
                       <option value="">Select notice period</option>
                       <option value="Immediate">Immediate</option>
@@ -836,14 +890,18 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     <div className="flex-1">
                       {/* Min Salary Input */}
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                          $
+                        </span>
                         <input
                           type="number"
                           min={1000}
                           className={inputClass(errors.min_salary)}
                           style={{ paddingLeft: "2.5rem" }} // 👈 FIX
                           value={form.additional_info.min_salary}
-                          onChange={(e) => handleAdditional("min_salary", e.target.value)}
+                          onChange={(e) =>
+                            handleAdditional("min_salary", e.target.value)
+                          }
                           placeholder="Min"
                         />
                       </div>
@@ -856,14 +914,18 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     {/* Max Salary Input */}
                     <div className="flex-1">
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                          $
+                        </span>
                         <input
                           type="number"
                           min={form.additional_info.min_salary}
                           className={inputClass(errors.max_salary)}
                           style={{ paddingLeft: "2.5rem" }} // 👈 FIX
                           value={form.additional_info.max_salary}
-                          onChange={(e) => handleAdditional("max_salary", e.target.value)}
+                          onChange={(e) =>
+                            handleAdditional("max_salary", e.target.value)
+                          }
                           placeholder="Max"
                         />
                       </div>
@@ -896,7 +958,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         min="0"
                         className={inputClass(errors.students)}
                         value={form.additional_info.students}
-                        onChange={(e) => handleAdditional("students", e.target.value)}
+                        onChange={(e) =>
+                          handleAdditional("students", e.target.value)
+                        }
                       />
                     </div>
                     <ErrorText error={errors.students} />
@@ -910,7 +974,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         min="0"
                         className={inputClass(errors.teachers)}
                         value={form.additional_info.teachers}
-                        onChange={(e) => handleAdditional("teachers", e.target.value)}
+                        onChange={(e) =>
+                          handleAdditional("teachers", e.target.value)
+                        }
                       />
                     </div>
                     <ErrorText error={errors.teachers} />
@@ -924,22 +990,27 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         min="0"
                         className={inputClass(errors.website)}
                         value={form.additional_info.website}
-                        onChange={(e) => handleAdditional("website", e.target.value)}
+                        onChange={(e) =>
+                          handleAdditional("website", e.target.value)
+                        }
                       />
                     </div>
-                    
+
                     <ErrorText error={errors.website} />
                   </Field>
                 </Grid>
               </>
             )}
           </Section>
-          
+
           {userType == 1 && (
             <>
               <Section title="Experience" icon="💼">
                 {form.additional_info.experience.map((exp, index) => (
-                  <div key={index} className="border rounded-xl p-4 bg-gray-50 space-y-3 relative">
+                  <div
+                    key={index}
+                    className="border rounded-xl p-4 bg-gray-50 space-y-3 relative"
+                  >
                     {/* REMOVE BUTTON */}
                     {form.additional_info.experience.length > 1 && (
                       <button
@@ -955,7 +1026,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         ✕
                       </button>
                     )}
-                    
+
                     <Grid>
                       <Field label="Position">
                         <input
@@ -1044,8 +1115,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                             school: "",
                             from: "",
                             to: "",
-                            key_responsibilities: [""]
-                          }
+                            key_responsibilities: [""],
+                          },
                         ])
                       }
                       className="text-blue-600 text-sm font-medium"
@@ -1060,7 +1131,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
               <Section title="Education" icon="🎓">
                 {form.additional_info.education.map((edu, index) => (
-                  <div key={index} className="border rounded-xl p-4 space-y-3 bg-gray-50 relative">
+                  <div
+                    key={index}
+                    className="border rounded-xl p-4 space-y-3 bg-gray-50 relative"
+                  >
                     {form.additional_info.education.length > 1 && (
                       <button
                         type="button"
@@ -1075,7 +1149,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         ✕
                       </button>
                     )}
-
                     <Grid>
                       <Field label="Degree">
                         <input
@@ -1102,7 +1175,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         />
                       </Field>
                     </Grid>
-
                     <Grid>
                       <Field label="From">
                         <input
@@ -1130,33 +1202,39 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         />
                       </Field>
                     </Grid>
-
                     <Field label="Percentage">
-                      <input
-                        type="number"
-                        className="input"
-                        value={edu.percentage}
-                        onChange={(e) => {
-                          const arr = [...form.additional_info.education];
-                          arr[index].percentage = e.target.value;
-                          handleAdditional("education", arr);
-                        }}
-                      />
+                      <div className="flex gap-4 items-center">
+                        <input
+                          type="number"
+                          className="input"
+                          value={edu.percentage}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.education];
+                            arr[index].percentage = e.target.value;
+                            handleAdditional("education", arr);
+                          }}
+                        />
+                        %
+                      </div>
                     </Field>
-
                     <button
                       type="button"
                       onClick={() =>
                         handleAdditional("education", [
                           ...form.additional_info.education,
-                          { degree: "", college_university: "", from: "", to: "", percentage: "" }
+                          {
+                            degree: "",
+                            college_university: "",
+                            from: "",
+                            to: "",
+                            percentage: "",
+                          },
                         ])
                       }
                       className="text-blue-600 text-sm font-medium"
                     >
                       + Add Education
                     </button>
-
                     <ErrorText error={errors[`education_${index}`]} />
                   </div>
                 ))}
@@ -1168,7 +1246,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 {/* Selected Chips */}
                 <div className="flex flex-wrap gap-2">
                   {selectedLocations.map((loc, index) => (
-
                     <span
                       key={index}
                       className="flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm"
@@ -1213,7 +1290,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         </div>
                       ))
                     ) : (
-                      <div className="px-3 py-2 text-gray-500">No results found</div>
+                      <div className="px-3 py-2 text-gray-500">
+                        No results found
+                      </div>
                     )}
                   </div>
                 )}
@@ -1230,7 +1309,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     className="file-input"
                   />
                   {form.resume && (
-                    <p className="text-sm text-green-600 mt-2">✓ {form.resume.name}</p>
+                    <p className="text-sm text-green-600 mt-2">
+                      ✓ {form.resume.name}
+                    </p>
                   )}
                 </Field>
               </Section>
@@ -1316,14 +1397,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </svg>
             </div>
 
-            <p className="text-gray-800 text-sm mb-6">
-              {popupMessage}
-            </p>
+            <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>
 
             <button
               onClick={() => {
                 setShowPopup(false);
-                onClose();   // 👉 modal yaha close hoga
+                onClose(); // 👉 modal yaha close hoga
               }}
               className="px-4 py-2 bg-blue-500 text-white rounded-lg"
             >
@@ -1345,8 +1424,18 @@ const Header = ({ title, onClose }) => (
       className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
       aria-label="Close"
     >
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M6 18L18 6M6 6l12 12"
+        />
       </svg>
     </button>
   </div>
@@ -1376,7 +1465,15 @@ const Field = ({ label, required, children }) => (
   </div>
 );
 
-const Dynamic = ({ label, icon, values, onAdd, onChange, onRemove, placeholder }) => {
+const Dynamic = ({
+  label,
+  icon,
+  values,
+  onAdd,
+  onChange,
+  onRemove,
+  placeholder,
+}) => {
   const safeValues = Array.isArray(values) ? values : [""];
 
   return (
@@ -1391,8 +1488,18 @@ const Dynamic = ({ label, icon, values, onAdd, onChange, onRemove, placeholder }
           onClick={onAdd}
           className="px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-1"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4v16m8-8H4"
+            />
           </svg>
           Add
         </button>
@@ -1413,8 +1520,18 @@ const Dynamic = ({ label, icon, values, onAdd, onChange, onRemove, placeholder }
                 className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                 aria-label="Remove"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             )}
