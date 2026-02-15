@@ -46,6 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::post('send-message', [AuthController::class, 'sendMessage']);
+
+    Route::post('payment/success', [RazorpayController::class, 'success']);
 });
 
 Route::get('job-posts', [JobPostController::class, 'index']);

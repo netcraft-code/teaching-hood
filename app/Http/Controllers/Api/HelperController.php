@@ -13,35 +13,35 @@ class HelperController extends Controller
 {
     public function getSubjects()
     {
-        $subjects = Subject::all();
+        $subjects = Subject::orderBy('name', 'asc')->get();
 
         return response_formatter(DEFAULT_200, $subjects);
     }
 
     public function getGradeLevel()
     {
-        $gradelevel = GradeLevel::all();
+        $gradelevel = GradeLevel::orderBy('name', 'asc')->get();
 
         return response_formatter(DEFAULT_200, $gradelevel);
     }
 
     public function city()
     {
-        $cities = City::all();
+        $cities = City::orderBy('name', 'asc')->get();
 
         return response_formatter(DEFAULT_200, $cities);
     }
 
     public function states()
     {
-        $states = State::all();
+        $states = State::orderBy('name', 'asc')->get();
 
         return response_formatter(DEFAULT_200, $states);
     }
 
     public function countries()
     {
-        $countries = Country::all();
+        $countries = Country::orderBy('name', 'asc')->get();
 
         return response_formatter(DEFAULT_200, $countries);
     }
