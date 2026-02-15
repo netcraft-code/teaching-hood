@@ -420,7 +420,7 @@ const JobView = ({ jobData }) => {
 
               <button
                 onClick={() =>
-                  navigate(`${routes.VIEW_PROFILE}${id ? `/${userProfile.id}` : ""}`)
+                  navigate(`${routes.VIEW_PROFILE}${`/${userProfile.id}`}`)
                 }
                 className="w-full py-2 text-blue-500 rounded-xl border-2 border-blue-500"
               >

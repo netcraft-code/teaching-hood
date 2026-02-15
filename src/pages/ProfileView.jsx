@@ -49,6 +49,8 @@ const ProfileView = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userType, setUserType] = useState(0);
+    const [activeTab, setActiveTab] = useState("overview");
+  
 
   const hasFetched = useRef(false);
 
@@ -101,6 +103,10 @@ const ProfileView = () => {
     hasFetched.current = true;
     fetchProfile(id);
   }, []);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   // Get current user config
   const currentUser = USER_FORM_CONFIG[userType];
@@ -196,6 +202,7 @@ const ProfileView = () => {
               {currentUser?.tabs.map((tab) => (
                 <button
                   key={tab}
+                  onClick={() => handleTabChange(tab)}
                   className={`px-4 py-2 rounded-lg text-sm capitalize transition ${
                     activeTab === tab
                       ? "bg-blue-500 text-white"
@@ -340,12 +347,12 @@ const ProfileView = () => {
                           </div>
                           <p className="text-sm text-gray-600 mt-1">Teachers</p>
                         </div>
-                        <div className="border p-6 bg-red-50 rounded-xl">
+                        {/* <div className="border p-6 bg-red-50 rounded-xl">
                           <div className="text-red-500 text-2xl font-semibold">
                             {totalCreatedJobs || 0}
                           </div>
                           <p className="text-sm text-gray-600 mt-1">Open Positions</p>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
 
