@@ -283,7 +283,7 @@ const PostJob = () => {
             {/* Left Column - Form */}
             <div className="lg:col-span-2 space-y-6">
               {/* Basic Information Card */}
-              <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
+              <div className="bg-white rounded-2xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
                     <img
@@ -538,7 +538,7 @@ const PostJob = () => {
               </div>
 
               {/* Job Details Card */}
-              <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
+              <div className="bg-white rounded-2xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
                     <img
@@ -689,7 +689,7 @@ const PostJob = () => {
               </div>
 
               {/* Requirements & Description Card */}
-              <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
+              <div className="bg-white rounded-2xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
                     <img
@@ -768,7 +768,7 @@ const PostJob = () => {
               </div>
 
               {/* Contact Information Card */}
-              <div className="bg-white rounded-2xl p-6 sm:p-8 transition-shadow duration-300">
+              <div className="bg-white rounded-2xl transition-shadow duration-300">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
                     <img

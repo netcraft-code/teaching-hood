@@ -87,14 +87,14 @@ const RecruitersSection = () => {
           <div>
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-yellow-50 px-4 rounded-full mb-6 py-2">
-              <span className="text-lg text-yellow-400 font-semibold text-[22px]">
+              <span className="text-lg text-[darkorange] font-semibold text-[22px]">
                 For Recruiters
               </span>
             </div>
 
             <a
               href="/signup"
-              className="inline-flex items-center space-x-2 px-4 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white py-1"
+              className="relative top-[7px] inline-flex items-center space-x-2 px-4 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white py-1 h-[25px]"
             >
               Post a Job
             </a>

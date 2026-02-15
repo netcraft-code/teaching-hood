@@ -75,7 +75,7 @@ const SchoolsSection = () => {
             </div>
             <a
               href="/signup"
-              className="inline-flex items-center space-x-2 px-4 py-1 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white"
+              className="relative top-[7px] h-[25px] inline-flex items-center space-x-2 px-4 py-1 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white"
             >
               Post a Job
             </a>
@@ -191,7 +191,7 @@ const SchoolsSection = () => {
             <div className="absolute -z-10 -top-4 -right-4 w-32 h-32 bg-green-100 rounded-full opacity-50"></div>
           </div> */}
 
-          <div className="relative w-full">
+          <div className="relative w-full px-4">
             <img src={schoolSectionLeftImage} className="w-full object-cover h-[400px] sm:h-[500px] md:h-[500px] rounded-2xl" />
           </div>
         </div>
