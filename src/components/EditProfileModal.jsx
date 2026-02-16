@@ -348,7 +348,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       });
     }
 
-    if(userType == 2) {
+    if (userType == 2) {
       // if (!form.additional_info.website) e.website = "Website required";
       if (!form.additional_info.students) e.students = "Students required";
       if (!form.additional_info.teachers) e.teachers = "Teachers required";
@@ -1150,15 +1150,26 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       </button>
                     )}
                     <Grid>
-                      <Field label="Degree">
+                      <Field
+                        label={
+                          <div className="flex items-center gap-2">
+                            <span>Degree</span>
+                            <span className="text-xs text-gray-500">
+                              (Use standard, official degree format with correct
+                              capitalization, e.g., B.Sc, LLB)
+                            </span>
+                          </div>
+                        }
+                      >
                         <input
-                          className={inputClass(errors.education)}
+                          className={`${inputClass(errors.education)} transition focus:ring-2 focus:ring-primary/30`}
                           value={edu.degree}
                           onChange={(e) => {
                             const arr = [...form.additional_info.education];
                             arr[index].degree = e.target.value;
                             handleAdditional("education", arr);
                           }}
+                          placeholder="Enter degree"
                         />
                         <ErrorText error={errors.education} />
                       </Field>
