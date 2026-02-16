@@ -39,29 +39,38 @@ const QuickLinksSection = () => {
 
       {/* Quick Links Section */}
       <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
-          {quickLinks.map((link, index) => {
-            const isActive = link.active; // set true for "Uttar Pradesh Jobs"
+        <div className="overflow-x-auto">
+          <div
+            className="
+        grid grid-rows-2 grid-flow-col
+        auto-cols-[320px]
+        gap-6
+        w-max
+      "
+          >
+            {quickLinks.map((link, index) => {
+              const isActive = link.active;
 
-            return (
-              <button
-                key={index}
-                className={`
-            w-full max-w-[320px] h-[90px]
-            flex items-center justify-center
-            rounded-xl border text-xl font-semibold
-            transition-all duration-200
-            ${
-              isActive
-                ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                : "bg-white text-gray-900 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
-            }
-          `}
-              >
-                {link.city_name}
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={index}
+                  className={`
+              h-[90px]
+              flex items-center justify-center
+              rounded-xl border text-xl font-semibold
+              transition-all duration-200
+              ${
+                isActive
+                  ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                  : "bg-white text-gray-900 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+              }
+            `}
+                >
+                  {link.city_name}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

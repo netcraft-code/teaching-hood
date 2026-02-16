@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getProfile, logoutUser, updateAvatarBanner, getVacanies, getAppliedJobs, closeJob } from "../api/auth";
+import {
+  getProfile,
+  logoutUser,
+  updateAvatarBanner,
+  getVacanies,
+  getAppliedJobs,
+  closeJob,
+} from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
 import EditProfileModal from "../components/EditProfileModal";
@@ -57,7 +64,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [imageType, setImageType] = useState(null);
-  
+
   // Vacancies State
   const [createdJobs, setCreatedJobs] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
@@ -70,9 +77,9 @@ const Profile = () => {
 
   const navigate = useNavigate();
   const hasFetched = useRef(false);
-  
+
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
 
   // Helper Functions
   const getBannerAvatar = (url, userType, urlType) => {
@@ -88,7 +95,20 @@ const Profile = () => {
   const formatDate = (dateStr) => {
     if (!dateStr) return "Present";
     const [year, month] = dateStr.split("-");
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     return `${months[parseInt(month) - 1]} ${year}`;
   };
 
@@ -128,7 +148,7 @@ const Profile = () => {
       setCreatedJobs(res.data.data.data);
       setTotalCreatedJobs(res.data.data.total);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch vacancies');
+      setError(err.response?.data?.message || "Failed to fetch vacancies");
     } finally {
       setCreatedJobLoading(false);
     }
@@ -175,7 +195,9 @@ const Profile = () => {
         setError(res.data?.message || "Issue in logout");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Issue in logout. Please try again.");
+      setError(
+        err.response?.data?.message || "Issue in logout. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -190,21 +212,25 @@ const Profile = () => {
     if (res.data.status) {
       setProfile((prev) => ({
         ...prev,
-        avatar_url: type === "avatar_url" ? res.data.data.avatar_url : prev.avatar_url,
-        banner_image_url: type === "banner_image_url" ? res.data.data.banner_image_url : prev.banner_image_url,
+        avatar_url:
+          type === "avatar_url" ? res.data.data.avatar_url : prev.avatar_url,
+        banner_image_url:
+          type === "banner_image_url"
+            ? res.data.data.banner_image_url
+            : prev.banner_image_url,
       }));
     }
   };
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    
-    if (tab === 'vacancies') {
+
+    if (tab === "vacancies") {
       setCurrentPage(1); // Reset to page 1
       fetchVacancies(1);
     }
 
-    if (tab === 'jobs') {
+    if (tab === "jobs") {
       setCurrentPage(1); // Reset to page 1
       fetchJobs();
     }
@@ -213,38 +239,38 @@ const Profile = () => {
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
     fetchVacancies(newPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleEditJob = (job) => {
     navigate(`/edit-job/${job.id}`, {
-      state: { job }  // Pass the entire job object
+      state: { job }, // Pass the entire job object
     });
   };
 
   const handleCloseJob = async (jobId) => {
-  try {
-    const response = await closeJob(jobId);
+    try {
+      const response = await closeJob(jobId);
 
-    if (response.data.status) {
-      setPopupMessage(response.data.data.message);
+      if (response.data.status) {
+        setPopupMessage(response.data.data.message);
+
+        setShowPopup(true);
+
+        setCreatedJobs((createdJobs) =>
+          createdJobs.map((job) =>
+            job.id === jobId
+              ? { ...job, is_closed: 1 } // or true (API ke according)
+              : job,
+          ),
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      setPopupMessage("Failed to close job");
 
       setShowPopup(true);
-
-      setCreatedJobs((createdJobs) =>
-        createdJobs.map((job) =>
-          job.id === jobId
-            ? { ...job, is_closed: 1 } // or true (API ke according)
-            : job
-        )
-      );
     }
-  } catch (error) {
-    console.error(error);
-    setPopupMessage("Failed to close job");
-
-    setShowPopup(true);
-  }
   };
 
   // Effects
@@ -277,7 +303,7 @@ const Profile = () => {
   return (
     <>
       <Header />
-      
+
       <ProfileHeader onEdit={() => setEditOpen(true)} profile={profile} />
 
       <div className="mx-auto py-6 mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -289,7 +315,11 @@ const Profile = () => {
               {/* Banner Image */}
               <div className="relative">
                 <img
-                  src={getBannerAvatar(profile.banner_image_url, userType, "bannerImage")}
+                  src={getBannerAvatar(
+                    profile.banner_image_url,
+                    userType,
+                    "bannerImage",
+                  )}
                   alt="cover"
                   className="w-full h-32 rounded-t-2xl object-cover"
                 />
@@ -309,7 +339,11 @@ const Profile = () => {
                 {/* Avatar */}
                 <div className="relative">
                   <img
-                    src={getBannerAvatar(profile.avatar_url, userType, "avatarImage")}
+                    src={getBannerAvatar(
+                      profile.avatar_url,
+                      userType,
+                      "avatarImage",
+                    )}
                     alt="avatar"
                     className="w-24 h-24 sm:w-32 sm:h-32 rounded-full -mt-16 object-cover shadow-lg"
                   />
@@ -327,7 +361,8 @@ const Profile = () => {
                 {/* Name & Details */}
                 <div className="flex-1 mt-6">
                   <h2 className="text-xl sm:text-3xl font-semibold mb-3">
-                    {profile.first_name} {userType === 1 ? profile.last_name : ""}
+                    {profile.first_name}{" "}
+                    {userType === 1 ? profile.last_name : ""}
                   </h2>
                   <p className="text-m text-gray-500">
                     {userType === 2 ? profile?.board : profile?.position}
@@ -400,7 +435,8 @@ const Profile = () => {
                     About
                   </h3>
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    {profile?.additional_info?.about_us || "No description provided."}
+                    {profile?.additional_info?.about_us ||
+                      "No description provided."}
                   </p>
                 </div>
 
@@ -411,7 +447,11 @@ const Profile = () => {
                     <div className="bg-white rounded-xl shadow p-6">
                       <h3 className="flex items-center gap-3 font-semibold mb-5">
                         <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100">
-                          <img src={teachingExpertiseIcon} alt="Expertise" className="w-6 h-6" />
+                          <img
+                            src={teachingExpertiseIcon}
+                            alt="Expertise"
+                            className="w-6 h-6"
+                          />
                         </span>
                         Teaching Expertise
                       </h3>
@@ -424,7 +464,10 @@ const Profile = () => {
                                 ? profile.additional_info.subjects
                                 : []
                               ).map((s, i) => (
-                                <span key={i} className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full">
+                                <span
+                                  key={i}
+                                  className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
+                                >
                                   {s.name}
                                 </span>
                               ))
@@ -436,11 +479,16 @@ const Profile = () => {
                         <p className="text-sm font-medium mb-2">Grade Levels</p>
                         <div className="flex flex-wrap gap-2">
                           {profile?.additional_info?.grade_levels
-                            ? (Array.isArray(profile?.additional_info?.grade_levels)
+                            ? (Array.isArray(
+                                profile?.additional_info?.grade_levels,
+                              )
                                 ? profile.additional_info.grade_levels
                                 : []
                               ).map((s, i) => (
-                                <span key={i} className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full">
+                                <span
+                                  key={i}
+                                  className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-full"
+                                >
                                   {s.name}
                                 </span>
                               ))
@@ -463,7 +511,10 @@ const Profile = () => {
                                 .split(",")
                                 .filter(Boolean)
                                 .map((item, i) => (
-                                  <li key={i} className="flex items-start gap-2">
+                                  <li
+                                    key={i}
+                                    className="flex items-start gap-2"
+                                  >
                                     <span className="text-green-600">✓</span>
                                     <span>{item.trim()}</span>
                                   </li>
@@ -484,7 +535,10 @@ const Profile = () => {
                                 .split(",")
                                 .filter(Boolean)
                                 .map((item, i) => (
-                                  <li key={i} className="flex items-start gap-2">
+                                  <li
+                                    key={i}
+                                    className="flex items-start gap-2"
+                                  >
                                     <span className="text-yellow-500">★</span>
                                     <span>{item.trim()}</span>
                                   </li>
@@ -503,7 +557,11 @@ const Profile = () => {
                     <div className="bg-white rounded-xl shadow p-6">
                       <h3 className="flex items-center gap-3 font-semibold mb-5">
                         <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100">
-                          <img src={schoolStatisticIcon} alt="Statistics" className="w-6 h-6" />
+                          <img
+                            src={schoolStatisticIcon}
+                            alt="Statistics"
+                            className="w-6 h-6"
+                          />
                         </span>
                         School Statistics
                       </h3>
@@ -525,7 +583,9 @@ const Profile = () => {
                           <div className="text-red-500 text-2xl font-semibold">
                             {totalCreatedJobs || 0}
                           </div>
-                          <p className="text-sm text-gray-600 mt-1">Open Positions</p>
+                          <p className="text-sm text-gray-600 mt-1">
+                            Open Positions
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -556,77 +616,102 @@ const Profile = () => {
             )}
 
             {/* Experience Tab */}
-            {activeTab === "experience" && profile?.additional_info?.experience && (
-              <>
-                {profile.additional_info.experience
-                  .slice()
-                  .reverse()
-                  .map((exp, index) => (
-                    <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
-                      <div className="flex justify-between items-start mb-3">
-                        <div className="flex items-center gap-5">
-                          <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
-                            🏫
+            {activeTab === "experience" &&
+              profile?.additional_info?.experience && (
+                <>
+                  {profile.additional_info.experience
+                    .slice()
+                    .reverse()
+                    .map((exp, index) => (
+                      <div
+                        key={index}
+                        className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition"
+                      >
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex items-center gap-5">
+                            <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
+                              🏫
+                            </div>
+                            <div>
+                              <h3 className="text-xl text-gray-800">
+                                {exp.position}
+                              </h3>
+                              <p className="text-blue-500 font-medium">
+                                {exp.school}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="text-xl text-gray-800">{exp.position}</h3>
-                            <p className="text-blue-500 font-medium">{exp.school}</p>
-                          </div>
+                          <span className="px-3 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
+                            {exp.to ? "Past" : "Current"}
+                          </span>
                         </div>
-                        <span className="px-3 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
-                          {exp.to ? "Past" : "Current"}
-                        </span>
+
+                        <p className="text-sm text-gray-600 mb-3 pl-20">
+                          {formatDate(exp.from)} - {formatDate(exp.to)}
+                        </p>
+
+                        {exp.key_responsibilities && (
+                          <div className="pl-20">
+                            <p className="text-sm font-medium text-gray-700 mb-2">
+                              Key Responsibilities:
+                            </p>
+                            <ul className="space-y-2">
+                              {Array.isArray(exp.key_responsibilities) &&
+                                exp.key_responsibilities.map((resp, idx) => (
+                                  <li
+                                    key={idx}
+                                    className="text-gray-700 text-sm flex items-start"
+                                  >
+                                    <span className="text-blue-500 mr-2">
+                                      •
+                                    </span>
+                                    <span>{resp}</span>
+                                  </li>
+                                ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
-
-                      <p className="text-sm text-gray-600 mb-3 pl-20">
-                        {formatDate(exp.from)} - {formatDate(exp.to)}
-                      </p>
-
-                      {exp.key_responsibilities && (
-                        <div className="pl-20">
-                          <p className="text-sm font-medium text-gray-700 mb-2">Key Responsibilities:</p>
-                          <ul className="space-y-2">
-                            {Array.isArray(exp.key_responsibilities) &&
-                              exp.key_responsibilities.map((resp, idx) => (
-                                <li key={idx} className="text-gray-700 text-sm flex items-start">
-                                  <span className="text-blue-500 mr-2">•</span>
-                                  <span>{resp}</span>
-                                </li>
-                              ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-              </>
-            )}
+                    ))}
+                </>
+              )}
 
             {/* Education Tab */}
-            {activeTab === "education" && profile?.additional_info?.education && (
-              <>
-                {profile.additional_info.education
-                  .slice()
-                  .reverse()
-                  .map((edu, index) => (
-                    <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
-                      <div className="flex items-center gap-5 mb-3">
-                        <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
-                          🎓
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="text-xl text-gray-800">{edu.degree}</h3>
-                          <p className="text-green-500 font-medium">{edu.college_university}</p>
-                          <p className="text-sm text-gray-600 mt-1">
-                            {formatDate(edu.from)} - {formatDate(edu.to)}
-                            <span className="text-gray-500 mx-3">•</span>
-                            <span className="text-blue-400">{edu.percentage}%</span>
-                          </p>
+            {activeTab === "education" &&
+              profile?.additional_info?.education && (
+                <>
+                  {profile.additional_info.education
+                    .slice()
+                    .reverse()
+                    .map((edu, index) => (
+                      <div
+                        key={index}
+                        className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition"
+                      >
+                        <div className="flex items-center gap-5 mb-3">
+                          <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
+                            🎓
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl text-gray-800">
+                              {edu.degree}
+                            </h3>
+                            <p className="text-green-500 font-medium">
+                              {edu.college_university}
+                            </p>
+                            <p className="text-sm text-gray-600 mt-1">
+                              {formatDate(edu.from)} - {formatDate(edu.to)}
+                              <span className="text-gray-500 mx-3">•</span>
+                              <span className="text-blue-400">
+                                {edu.percentage}%
+                              </span>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-              </>
-            )}
+                    ))}
+                </>
+              )}
 
             {/* Jobs Applied Tab */}
             {activeTab === "jobs" && (
@@ -674,7 +759,7 @@ const Profile = () => {
                       <p className="text-green-600 font-semibold">
                         {formatExpectedSalary(
                           profile?.additional_info?.min_salary,
-                          profile?.additional_info?.max_salary
+                          profile?.additional_info?.max_salary,
                         )}
                       </p>
                     </div>
@@ -684,7 +769,9 @@ const Profile = () => {
                     </div>
                     <div>
                       <p className="text-gray-400">Preferred Location</p>
-                      <p>{profile?.additional_info?.preferred_location ?? "--"}</p>
+                      <p>
+                        {profile?.additional_info?.preferred_location ?? "--"}
+                      </p>
                     </div>
                   </div>
                   <button className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition">
@@ -692,7 +779,7 @@ const Profile = () => {
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition"
+                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red"
                   >
                     Logout
                   </button>
@@ -703,7 +790,9 @@ const Profile = () => {
                   <div className="space-y-3 text-sm">
                     <div>
                       <p className="text-gray-400">Email</p>
-                      <p className="text-xs break-all">{profile?.email ?? "--"}</p>
+                      <p className="text-xs break-all">
+                        {profile?.email ?? "--"}
+                      </p>
                     </div>
                     <div>
                       <p className="text-gray-400">Phone</p>
@@ -732,12 +821,14 @@ const Profile = () => {
                     )}
                     <div>
                       <p className="text-gray-400">Address</p>
-                      <p className="text-xs">{getFormattedAddress(profile?.addresses)}</p>
+                      <p className="text-xs">
+                        {getFormattedAddress(profile?.addresses)}
+                      </p>
                     </div>
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition"
+                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red-500"
                   >
                     Logout
                   </button>
@@ -767,9 +858,7 @@ const Profile = () => {
               </svg>
             </div>
 
-            <p className="text-gray-800 text-sm mb-6">
-              {popupMessage}
-            </p>
+            <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>
 
             <button
               onClick={() => setShowPopup(false)}
