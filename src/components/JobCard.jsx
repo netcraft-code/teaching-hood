@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   ChevronRight,
   X,
   Menu,
 } from "lucide-react";
+import AsyncSelect from "react-select/async";
 import { Link, useSearchParams } from 'react-router-dom';
 import { HeroImages } from "../assets/images/HeroImages";
 import { getCities, getJobs, likeUnlikeJobApi, applyJobApi } from "../api/auth";
@@ -11,7 +12,6 @@ import { findJobIcons } from "./../assets/icons/findJobIcons";
 
 const JobCard = () => {
   const [jobs, setJobs] = useState([]);
-  const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalJobs, setTotalJobs] = useState(0);
@@ -19,7 +19,7 @@ const JobCard = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // Filter states
-  const [selectedCity, setSelectedCity] = useState("all");
+  const [selectedCity, setSelectedCity] = useState([]);
   const [selectedJobType, setSelectedJobType] = useState("all");
   const [selectedExperience, setSelectedExperience] = useState("0-1");
   const [salaryRange, setSalaryRange] = useState([0, 0]);
@@ -36,19 +36,14 @@ const JobCard = () => {
   const gradeParam = searchParams.get("grade");
   const cityParam = searchParams.get("city");
 
-  const MIN = 0;
-  const MAX = 50;
-  const STEP = 1;
-
   const buildFilters = () => {
-    setSelectedCity(cityParam || "all");
     return {
       page: currentPage,
-      city_id: cityParam || "all",
+      city_id: selectedCity?.value || "all",
       job_type: selectedJobType !== "all" ? selectedJobType : "all",
       experience: selectedExperience !== "0-1" ? selectedExperience : "0-1",
-      min_salary: salaryRange[0] > 0 ? salaryRange[0] * 100000 : 0,
-      max_salary: salaryRange[1] > 0 ? salaryRange[1] * 100000 : 5000000,
+      // min_salary: salaryRange[0] > 0 ? salaryRange[0] * 100000 : 0,
+      // max_salary: salaryRange[1] > 0 ? salaryRange[1] * 100000 : 5000000,
       posted: postedDate !== "any" ? postedDate : "any",
       search: searchQuery || "",
       radius: searchRadius > 0 ? searchRadius : 0,
@@ -57,7 +52,6 @@ const JobCard = () => {
     };
   };
 
-  // Fetch cities
   useEffect(() => {
     fetchCities();
   }, []);
@@ -77,12 +71,47 @@ const JobCard = () => {
     fetchJobs();
   }, [currentPage]);
 
+  // Async load cities for searchable dropdown
+  const loadCities = async (inputValue) => {
+    try {
+      const res = await getCities({
+        search: inputValue,
+        limit: 20,
+      });
+
+      return (
+        res?.data?.data?.map((city) => ({
+          value: city.id,
+          label: city.name,
+        })) || []
+      );
+    } catch (error) {
+      console.error("City API error", error);
+      return [];
+    }
+  };
+  
   const fetchCities = async () => {
     try {
       const response = await getCities();
 
       if (response.data.status) {
-        setCities(response.data.data || []);
+        const cityOptions =
+          response.data.data?.map((city) => ({
+            value: city.id,
+            label: city.name,
+          })) || [];
+
+        // 🔥 cityParam match yahi kar do
+        if (cityParam) {
+          const matchedCity = cityOptions.find(
+            (city) => city.value.toString() === cityParam.toString()
+          );
+
+          if (matchedCity) {
+            setSelectedCity(matchedCity);
+          }
+        }
       }
     } catch (error) {
       console.error("Error fetching cities:", error);
@@ -113,7 +142,7 @@ const JobCard = () => {
     selectedCity,
     selectedJobType,
     selectedExperience,
-    salaryRange,
+    // salaryRange,
     postedDate,
     searchQuery,
     searchRadius,
@@ -245,49 +274,18 @@ const JobCard = () => {
           />
           <h3 className="font-medium">Location</h3>
         </div>
-        <div className="relative w-full">
-          <select
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            className="
-              w-full appearance-none
-              bg-white
-              px-4 py-3
-              pr-10
-              border border-gray-200
-              rounded-xl
-              text-gray-700
-              text-sm
-              shadow-sm
-              focus:outline-none
-              focus:ring-2 focus:ring-blue-500
-              focus:border-blue-500
-            "
-          >
-            <option value="all">All Cities</option>
-            {cities.map((city) => (
-              <option key={city.id} value={city.id.toString()}>
-                {city.name}
-              </option>
-            ))}
-          </select>
 
-          <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center">
-            <svg
-              className="w-4 h-4 text-gray-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </div>
-        </div>
+        <AsyncSelect
+          cacheOptions
+          defaultOptions
+          loadOptions={loadCities}
+          value={selectedCity}
+          onChange={(option) => {
+            setSelectedCity(option);
+          }}
+          placeholder="Search city"
+          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+        />
       </div>
 
       {/* Job Type Filter */}

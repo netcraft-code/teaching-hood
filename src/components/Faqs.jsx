@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
+import { useNavigate } from "react-router-dom";
 
 const Faqs = () => {
   const [openIndex, setOpenIndex] = useState(null);
+  const navigate = useNavigate();
 
   const faqs = [
     {
@@ -119,7 +121,7 @@ const Faqs = () => {
             <p className="text-gray-600 mb-6">
               Our support team is here to help you get the answers you need.
             </p>
-            <button className="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition font-semibold">
+            <button onClick={() => navigate("/contact-us")} className="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition font-semibold">
               Contact Support
             </button>
           </div>

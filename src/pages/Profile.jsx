@@ -306,48 +306,53 @@ const Profile = () => {
 
               {/* Profile Info */}
               <div className="flex items-start gap-4 mx-8 pb-8 relative">
-                {/* Avatar */}
-                <div className="relative">
-                  <img
-                    src={getBannerAvatar(profile.avatar_url, userType, "avatarImage")}
-                    alt="avatar"
-                    className="w-24 h-24 sm:w-32 sm:h-32 rounded-full -mt-16 object-cover shadow-lg"
-                  />
-                  <button
-                    onClick={() => {
-                      setImageType("avatar_url");
-                      setImageModalOpen(true);
-                    }}
-                    className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow hover:bg-gray-100 w-[30px] h-[30px]"
-                  >
-                    ✏️
-                  </button>
-                </div>
+                <div className="grid grid-cols-1 md:grid-cols-5 justify-start">
+                  {/* Avatar */}
+                  <div className="relative col-span-2 flex justify-center sm:justify-start">
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full -mt-12 border-2 border-white overflow-hidden bg-gray-100">
+                      <img
+                        src={getBannerAvatar(profile.avatar_url, userType, "avatarImage")}
+                        alt="profile"
+                        className="w-full h-full object-cover"
+                      />
 
-                {/* Name & Details */}
-                <div className="flex-1 mt-6">
-                  <h2 className="text-xl sm:text-3xl font-semibold mb-3">
-                    {profile.first_name} {userType === 1 ? profile.last_name : ""}
-                  </h2>
-                  <p className="text-m text-gray-500">
-                    {userType === 2 ? profile?.board : profile?.position}
-                  </p>
+                      <button
+                        onClick={() => {
+                          setImageType("avatar_url");
+                          setImageModalOpen(true);
+                        }}
+                        className="absolute top-6 left-24 md:top-8 md:left-20 bg-white p-1 rounded-full shadow hover:bg-gray-100 w-[30px] h-[30px]"
+                      >
+                        ✏️
+                      </button>
+                    </div>
+                  </div>
 
-                  <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
-                    <span className="flex items-center gap-1">
-                      <img src={locationIcon} alt="Location" />
-                      {profile?.addresses
-                        ? `${profile.addresses.city}, ${profile.addresses.state}`
-                        : "Location not specified"}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <img src={durationIcon} alt="Duration" />
-                      {profile?.total_experience
-                        ? userType === 1
-                          ? `${profile.total_experience} years experience`
-                          : `Est. ${getTotalDurationCount(profile.total_experience)}`
-                        : "----"}
-                    </span>
+                  {/* Name & Details */}
+                  <div className="col-span-3 justify-start mt-6">
+                    <h2 className="text-xl sm:text-3xl font-semibold mb-3">
+                      {profile.first_name} {userType === 1 ? profile.last_name : ""}
+                    </h2>
+                    <p className="text-m text-gray-500">
+                      {userType === 2 ? profile?.board : profile?.position}
+                    </p>
+
+                    <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
+                      <span className="flex items-center gap-1">
+                        <img src={locationIcon} alt="Location" />
+                        {profile?.addresses
+                          ? `${profile.addresses.city}, ${profile.addresses.state}`
+                          : "Location not specified"}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <img src={durationIcon} alt="Duration" />
+                        {profile?.total_experience
+                          ? userType === 1
+                            ? `${profile.total_experience} years experience`
+                            : `Est. ${getTotalDurationCount(profile.total_experience)}`
+                          : "----"}
+                      </span>
+                    </div>
                   </div>
                 </div>
 

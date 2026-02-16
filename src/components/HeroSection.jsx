@@ -4,6 +4,7 @@ import { HeroImages } from "../assets/images/HeroImages";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
 import { getCities, getGradeLevels, getSubjects } from "../api/auth";
 import { useNavigate } from "react-router-dom";
+import AsyncSelect from "react-select/async";
 
 const HeroSection = () => {
   const [subjects, setSubjects] = useState([]);
@@ -12,7 +13,7 @@ const HeroSection = () => {
 
   const [subject, setSubject] = useState("");
   const [grade, setGrade] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState([]);
 
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
@@ -46,16 +47,28 @@ const HeroSection = () => {
   };
 
   const handleSearch = () => {
-    if (!subject || !grade || !location) {
-      setPopupMessage("Please select Subject, Grade and Location");
-      setShowPopup(true);
-
-      return;
-    }
-
     navigate(
-      `/find-job?subject=${subject}&grade=${grade}&city=${location}`
+      `/find-job?subject=${subject}&grade=${grade}&city=${location.value}`
     );
+  };
+
+  const loadCities = async (inputValue) => {
+    try {
+      const res = await getCities({
+        search: inputValue,
+        limit: 20,
+      });
+
+      return (
+        res?.data?.data?.map((city) => ({
+          value: city.id,
+          label: city.name,
+        })) || []
+      );
+    } catch (error) {
+      console.error("City API error", error);
+      return [];
+    }
   };
 
   return (
@@ -230,35 +243,41 @@ const HeroSection = () => {
                       size={20}
                     />
 
-                    <select
+                    <AsyncSelect
+                      cacheOptions
+                      defaultOptions
+                      loadOptions={loadCities}
                       value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                      onFocus={() => setOpen({ ...open, location: true })}
-                      onBlur={() => setOpen({ ...open, location: false })}
-                      className="w-full pl-10 pr-10 py-4 bg-[#F5F6F7] text-gray-400 border border-gray-200 rounded-lg
-                      font-sf text-[14px] appearance-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="" disabled>
-                        Location (e.g., Delhi)
-                      </option>
-                      {cities.map((city) => (
-                        <option
-                          key={city.id}
-                          value={city.id}
-                          className="text-black"
-                        >
-                          {city.name}
-                        </option>
-                      ))}
-                    </select>
-
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                      {open.location ? (
-                        <ChevronUp size={18} />
-                      ) : (
-                        <ChevronDown size={18} />
-                      )}
-                    </div>
+                      onChange={(option) => {
+                        setLocation(option);
+                      }}
+                      placeholder="Search city"
+                      styles={{
+                        control: (provided) => ({
+                          ...provided,
+                          backgroundColor: "#F5F6F7", // main box bg
+                          border: "1px solid #e5e7eb",
+                          borderRadius: "8px",
+                          minHeight: "52px",
+                        }),
+                        menu: (provided) => ({
+                          ...provided,
+                          backgroundColor: "#ffffff", // dropdown bg
+                        }),
+                        input: (provided) => ({
+                          ...provided,
+                          color: "#111827", // typing text color
+                        }),
+                        singleValue: (provided) => ({
+                          ...provided,
+                          color: "#6b7280", // selected text color
+                        }),
+                        placeholder: (provided) => ({
+                          ...provided,
+                          color: "#9ca3af",
+                        }),
+                      }}
+                    />
                   </div>
 
                   {/* Button */}
