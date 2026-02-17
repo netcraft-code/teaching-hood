@@ -21,10 +21,27 @@ class JobPostController extends Controller
             ->with('city', 'grade', 'subject', 'like', 'applied')
             ->where('is_closed', false)
             ->when($request->search, function ($query) use ($request) {
-                $query->where(function ($q) use ($request) {
-                    $q->where('school_name', 'like', '%' . $request->search . '%')
-                        ->orWhere('job_description', 'like', '%' . $request->search . '%')
-                        ->orWhere('position', 'like', '%' . $request->search . '%');
+                $search = $request->search;
+                $query->where(function ($q) use ($search) {
+                    // Search in job_posts table
+                    $q->where('school_name', 'like', "%{$search}%")
+                        ->orWhere('job_description', 'like', "%{$search}%")
+                        ->orWhere('position', 'like', "%{$search}%")
+
+                        // 🔥 Search in city
+                        ->orWhereHas('city', function ($city) use ($search) {
+                            $city->where('name', 'like', "%{$search}%");
+                        })
+
+                        // 🔥 Search in subject
+                        ->orWhereHas('subject', function ($subject) use ($search) {
+                            $subject->where('name', 'like', "%{$search}%");
+                        })
+
+                        // 🔥 Search in grade
+                        ->orWhereHas('grade', function ($grade) use ($search) {
+                            $grade->where('name', 'like', "%{$search}%");
+                        });
                 });
             })
             ->when($request->school_name, function ($query) use ($request) {
