@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  ChevronRight,
-  X,
-  Menu,
-} from "lucide-react";
+import { ChevronRight, X, Menu } from "lucide-react";
 import AsyncSelect from "react-select/async";
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from "react-router-dom";
 import { HeroImages } from "../assets/images/HeroImages";
 import { getCities, getJobs, likeUnlikeJobApi, applyJobApi } from "../api/auth";
 import { findJobIcons } from "./../assets/icons/findJobIcons";
@@ -28,7 +24,7 @@ const JobCard = () => {
   const [searchRadius, setSearchRadius] = useState(0);
 
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
 
   const [searchParams] = useSearchParams();
 
@@ -105,7 +101,7 @@ const JobCard = () => {
         // 🔥 cityParam match yahi kar do
         if (cityParam) {
           const matchedCity = cityOptions.find(
-            (city) => city.value.toString() === cityParam.toString()
+            (city) => city.value.toString() === cityParam.toString(),
           );
 
           if (matchedCity) {
@@ -168,15 +164,20 @@ const JobCard = () => {
 
   // Format salary to LPA
   const formatSalary = (min, max) => {
+    if (Number(min) === 0 && Number(max) === 0) {
+      return "Salary - As per industry standards";
+    }
+
     const minLPA = (min / 100000).toFixed(1);
     const maxLPA = (max / 100000).toFixed(1);
-    return `₹${minLPA}-${maxLPA} Per Month`;
+
+    return `Salary - ₹${minLPA}-${maxLPA} Per Month`;
   };
 
   // Get job title
   const getJobTitle = (job) => {
     if (job.subject_name && job.grade_name) {
-      return `${job.subject_name} (${job.grade_name})`;
+      return `${job.grade_name} ${job.subject_name} Teacher`;
     } else if (job.subject_name) {
       return `${job.position} - ${job.subject_name}`;
     } else if (job.grade_name) {
@@ -206,10 +207,8 @@ const JobCard = () => {
       if (response.data.status) {
         setJobs((jobs) =>
           jobs.map((job) =>
-            job.id === jobId
-              ? { ...job, is_liked: !job.is_liked }
-              : job
-          )
+            job.id === jobId ? { ...job, is_liked: !job.is_liked } : job,
+          ),
         );
       }
     } catch (error) {
@@ -235,10 +234,8 @@ const JobCard = () => {
 
           setJobs((jobs) =>
             jobs.map((job) =>
-              job.id === jobId
-                ? { ...job, is_applied: !job.is_applied }
-                : job
-            )
+              job.id === jobId ? { ...job, is_applied: !job.is_applied } : job,
+            ),
           );
         }
       } catch (err) {
@@ -252,7 +249,9 @@ const JobCard = () => {
 
   // Filter Sidebar Component
   const FilterSidebar = ({ isMobile = false }) => (
-    <div className={`bg-white rounded-[24px] shadow-sm p-6 ${isMobile ? '' : 'sticky top-6'}`}>
+    <div
+      className={`bg-white rounded-[24px] shadow-sm p-6 ${isMobile ? "" : "sticky top-6"}`}
+    >
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold">Filters</h2>
         {isMobile && (
@@ -291,10 +290,7 @@ const JobCard = () => {
       {/* Job Type Filter */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
-          <img
-            src={findJobIcons.jobType}
-            className="w-5 h-5 text-blue-600"
-          />
+          <img src={findJobIcons.jobType} className="w-5 h-5 text-blue-600" />
           <h3 className="font-medium">Job Type</h3>
         </div>
         <div className="space-y-3">
@@ -538,9 +534,7 @@ const JobCard = () => {
             />
             Search Radius
           </h3>
-          <span className="text-blue-600 font-semibold">
-            {searchRadius}km
-          </span>
+          <span className="text-blue-600 font-semibold">{searchRadius}km</span>
         </div>
 
         <input
@@ -586,8 +580,9 @@ const JobCard = () => {
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
               <span className="text-xs md:text-sm text-gray-600 font-regular">
                 <span className="text-blue-500">
-                  {newJobs} new job{newJobs > 1 ? 's' : ''}
-                </span> posted this week
+                  {newJobs} new job{newJobs > 1 ? "s" : ""}
+                </span>{" "}
+                posted this week
               </span>
             </div>
 
@@ -697,7 +692,9 @@ const JobCard = () => {
                 <h1 className="text-2xl md:text-3xl font-bold mb-2">
                   {totalJobs} Position{totalJobs !== 1 ? "s" : ""} Available
                 </h1>
-                <p className="text-sm md:text-base text-gray-600">Find your perfect teaching role</p>
+                <p className="text-sm md:text-base text-gray-600">
+                  Find your perfect teaching role
+                </p>
               </div>
 
               {/* Job Cards */}
@@ -766,7 +763,8 @@ const JobCard = () => {
                                   className="w-4 h-4"
                                 />
                                 <span>
-                                  {job.total_applicants} applicant{job.total_applicants > 1 ? "s" : ""}
+                                  {job.total_applicants} applicant
+                                  {job.total_applicants > 1 ? "s" : ""}
                                 </span>
                               </div>
                             </div>
@@ -819,14 +817,18 @@ const JobCard = () => {
                               src={findJobIcons.timeDuration}
                               className="w-4 h-4 flex-shrink-0"
                             />
-                            <span className="truncate">{getTimeAgo(job.created_at)}</span>
+                            <span className="truncate">
+                              {getTimeAgo(job.created_at)}
+                            </span>
                           </div>
                           <div className="flex items-center gap-1">
                             <img
                               src={findJobIcons.totalExperience}
                               className="w-4 h-4 flex-shrink-0"
                             />
-                            <span className="truncate">{job.experience_required} years</span>
+                            <span className="truncate">
+                              {job.experience_required} years
+                            </span>
                           </div>
                         </div>
 
@@ -844,7 +846,9 @@ const JobCard = () => {
                               className="w-full sm:w-auto px-4 md:px-6 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
                               onClick={() => applyJob(job.id)}
                             >
-                              {isWithin30Days(job.created_at) ? "Apply Now" : "Express Interest"}
+                              {isWithin30Days(job.created_at)
+                                ? "Apply Now"
+                                : "Express Interest"}
                               <ChevronRight className="w-4 h-4" />
                             </button>
                           )}
@@ -903,9 +907,7 @@ const JobCard = () => {
               </svg>
             </div>
 
-            <p className="text-gray-800 text-sm mb-6">
-              {popupMessage}
-            </p>
+            <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>
 
             <button
               onClick={() => setShowPopup(false)}
@@ -916,7 +918,6 @@ const JobCard = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
