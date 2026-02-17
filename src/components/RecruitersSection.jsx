@@ -93,7 +93,7 @@ const RecruitersSection = () => {
             </div>
 
             <a
-              href="/signup"
+              href="/post-job"
               className="relative top-[7px] inline-flex items-center space-x-2 px-4 rounded-full mb-6 ml-4 font-bold bg-blue-500 text-white py-1 h-[25px]"
             >
               Post a Job

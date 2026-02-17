@@ -338,7 +338,7 @@ const Profile = () => {
               <div className="flex items-start gap-4 mx-8 pb-8 relative">
                 <div className="grid grid-cols-1 md:grid-cols-5 justify-start">
                   {/* Avatar */}
-                  <div className="relative col-span-2 flex justify-center sm:justify-start">
+                  <div className="relative col-span-2 flex sm:justify-start">
                     <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full -mt-12 border-2 border-white overflow-hidden bg-gray-100">
                       <img
                         src={getBannerAvatar(profile.avatar_url, userType, "avatarImage")}

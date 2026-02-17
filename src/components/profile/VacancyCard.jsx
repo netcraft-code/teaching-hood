@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
 const VacancyCard = ({ job, onEdit, onClose }) => {
   const getJobTitle = (job) => {
     if (job.subject_name && job.grade_name) {
-      return `${job.subject_name} (${job.grade_name})`;
+      return `${job.grade_name} ${job.subject_name} Teacher`;
     } else if (job.subject_name) {
       return `${job.position} - ${job.subject_name}`;
     } else if (job.grade_name) {
@@ -48,7 +48,9 @@ const VacancyCard = ({ job, onEdit, onClose }) => {
         {/* RIGHT SIDE - Urgent Badge & Buttons */}
         <div className="flex flex-col items-end gap-3">
           {/* Urgent Badge */}
-          <span className="text-xs font-regular text-red-400 bg-red-100 px-2 py-1 rounded-full">Urgent</span>
+          <span className="text-xs font-regular text-red-400 bg-red-100 px-2 py-1 rounded-full">
+            Urgent
+          </span>
 
           {/* Action Buttons */}
           <div className="flex gap-2">
@@ -72,7 +74,12 @@ const VacancyCard = ({ job, onEdit, onClose }) => {
               Edit
             </button>
 
-            { job.is_closed ? <span className="font-regular bg-red-100 text-red-500 p-1 rounded-full">Closed</span> : <button
+            {job.is_closed ? (
+              <span className="font-regular bg-red-100 text-red-500 p-1 rounded-full">
+                Closed
+              </span>
+            ) : (
+              <button
                 onClick={() => onClose(job)}
                 className="flex items-center gap-1.5 px-2 py-1 bg-red-500 rounded-lg text-sm font-medium text-white hover:bg-red-700 transition"
               >
@@ -91,7 +98,7 @@ const VacancyCard = ({ job, onEdit, onClose }) => {
                 </svg>
                 Close
               </button>
-            }
+            )}
           </div>
         </div>
       </div>
