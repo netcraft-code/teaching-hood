@@ -2,25 +2,25 @@ import { Navigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
-const ProtectedRoute = ({ children, notAllowedUserType }) => {
+const ProtectedRoute = ({ children, notAllowedUserTypes = [] }) => {
   const token = localStorage.getItem("auth_token");
-  const userType = localStorage.getItem("user_type"); // assume user stored
+  const userType = Number(localStorage.getItem("user_type")); // convert to number
 
   // ❌ Not logged in
   if (!token) {
     return <Navigate to="/signin" replace />;
   }
-  
+console.log(notAllowedUserTypes, (userType));
   // ❌ Logged in but not authorized
-  if (notAllowedUserType && userType == notAllowedUserType) {
+  if (notAllowedUserTypes.includes(userType)) {
     return (
       <>
         <Header />
-          <div className="min-h-[60vh] flex items-center justify-center">
-            <h2 className="text-xl font-semibold text-red-600">
-              You are not authorized to access this route
-            </h2>
-          </div>
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <h2 className="text-xl font-semibold text-red-600">
+            You are not authorized to access this Service
+          </h2>
+        </div>
         <Footer />
       </>
     );

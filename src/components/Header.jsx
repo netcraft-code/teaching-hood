@@ -81,6 +81,13 @@ const Header = () => {
                 return null;
               }
 
+              if (
+                item.path === "/find-job" &&
+                (userType === 2 || userType === 3)
+              ) {
+                return null;
+              }
+
               return (
                 <a
                   key={item.path}

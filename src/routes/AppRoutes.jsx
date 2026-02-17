@@ -56,7 +56,7 @@ const AppRoutes = () => {
       <Route
         path="/post-job"
         element={
-          <ProtectedRoute notAllowedUserType={1}>
+          <ProtectedRoute notAllowedUserTypes={[1]}>
             <PostJob />
           </ProtectedRoute>
         }
@@ -67,7 +67,9 @@ const AppRoutes = () => {
       <Route
         path="/find-job"
         element={
-          <FindJob />
+          <ProtectedRoute notAllowedUserTypes={[2, 3]}>
+            <FindJob />
+          </ProtectedRoute>
         }
       />
 

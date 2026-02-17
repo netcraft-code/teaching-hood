@@ -63,7 +63,7 @@ const SignUpPage = () => {
       cityPlaceholder: "Enter city name",
       showCity: true,
       tabColor: "#28C76F",
-      title: "Join Teachinghood to take your career to the next level school",
+      title: "Sign up today to post free jobs and receive quality applications",
     },
 
     3: {
@@ -78,8 +78,7 @@ const SignUpPage = () => {
       cityPlaceholder: "Enter city name",
       showCity: true,
       tabColor: "#FFC107",
-      title:
-        "Join Teachinghood to take your career to the next level recruiter",
+      title: "Sign up today to post free jobs and receive quality applications",
     },
   };
 

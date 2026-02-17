@@ -496,10 +496,15 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       setPopupMessage("Profile updated successfully ✅");
       setShowPopup(true);
     } catch (error) {
-      if (error.response?.data?.errors) {
-        setErrors(error.response.data.errors);
+      console.error("Job save failed:", error);
+
+      // ✅ Backend validation handling (Laravel)
+      if (error.response?.status === 422) {
+        setErrors(error.response.data.errors || {});
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
-        setPopupMessage("Server error, try again later");
+        setPopupMessage("Something went wrong. Please try again.");
+
         setShowPopup(true);
       }
     } finally {
@@ -694,7 +699,17 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               <textarea
                 className={inputClass(errors.address)}
                 value={form.address}
-                onChange={(e) => setForm({ ...form, address: e.target.value })}
+                onChange={(e) => {
+                  setForm((prev) => ({
+                    ...prev,
+                    address: e.target.value,
+                  }));
+
+                  setErrors((prev) => ({
+                    ...prev,
+                    address: "",
+                  }));
+                }}
                 placeholder="Enter full address"
               />
               <ErrorText error={errors.address} />
@@ -709,12 +724,17 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   maxLength={6}
                   className={inputClass(errors.pincode)}
                   value={form.pincode}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
+                  onChange={(e) => {
+                    setForm((prev) => ({
+                      ...prev,
                       pincode: e.target.value.replace(/\D/g, ""),
-                    })
-                  }
+                    }));
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      pincode: "",
+                    }));
+                  }}
                   placeholder="6-digit pincode"
                 />
                 <ErrorText error={errors.pincode} />
@@ -740,7 +760,17 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 <select
                   className={inputClass(errors.state)}
                   value={form.state}
-                  onChange={(e) => setForm({ ...form, state: e.target.value })}
+                  onChange={(e) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      state: e.target.value,
+                    }));
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      state: "",
+                    }));
+                  }}
                 >
                   <option value="">Select State</option>
                   {states.map((s) => (
@@ -757,7 +787,17 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 <select
                   className={inputClass(errors.city)}
                   value={form.city}
-                  onChange={(e) => setForm({ ...form, city: e.target.value })}
+                  onChange={(e) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      city: e.target.value,
+                    }));
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      city: "",
+                    }));
+                  }}
                 >
                   <option value="">Select City</option>
                   {locations.map((c) => (
@@ -780,6 +820,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 onChange={(e) => handleAdditional("about_us", e.target.value)}
                 placeholder="Tell us about yourself, your teaching philosophy, and experience..."
               />
+
+              <ErrorText error={errors.about_us} />
             </Field>
 
             {userType == 1 && (
