@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AppliedJob as MailAppliedJob;
 use App\Models\JobPost;
 use App\Models\LikedJob;
 use App\Models\AppliedJob;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class JobPostController extends Controller
@@ -19,6 +21,7 @@ class JobPostController extends Controller
 
         $jobs = JobPost::withCount('appliedJobs')
             ->with('city', 'grade', 'subject', 'like', 'applied')
+            ->where('status', true)
             ->where('is_closed', false)
             ->when($request->search, function ($query) use ($request) {
                 $search = $request->search;
@@ -47,10 +50,10 @@ class JobPostController extends Controller
             ->when($request->school_name, function ($query) use ($request) {
                 $query->where('school_name', 'like', '%' . $request->school_name . '%');
             })
-            ->when($request->subject, function ($query) use ($request) {
+            ->when($request->subject_id != 'all', function ($query) use ($request) {
                 $query->where('subject_id', $request->subject_id);
             })
-            ->when($request->grade, function ($query) use ($request) {
+            ->when($request->grade_id != 'all', function ($query) use ($request) {
                 $query->where('grade_id', $request->grade_id);
             })
             ->when($request->city_id != 'all', function ($query) use ($request) {
@@ -163,8 +166,7 @@ class JobPostController extends Controller
     // 📌 JOB POST DETAIL
     public function show($id)
     {
-        $job = JobPost::with('city', 'grade', 'subject', 'user.addresses', 'user.additional_info')
-            ->findOrFail($id);
+        $job = JobPost::with('city', 'grade', 'subject', 'user.addresses', 'user.additional_info')->findOrFail($id);
 
         $job->city_name = $job->city->name;
         $job->subject_name = $job->subject?->name;
@@ -247,17 +249,16 @@ class JobPostController extends Controller
 
     public function getMaxCitiesJobs()
     {
-        $jobs = JobPost::with('city')
-            ->select('city_id', \DB::raw('COUNT(*) as total_jobs'))
-            ->groupBy('city_id')
-            ->orderByDesc('total_jobs')
-            ->limit(5)
+        $jobs = JobPost::join('cities', 'job_posts.city_id', '=', 'cities.id')
+            ->select(
+                'job_posts.city_id',
+                'cities.name as city_name',
+                \DB::raw('COUNT(job_posts.id) as total_jobs')
+            )
+            ->groupBy('job_posts.city_id', 'cities.name')
+            ->orderBy('cities.name') // 🔥 order by city name
             ->get();
 
-        $jobs->map(function ($job) {
-            $job->city_name = $job->city->name;
-            return $job;
-        });
 
         return response_formatter(DEFAULT_200, $jobs);
     }
@@ -362,6 +363,8 @@ class JobPostController extends Controller
             'user_id'     => $userId,
             'job_post_id' => $id,
         ]);
+
+        Mail::to('akathuria289@gmail.com')->send(new MailAppliedJob($job));
 
         return response_formatter(DEFAULT_200, [
             'applied' => true,

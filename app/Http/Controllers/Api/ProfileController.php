@@ -42,8 +42,8 @@ class ProfileController extends Controller
             'grade_levels'        => 'required|array',
             'experience'          => 'required|array',
             'education'           => 'required|array',
-            'achievement'         => 'required|string',
-            'certification'       => 'required|string',
+            'achievement'         => 'nullable|string',
+            'certification'       => 'nullable|string',
 
             'first_name'                => 'required|string|max:255',
             'last_name'                 => 'nullable|string|max:255',
@@ -52,8 +52,7 @@ class ProfileController extends Controller
             'total_experience'    => 'nullable|string|max:255',
 
             'availability'        => 'required|string',
-            // 'expected_salary'     => 'required|string',
-            'notice_period'       => 'required|string',
+            'notice_period'       => 'nullable|string',
             'preferred_location'  => 'required|string',
             'min_salary'          => 'required|integer',
             'max_salary'          => 'required|integer',
@@ -148,8 +147,8 @@ class ProfileController extends Controller
     {
         request()->validate([
             'about_us'          => 'required|string',
-            'why_join_us'       => 'required|string',
-            'website'       => 'required|string',
+            'why_join_us'       => 'nullable|string',
+            'website'       => 'nullable|string',
             'students'       => 'required|string',
             'teachers'       => 'required|string',
 
