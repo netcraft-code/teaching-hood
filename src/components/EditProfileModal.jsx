@@ -307,11 +307,11 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!form.phone) e.phone = "Phone is required";
 
     if (userType == 1) {
-      if (!form.additional_info.subjects.length)
-        e.subjects = "At least one subject required";
+      if (!form.additional_info.availability.length)
+        e.availability = "Select employment type";
 
-      if (!form.additional_info.grade_levels.length)
-        e.grade_levels = "At least one grade level required";
+      if (!form.additional_info.notice_period.length)
+        e.notice_period = "Select notice period";
 
       if (!form.additional_info.education[0]?.degree)
         e.education = "Education details required";
@@ -906,6 +906,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       <option value="Part Time">Part Time</option>
                       <option value="Contract">Contract</option>
                     </select>
+
+                    <ErrorText error={errors.availability} />
                   </Field>
 
                   <Field label="Notice Period">
@@ -923,6 +925,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       <option value="60 Days">60 Days</option>
                       <option value="90 Days">90 Days</option>
                     </select>
+
+                    <ErrorText error={errors.notice_period} />
                   </Field>
                 </Grid>
 
@@ -1366,6 +1370,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       ✓ {form.resume.name}
                     </p>
                   )}
+
+                  <ErrorText error={errors.resume} />
                 </Field>
               </Section>
             </>

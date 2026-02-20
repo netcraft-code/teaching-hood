@@ -617,7 +617,7 @@ const Profile = () => {
 
             {/* Experience Tab */}
             {activeTab === "experience" &&
-              profile?.additional_info?.experience && (
+              (profile?.additional_info?.experience ? (
                 <>
                   {profile.additional_info.experience
                     .slice()
@@ -674,11 +674,11 @@ const Profile = () => {
                       </div>
                     ))}
                 </>
-              )}
+              ) : <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">No record found</div>)}
 
             {/* Education Tab */}
             {activeTab === "education" &&
-              profile?.additional_info?.education && (
+              (profile?.additional_info?.education ? (
                 <>
                   {profile.additional_info.education
                     .slice()
@@ -711,7 +711,7 @@ const Profile = () => {
                       </div>
                     ))}
                 </>
-              )}
+              ) : <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">No record found</div>)}
 
             {/* Jobs Applied Tab */}
             {activeTab === "jobs" && (

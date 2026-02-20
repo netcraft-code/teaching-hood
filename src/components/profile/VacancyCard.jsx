@@ -48,9 +48,14 @@ const VacancyCard = ({ job, onEdit, onClose }) => {
         {/* RIGHT SIDE - Urgent Badge & Buttons */}
         <div className="flex flex-col items-end gap-3">
           {/* Urgent Badge */}
-          <span className="text-xs font-regular text-red-400 bg-red-100 px-2 py-1 rounded-full">
-            Urgent
-          </span>
+          { job.status
+              ? <span className="text-xs font-regular text-green-400 bg-green-100 px-2 py-1 rounded-full">
+                  Active
+                </span>
+              : <span className="text-xs font-regular text-yellow-400 bg-yellow-100 px-2 py-1 rounded-full">
+                  Draft
+                </span>
+          }
 
           {/* Action Buttons */}
           <div className="flex gap-2">

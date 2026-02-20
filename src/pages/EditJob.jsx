@@ -235,7 +235,7 @@ const EditJob = () => {
       setPopupMessage(status === 1 ? "Job updated and published successfully!" : "Job updated and saved as draft!");
 
       setShowPopup(true);
-
+      
       if (response?.data?.status === true) {
         navigate("/profile"); // redirect to profile or job listing page
       } else {
@@ -247,7 +247,7 @@ const EditJob = () => {
 
       // Backend validation handling (Laravel)
       if (error.response?.status === 422) {
-        setErrors(error.response.data.errors || {});
+        setErrors(error.response.data.data || {});
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         setPopupMessage("Something went wrong. Please try again.");
@@ -797,6 +797,12 @@ const EditJob = () => {
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                     />
+
+                    {errors.application_deadline && (
+                      <p className="text-sm text-red-500 mt-2">
+                        {errors.application_deadline}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

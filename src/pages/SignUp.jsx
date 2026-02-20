@@ -156,9 +156,9 @@ const SignUpPage = () => {
         }, 1500);
       } else {
         const errorMessages = Object.entries(res.data.errors)
-          .map(([key, values]) => `${key}: ${values.join(", ")}`)
+          .map(([key, values]) => `${values.join(", ")}`)
           .join("\n");
-
+          
         setError(errorMessages || "An error occurred");
       }
     } catch (err) {
@@ -166,7 +166,7 @@ const SignUpPage = () => {
 
       if (err.response?.data?.errors) {
         errorMessages = Object.entries(err.response.data.errors)
-          .map(([key, values]) => `${key}: ${values.join(", ")}`)
+          .map(([key, values]) => `${values.join(", ")}`)
           .join("<br />");
       }
 
