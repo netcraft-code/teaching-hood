@@ -335,7 +335,7 @@ const Profile = () => {
               </div>
 
               {/* Profile Info */}
-              <div className="flex items-start gap-4 mx-8 pb-8 relative">
+              <div className="flex items-start gap-4 mx-8 pb-8 relative justify-between">
                 <div className="grid grid-cols-1 md:grid-cols-5 justify-start">
                   {/* Avatar */}
                   <div className="relative col-span-2 flex sm:justify-start">

@@ -17,7 +17,7 @@ const JobCard = () => {
   // Filter states
   const [selectedCity, setSelectedCity] = useState([]);
   const [selectedJobType, setSelectedJobType] = useState("all");
-  const [selectedExperience, setSelectedExperience] = useState("0-1");
+  const [selectedExperience, setSelectedExperience] = useState();
   const [salaryRange, setSalaryRange] = useState([0, 0]);
   const [postedDate, setPostedDate] = useState("any");
   const [searchQuery, setSearchQuery] = useState("");
