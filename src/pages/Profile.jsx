@@ -774,9 +774,16 @@ const Profile = () => {
                       </p>
                     </div>
                   </div>
-                  <button className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition">
-                    Upload Latest Resume
-                  </button>
+
+                  <a
+                    href={profile?.additional_info?.resume}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition inline-block text-center"
+                  >
+                    Download Latest Resume
+                  </a>
+
                   <button
                     onClick={handleLogout}
                     className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red"
