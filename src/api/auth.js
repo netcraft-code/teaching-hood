@@ -92,6 +92,14 @@ export const getMaxCitiesJobs = () => {
   return api.get("/api/city/jobs");
 };
 
+export const getMaxSubjectsJobs = () => {
+  return api.get("/api/subjects/jobs");
+};
+
+export const getMaxGradeJobs = () => {
+  return api.get("/api/grade/jobs");
+};
+
 export const sendMessage = (data) => {
   return api.post("/api/send-message", data);
 }

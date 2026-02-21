@@ -1,15 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { Users } from "lucide-react";
-import { getMaxCitiesJobs } from "../api/auth";
+import {
+  getMaxCitiesJobs,
+  getMaxSubjectsJobs,
+  getMaxGradeJobs,
+} from "../api/auth";
 
 const QuickLinksSection = () => {
-  const [quickLinks, setQuickLinks] = useState([]);
+  const [citiesQuickLinks, setCitiesQuickLinks] = useState([]);
+  const [subjectsQuickLinks, setSubjectsQuickLinks] = useState([]);
+  const [gradesQuickLinks, setGradesQuickLinks] = useState([]);
 
   useEffect(() => {
     const fetchJobsList = async () => {
       try {
         const res = await getMaxCitiesJobs();
-        setQuickLinks(res.data.data);
+        setCitiesQuickLinks(res.data.data);
+      } catch (err) {}
+    };
+
+    fetchJobsList();
+  }, []);
+
+  useEffect(() => {
+    const fetchJobsList = async () => {
+      try {
+        const res = await getMaxSubjectsJobs();
+        setSubjectsQuickLinks(res.data.data);
+      } catch (err) {}
+    };
+
+    fetchJobsList();
+  }, []);
+
+  useEffect(() => {
+    const fetchJobsList = async () => {
+      try {
+        const res = await getMaxGradeJobs();
+        setGradesQuickLinks(res.data.data);
       } catch (err) {}
     };
 
@@ -42,13 +70,13 @@ const QuickLinksSection = () => {
         <div className="overflow-x-auto">
           <div
             className="
-        grid grid-rows-2 grid-flow-col
-        auto-cols-[320px]
-        gap-6
-        w-max
-      "
+            grid grid-rows-1 grid-flow-col
+            auto-cols-[320px]
+            gap-6
+            w-max
+          "
           >
-            {quickLinks.map((link, index) => {
+            {citiesQuickLinks.map((link, index) => {
               const isActive = link.active;
 
               return (
@@ -67,6 +95,72 @@ const QuickLinksSection = () => {
             `}
                 >
                   {link.city_name}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        <div className="overflow-x-auto mt-4">
+          <div
+            className="
+            grid grid-rows-1 grid-flow-col
+            auto-cols-[320px]
+            gap-6
+            w-max
+          "
+          >
+            {subjectsQuickLinks.map((link, index) => {
+              const isActive = link.active;
+
+              return (
+                <button
+                  key={index}
+                  className={`
+              h-[90px]
+              flex items-center justify-center
+              rounded-xl border text-xl font-semibold
+              transition-all duration-200
+              ${
+                isActive
+                  ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                  : "bg-white text-gray-900 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+              }
+            `}
+                >
+                  {link.subject_name}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        <div className="overflow-x-auto mt-4">
+          <div
+            className="
+            grid grid-rows-1 grid-flow-col
+            auto-cols-[320px]
+            gap-6
+            w-max
+          "
+          >
+            {gradesQuickLinks.map((link, index) => {
+              const isActive = link.active;
+
+              return (
+                <button
+                  key={index}
+                  className={`
+              h-[90px]
+              flex items-center justify-center
+              rounded-xl border text-xl font-semibold
+              transition-all duration-200
+              ${
+                isActive
+                  ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                  : "bg-white text-gray-900 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+              }
+            `}
+                >
+                  {link.grade_name}
                 </button>
               );
             })}
