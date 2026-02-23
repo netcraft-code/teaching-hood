@@ -9,14 +9,14 @@ const Footer = () => {
     HOME: "/",
     ABOUT_US: "/about-us",
     TERM_CONDITION: "/term-condition",
-    CONTACT_US: "/contact-us"
+    CONTACT_US: "/contact-us",
   };
 
   return (
     <footer className="bg-[#0B1828] text-gray-300 mx-auto w-full">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pb-7 pt-12">
         {/* MAIN FOOTER */}
-        <div className="mx-auto flex flex-col md:flex-row gap-10 md:gap-36 mb-6">
+        <div className="mx-auto flex flex-col md:flex-row gap-10 xl:gap-36 mb-6">
           <div className="flex flex-row items-center justify-start">
             {/* BRAND */}
             <div className="space-y-4">
@@ -39,7 +39,7 @@ const Footer = () => {
 
               <div className="font-normal text-[16px] leading-[26px] tracking-[0] text-gray-400">
                 <p>contact@teachinghood.com</p>
-                <p>+91-9923800424</p>
+                <p>+91-9960750424</p>
                 <p>Gurgaon, India</p>
               </div>
 
@@ -73,7 +73,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-[5rem]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 xl:gap-[5rem]">
             {/* CANDIDATES */}
             <div>
               <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">

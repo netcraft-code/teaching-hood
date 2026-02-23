@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
-import contactUsEmailIcon from "./../assets/icons/contact-us-email.svg"
+import React, { useState } from "react";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
+import contactUsEmailIcon from "./../assets/icons/contact-us-email.svg";
 import { sendMessage } from "../api/auth";
-import schoolFindRightIcon from "./../assets/icons/school-find-right.svg"
+import schoolFindRightIcon from "./../assets/icons/school-find-right.svg";
 
 const ContactUsSection = () => {
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+    name: "",
+    email: "",
+    message: "",
     attachment: null,
   });
 
@@ -20,9 +20,9 @@ const ContactUsSection = () => {
   };
 
   const handleFileChange = (e) => {
-    setFormData({ 
-      ...formData, 
-      attachment: e.target.files[0] 
+    setFormData({
+      ...formData,
+      attachment: e.target.files[0],
     });
   };
 
@@ -45,14 +45,14 @@ const ContactUsSection = () => {
       setShowPopup(true);
 
       setFormData({
-        name: '',
-        email: '',
-        message: '',
+        name: "",
+        email: "",
+        message: "",
         attachment: null,
       });
     } catch (error) {
       console.error("Contact form error:", error);
-      
+
       setPopupMessage("Something went wrong. Please try again.");
       setShowPopup(true);
     }
@@ -66,7 +66,9 @@ const ContactUsSection = () => {
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-full mb-6">
             <img src={contactUsEmailIcon} className="w-4 h-4 text-green-600" />
-            <span className="text-sm text-green-600 font-semibold">Get in Touch</span>
+            <span className="text-sm text-green-600 font-semibold">
+              Get in Touch
+            </span>
           </div>
 
           {/* Heading */}
@@ -163,8 +165,10 @@ const ContactUsSection = () => {
           <div className="space-y-6">
             {/* Contact Info Card */}
             <div className="bg-white rounded-2xl shadow-xl p-8 mt-8 border border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Contact Information</h3>
-              
+              <h3 className="text-xl font-bold text-gray-900 mb-6">
+                Contact Information
+              </h3>
+
               <div className="space-y-6">
                 {/* Email */}
                 <div className="flex items-start space-x-4">
@@ -173,7 +177,9 @@ const ContactUsSection = () => {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500 mb-1">Email</div>
-                    <div className="font-normal text-gray-900">contact@teachinghood.com</div>
+                    <div className="font-normal text-gray-900">
+                      contact@teachinghood.com
+                    </div>
                   </div>
                 </div>
 
@@ -184,7 +190,9 @@ const ContactUsSection = () => {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500 mb-1">Phone</div>
-                    <div className="font-normal text-gray-900">+91-9923800424</div>
+                    <div className="font-normal text-gray-900">
+                      +91-9960750424
+                    </div>
                   </div>
                 </div>
 
@@ -195,7 +203,9 @@ const ContactUsSection = () => {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500 mb-1">Location</div>
-                    <div className="font-normal text-gray-900">Gurgaon, India</div>
+                    <div className="font-normal text-gray-900">
+                      Gurgaon, India
+                    </div>
                   </div>
                 </div>
               </div>
@@ -206,8 +216,14 @@ const ContactUsSection = () => {
               <div>
                 {/* Icon + Heading */}
                 <div className="flex items-center space-x-2 mb-1">
-                  <img src={schoolFindRightIcon} className="w-5 h-5" alt="icon" />
-                  <h4 className="font-semibold text-blue-500">Quick Response:</h4>
+                  <img
+                    src={schoolFindRightIcon}
+                    className="w-5 h-5"
+                    alt="icon"
+                  />
+                  <h4 className="font-semibold text-blue-500">
+                    Quick Response:
+                  </h4>
                 </div>
 
                 {/* Paragraph */}
@@ -216,8 +232,6 @@ const ContactUsSection = () => {
                 </p>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
@@ -241,9 +255,7 @@ const ContactUsSection = () => {
               </svg>
             </div>
 
-            <p className="text-gray-800 text-sm mb-6">
-              {popupMessage}
-            </p>
+            <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>
 
             <button
               onClick={() => setShowPopup(false)}

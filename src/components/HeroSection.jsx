@@ -185,7 +185,7 @@ const HeroSection = () => {
                         .map(s => ({ value: s.id, label: s.name }))
                         .find(option => option.value === subject)}
                       onChange={(option) => setSubject(option.value)}
-                      placeholder="Subject (e.g., Mathematics)"
+                      placeholder="Subject (e.g., Math)"
                       menuPortalTarget={document.body}
                       menuPosition="fixed"
                       styles={{
@@ -240,7 +240,7 @@ const HeroSection = () => {
 
                       onChange={(option) => setGrade(option.value)}
 
-                      placeholder="Grade (e.g., Primary)"
+                      placeholder="Grade (e.g., PRT)"
 
                       menuPortalTarget={document.body}
                       menuPosition="fixed"

@@ -937,7 +937,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       {/* Min Salary Input */}
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                          $
+                          ₹
                         </span>
                         <input
                           type="number"
@@ -961,7 +961,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     <div className="flex-1">
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                          $
+                          ₹
                         </span>
                         <input
                           type="number"

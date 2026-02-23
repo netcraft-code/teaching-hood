@@ -168,10 +168,10 @@ const JobCard = () => {
       return "Salary - As per industry standards";
     }
 
-    const minLPA = (min / 100000).toFixed(1);
-    const maxLPA = (max / 100000).toFixed(1);
+    const minLPA = (min);
+    const maxLPA = (max);
 
-    return `Salary - ₹${minLPA}-${maxLPA} Per Month`;
+    return `Salary - ₹${minLPA}-${maxLPA} per month`;
   };
 
   // Get job title
@@ -722,7 +722,7 @@ const JobCard = () => {
                       key={job.id}
                       className="bg-white rounded-2xl border-t-8 border-blue-400 shadow-lg transition-shadow p-4 md:p-6"
                     >
-                      <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+                      <div className="flex sm:flex-row items-start justify-between gap-4">
                         {/* LEFT SIDE */}
                         <Link to={`/job/${job.id}`}>
                           <div className="flex items-start gap-3 md:gap-4 w-full sm:w-auto">

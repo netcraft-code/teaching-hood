@@ -43,7 +43,7 @@ const Header = () => {
       : "text-gray-700 hover:text-blue-600";
 
   const goTo = (path) => {
-    if (!isLoggedIn && (path === "/post-job")) {
+    if (!isLoggedIn && path === "/post-job") {
       navigate("/signin");
     } else {
       navigate(path);
@@ -72,12 +72,9 @@ const Header = () => {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden xl:flex items-center space-x-8">
             {menuItems.map((item) => {
-              if (
-                item.path === "/post-job" &&
-                userType === 1
-              ) {
+              if (item.path === "/post-job" && userType === 1) {
                 return null;
               }
 
@@ -101,7 +98,7 @@ const Header = () => {
           </div>
 
           {/* Desktop Right Section */}
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="hidden xl:flex items-center gap-6">
             {!isLoggedIn ? (
               <>
                 <button
@@ -132,14 +129,14 @@ const Header = () => {
                 Call Us
               </p>
               <p className="text-[19px] font-normal leading-[28.5px] text-green-600 align-middle">
-                +91-9923800424
+                +91-9960750424
               </p>
             </div>
           </div>
 
           {/* Mobile Toggle */}
           <button
-            className="lg:hidden p-2"
+            className="xl:hidden p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
@@ -148,7 +145,7 @@ const Header = () => {
 
         {/* Mobile Menu */}
         <div
-          className={`lg:hidden overflow-hidden transition-all duration-300 ${
+          className={`xl:hidden overflow-hidden transition-all duration-300 ${
             isMenuOpen
               ? "max-h-screen mt-4 p-4 bg-white-900 rounded-lg"
               : "max-h-0"
@@ -176,7 +173,7 @@ const Header = () => {
                 <button className="text-[16px] font-normal leading-none tracking-[0] w-full border py-2 rounded-full">
                   Sign In
                 </button>
-                <button className="text-[16px] font-normal leading-none tracking-[0] w-full bg-blue-600 text-black py-2 rounded-full">
+                <button className="text-[16px] font-normal leading-none tracking-[0] w-full bg-blue-600 text-white py-2 rounded-full">
                   Sign Up
                 </button>
               </>
@@ -195,7 +192,7 @@ const Header = () => {
                 Call Us
               </p>
               <p className="text-[19px] font-normal leading-[28.5px] text-green-600 align-middle">
-                +91-9923800424
+                +91-9960750424
               </p>
             </div>
           </div>
