@@ -49,7 +49,7 @@ const HeroSection = () => {
 
   const handleSearch = () => {
     navigate(
-      `/find-job?subject=${subject}&grade=${grade}&city=${location.value}`
+      `/find-job?subject=${subject}&grade=${grade}&city=${location.value}`,
     );
   };
 
@@ -177,13 +177,13 @@ const HeroSection = () => {
                     />
 
                     <Select
-                      options={subjects.map(s => ({
+                      options={subjects.map((s) => ({
                         value: s.id,
-                        label: s.name
+                        label: s.name,
                       }))}
                       value={subjects
-                        .map(s => ({ value: s.id, label: s.name }))
-                        .find(option => option.value === subject)}
+                        .map((s) => ({ value: s.id, label: s.name }))
+                        .find((option) => option.value === subject)}
                       onChange={(option) => setSubject(option.value)}
                       placeholder="Subject (e.g., Math)"
                       menuPortalTarget={document.body}
@@ -196,8 +196,8 @@ const HeroSection = () => {
                           minHeight: "52px",
                           backgroundColor: "#F5F6F7",
                           borderRadius: "8px",
-                          paddingLeft: "40px",   // 🔥 icon ke liye space
-                          border: "1px solid #e5e7eb"
+                          paddingLeft: "40px", // 🔥 icon ke liye space
+                          border: "1px solid #e5e7eb",
                         }),
 
                         input: (base) => ({
@@ -229,22 +229,17 @@ const HeroSection = () => {
                     />
 
                     <Select
-                      options={grades.map(g => ({
+                      options={grades.map((g) => ({
                         value: g.id,
-                        label: g.name
+                        label: g.name,
                       }))}
-
                       value={grades
-                        .map(g => ({ value: g.id, label: g.name }))
-                        .find(option => option.value === grade)}
-
+                        .map((g) => ({ value: g.id, label: g.name }))
+                        .find((option) => option.value === grade)}
                       onChange={(option) => setGrade(option.value)}
-
                       placeholder="Grade (e.g., PRT)"
-
                       menuPortalTarget={document.body}
                       menuPosition="fixed"
-
                       styles={{
                         menuPortal: (base) => ({ ...base, zIndex: 9999 }),
 
@@ -278,7 +273,6 @@ const HeroSection = () => {
 
                   {/* Location */}
                   <div className="flex-1 relative">
-
                     {/* Icon */}
                     <img
                       src={homePageIcons.locationIcon}
@@ -320,6 +314,16 @@ const HeroSection = () => {
                           ...provided,
                           color: "#9ca3af",
                           textAlign: "left",
+                        }),
+                        option: (provided, state) => ({
+                          ...provided,
+                          textAlign: "left",
+                          color: "#111827",
+                          backgroundColor: state.isFocused
+                            ? "#f3f4f6"
+                            : state.isSelected
+                              ? "#e5e7eb"
+                              : "#ffffff",
                         }),
                       }}
                     />
