@@ -674,7 +674,8 @@ const Profile = () => {
                       </div>
                     ))}
                 </>
-              ) : <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">No record found</div>)}
+              ) : <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">No record found</div>
+            )}
 
             {/* Education Tab */}
             {activeTab === "education" &&

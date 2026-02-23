@@ -104,7 +104,7 @@ const AppliedTab = ({
 
                             {/* Grade & Experience */}
                             <p className="text-sm text-gray-600 mb-2 flex items-center">
-                                {job.job_posted.school_name}
+                                {job.job_posted.school_name} { job?.job_posted?.city_name ? ', ' + job?.job_posted?.city_name : ''}
                             </p>
 
                             {/* Salary & Applicants */}

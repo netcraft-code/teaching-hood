@@ -181,7 +181,10 @@ const Header = () => {
                 </button>
               </>
             ) : (
-              <button className="text-[16px] font-normal leading-none tracking-[0] w-full flex justify-center items-center gap-2 py-2">
+              <button
+                className="text-[16px] font-normal leading-none tracking-[0] w-full flex justify-center items-center gap-2 py-2"
+                onClick={() => goTo(routes.PROFILE)}
+              >
                 <UserCircle /> Profile
               </button>
             )}

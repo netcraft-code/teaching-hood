@@ -5,6 +5,7 @@ import { homePageIcons } from "../assets/icons/HomePageIcons";
 import { getCities, getGradeLevels, getSubjects } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import AsyncSelect from "react-select/async";
+import Select from "react-select";
 
 const HeroSection = () => {
   const [subjects, setSubjects] = useState([]);
@@ -168,79 +169,121 @@ const HeroSection = () => {
                 <div className="flex flex-col md:flex-row gap-2">
                   {/* Subject */}
                   <div className="flex-1 relative">
+                    {/* Left Icon */}
                     <img
                       src={homePageIcons.subjectIcon}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]"
-                      size={20}
+                      alt="subject"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 z-20 pointer-events-none"
                     />
 
-                    <select
-                      value={subject}
-                      onChange={(e) => setSubject(e.target.value)}
-                      onFocus={() => setOpen({ ...open, subject: true })}
-                      onBlur={() => setOpen({ ...open, subject: false })}
-                      className="w-full pl-10 pr-10 py-4 bg-[#F5F6F7] text-gray-400 border border-gray-200 rounded-lg font-sf text-[14px] appearance-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="" disabled>
-                        Subject (e.g., Mathematics)
-                      </option>
-                      {subjects.map((s) => (
-                        <option key={s.id} value={s.id} className="text-black">
-                          {s.name}
-                        </option>
-                      ))}
-                    </select>
+                    <Select
+                      options={subjects.map(s => ({
+                        value: s.id,
+                        label: s.name
+                      }))}
+                      value={subjects
+                        .map(s => ({ value: s.id, label: s.name }))
+                        .find(option => option.value === subject)}
+                      onChange={(option) => setSubject(option.value)}
+                      placeholder="Subject (e.g., Mathematics)"
+                      menuPortalTarget={document.body}
+                      menuPosition="fixed"
+                      styles={{
+                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
 
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                      {open.subject ? (
-                        <ChevronUp size={18} />
-                      ) : (
-                        <ChevronDown size={18} />
-                      )}
-                    </div>
+                        control: (base) => ({
+                          ...base,
+                          minHeight: "52px",
+                          backgroundColor: "#F5F6F7",
+                          borderRadius: "8px",
+                          paddingLeft: "40px",   // 🔥 icon ke liye space
+                          border: "1px solid #e5e7eb"
+                        }),
+
+                        input: (base) => ({
+                          ...base,
+                          color: "#111827",
+                          textAlign: "left",
+                        }),
+                        singleValue: (base) => ({
+                          ...base,
+                          color: "#6b7280",
+                          textAlign: "left",
+                        }),
+                        placeholder: (base) => ({
+                          ...base,
+                          color: "#9ca3af",
+                          textAlign: "left",
+                        }),
+                      }}
+                    />
                   </div>
 
                   {/* Grade */}
                   <div className="flex-1 relative">
+                    {/* Left Icon */}
                     <img
                       src={homePageIcons.gradeIcon}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]"
-                      size={20}
+                      alt="grade"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 z-20 pointer-events-none"
                     />
 
-                    <select
-                      value={grade}
-                      onChange={(e) => setGrade(e.target.value)}
-                      onFocus={() => setOpen({ ...open, grade: true })}
-                      onBlur={() => setOpen({ ...open, grade: false })}
-                      className="w-full pl-10 pr-10 py-4 bg-[#F5F6F7] text-gray-400 border border-gray-200 rounded-lg
-                      font-sf text-[14px] appearance-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="" disabled>
-                        Grade (e.g., Primary)
-                      </option>
-                      {grades.map((g) => (
-                        <option key={g.id} value={g.id} className="text-black">
-                          {g.name}
-                        </option>
-                      ))}
-                    </select>
+                    <Select
+                      options={grades.map(g => ({
+                        value: g.id,
+                        label: g.name
+                      }))}
 
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                      {open.grade ? (
-                        <ChevronUp size={18} />
-                      ) : (
-                        <ChevronDown size={18} />
-                      )}
-                    </div>
+                      value={grades
+                        .map(g => ({ value: g.id, label: g.name }))
+                        .find(option => option.value === grade)}
+
+                      onChange={(option) => setGrade(option.value)}
+
+                      placeholder="Grade (e.g., Primary)"
+
+                      menuPortalTarget={document.body}
+                      menuPosition="fixed"
+
+                      styles={{
+                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+
+                        control: (base) => ({
+                          ...base,
+                          minHeight: "52px",
+                          backgroundColor: "#F5F6F7",
+                          borderRadius: "8px",
+                          paddingLeft: "40px",
+                          border: "1px solid #e5e7eb",
+                        }),
+
+                        input: (base) => ({
+                          ...base,
+                          color: "#111827",
+                          textAlign: "left",
+                        }),
+                        singleValue: (base) => ({
+                          ...base,
+                          color: "#6b7280",
+                          textAlign: "left",
+                        }),
+                        placeholder: (base) => ({
+                          ...base,
+                          color: "#9ca3af",
+                          textAlign: "left",
+                        }),
+                      }}
+                    />
                   </div>
 
                   {/* Location */}
                   <div className="flex-1 relative">
+
+                    {/* Icon */}
                     <img
                       src={homePageIcons.locationIcon}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-[#717182]"
-                      size={20}
+                      alt="location"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 z-10 pointer-events-none"
                     />
 
                     <AsyncSelect
@@ -248,33 +291,35 @@ const HeroSection = () => {
                       defaultOptions
                       loadOptions={loadCities}
                       value={location}
-                      onChange={(option) => {
-                        setLocation(option);
-                      }}
+                      onChange={(option) => setLocation(option)}
                       placeholder="Search city"
                       styles={{
                         control: (provided) => ({
                           ...provided,
-                          backgroundColor: "#F5F6F7", // main box bg
+                          backgroundColor: "#F5F6F7",
                           border: "1px solid #e5e7eb",
                           borderRadius: "8px",
                           minHeight: "52px",
+                          paddingLeft: "40px",
                         }),
                         menu: (provided) => ({
                           ...provided,
-                          backgroundColor: "#ffffff", // dropdown bg
+                          backgroundColor: "#ffffff",
                         }),
                         input: (provided) => ({
                           ...provided,
-                          color: "#111827", // typing text color
+                          color: "#111827",
+                          textAlign: "left",
                         }),
                         singleValue: (provided) => ({
                           ...provided,
-                          color: "#6b7280", // selected text color
+                          color: "#6b7280",
+                          textAlign: "left",
                         }),
                         placeholder: (provided) => ({
                           ...provided,
                           color: "#9ca3af",
+                          textAlign: "left",
                         }),
                       }}
                     />
