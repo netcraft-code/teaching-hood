@@ -42,15 +42,15 @@ const AboutUs = () => {
           <br />
           <br />
           <span>
-            Welcome to <strong>Teachinghood</strong> ("Plaƞorm", "we", "us",
-            "our"). Teachinghood is an online hiring and career plaƞorm designed
-            to connect <strong>teachers</strong>, <strong>schools</strong>, and{" "}
-            <strong>recruitment agencies</strong> on a single, organized
-            ecosystem for teacher recruitment, professional growth, and
-            opportunity discovery.
+            Welcome to <strong>Teachinghood</strong> ("Platform", "we", "us",
+            "our"). Teachinghood is an online hiring and career platform
+            designed to connect <strong>teachers</strong>,{" "}
+            <strong>schools</strong>, and <strong>recruitment agencies</strong>{" "}
+            on a single, organized ecosystem for teacher recruitment,
+            professional growth, and opportunity discovery.
             <br />
             <br /> By accessing or using Teachinghood (including our website,
-            mobile experiences, WhatsAppbased interactions, APIs, and related
+            mobile experiences, WhatsApp-based interactions, APIs, and related
             services), you agree to be bound by these Terms of Service
             ("Terms").
           </span>
@@ -65,17 +65,17 @@ const AboutUs = () => {
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>You must be at least 18 years old to use Teachinghood.</li>
               <li>
-                By using the Plaƞorm, you represent that you are legally capable
-                of entering into a binding agreement.
+                By using the Platform, you represent that you are legally
+                capable of entering into a binding agreement.
               </li>
               <li>
                 Schools and recruiters confirm they are authorized to post jobs
-                and engage candidates on behalf of their insƟtuƟon or clients.
+                and engage candidates on behalf of their institution or clients.
               </li>
             </ul>
             {/* <p className="text-sm text-gray-800 leading-relaxed">
-                        By accessing, registering, or using Teachinghood in any manner, you confirm that you have read, understood, and agreed to these Terms & Conditions.  If you do not agree, you must not use the platform.
-                    </p> */}
+                  By accessing, registering, or using Teachinghood in any manner, you confirm that you have read, understood, and agreed to these Terms & Conditions.  If you do not agree, you must not use the platform.
+              </p> */}
           </div>
 
           {/* Section 2 */}
@@ -124,8 +124,8 @@ const AboutUs = () => {
                 informaƟon
               </li>
               <li>
-                You are responsible for maintaining the confidenƟality of your
-                account credenƟals.
+                You are responsible for maintaining the confidentiality of your
+                account credentials.
               </li>
               <li>
                 Teachinghood is not responsible for unauthorized access caused
@@ -150,14 +150,14 @@ const AboutUs = () => {
               <li>Provide false, misleading, or fraudulent informaƟon.</li>
               <li>
                 Post discriminatory, abusive, misleading, or unlawful job
-                lisƟngs or profiles
+                listings or profiles
               </li>
               <li>
-                Attempt to scrape, copy, reverse engineer, or misuse plaƞorm
+                Attempt to scrape, copy, reverse engineer, or misuse platform
                 data.
               </li>
               <li>
-                Circumvent plaƞorm processes, opt-in flows, or communicaƟon
+                Circumvent platform processes, opt-in flows, or communication
                 safeguards
               </li>
               <li>
@@ -195,10 +195,10 @@ const AboutUs = () => {
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>
                 Teachers are responsible for the accuracy of their profiles,
-                qualificaƟons, experience, and preferences.
+                qualifications, experience, and preferences.
               </li>
               <li>
-                Profile visibility may be limited or enhanced based on plaƞorm
+                Profile visibility may be limited or enhanced based on platform
                 features.
               </li>
               <li>
@@ -206,7 +206,7 @@ const AboutUs = () => {
                 recruiters
               </li>
               <li>
-                Teachinghood does not verify every credenƟal unless explicitly
+                Teachinghood does not verify every credential unless explicitly
                 stated.
               </li>
             </ul>
@@ -220,13 +220,13 @@ const AboutUs = () => {
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>
                 Schools and recruiters are solely responsible for job accuracy,
-                role legiƟmacy, salary disclosures, and compliance with labor
+                role legitimacy, salary disclosures, and compliance with labor
                 laws
               </li>
               <li>All payments are non-refundable unless stated otherwise.</li>
               <li>
                 Teachinghood reserves the right to review, modify, or remove job
-                posƟngs that violate these Terms or applicable laws.
+                postings that violate these Terms or applicable laws.
               </li>
               <li>
                 Teachinghood is not a party to any employment contract between
@@ -242,16 +242,16 @@ const AboutUs = () => {
             </h2>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>
-                By using Teachinghood, you consent to receive communicaƟons via
-                email, phone, WhatsApp, or in-plaƞorm messaging, strictly
-                related to hiring, onboarding, and plaƞorm updates
+                By using Teachinghood, you consent to receive communications via
+                email, phone, WhatsApp, or in-platform messaging, strictly
+                related to hiring, onboarding, and platform updates
               </li>
               <li>
-                Users may opt out of non-essenƟal communicaƟons at any Ɵme.
+                Users may opt out of non-essential communications at any time.
               </li>
               <li>
                 Teachinghood does not sell personal contact data to third
-                parƟes.
+                parties.
               </li>
             </ul>
             {/* <p className="text-sm text-gray-800 leading-relaxed">
@@ -276,7 +276,7 @@ const AboutUs = () => {
               </li>
               <li>
                 Teachinghood reserves the right to introduce paid plans,
-                subscripƟons, or successbased fees with prior noƟce.
+                subscriptions, or success-based fees with prior notice.
               </li>
               <li>
                 All fees, if applicable, will be transparently communicated
@@ -297,13 +297,13 @@ const AboutUs = () => {
             </h2>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>
-                All plaƞorm content, branding, workflows, and soŌware are the
+                All platform content, branding, workflows, and software are the
                 intellectual property of Teachinghood.
               </li>
               <li>
                 Users retain ownership of their content but grant Teachinghood a
-                non-exclusive, royalty-free license to use it for plaƞorm
-                operaƟons and improvements.
+                non-exclusive, royalty-free license to use it for platform
+                operations and improvements.
               </li>
             </ul>
             {/* <p className="text-sm text-gray-800 leading-relaxed">
@@ -329,8 +329,8 @@ const AboutUs = () => {
                   absolute security
                 </li>
                 <li>
-                  Users are encouraged to avoid sharing sensiƟve personal
-                  informaƟon outside plaƞorm-recommended fields.
+                  Users are encouraged to avoid sharing sensitive personal
+                  information outside platform-recommended fields.
                 </li>
               </ul>
               {/* <li>Use of the platform is at your own risk.</li> */}
@@ -344,7 +344,7 @@ const AboutUs = () => {
             </h2>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>
-                Teachinghood strives for reliable upƟme but does not guarantee
+                Teachinghood strives for reliable uptime but does not guarantee
                 uninterrupted access.
               </li>
               <li>
@@ -360,7 +360,7 @@ const AboutUs = () => {
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>
                 Teachinghood shall not be liable for indirect, incidental, or
-                consequenƟal damages
+                consequential damages
               </li>
               <li>
                 Teachinghood is not responsible for hiring decisions, employment
@@ -379,7 +379,7 @@ const AboutUs = () => {
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>Your use of the Platform</li>
               <li>Your violation of these Terms</li>
-              <li>Content or informaƟon you submit</li>
+              <li>Content or information you submit</li>
             </ul>
           </div>
           <div className="mb-8">
@@ -388,11 +388,11 @@ const AboutUs = () => {
             </h2>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>
-                Teachinghood may suspend or terminate access for violaƟons of
+                Teachinghood may suspend or terminate access for violations of
                 these Terms.
               </li>
               <li>
-                Users may delete their account subject to data retenƟon
+                Users may delete their account subject to data retention
                 requirements.
               </li>
             </ul>
@@ -402,9 +402,9 @@ const AboutUs = () => {
               15. Modifications to Terms
             </h2>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
-              <li>Teachinghood may update these Terms from Ɵme to Ɵme</li>
+              <li>Teachinghood may update these Terms from time to time</li>
               <li>
-                ConƟnued use of the Plaƞorm aŌer updates consƟtutes acceptance
+                Continued use of the Platform after updates constitutes acceptance
                 of revised Terms
               </li>
             </ul>
@@ -415,7 +415,7 @@ const AboutUs = () => {
             </h2>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>These Terms are governed by the laws of India.</li>
-              <li>Courts located in India shall have exclusive jurisdicƟon.</li>
+              <li>Courts located in India shall have exclusive jurisdiction.</li>
             </ul>
           </div>
           <div className="mb-8">

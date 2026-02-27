@@ -539,7 +539,7 @@ const EditJob = () => {
                           }));
                           setErrors((prev) => ({ ...prev, city_id: "" }));
                         }}
-                        placeholder="Search city"
+                        placeholder="Search Location"
                         className="w-full"
                       />
 

@@ -286,7 +286,7 @@ const HeroSection = () => {
                       loadOptions={loadCities}
                       value={location}
                       onChange={(option) => setLocation(option)}
-                      placeholder="Search city"
+                      placeholder="Search Location"
                       styles={{
                         control: (provided) => ({
                           ...provided,

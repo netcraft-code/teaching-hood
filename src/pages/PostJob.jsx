@@ -483,7 +483,7 @@ const PostJob = () => {
                           }));
                           setErrors((prev) => ({ ...prev, city_id: "" }));
                         }}
-                        placeholder="Search city"
+                        placeholder="Search Location"
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                       />
 

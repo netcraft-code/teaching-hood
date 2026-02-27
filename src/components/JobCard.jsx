@@ -165,11 +165,11 @@ const JobCard = () => {
   // Format salary to LPA
   const formatSalary = (min, max) => {
     if (Number(min) === 0 && Number(max) === 0) {
-      return "Salary - As per industry standards";
+      return "Salary - as per industry standards";
     }
 
-    const minLPA = (min);
-    const maxLPA = (max);
+    const minLPA = min;
+    const maxLPA = max;
 
     return `Salary - ₹${minLPA}-${maxLPA} per month`;
   };
@@ -282,7 +282,7 @@ const JobCard = () => {
           onChange={(option) => {
             setSelectedCity(option);
           }}
-          placeholder="Search city"
+          placeholder="Search Location"
           className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
         />
       </div>
@@ -834,7 +834,10 @@ const JobCard = () => {
 
                         {/* Salary and Apply Button */}
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                          <div className="text-xl md:text-2xl font-semibold text-gray-900">
+                          <div
+                            className="text-xl md:text-2xl font-semibold text-gray-900"
+                            style={{ fontSize: "19px" }}
+                          >
                             {formatSalary(job.min_salary, job.max_salary)}
                           </div>
                           {job.is_applied ? (
