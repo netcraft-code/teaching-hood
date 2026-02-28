@@ -388,12 +388,23 @@ const JobCard = () => {
             <input
               type="radio"
               name="experience"
-              value="5+"
-              checked={selectedExperience === "5+"}
+              value="5-10"
+              checked={selectedExperience === "5-10"}
               onChange={(e) => setSelectedExperience(e.target.value)}
               className="w-4 h-4 text-blue-600 focus:ring-blue-500"
             />
-            <span className="ml-2 text-gray-700">5+ Years</span>
+            <span className="ml-2 text-gray-700">5-10 Years</span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="experience"
+              value="10+"
+              checked={selectedExperience === "10+"}
+              onChange={(e) => setSelectedExperience(e.target.value)}
+              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+            />
+            <span className="ml-2 text-gray-700">10+ Years</span>
           </label>
         </div>
       </div>
