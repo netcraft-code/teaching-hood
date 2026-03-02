@@ -1,9 +1,13 @@
+import React, { useState } from "react";
 import { FaFacebookF, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import logo from "../assets/images/tp-logo.png";
 import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const navigate = useNavigate();
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
 
   const routes = {
     HOME: "/",
@@ -13,7 +17,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#0B1828] text-gray-300 mx-auto w-full">
+    <div className="bg-[#0B1828] text-gray-300 mx-auto w-full">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pb-7 pt-12">
         {/* MAIN FOOTER */}
         <div className="mx-auto flex flex-col md:flex-row gap-10 md:gap-36 mb-6">
@@ -109,13 +113,8 @@ const Footer = () => {
                 </li> */}
                 <li
                   onClick={() => {
-                    if (
-                      window.confirm(
-                        "Please call our representative for inquiring about dedicated hiring support: +91-9226224831",
-                      )
-                    ) {
-                      window.location.href = "tel:9226224831";
-                    }
+                    setPopupMessage("Please call our representative for inquiring about dedicated hiring support: +91-9226224831");
+                    setShowPopup(true);
                   }}
                   className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]"
                 >
@@ -136,7 +135,13 @@ const Footer = () => {
                 {/* <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Search Candidates
                 </li> */}
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                <li
+                  onClick={() => {
+                    setPopupMessage("Please call our representative for inquiring about dedicated hiring support: +91-9226224831");
+                    setShowPopup(true);
+                  }}
+                  className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]"
+                >
                   Seek Dedicated Hiring Support
                 </li>
               </ul>
@@ -184,7 +189,38 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
+
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-md p-6 text-center">
+            <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+
+            <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>
+
+            <button
+              onClick={() => setShowPopup(false)}
+              className="px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

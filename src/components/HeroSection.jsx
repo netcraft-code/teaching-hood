@@ -293,6 +293,7 @@ const HeroSection = () => {
                       value={location}
                       onChange={(option) => setLocation(option)}
                       placeholder="Search city"
+
                       styles={{
                         control: (provided) => ({
                           ...provided,
@@ -320,6 +321,16 @@ const HeroSection = () => {
                           ...provided,
                           color: "#9ca3af",
                           textAlign: "left",
+                        }),
+                        option: (provided, state) => ({
+                          ...provided,
+                          textAlign: "left",
+                          color: "#111827",
+                          backgroundColor: state.isFocused
+                            ? "#f3f4f6"
+                            : state.isSelected
+                            ? "#e5e7eb"
+                            : "#ffffff",
                         }),
                       }}
                     />
