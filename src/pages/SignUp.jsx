@@ -195,11 +195,7 @@ const SignUpPage = () => {
                 onClick={() => navigate(routes.HOME)}
                 className="flex items-center justify-center space-x-2 mb-1"
               >
-                <img
-                  src={logo}
-                  alt="Teachinghood Logo"
-                  className="w-[250px]"
-                />
+                <img src={logo} alt="Teachinghood Logo" className="w-[250px]" />
               </button>
             </div>
 
@@ -427,7 +423,11 @@ const SignUpPage = () => {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                 >
-                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showConfirmPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
                 </button>
               </div>
             </div>

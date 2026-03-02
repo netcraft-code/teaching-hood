@@ -211,7 +211,7 @@ const SignInPage = () => {
           </div>
 
           {/* Main Form */}
-          <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8">
+          <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 mx-1">
             {/* Step 1: Choose Login Method */}
             {step === "choice" && (
               <>

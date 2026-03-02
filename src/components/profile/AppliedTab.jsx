@@ -1,7 +1,7 @@
-import React from 'react';
-import Pagination from './Pagination';
-import schoolVacanciesIcon from './../../assets/icons/about-us.svg';
-import schoolIcon from './../../assets/icons/school-icon.svg';
+import React from "react";
+import Pagination from "./Pagination";
+import schoolVacanciesIcon from "./../../assets/icons/about-us.svg";
+import schoolIcon from "./../../assets/icons/school-icon.svg";
 
 const AppliedTab = ({
   jobs,
@@ -13,35 +13,36 @@ const AppliedTab = ({
   searchQuery,
   setSearchQuery,
 }) => {
-    const getJobTitle = (job) => {
-        if (job.subject_name && job.grade_name) {
-        return `${job.subject_name} (${job.grade_name})`;
-        } else if (job.subject_name) {
-        return `${job.position} - ${job.subject_name}`;
-        } else if (job.grade_name) {
-        return `${job.position} - ${job.grade_name}`;
-        }
-        return job.position;
-    };
+  const getJobTitle = (job) => {
+    console.log("Job data:", job);
+    if (job.subject_name && job.grade_name) {
+      return `${job.grade_name} ${job.subject_name} Teacher`;
+    } else if (job.subject_name) {
+      return `${job.position} - ${job.subject_name}`;
+    } else if (job.grade_name) {
+      return `${job.position} - ${job.grade_name}`;
+    }
+    return job.position;
+  };
 
-    // Get human readable time
-    const getTimeAgo = (dateString) => {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffTime = Math.abs(now - date);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  // Get human readable time
+  const getTimeAgo = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (diffDays === 0) return "Today";
-        if (diffDays === 1) return "1 day ago";
-        if (diffDays < 7) return `${diffDays} days ago`;
-        if (diffDays < 30) {
-        const weeks = Math.floor(diffDays / 7);
-        return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
-        }
-        const months = Math.floor(diffDays / 30);
-        return `${months} month${months > 1 ? "s" : ""} ago`;
-    };
-    
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "1 day ago";
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) {
+      const weeks = Math.floor(diffDays / 7);
+      return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+    }
+    const months = Math.floor(diffDays / 30);
+    return `${months} month${months > 1 ? "s" : ""} ago`;
+  };
+
   return (
     <div className="p-6">
       {/* Header */}
@@ -60,18 +61,18 @@ const AppliedTab = ({
 
         {/* RIGHT - Active Positions Badge */}
         <div className="flex justify-end">
-            <input
-                type="text"
-                placeholder="Search jobs..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        onSearch(); // parent se aayega
-                    }
-                }}
-                className="border rounded-lg px-3 py-2 text-sm w-60"
-            />
+          <input
+            type="text"
+            placeholder="Search jobs..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                onSearch(); // parent se aayega
+              }
+            }}
+            className="border rounded-lg px-3 py-2 text-sm w-60"
+          />
         </div>
       </div>
 
@@ -88,34 +89,40 @@ const AppliedTab = ({
           </div>
         ) : (
           jobs.map((job) => (
-            <div key={job.id} className="rounded-xl border-2 border-[#E5E7EB] p-6">
-                <div className="flex items-center justify-between gap-4">
-                    {/* LEFT SIDE - Job Info */}
-                    <div className='flex items-center gap-4'>
-                        <div className='flex items-center rounded-xl bg-blue-100 p-2  w-12 h-12'>
-                            <img src={schoolIcon} className='w-8 h-8' />
-                        </div>
+            <div
+              key={job.id}
+              className="rounded-xl border-2 border-[#E5E7EB] p-6"
+            >
+              <div className="flex items-center justify-between gap-4">
+                {/* LEFT SIDE - Job Info */}
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center rounded-xl bg-blue-100 p-2  w-12 h-12">
+                    <img src={schoolIcon} className="w-8 h-8" />
+                  </div>
 
-                        <div className="flex-1">
-                            {/* Title */}
-                            <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                                {getJobTitle(job.job_posted)}
-                            </h3>
+                  <div className="flex-1">
+                    {/* Title */}
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      {getJobTitle(job.job_posted)}
+                    </h3>
 
-                            {/* Grade & Experience */}
-                            <p className="text-sm text-gray-600 mb-2 flex items-center">
-                                {job.job_posted.school_name} { job?.job_posted?.city_name ? ', ' + job?.job_posted?.city_name : ''}
-                            </p>
+                    {/* Grade & Experience */}
+                    <p className="text-sm text-gray-600 flex items-center">
+                      {job.job_posted.school_name}{" "}
+                      {job?.job_posted?.city_name
+                        ? ", " + job?.job_posted?.city_name
+                        : ""}
+                    </p>
 
-                            {/* Salary & Applicants */}
-                            <div className="flex items-center gap-1 text-sm text-gray-600">
-                                <span className="font-regular text-gray-900">
-                                    Applied on: {getTimeAgo(job.created_at)}
-                                </span>
-                            </div>
-                        </div>
+                    {/* Salary & Applicants */}
+                    <div className="flex items-center gap-1 text-sm text-gray-600">
+                      <span className="font-regular text-gray-900">
+                        Applied on: {getTimeAgo(job.created_at)}
+                      </span>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
           ))
         )}

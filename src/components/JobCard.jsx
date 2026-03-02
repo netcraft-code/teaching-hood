@@ -165,13 +165,13 @@ const JobCard = () => {
   // Format salary to LPA
   const formatSalary = (min, max) => {
     if (Number(min) === 0 && Number(max) === 0) {
-      return "Salary - As per industry standards";
+      return "Salary - as per industry standards";
     }
 
-    const minLPA = (min / 100000).toFixed(1);
-    const maxLPA = (max / 100000).toFixed(1);
+    const minLPA = min;
+    const maxLPA = max;
 
-    return `Salary - ₹${minLPA}-${maxLPA} Per Month`;
+    return `Salary - ₹${minLPA}-${maxLPA} per month`;
   };
 
   // Get job title
@@ -282,7 +282,7 @@ const JobCard = () => {
           onChange={(option) => {
             setSelectedCity(option);
           }}
-          placeholder="Search city"
+          placeholder="Search Location"
           className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
         />
       </div>
@@ -388,12 +388,23 @@ const JobCard = () => {
             <input
               type="radio"
               name="experience"
-              value="5+"
-              checked={selectedExperience === "5+"}
+              value="5-10"
+              checked={selectedExperience === "5-10"}
               onChange={(e) => setSelectedExperience(e.target.value)}
               className="w-4 h-4 text-blue-600 focus:ring-blue-500"
             />
-            <span className="ml-2 text-gray-700">5+ Years</span>
+            <span className="ml-2 text-gray-700">5-10 Years</span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="experience"
+              value="10+"
+              checked={selectedExperience === "10+"}
+              onChange={(e) => setSelectedExperience(e.target.value)}
+              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+            />
+            <span className="ml-2 text-gray-700">10+ Years</span>
           </label>
         </div>
       </div>
@@ -722,7 +733,7 @@ const JobCard = () => {
                       key={job.id}
                       className="bg-white rounded-2xl border-t-8 border-blue-400 shadow-lg transition-shadow p-4 md:p-6"
                     >
-                      <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+                      <div className="flex sm:flex-row items-start justify-between gap-4">
                         {/* LEFT SIDE */}
                         <Link to={`/job/${job.id}`}>
                           <div className="flex items-start gap-3 md:gap-4 w-full sm:w-auto">
@@ -834,7 +845,10 @@ const JobCard = () => {
 
                         {/* Salary and Apply Button */}
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                          <div className="text-xl md:text-2xl font-semibold text-gray-900">
+                          <div
+                            className="text-xl md:text-2xl font-semibold text-gray-900"
+                            style={{ fontSize: "19px" }}
+                          >
                             {formatSalary(job.min_salary, job.max_salary)}
                           </div>
                           {job.is_applied ? (

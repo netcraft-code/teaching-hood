@@ -27,7 +27,7 @@ const VacancyCard = ({ job, onEdit, onClose }) => {
           </h3>
 
           {/* Grade & Experience */}
-          <p className="text-sm text-gray-600 mb-2 flex items-center">
+          <p className="text-sm text-gray-600 flex items-center">
             {job.grade_name}
             {job.grade_name && (
               <span className="w-1 h-1 bg-gray-400 rounded-full mx-2" />

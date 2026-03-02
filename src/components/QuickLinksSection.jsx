@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Users } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   getMaxCitiesJobs,
   getMaxSubjectsJobs,
@@ -10,6 +11,7 @@ const QuickLinksSection = () => {
   const [citiesQuickLinks, setCitiesQuickLinks] = useState([]);
   const [subjectsQuickLinks, setSubjectsQuickLinks] = useState([]);
   const [gradesQuickLinks, setGradesQuickLinks] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchJobsList = async () => {
@@ -43,6 +45,17 @@ const QuickLinksSection = () => {
 
     fetchJobsList();
   }, []);
+
+  const isLoggedIn = !!localStorage.getItem("auth_token");
+
+  const goTo = (path) => {
+    if (!isLoggedIn) {
+      navigate("/signin");
+    } else {
+      navigate(path);
+    }
+    // setIsMenuOpen(false);
+  };
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8">
@@ -81,6 +94,7 @@ const QuickLinksSection = () => {
 
               return (
                 <button
+                  onClick={() => goTo(`/find-job?city=${link.city_id}`)}
                   key={index}
                   className={`
               h-[90px]
@@ -114,18 +128,19 @@ const QuickLinksSection = () => {
 
               return (
                 <button
+                  onClick={() => goTo(`/find-job?subject=${link.subject_id}`)}
                   key={index}
                   className={`
-              h-[90px]
-              flex items-center justify-center
-              rounded-xl border text-xl font-semibold
-              transition-all duration-200
-              ${
-                isActive
-                  ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                  : "bg-white text-gray-900 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
-              }
-            `}
+                    h-[90px]
+                    flex items-center justify-center
+                    rounded-xl border text-xl font-semibold
+                    transition-all duration-200
+                    ${
+                      isActive
+                        ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                        : "bg-white text-gray-900 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                    }
+                  `}
                 >
                   {link.subject_name}
                 </button>
@@ -147,18 +162,19 @@ const QuickLinksSection = () => {
 
               return (
                 <button
+                  onClick={() => goTo(`/find-job?grade=${link.grade_id}`)}
                   key={index}
                   className={`
-              h-[90px]
-              flex items-center justify-center
-              rounded-xl border text-xl font-semibold
-              transition-all duration-200
-              ${
-                isActive
-                  ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                  : "bg-white text-gray-900 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
-              }
-            `}
+                    h-[90px]
+                    flex items-center justify-center
+                    rounded-xl border text-xl font-semibold
+                    transition-all duration-200
+                    ${
+                      isActive
+                        ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                        : "bg-white text-gray-900 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                    }
+                  `}
                 >
                   {link.grade_name}
                 </button>
