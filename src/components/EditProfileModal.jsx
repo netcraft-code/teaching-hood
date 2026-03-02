@@ -62,6 +62,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           from: "",
           to: "",
           key_responsibilities: [""],
+          is_currently_working: false,
         },
       ],
       preferred_location: "",
@@ -101,10 +102,20 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   };
 
   const isValidDateRange = (from, to) => {
-    if (!from || !to) return true;
+    if (!from) return false;
+
+    // handle null, undefined, empty string properly
+    if (to === 'null' || to === null || to === undefined || to === "") {
+      return true;
+    }
 
     const fromDate = new Date(from);
     const toDate = new Date(to);
+
+    // invalid date protection
+    if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime())) {
+      return false;
+    }
 
     return fromDate <= toDate;
   };
@@ -189,6 +200,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       from: "",
                       to: "",
                       key_responsibilities: [""],
+                      is_currently_working: false,
                     },
                   ],
 
@@ -249,6 +261,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     const data = source
       .filter((i) => ids.includes(i.id))
       .map((i) => ({ id: i.id, name: i.name }));
+
     handleAdditional(field, data);
 
     setErrors((prev) => ({
@@ -301,7 +314,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
   const validate = () => {
     const e = {};
-
+    
     if (!form.first_name) e.first_name = "Name is required";
 
     if (!form.phone) e.phone = "Phone is required";
@@ -371,6 +384,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     return Object.keys(e).length === 0;
   };
 
+  const isAnyCurrentlyWorking = form.additional_info.experience.some(
+    (exp) => exp.is_currently_working
+  );
+
   const ErrorText = ({ error }) =>
     error ? <p className="text-red-500 text-xs mt-1">{error}</p> : null;
 
@@ -415,6 +432,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           fd.append(`experience[${i}][school]`, exp.school);
           fd.append(`experience[${i}][from]`, exp.from);
           fd.append(`experience[${i}][to]`, exp.to);
+          fd.append(`experience[${i}][is_currently_working]`, exp.is_currently_working ? 1 : 0);
 
           exp.key_responsibilities.forEach((r, j) => {
             fd.append(`experience[${i}][key_responsibilities][${j}]`, r);
@@ -1102,6 +1120,22 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     </Grid>
 
                     <Grid>
+                      <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                        <input
+                          type="checkbox"
+                          checked={exp.is_currently_working || false}
+                          onChange={(e) => {
+                            const arr = [...form.additional_info.experience];
+                            arr[index].is_currently_working = e.target.checked;
+                            handleAdditional("experience", arr);
+                          }}
+                          disabled={isAnyCurrentlyWorking && !exp.is_currently_working}
+                        />
+                        <label>I am currently working here</label>
+                      </div>
+                    </Grid>
+
+                    <Grid>
                       <Field label="From">
                         <input
                           type="month"
@@ -1120,6 +1154,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                           type="month"
                           className="input"
                           value={exp.to || ""}
+                          disabled={exp.is_currently_working}
                           onChange={(e) => {
                             const arr = [...form.additional_info.experience];
                             arr[index].to = e.target.value;
@@ -1162,6 +1197,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                             from: "",
                             to: "",
                             key_responsibilities: [""],
+                            is_currently_working: false,
                           },
                         ])
                       }

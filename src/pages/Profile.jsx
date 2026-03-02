@@ -93,7 +93,8 @@ const Profile = () => {
   };
 
   const formatDate = (dateStr) => {
-    if (!dateStr) return "Present";
+    console.log(dateStr);
+    if (!dateStr || dateStr === "null") return "";
     const [year, month] = dateStr.split("-");
     const months = [
       "Jan",
@@ -642,7 +643,7 @@ const Profile = () => {
                             </div>
                           </div>
                           <span className="px-3 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
-                            {exp.to ? "Past" : "Current"}
+                            {exp.is_currently_working ? "Current" : "Past"}
                           </span>
                         </div>
 
