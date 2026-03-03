@@ -291,7 +291,7 @@ const JobCard = () => {
           onChange={(option) => {
             setSelectedCity(option);
           }}
-          placeholder="Search Location"
+          placeholder="Location (e.g, Agra)"
           className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
         />
       </div>

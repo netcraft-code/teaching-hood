@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, HelpCircle, Users, Briefcase, ArrowLeft } from "lucide-react";
+import {
+  ChevronDown,
+  HelpCircle,
+  Users,
+  Briefcase,
+  ArrowLeft,
+} from "lucide-react";
 import {
   getCities,
   getGradeLevels,
@@ -25,7 +31,7 @@ const EditJob = () => {
   const { id } = useParams(); // Get job ID from URL params
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
 
   // Get job data from location state or fetch from API
   const jobData = location.state?.job;
@@ -73,7 +79,8 @@ const EditJob = () => {
         max_salary: jobData.max_salary ?? "",
         experience_required: jobData.experience_required || "",
         food: jobData.food === 1 || jobData.food === true,
-        accommodation: jobData.accommodation === 1 || jobData.accommodation === true,
+        accommodation:
+          jobData.accommodation === 1 || jobData.accommodation === true,
         job_description: jobData.job_description || "",
         qualification_requirements: jobData.qualification_requirements || "",
         application_deadline: jobData.application_deadline || "",
@@ -235,10 +242,14 @@ const EditJob = () => {
       console.log("Job updated successfully:", response.data);
 
       // Success UX
-      setPopupMessage(status === 1 ? "Job updated and published successfully!" : "Job updated and saved as draft!");
+      setPopupMessage(
+        status === 1
+          ? "Job updated and published successfully!"
+          : "Job updated and saved as draft!",
+      );
 
       setShowPopup(true);
-      
+
       if (response?.data?.status === true) {
         navigate("/profile"); // redirect to profile or job listing page
       } else {
@@ -1057,9 +1068,7 @@ const EditJob = () => {
               </svg>
             </div>
 
-            <p className="text-gray-800 text-sm mb-6">
-              {popupMessage}
-            </p>
+            <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>
 
             <button
               onClick={() => setShowPopup(false)}

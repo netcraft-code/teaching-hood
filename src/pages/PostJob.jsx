@@ -23,7 +23,7 @@ const PostJob = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
 
   useEffect(() => {
     fetchDropdowns();
@@ -203,7 +203,9 @@ const PostJob = () => {
       console.log("Job saved successfully:", response.data);
 
       // ✅ Success UX
-      setPopupMessage(status === 1 ? "Job published successfully!" : "Job saved as draft!");
+      setPopupMessage(
+        status === 1 ? "Job published successfully!" : "Job saved as draft!",
+      );
 
       setShowPopup(true);
 
@@ -1009,9 +1011,7 @@ const PostJob = () => {
               </svg>
             </div>
 
-            <p className="text-gray-800 text-sm mb-6">
-              {popupMessage}
-            </p>
+            <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>
 
             <button
               onClick={() => setShowPopup(false)}
