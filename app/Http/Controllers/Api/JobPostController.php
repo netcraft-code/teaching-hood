@@ -24,27 +24,27 @@ class JobPostController extends Controller
             ->where('status', true)
             ->where('is_closed', false)
             ->when($request->search, function ($query) use ($request) {
-                $search = $request->search;
-                $query->where(function ($q) use ($search) {
-                    // Search in job_posts table
-                    $q->where('school_name', 'like', "%{$search}%")
-                        ->orWhere('job_description', 'like', "%{$search}%")
-                        ->orWhere('position', 'like', "%{$search}%")
+                $keywords = explode(' ', $request->search);
+                $query->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $word) {
+                        $q->where(function ($sub) use ($word) {
+                            $sub->where('school_name', 'like', "%{$word}%")
+                                ->orWhere('job_description', 'like', "%{$word}%")
+                                ->orWhere('position', 'like', "%{$word}%")
 
-                        // 🔥 Search in city
-                        ->orWhereHas('city', function ($city) use ($search) {
-                            $city->where('name', 'like', "%{$search}%");
-                        })
+                                ->orWhereHas('city', function ($city) use ($word) {
+                                    $city->where('name', 'like', "%{$word}%");
+                                })
 
-                        // 🔥 Search in subject
-                        ->orWhereHas('subject', function ($subject) use ($search) {
-                            $subject->where('name', 'like', "%{$search}%");
-                        })
+                                ->orWhereHas('subject', function ($subject) use ($word) {
+                                    $subject->where('name', 'like', "%{$word}%");
+                                })
 
-                        // 🔥 Search in grade
-                        ->orWhereHas('grade', function ($grade) use ($search) {
-                            $grade->where('name', 'like', "%{$search}%");
+                                ->orWhereHas('grade', function ($grade) use ($word) {
+                                    $grade->where('name', 'like', "%{$word}%");
+                                });
                         });
+                    }
                 });
             })
             ->when($request->school_name, function ($query) use ($request) {
@@ -249,16 +249,51 @@ class JobPostController extends Controller
 
     public function getMaxCitiesJobs()
     {
-        $jobs = JobPost::join('cities', 'job_posts.city_id', '=', 'cities.id')
-            ->select(
-                'job_posts.city_id',
-                'cities.name as city_name',
-                \DB::raw('COUNT(job_posts.id) as total_jobs')
-            )
-            ->groupBy('job_posts.city_id', 'cities.name')
-            ->orderBy('cities.name') // 🔥 order by city name
+        $jobs = JobPost::with('city')
+            ->select('city_id', \DB::raw('COUNT(*) as total_jobs'))
+            ->groupBy('city_id')
+            ->orderByDesc('total_jobs')
+            // ->limit(5)
             ->get();
 
+        $jobs->map(function ($job) {
+            $job->city_name = $job->city?->name;
+            return $job;
+        });
+
+        return response_formatter(DEFAULT_200, $jobs);
+    }
+
+    public function getMaxSubjectsJobs()
+    {
+        $jobs = JobPost::with('subject')
+            ->select('subject_id', \DB::raw('COUNT(*) as total_jobs'))
+            ->groupBy('subject_id')
+            ->orderByDesc('total_jobs')
+            // ->limit(5)
+            ->get();
+
+        $jobs->map(function ($job) {
+            $job->subject_name = $job->subject?->name;
+            return $job;
+        });
+
+        return response_formatter(DEFAULT_200, $jobs);
+    }
+
+    public function getMaxGradesJobs()
+    {
+        $jobs = JobPost::with('grade')
+            ->select('grade_id', \DB::raw('COUNT(*) as total_jobs'))
+            ->groupBy('grade_id')
+            ->orderByDesc('total_jobs')
+            // ->limit(5)
+            ->get();
+
+        $jobs->map(function ($job) {
+            $job->grade_name = $job->grade?->name;
+            return $job;
+        });
 
         return response_formatter(DEFAULT_200, $jobs);
     }

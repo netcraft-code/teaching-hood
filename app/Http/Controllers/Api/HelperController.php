@@ -27,7 +27,13 @@ class HelperController extends Controller
 
     public function city()
     {
-        $cities = City::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc');
+
+        if (request()->has('state_id')) {
+            $cities = $cities->where('state_id', request('state_id'));
+        }
+
+        $cities = $cities->get();
 
         return response_formatter(DEFAULT_200, $cities);
     }

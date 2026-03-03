@@ -9,6 +9,7 @@ use App\Mail\QueryMessageMail;
 use App\Models\User;
 use App\Models\QueryMessage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,6 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
-    // REGISTER
     public function register(Request $request)
     {
         $request->validate([
@@ -27,7 +27,32 @@ class AuthController extends Controller
             'user_type' => 'required|in:1,2,3', // 1 = Teacher, 2 = School, 3 = Recuiter
             'city'      => 'required_if:user_type,2,3',
             'phone'     => 'required|unique:users,phone',
+            'otp'        => 'required|digits:4'
         ]);
+
+        $email = $request->email;
+        $enteredOtp = $request->otp;
+
+        // 🔍 Check OTP from cache
+        $cachedData = Cache::get('otp_' . $email);
+
+        if (!$cachedData) {
+            return response()->json([
+                'success' => false,
+                'message' => 'OTP expired or not found.'
+            ], 400);
+        }
+
+        // 🔐 Verify OTP
+        if (!Hash::check($enteredOtp, $cachedData['otp'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid OTP.'
+            ], 400);
+        }
+
+        // ✅ OTP Verified — remove it
+        Cache::forget('otp_' . $email);
 
         $user = User::create([
             'first_name' => $request->first_name,
@@ -48,6 +73,47 @@ class AuthController extends Controller
                 'token' => $token
             ]
         );
+    }
+
+    public function sendOTPOnRegisteration(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        $email = $request->email;
+
+        // 🔒 Rate limit (prevent spam - 1 OTP per 60 seconds)
+        if (Cache::has('otp_rate_limit_' . $email)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please wait before requesting another OTP.'
+            ], 429);
+        }
+
+        // 🎯 Generate 4 digit OTP
+        $otp = random_int(1000, 9999);
+
+        // 🔐 Store Hashed OTP in Cache (valid for 5 minutes)
+        Cache::put(
+            'otp_' . $email,
+            [
+                'otp' => Hash::make($otp),
+                'expires_at' => now()->addMinutes(5)
+            ],
+            now()->addMinutes(5)
+        );
+
+        // ⏱ Set rate limit key (60 seconds)
+        Cache::put('otp_rate_limit_' . $email, true, now()->addSeconds(60));
+
+        // 📩 Send OTP Mail
+        Mail::to($email)->send(new OtpMail($otp));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'OTP sent successfully to your email.',
+        ], 200);
     }
 
     // LOGIN

@@ -309,6 +309,15 @@ class ProfileController extends Controller
 
         $user->update($userData);
 
-        return response_formatter(DEFAULT_UPDATED_200);
+        $data = [];
+        if (isset(request()->avatar_url)) {
+            $data['avatar_url'] = url('/') . "/storage/" . $user->avatar_url;
+        }
+
+        if (isset(request()->banner_image_url)) {
+            $data['banner_image_url'] = url('/') . "/storage/" . $user->banner_image_url;
+        }
+
+        return response_formatter(DEFAULT_UPDATED_200, $data);
     }
 }
