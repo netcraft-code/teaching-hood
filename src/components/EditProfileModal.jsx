@@ -143,6 +143,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
           const stateValue = profile?.addresses?.state || "";
 
+          const knownBoards = ["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE"];
+
           setForm({
             first_name: profile.first_name || "",
             last_name: profile.last_name || "",
@@ -153,7 +155,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             position: profile.position || "",
             grade: profile.grade || "",
             subject: profile.subject || "",
-            board: profile.board || "",
+            board: knownBoards.includes(profile.board) ? profile.board : (profile.board ? "Others" : ""),
+            board_other: knownBoards.includes(profile.board) ? "" : (profile.board || ""),
             total_experience: profile.total_experience || "",
             resume: null,
             address: profile?.addresses?.address || "",
@@ -380,6 +383,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       // if (!form.additional_info.website) e.website = "Website required";
       if (!form.additional_info.students) e.students = "Students required";
       if (!form.additional_info.teachers) e.teachers = "Teachers required";
+
+      form.board = form.board === "Others" ? form.board_other : form.board;
+
       if (!form.board) e.board = "Board required";
     }
 
@@ -714,21 +720,32 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               {/* Board */}
               {userType == 2 && (
                 <>
-                  <Field
-                    label={USER_BASE_DETAILS[userType]?.positionLabel}
-                    required
-                  >
-                    <input
-                      type="text"
-                      name="board"
+                  <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
+                    <select
                       className={inputClass(errors.board)}
-                      value={form.board}
-                      onChange={handleChange}
-                      placeholder={
-                        USER_BASE_DETAILS[userType]?.positionPlaceHolder
-                      }
-                    />
+                      value={form.board === "CBSE" || form.board === "ISCE" || form.board === "ISC" || form.board === "NIOS" || form.board === "BSB" || form.board === "IB" || form.board === "CAIE" ? form.board : (form.board ? "Others" : "")}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setForm((prev) => ({ ...prev, board: val, board_other: "" }));
+                        setErrors((prev) => ({ ...prev, board: "" }));
+                      }}
+                    >
+                      <option value="">Select Board</option>
+                      {["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE"].map((b) => (
+                        <option key={b} value={b}>{b}</option>
+                      ))}
+                      <option value="Others">Others</option>
+                    </select>
 
+                    {form.board === "Others" && (
+                      <input
+                        type="text"
+                        className={`${inputClass(errors.board)} mt-2`}
+                        placeholder="Enter board name"
+                        value={form.board_other || ""}
+                        onChange={(e) => setForm((prev) => ({ ...prev, board_other: e.target.value }))}
+                      />
+                    )}
                     <ErrorText error={errors.board} />
                   </Field>
                 </>

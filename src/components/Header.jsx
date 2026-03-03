@@ -60,7 +60,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 shadow-sm">
+    <header className="sticky top-0 z-50 shadow-md">
       <nav className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-2">
         <div className="flex items-center justify-between">
           {/* Logo */}
