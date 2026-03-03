@@ -29,6 +29,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     avatar_url: null,
     banner_image_url: null,
     position: "",
+    grade: "",
+    subject: "",
     total_experience: 1,
     address: "",
     city: "",
@@ -149,6 +151,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             avatar_url: null,
             banner_image_url: null,
             position: profile.position || "",
+            grade: profile.grade || "",
+            subject: profile.subject || "",
             board: profile.board || "",
             total_experience: profile.total_experience || "",
             resume: null,
@@ -379,6 +383,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       if (!form.board) e.board = "Board required";
     }
 
+    if (userType == 1) {
+      form.position = form.grade === "Other" ? form.grade_other : form.grade + ' ' + (form.subject === "Other" ? form.subject_other : form.subject);
+    }
+
     if (userType == 1 || userType == 3) {
       if (!form.position) e.position = "Position is required";
     }
@@ -493,6 +501,11 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
         fd.append("board", form.board);
       }
 
+      if (userType == 1) {
+        fd.append("grade", form.grade === "Other" ? form.grade_other : form.grade);
+        fd.append("subject", form.subject === "Other" ? form.subject_other : form.subject);
+      }
+
       if (userType == 1 || userType == 2) {
         fd.append("position", form.position);
       }
@@ -605,10 +618,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   placeholder="your.email@example.com"
                 />
               </Field>
-            </Grid>
 
-            {/* Phone Number, Position, Board, Total Experience */}
-            <Grid>
               {/* Phone Number */}
               <Field label="Phone Number" required>
                 <div className="grid grid-cols-5 gap-2">
@@ -632,26 +642,71 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
                 <ErrorText error={errors.phone} />
               </Field>
+            </Grid>
 
+            {/* Phone Number, Position, Board, Total Experience */}
+            <Grid>
               {/* Position */}
               {userType == 1 && (
                 <>
-                  <Field
-                    label={USER_BASE_DETAILS[userType]?.positionLabel}
-                    required
-                  >
-                    <input
-                      type="text"
-                      name="position"
-                      className={inputClass(errors.position)}
-                      value={form.position}
-                      onChange={handleChange}
-                      placeholder={
-                        USER_BASE_DETAILS[userType]?.positionPlaceHolder
-                      }
-                    />
+                  {/* Grade Field */}
+                  <Field label="Grade" required>
+                    <select
+                      className={inputClass(errors.grade)}
+                      value={form.grade === "Other" ? "Other" : (form.grade || "")}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setForm((prev) => ({ ...prev, grade: val, grade_other: "" }));
+                        setErrors((prev) => ({ ...prev, grade: "" }));
+                      }}
+                    >
+                      <option value="">Select Grade</option>
+                      {grades.map((g) => (
+                        <option key={g.id} value={g.name}>{g.name}</option>
+                      ))}
+                      <option value="Other">Other</option>
+                    </select>
 
-                    <ErrorText error={errors.position} />
+                    {form.grade === "Other" && (
+                      <input
+                        type="text"
+                        className={`${inputClass(errors.grade)} mt-2`}
+                        placeholder="Enter grade"
+                        value={form.grade_other || ""}
+                        onChange={(e) => setForm((prev) => ({ ...prev, grade_other: e.target.value }))}
+                      />
+                    )}
+                    <ErrorText error={errors.grade} />
+                  </Field>
+
+                  {/* Subject Field */}
+                  <Field label="Subject" required>
+                    <select
+                      className={inputClass(errors.subject)}
+                      value={form.subject === "Other" ? "Other" : (form.subject || "")}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setForm((prev) => ({ ...prev, subject: val, subject_other: "" }));
+                        setErrors((prev) => ({ ...prev, subject: "" }));
+                      }}
+                    >
+                      <option value="">Select Subject</option>
+                      {subjects.map((s) => (
+                        <option key={s.id} value={s.name}>{s.name}</option>
+                      ))}
+                      <option value="Other">Other</option>
+                    </select>
+
+                    {form.subject === "Other" && (
+                      <input
+                        type="text"
+                        className={`${inputClass(errors.subject)} mt-2`}
+                        placeholder="Enter subject"
+                        value={form.subject_other || ""}
+                        onChange={(e) => setForm((prev) => ({ ...prev, subject_other: e.target.value }))}
+                      />
+                    )}
+                    <ErrorText error={errors.subject} />
                   </Field>
                 </>
               )}
