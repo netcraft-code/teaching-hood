@@ -23,7 +23,7 @@ const PostJob = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
 
   useEffect(() => {
     fetchDropdowns();
@@ -201,7 +201,9 @@ const PostJob = () => {
       console.log("Job saved successfully:", response.data);
 
       // ✅ Success UX
-      setPopupMessage(status === 1 ? "Job published successfully!" : "Job saved as draft!");
+      setPopupMessage(
+        status === 1 ? "Job published successfully!" : "Job saved as draft!",
+      );
 
       setShowPopup(true);
 
@@ -483,7 +485,7 @@ const PostJob = () => {
                           }));
                           setErrors((prev) => ({ ...prev, city_id: "" }));
                         }}
-                        placeholder="Search Location"
+                        placeholder="Location (e.g, Agra)"
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                       />
 
@@ -558,7 +560,6 @@ const PostJob = () => {
                     </label>
 
                     <div className="flex gap-3 items-start w-full">
-                      
                       {/* Min Salary */}
                       <div className="w-full">
                         <input
@@ -598,7 +599,6 @@ const PostJob = () => {
                           </p>
                         )}
                       </div>
-
                     </div>
                   </div>
 
@@ -984,9 +984,7 @@ const PostJob = () => {
               </svg>
             </div>
 
-            <p className="text-gray-800 text-sm mb-6">
-              {popupMessage}
-            </p>
+            <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>
 
             <button
               onClick={() => setShowPopup(false)}

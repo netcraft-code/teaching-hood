@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, HelpCircle, Users, Briefcase, ArrowLeft } from "lucide-react";
+import {
+  ChevronDown,
+  HelpCircle,
+  Users,
+  Briefcase,
+  ArrowLeft,
+} from "lucide-react";
 import {
   getCities,
   getGradeLevels,
@@ -25,7 +31,7 @@ const EditJob = () => {
   const { id } = useParams(); // Get job ID from URL params
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
 
   // Get job data from location state or fetch from API
   const jobData = location.state?.job;
@@ -70,7 +76,8 @@ const EditJob = () => {
         max_salary: jobData.max_salary || "",
         experience_required: jobData.experience_required || "",
         food: jobData.food === 1 || jobData.food === true,
-        accommodation: jobData.accommodation === 1 || jobData.accommodation === true,
+        accommodation:
+          jobData.accommodation === 1 || jobData.accommodation === true,
         job_description: jobData.job_description || "",
         qualification_requirements: jobData.qualification_requirements || "",
         application_deadline: jobData.application_deadline || "",
@@ -232,10 +239,14 @@ const EditJob = () => {
       console.log("Job updated successfully:", response.data);
 
       // Success UX
-      setPopupMessage(status === 1 ? "Job updated and published successfully!" : "Job updated and saved as draft!");
+      setPopupMessage(
+        status === 1
+          ? "Job updated and published successfully!"
+          : "Job updated and saved as draft!",
+      );
 
       setShowPopup(true);
-      
+
       if (response?.data?.status === true) {
         navigate("/profile"); // redirect to profile or job listing page
       } else {
@@ -539,7 +550,7 @@ const EditJob = () => {
                           }));
                           setErrors((prev) => ({ ...prev, city_id: "" }));
                         }}
-                        placeholder="Search Location"
+                        placeholder="Location (e.g, Agra)"
                         className="w-full"
                       />
 
@@ -561,7 +572,10 @@ const EditJob = () => {
                         <button
                           key={type}
                           onClick={() => {
-                            setFormData((prev) => ({ ...prev, job_type: type }));
+                            setFormData((prev) => ({
+                              ...prev,
+                              job_type: type,
+                            }));
                             setErrors((prev) => ({ ...prev, job_type: "" }));
                           }}
                           className={`py-3 px-4 rounded-xl font-medium transition-all duration-200 text-sm sm:text-base ${
@@ -593,7 +607,9 @@ const EditJob = () => {
                       className="w-5 h-5 text-green-600"
                     />
                   </div>
-                  <h2 className="text-lg sm:text-xl font-bold text-gray-800">Job Details</h2>
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-800">
+                    Job Details
+                  </h2>
                 </div>
 
                 <div className="space-y-5">
@@ -627,14 +643,17 @@ const EditJob = () => {
                     </div>
 
                     {errors.salary && (
-                      <p className="text-sm text-red-500 mt-1">{errors.salary}</p>
+                      <p className="text-sm text-red-500 mt-1">
+                        {errors.salary}
+                      </p>
                     )}
                   </div>
 
                   {/* Experience Required */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Experience Required <span className="text-red-500">*</span>
+                      Experience Required{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <select
@@ -670,7 +689,10 @@ const EditJob = () => {
                         <div className="flex-1">
                           <div className="flex items-center space-x-2">
                             <div className="bg-orange-50 flex items-center justify-center w-10 h-10 rounded-full">
-                              <img src={postJobIcons.food} className="w-5 h-5" />
+                              <img
+                                src={postJobIcons.food}
+                                className="w-5 h-5"
+                              />
                             </div>
                             <span className="font-medium text-gray-800 text-sm sm:text-base">
                               Food Provided
@@ -894,7 +916,10 @@ const EditJob = () => {
               <div className="bg-blue-50 rounded-3xl p-6 sticky top-24">
                 <div className="flex items-center space-x-3 mb-4">
                   <div className="w-10 h-10 bg-white backdrop-blur-sm rounded-lg flex items-center justify-center">
-                    <img src={postJobIcons.tipsForSuccess} className="w-5 h-5" />
+                    <img
+                      src={postJobIcons.tipsForSuccess}
+                      className="w-5 h-5"
+                    />
                   </div>
                   <h3 className="font-medium">Tips for Success</h3>
                 </div>
@@ -1007,9 +1032,7 @@ const EditJob = () => {
               </svg>
             </div>
 
-            <p className="text-gray-800 text-sm mb-6">
-              {popupMessage}
-            </p>
+            <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>
 
             <button
               onClick={() => setShowPopup(false)}

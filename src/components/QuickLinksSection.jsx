@@ -94,21 +94,21 @@ const QuickLinksSection = () => {
 
               return (
                 <button
-                  onClick={() => goTo(`/find-job?city=${link.city_id}`)}
+                  onClick={() => goTo(`/find-job?state_id=${link.state_id}`)}
                   key={index}
                   className={`
-              h-[90px]
-              flex items-center justify-center
-              rounded-xl border text-xl font-semibold
-              transition-all duration-200
-              ${
-                isActive
-                  ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                  : "bg-white text-gray-900 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
-              }
-            `}
+                  h-[90px]
+                  flex items-center justify-center
+                  rounded-xl border text-xl font-semibold
+                  transition-all duration-200
+                  ${
+                    isActive
+                      ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                      : "bg-white text-gray-900 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                  }
+                `}
                 >
-                  {link.city_name}
+                  {link.state_name}
                 </button>
               );
             })}

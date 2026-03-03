@@ -1430,7 +1430,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     setSearch(e.target.value);
                     setShowDropdown(true);
                   }}
-                  placeholder="Search location..."
+                  placeholder="Location (e.g, Agra)..."
                   className={inputClass(errors.preferred_location)}
                 />
 
