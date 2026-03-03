@@ -126,20 +126,20 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
     const load = async () => {
       try {
-        const [subjectsRes, gradesRes, stateRes, cityRes] = await Promise.all([
+        const [subjectsRes, gradesRes, stateRes] = await Promise.all([
           getSubjects(),
           getGradeLevels(),
           getStates(),
-          getCities(),
         ]);
 
         setSubjects(subjectsRes.data.data);
         setGrades(gradesRes.data.data);
         setStates(stateRes.data.data);
-        setLocations(cityRes.data.data);
 
         if (profile) {
           setUserType(profile.user_type);
+
+          const stateValue = profile?.addresses?.state || "";
 
           setForm({
             first_name: profile.first_name || "",
@@ -154,7 +154,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             resume: null,
             address: profile?.addresses?.address || "",
             city: profile?.addresses?.city || "",
-            state: profile?.addresses?.state || "",
+            state: stateValue,
             pincode: profile?.addresses?.pincode || "",
             country: profile?.addresses?.country || "India",
             additional_info: {
@@ -220,6 +220,11 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               website: profile?.additional_info?.website || "",
             },
           });
+
+          if (stateValue && stateRes.data.data.length > 0) {
+            const matched = stateRes.data.data.find((s) => s.name === stateValue);
+            if (matched) fetchCities(matched.id);
+          }
         }
       } finally {
         setPageLoading(false);
@@ -228,6 +233,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
     load();
   }, [open, profile]);
+
+  const fetchCities = async (stateId) => {
+    const cityRes = await getCities({ state_id: stateId });
+
+    setLocations(cityRes.data.data);
+  };
 
   /* ---------------- HANDLERS ---------------- */
   const handleChange = (e) => {
@@ -777,22 +788,23 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               <Field label="State" required>
                 <select
                   className={inputClass(errors.state)}
-                  value={form.state}
+                  // name se matching state dhundho, uska JSON stringify karo
+                  value={
+                    form.state
+                      ? JSON.stringify(states.find((s) => s.name === form.state) || "")
+                      : ""
+                  }
                   onChange={(e) => {
-                    setForm((prev) => ({
-                      ...prev,
-                      state: e.target.value,
-                    }));
-
-                    setErrors((prev) => ({
-                      ...prev,
-                      state: "",
-                    }));
+                    if (!e.target.value) return;
+                    const selectedState = JSON.parse(e.target.value);
+                    setForm((prev) => ({ ...prev, state: selectedState.name }));
+                    fetchCities(selectedState.id);
+                    setErrors((prev) => ({ ...prev, state: "" }));
                   }}
                 >
                   <option value="">Select State</option>
                   {states.map((s) => (
-                    <option key={s.id} value={s.name}>
+                    <option key={s.id} value={JSON.stringify(s)}>
                       {s.name}
                     </option>
                   ))}
