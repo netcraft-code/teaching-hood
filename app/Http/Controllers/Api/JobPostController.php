@@ -399,11 +399,21 @@ class JobPostController extends Controller
             'job_post_id' => $id,
         ]);
 
-        Mail::to('akathuria289@gmail.com')->send(new MailAppliedJob($job));
+        Mail::to($job->email)->send(new MailAppliedJob($job));
+
+        // Calculate job age in days
+        $jobAgeInDays = Carbon::parse($job->created_at)->diffInDays(now());
+
+        if ($jobAgeInDays > 30) {
+            $message = 'This job has been applied successfully, Your interest has been expressed to the school';
+        } else {
+            $schoolName = $job->school_name ?? 'the school';
+            $message = "Your application has been forwarded to {$schoolName}. If your profile matches, they will contact you via your registered mobile / email.";
+        }
 
         return response_formatter(DEFAULT_200, [
             'applied' => true,
-            'message' => 'This job has been applied successfully, Your interest has been expressed to the school'
+            'message' => $message
         ]);
     }
 
