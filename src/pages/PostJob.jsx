@@ -146,6 +146,10 @@ const PostJob = () => {
     if (formData.position === "Teacher") {
       if (!formData.subject_id) newErrors.subject_id = "Subject is required";
       if (!formData.grade_id) newErrors.grade_id = "Grade is required";
+
+      if (formData.subject_id === "other" && !formData.subject_id_other) {
+        newErrors.subject_id_other = "Please specify the subject";
+      }
     }
 
     if (profile.user_type == 3) {
@@ -409,24 +413,22 @@ const PostJob = () => {
                       </label>
 
                       <Select
-                        options={subjects.map((s) => ({
-                          value: s.id,
-                          label: s.name,
-                        }))}
+                        options={[
+                          ...subjects.map((s) => ({ value: s.id, label: s.name })),
+                          { value: "other", label: "Other" },
+                        ]}
                         value={
-                          subjects.find((s) => s.id === formData.subject_id)
-                            ? {
-                                value: formData.subject_id,
-                                label: subjects.find(
-                                  (s) => s.id === formData.subject_id,
-                                ).name,
-                              }
+                          formData.subject_id === "other"
+                            ? { value: "other", label: "Other" }
+                            : subjects.find((s) => s.id === formData.subject_id)
+                            ? { value: formData.subject_id, label: subjects.find((s) => s.id === formData.subject_id).name }
                             : null
                         }
                         onChange={(selected) => {
                           setFormData((prev) => ({
                             ...prev,
                             subject_id: selected.value,
+                            subject_id_other: "",
                           }));
                           setErrors((prev) => ({ ...prev, subject_id: "" }));
                         }}
@@ -434,10 +436,21 @@ const PostJob = () => {
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                       />
 
+                      {/* Other input */}
+                      {formData.subject_id === "other" && (
+                        <input
+                          type="text"
+                          value={formData.subject_id_other || ""}
+                          onChange={(e) =>
+                            setFormData((prev) => ({ ...prev, subject_id_other: e.target.value }))
+                          }
+                          placeholder="Enter subject name"
+                          className="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                        />
+                      )}
+
                       {errors.subject_id && (
-                        <p className="text-sm text-red-500 mt-1">
-                          {errors.subject_id}
-                        </p>
+                        <p className="text-sm text-red-500 mt-1">{errors.subject_id}</p>
                       )}
                     </div>
                   )}

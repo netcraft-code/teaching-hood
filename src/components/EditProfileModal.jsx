@@ -1321,13 +1321,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                           <div className="flex items-center gap-2">
                             <span>Degree</span>
                             <span className="text-xs text-gray-500">
-                              (Use standard, official degree format with correct
-                              capitalization, e.g., B.Sc, LLB)
+                              (Use standard, official degree format with correct capitalization, e.g., B.Sc, LLB)
                             </span>
                           </div>
                         }
                       >
-                        <input
+                        <select
                           className={`${inputClass(errors.education)} transition focus:ring-2 focus:ring-primary/30`}
                           value={edu.degree}
                           onChange={(e) => {
@@ -1335,8 +1334,52 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                             arr[index].degree = e.target.value;
                             handleAdditional("education", arr);
                           }}
-                          placeholder="Enter degree"
-                        />
+                        >
+                          <option value="">Select Degree</option>
+                          {[
+                            "BA – Bachelor of Arts",
+                            "MA – Master of Arts",
+                            "BSc – Bachelor of Science",
+                            "MSc – Master of Science",
+                            "BCom – Bachelor of Commerce",
+                            "MCom – Master of Commerce",
+                            "BBA – Bachelor of Business Administration",
+                            "MBA – Master of Business Administration",
+                            "BMS – Bachelor of Management Studies",
+                            "MMS – Master of Management Studies",
+                            "BCA – Bachelor of Computer Applications",
+                            "MCA – Master of Computer Applications",
+                            "BTech – Bachelor of Technology",
+                            "MTech – Master of Technology",
+                            "BE – Bachelor of Engineering",
+                            "ME – Master of Engineering",
+                            "BEd – Bachelor of Education",
+                            "MEd – Master of Education",
+                            "BElEd – Bachelor of Elementary Education",
+                            "LLB – Bachelor of Laws",
+                            "LLM – Master of Laws",
+                            "MBBS – Bachelor of Medicine & Bachelor of Surgery",
+                            "MD – Doctor of Medicine",
+                            "MS – Master of Surgery",
+                            "BDS – Bachelor of Dental Surgery",
+                            "MDS – Master of Dental Surgery",
+                            "BPharm – Bachelor of Pharmacy",
+                            "MPharm – Master of Pharmacy",
+                            "BArch – Bachelor of Architecture",
+                            "MArch – Master of Architecture",
+                            "BDes – Bachelor of Design",
+                            "MDes – Master of Design",
+                            "BFA – Bachelor of Fine Arts",
+                            "MFA – Master of Fine Arts",
+                            "BHM – Bachelor of Hotel Management",
+                            "MHM – Master of Hotel Management",
+                            "BPEd – Bachelor of Physical Education",
+                            "MPEd – Master of Physical Education",
+                            "BSW – Bachelor of Social Work",
+                          ].map((degree) => (
+                            <option key={degree} value={degree}>{degree}</option>
+                          ))}
+                        </select>
                         <ErrorText error={errors.education} />
                       </Field>
 

@@ -72,6 +72,7 @@ const EditJob = () => {
         board_other: knownBoards.includes(jobData.board) ? "" : (jobData.board || ""),
         position: jobData.position || "",
         subject_id: jobData.subject_id || "",
+        subject_id_other: jobData.subject_id_other || "",
         grade_id: jobData.grade_id || "",
         city_id: jobData.city_id || "",
         job_type: jobData.job_type || "",
@@ -474,24 +475,22 @@ const EditJob = () => {
                       </label>
 
                       <Select
-                        options={subjects.map((s) => ({
-                          value: s.id,
-                          label: s.name,
-                        }))}
+                        options={[
+                          ...subjects.map((s) => ({ value: s.id, label: s.name })),
+                          { value: "other", label: "Other" },
+                        ]}
                         value={
-                          subjects.find((s) => s.id === formData.subject_id)
-                            ? {
-                                value: formData.subject_id,
-                                label: subjects.find(
-                                  (s) => s.id === formData.subject_id,
-                                ).name,
-                              }
+                          formData.subject_id === "other"
+                            ? { value: "other", label: "Other" }
+                            : subjects.find((s) => s.id === formData.subject_id)
+                            ? { value: formData.subject_id, label: subjects.find((s) => s.id === formData.subject_id).name }
                             : null
                         }
                         onChange={(selected) => {
                           setFormData((prev) => ({
                             ...prev,
                             subject_id: selected.value,
+                            subject_id_other: "",
                           }));
                           setErrors((prev) => ({ ...prev, subject_id: "" }));
                         }}
@@ -499,10 +498,20 @@ const EditJob = () => {
                         className="w-full"
                       />
 
+                      {formData.subject_id === "other" && (
+                        <input
+                          type="text"
+                          value={formData.subject_id_other || ""}
+                          onChange={(e) =>
+                            setFormData((prev) => ({ ...prev, subject_id_other: e.target.value }))
+                          }
+                          placeholder="Enter subject name"
+                          className="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                        />
+                      )}
+
                       {errors.subject_id && (
-                        <p className="text-sm text-red-500 mt-1">
-                          {errors.subject_id}
-                        </p>
+                        <p className="text-sm text-red-500 mt-1">{errors.subject_id}</p>
                       )}
                     </div>
                   )}
