@@ -59,6 +59,11 @@ class JobPostController extends Controller
             ->when($request->city_id != 'all', function ($query) use ($request) {
                 $query->where('city_id', $request->city_id);
             })
+            // ->when($request->state_id != 'all', function ($query) use ($request) {
+            //     $query->whereHas('city', function ($q) use ($request) {
+            //         $q->where('state_id', $request->state_id);
+            //     });
+            // })
             ->when($request->job_type != 'all', function ($query) use ($request) {
                 $query->where('job_type', 'like', '%' . $request->job_type . '%');
             })
@@ -158,6 +163,7 @@ class JobPostController extends Controller
             'contact_phone'            => $request->contact_phone,
             'status'                   => $request->status ?? false,
             'user_id'                   => auth()->user()->id,
+            'board'                     => $request->board
         ]);
 
         return response_formatter(DEFAULT_CREATED_201, $job);
@@ -235,6 +241,7 @@ class JobPostController extends Controller
             'contact_phone'             => $request->contact_phone,
             'status'                    => $request->status ?? false,
             'is_closed'                 => false,
+            'board'                     => $request->board
         ]);
 
         return response_formatter(DEFAULT_UPDATED_200, $job);
@@ -247,19 +254,19 @@ class JobPostController extends Controller
         return response_formatter(DEFAULT_DELETED_200);
     }
 
-    public function getMaxCitiesJobs()
+    public function getMaxStateJobs()
     {
-        $jobs = JobPost::with('city')
-            ->select('city_id', \DB::raw('COUNT(*) as total_jobs'))
-            ->groupBy('city_id')
+        $jobs = \DB::table('states')
+            ->leftJoin('cities', 'states.id', '=', 'cities.state_id')
+            ->leftJoin('job_posts', 'cities.id', '=', 'job_posts.city_id')
+            ->select(
+                'states.id as state_id',
+                'states.name as state_name',
+                \DB::raw('COUNT(job_posts.id) as total_jobs')
+            )
+            ->groupBy('states.id', 'states.name')
             ->orderByDesc('total_jobs')
-            // ->limit(5)
             ->get();
-
-        $jobs->map(function ($job) {
-            $job->city_name = $job->city?->name;
-            return $job;
-        });
 
         return response_formatter(DEFAULT_200, $jobs);
     }
@@ -350,7 +357,8 @@ class JobPostController extends Controller
 
     public function currentVacanies()
     {
-        if (auth()->user()->user_type == 2) {
+
+        if (in_array(auth()->user()->user_type, [3, 2])) {
             $perPage = (int) request()->get('perPage', 10);
             $offset  = (int) request()->get('offset', 0);
 

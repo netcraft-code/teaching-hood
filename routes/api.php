@@ -14,8 +14,8 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('view-profile/{id}', [AuthController::class, 'specificProfile']);
 Route::get('city', [HelperController::class, 'city']);
 
-Route::get('city/jobs', [JobPostController::class, 'getMaxCitiesJobs']);
-Route::get('subject/jobs', [JobPostController::class, 'getMaxSubjectsJobs']);
+Route::get('city/jobs', [JobPostController::class, 'getMaxStateJobs']);
+Route::get('subjects/jobs', [JobPostController::class, 'getMaxSubjectsJobs']);
 Route::get('grade/jobs', [JobPostController::class, 'getMaxGradesJobs']);
 
 Route::post('send-otp', [AuthController::class, 'sendOTP']);
@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('update/{id}', [JobPostController::class, 'close']);
         Route::get('current/vacanies', [JobPostController::class, 'currentVacanies']);
         Route::post('apply/{id}', [JobPostController::class, 'applyJob']);
+        Route::get('applied', [JobPostController::class, 'appliedJobs']);
     });
 
     Route::post('send-message', [AuthController::class, 'sendMessage']);

@@ -244,7 +244,9 @@ class ProfileController extends Controller
             'phone',
             'position',
             'total_experience',
-            'board'
+            'board',
+            'subject',
+            'grade',
         ]);
 
         return $userData;

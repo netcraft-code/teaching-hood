@@ -24,9 +24,12 @@ class JobPost extends Model
         'contact_phone',
         'status',
         'position',
+        'subject',
+        'grade',
         'user_id',
         'is_applied',
         'is_closed',
+        'board'
     ];
 
     public function city()

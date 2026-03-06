@@ -33,7 +33,6 @@ class AdditionalInfo extends Model
         return [
             'education' => 'json',
             'experience' => 'json',
-            'preferred_location' => 'json',
         ];
     }
 

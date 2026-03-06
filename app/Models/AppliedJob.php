@@ -10,4 +10,14 @@ class AppliedJob extends Model
         'user_id',
         'job_post_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function job_posted()
+    {
+        return $this->belongsTo(JobPost::class, 'job_post_id', 'id');
+    }
 }
