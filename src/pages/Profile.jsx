@@ -643,7 +643,7 @@ const Profile = () => {
                             </div>
                           </div>
                           <span className="px-3 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
-                            {exp.is_currently_working ? "Current" : "Past"}
+                            {exp.is_currently_working === "1" ? "Current" : "Past"}
                           </span>
                         </div>
 

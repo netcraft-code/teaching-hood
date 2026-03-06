@@ -199,7 +199,16 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   ],
 
               experience: Array.isArray(profile.additional_info?.experience)
-                ? profile.additional_info.experience
+                ? profile.additional_info.experience.map((exp) => ({
+                  ...exp,
+                  // Convert "0", "1", 0, 1, true, false to proper boolean
+                  is_currently_working:
+                    exp.is_currently_working === true ||
+                    exp.is_currently_working === 1 ||
+                    exp.is_currently_working === "1"
+                      ? true
+                      : false,
+                }))
                 : [
                     {
                       position: "",
@@ -458,6 +467,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           fd.append(`experience[${i}][from]`, exp.from);
           fd.append(`experience[${i}][to]`, exp.to);
           fd.append(`experience[${i}][is_currently_working]`, exp.is_currently_working ? 1 : 0);
+
+          if (exp.is_currently_working) {
+            fd.append(`experience[${i}][to]`, '');
+          }
 
           exp.key_responsibilities.forEach((r, j) => {
             fd.append(`experience[${i}][key_responsibilities][${j}]`, r);
@@ -1207,11 +1220,26 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
                         <input
                           type="checkbox"
-                          checked={exp.is_currently_working || false}
+                          checked={exp.is_currently_working === true}  // Strict equality
                           onChange={(e) => {
-                            const arr = [...form.additional_info.experience];
-                            arr[index].is_currently_working = e.target.checked;
-                            handleAdditional("experience", arr);
+                            const arr = [...form.additional_info.experience];  // ✅ Pehle array define kar
+                            
+                            if (e.target.checked) {
+                              // Uncheck all others
+                              arr.forEach((expItem, i) => {
+                                if (i !== index) {
+                                  expItem.is_currently_working = false;
+                                }
+                              });
+                              // Check current and clear "to" date
+                              arr[index].is_currently_working = true;
+                              arr[index].to = "";
+                            } else {
+                              // Uncheck current
+                              arr[index].is_currently_working = false;
+                            }
+                            
+                            handleAdditional("experience", arr);  // ✅ Then pass it
                           }}
                           disabled={isAnyCurrentlyWorking && !exp.is_currently_working}
                         />
