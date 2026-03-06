@@ -1,6 +1,7 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";
+import SimpleBanner from "../components/SimpleBanner";
 import TeachersSection from "../components/TeachersSection"
 import SchoolsSection from "../components/SchoolsSection"
 import RecruitersSection from "../components/RecruitersSection"
@@ -16,6 +17,7 @@ const Home = () => {
   return (
     <>
       <Header />
+      <SimpleBanner />
       <HeroSection />
       <TeachersSection />
       <SchoolsSection />
