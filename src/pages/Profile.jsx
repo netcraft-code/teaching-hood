@@ -359,7 +359,11 @@ const Profile = () => {
                   <div className="relative col-span-2 flex sm:justify-start">
                     <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full -mt-12 border-2 border-white overflow-hidden bg-gray-100">
                       <img
-                        src={getBannerAvatar(profile.avatar_url, userType, "avatarImage")}
+                        src={getBannerAvatar(
+                          profile.avatar_url,
+                          userType,
+                          "avatarImage",
+                        )}
                         alt="profile"
                         className="w-full h-full object-cover"
                       />
@@ -379,10 +383,12 @@ const Profile = () => {
                   {/* Name & Details */}
                   <div className="col-span-3 justify-start mt-6">
                     <h2 className="text-xl sm:text-3xl font-semibold mb-3">
-                      {profile.first_name} {userType === 1 ? profile.last_name : ""}
+                      {profile.first_name}{" "}
+                      {userType === 1 ? profile.last_name : ""}
                     </h2>
                     <p className="text-m text-gray-500">
-                      {userType === 2 ? profile?.board : profile?.position}
+                      {userType === 2 ? profile?.board : profile?.position}{" "}
+                      Teacher
                     </p>
 
                     <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
@@ -692,8 +698,11 @@ const Profile = () => {
                       </div>
                     ))}
                 </>
-              ) : <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">No record found</div>
-            )}
+              ) : (
+                <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                  No record found
+                </div>
+              ))}
 
             {/* Education Tab */}
             {activeTab === "education" &&
@@ -730,7 +739,11 @@ const Profile = () => {
                       </div>
                     ))}
                 </>
-              ) : <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">No record found</div>)}
+              ) : (
+                <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                  No record found
+                </div>
+              ))}
 
             {/* Jobs Applied Tab */}
             {activeTab === "jobs" && (
@@ -805,7 +818,7 @@ const Profile = () => {
 
                   <button
                     onClick={handleLogout}
-                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red"
+                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red-500 font-bold"
                   >
                     Logout
                   </button>
@@ -854,7 +867,7 @@ const Profile = () => {
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red-500"
+                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red-500 font-bold"
                   >
                     Logout
                   </button>

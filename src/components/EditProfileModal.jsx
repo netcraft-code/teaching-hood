@@ -97,7 +97,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     3: {
       positionLabel: "Position",
       positionPlaceHolder: "e.g., CBSE Affiliated School",
-      totalExperience: "Years",
+      totalExperience: "Years of Experience",
       avatarUrl: "Bussiness Profile",
       firstNameLabel: "Bussiness Name",
     },
@@ -107,7 +107,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!from) return false;
 
     // handle null, undefined, empty string properly
-    if (to === 'null' || to === null || to === undefined || to === "") {
+    if (to === "null" || to === null || to === undefined || to === "") {
       return true;
     }
 
@@ -143,7 +143,15 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
           const stateValue = profile?.addresses?.state || "";
 
-          const knownBoards = ["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE"];
+          const knownBoards = [
+            "CBSE",
+            "ISCE",
+            "ISC",
+            "NIOS",
+            "BSB",
+            "IB",
+            "CAIE",
+          ];
 
           setForm({
             first_name: profile.first_name || "",
@@ -155,8 +163,14 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             position: profile.position || "",
             grade: profile.grade || "",
             subject: profile.subject || "",
-            board: knownBoards.includes(profile.board) ? profile.board : (profile.board ? "Others" : ""),
-            board_other: knownBoards.includes(profile.board) ? "" : (profile.board || ""),
+            board: knownBoards.includes(profile.board)
+              ? profile.board
+              : profile.board
+                ? "Others"
+                : "",
+            board_other: knownBoards.includes(profile.board)
+              ? ""
+              : profile.board || "",
             total_experience: profile.total_experience || "",
             resume: null,
             address: profile?.addresses?.address || "",
@@ -200,15 +214,15 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
               experience: Array.isArray(profile.additional_info?.experience)
                 ? profile.additional_info.experience.map((exp) => ({
-                  ...exp,
-                  // Convert "0", "1", 0, 1, true, false to proper boolean
-                  is_currently_working:
-                    exp.is_currently_working === true ||
-                    exp.is_currently_working === 1 ||
-                    exp.is_currently_working === "1"
-                      ? true
-                      : false,
-                }))
+                    ...exp,
+                    // Convert "0", "1", 0, 1, true, false to proper boolean
+                    is_currently_working:
+                      exp.is_currently_working === true ||
+                      exp.is_currently_working === 1 ||
+                      exp.is_currently_working === "1"
+                        ? true
+                        : false,
+                  }))
                 : [
                     {
                       position: "",
@@ -238,7 +252,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           });
 
           if (stateValue && stateRes.data.data.length > 0) {
-            const matched = stateRes.data.data.find((s) => s.name === stateValue);
+            const matched = stateRes.data.data.find(
+              (s) => s.name === stateValue,
+            );
             if (matched) fetchCities(matched.id);
           }
         }
@@ -403,7 +419,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     }
 
     if (userType == 1) {
-      form.position = form.grade === "Other" ? form.grade_other : form.grade + ' ' + (form.subject === "Other" ? form.subject_other : form.subject);
+      form.position =
+        form.grade === "Other"
+          ? form.grade_other
+          : form.grade +
+            " " +
+            (form.subject === "Other" ? form.subject_other : form.subject);
     }
 
     if (userType == 1 || userType == 3) {
@@ -423,7 +444,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   };
 
   const isAnyCurrentlyWorking = form.additional_info.experience.some(
-    (exp) => exp.is_currently_working
+    (exp) => exp.is_currently_working,
   );
 
   const ErrorText = ({ error }) =>
@@ -470,10 +491,13 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           fd.append(`experience[${i}][school]`, exp.school);
           fd.append(`experience[${i}][from]`, exp.from);
           fd.append(`experience[${i}][to]`, exp.to);
-          fd.append(`experience[${i}][is_currently_working]`, exp.is_currently_working ? 1 : 0);
+          fd.append(
+            `experience[${i}][is_currently_working]`,
+            exp.is_currently_working ? 1 : 0,
+          );
 
           if (exp.is_currently_working) {
-            fd.append(`experience[${i}][to]`, '');
+            fd.append(`experience[${i}][to]`, "");
           }
 
           exp.key_responsibilities.forEach((r, j) => {
@@ -525,8 +549,14 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       }
 
       if (userType == 1) {
-        fd.append("grade", form.grade === "Other" ? form.grade_other : form.grade);
-        fd.append("subject", form.subject === "Other" ? form.subject_other : form.subject);
+        fd.append(
+          "grade",
+          form.grade === "Other" ? form.grade_other : form.grade,
+        );
+        fd.append(
+          "subject",
+          form.subject === "Other" ? form.subject_other : form.subject,
+        );
       }
 
       if (userType == 1 || userType == 2) {
@@ -676,16 +706,24 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   <Field label="Grade" required>
                     <select
                       className={inputClass(errors.grade)}
-                      value={form.grade === "Other" ? "Other" : (form.grade || "")}
+                      value={
+                        form.grade === "Other" ? "Other" : form.grade || ""
+                      }
                       onChange={(e) => {
                         const val = e.target.value;
-                        setForm((prev) => ({ ...prev, grade: val, grade_other: "" }));
+                        setForm((prev) => ({
+                          ...prev,
+                          grade: val,
+                          grade_other: "",
+                        }));
                         setErrors((prev) => ({ ...prev, grade: "" }));
                       }}
                     >
                       <option value="">Select Grade</option>
                       {grades.map((g) => (
-                        <option key={g.id} value={g.name}>{g.name}</option>
+                        <option key={g.id} value={g.name}>
+                          {g.name}
+                        </option>
                       ))}
                       <option value="Other">Other</option>
                     </select>
@@ -696,7 +734,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         className={`${inputClass(errors.grade)} mt-2`}
                         placeholder="Enter grade"
                         value={form.grade_other || ""}
-                        onChange={(e) => setForm((prev) => ({ ...prev, grade_other: e.target.value }))}
+                        onChange={(e) =>
+                          setForm((prev) => ({
+                            ...prev,
+                            grade_other: e.target.value,
+                          }))
+                        }
                       />
                     )}
                     <ErrorText error={errors.grade} />
@@ -706,16 +749,24 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   <Field label="Subject" required>
                     <select
                       className={inputClass(errors.subject)}
-                      value={form.subject === "Other" ? "Other" : (form.subject || "")}
+                      value={
+                        form.subject === "Other" ? "Other" : form.subject || ""
+                      }
                       onChange={(e) => {
                         const val = e.target.value;
-                        setForm((prev) => ({ ...prev, subject: val, subject_other: "" }));
+                        setForm((prev) => ({
+                          ...prev,
+                          subject: val,
+                          subject_other: "",
+                        }));
                         setErrors((prev) => ({ ...prev, subject: "" }));
                       }}
                     >
                       <option value="">Select Subject</option>
                       {subjects.map((s) => (
-                        <option key={s.id} value={s.name}>{s.name}</option>
+                        <option key={s.id} value={s.name}>
+                          {s.name}
+                        </option>
                       ))}
                       <option value="Other">Other</option>
                     </select>
@@ -726,7 +777,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         className={`${inputClass(errors.subject)} mt-2`}
                         placeholder="Enter subject"
                         value={form.subject_other || ""}
-                        onChange={(e) => setForm((prev) => ({ ...prev, subject_other: e.target.value }))}
+                        onChange={(e) =>
+                          setForm((prev) => ({
+                            ...prev,
+                            subject_other: e.target.value,
+                          }))
+                        }
                       />
                     )}
                     <ErrorText error={errors.subject} />
@@ -737,20 +793,43 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               {/* Board */}
               {userType == 2 && (
                 <>
-                  <Field label={USER_BASE_DETAILS[userType]?.positionLabel} required>
+                  <Field
+                    label={USER_BASE_DETAILS[userType]?.positionLabel}
+                    required
+                  >
                     <select
                       className={inputClass(errors.board)}
-                      value={form.board === "CBSE" || form.board === "ISCE" || form.board === "ISC" || form.board === "NIOS" || form.board === "BSB" || form.board === "IB" || form.board === "CAIE" ? form.board : (form.board ? "Others" : "")}
+                      value={
+                        form.board === "CBSE" ||
+                        form.board === "ISCE" ||
+                        form.board === "ISC" ||
+                        form.board === "NIOS" ||
+                        form.board === "BSB" ||
+                        form.board === "IB" ||
+                        form.board === "CAIE"
+                          ? form.board
+                          : form.board
+                            ? "Others"
+                            : ""
+                      }
                       onChange={(e) => {
                         const val = e.target.value;
-                        setForm((prev) => ({ ...prev, board: val, board_other: "" }));
+                        setForm((prev) => ({
+                          ...prev,
+                          board: val,
+                          board_other: "",
+                        }));
                         setErrors((prev) => ({ ...prev, board: "" }));
                       }}
                     >
                       <option value="">Select Board</option>
-                      {["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE"].map((b) => (
-                        <option key={b} value={b}>{b}</option>
-                      ))}
+                      {["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE"].map(
+                        (b) => (
+                          <option key={b} value={b}>
+                            {b}
+                          </option>
+                        ),
+                      )}
                       <option value="Others">Others</option>
                     </select>
 
@@ -760,7 +839,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         className={`${inputClass(errors.board)} mt-2`}
                         placeholder="Enter board name"
                         value={form.board_other || ""}
-                        onChange={(e) => setForm((prev) => ({ ...prev, board_other: e.target.value }))}
+                        onChange={(e) =>
+                          setForm((prev) => ({
+                            ...prev,
+                            board_other: e.target.value,
+                          }))
+                        }
                       />
                     )}
                     <ErrorText error={errors.board} />
@@ -779,7 +863,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     value={form.total_experience}
                     onChange={handleChange}
                   />
-                  <span className="text-gray-600 font-medium">years</span>
+                  {/* <span className="text-gray-600 font-medium">years</span> */}
                 </div>
               </Field>
             </Grid>
@@ -880,7 +964,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   // name se matching state dhundho, uska JSON stringify karo
                   value={
                     form.state
-                      ? JSON.stringify(states.find((s) => s.name === form.state) || "")
+                      ? JSON.stringify(
+                          states.find((s) => s.name === form.state) || "",
+                        )
                       : ""
                   }
                   onChange={(e) => {
@@ -945,6 +1031,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
             {userType == 1 && (
               <>
+                <span className="text-sm font-medium text-gray-700 mb-1.5 block">
+                  Select other subjects and grades you are interested in
+                </span>
                 <Grid>
                   <Field label="Subjects">
                     <select
@@ -1053,46 +1142,65 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 <Field label="Expected Salary Range (per year)">
                   {(() => {
                     const SALARY_RANGES = [
-                      { label: "Upto 10,000",          min: "0",       max: "10000"  },
-                      { label: "10,000 - 20,000",      min: "10000",   max: "20000"  },
-                      { label: "20,000 - 30,000",      min: "20000",   max: "30000"  },
-                      { label: "30,000 - 40,000",      min: "30000",   max: "40000"  },
-                      { label: "40,000 - 50,000",      min: "40000",   max: "50000"  },
-                      { label: "50,000 - 75,000",      min: "50000",   max: "75000"  },
-                      { label: "75,000 - 1,00,000",    min: "75000",   max: "100000" },
-                      { label: "1,00,000 - 1,50,000",  min: "100000",  max: "150000" },
-                      { label: "Above 1,50,000",       min: "150000",  max: "0"      },
+                      { label: "Upto 10,000", min: "0", max: "10000" },
+                      { label: "10,000 - 20,000", min: "10000", max: "20000" },
+                      { label: "20,000 - 30,000", min: "20000", max: "30000" },
+                      { label: "30,000 - 40,000", min: "30000", max: "40000" },
+                      { label: "40,000 - 50,000", min: "40000", max: "50000" },
+                      { label: "50,000 - 75,000", min: "50000", max: "75000" },
+                      {
+                        label: "75,000 - 1,00,000",
+                        min: "75000",
+                        max: "100000",
+                      },
+                      {
+                        label: "1,00,000 - 1,50,000",
+                        min: "100000",
+                        max: "150000",
+                      },
+                      { label: "Above 1,50,000", min: "150000", max: "0" },
                     ];
 
-                    const selectedValue = form.additional_info.min_salary !== undefined && form.additional_info.max_salary !== undefined
-                      ? `${String(form.additional_info.min_salary ?? 0)}-${String(form.additional_info.max_salary ?? 0)}`
-                      : "";
-                      
+                    const selectedValue =
+                      form.additional_info.min_salary !== undefined &&
+                      form.additional_info.max_salary !== undefined
+                        ? `${String(form.additional_info.min_salary ?? 0)}-${String(form.additional_info.max_salary ?? 0)}`
+                        : "";
+
                     return (
                       <div>
                         <select
                           value={selectedValue}
                           onChange={(e) => {
-                          const val = e.target.value;
-                          if (!val) {
-                            handleSalaryRange("", "");
-                            return;
-                          }
-                          const found = SALARY_RANGES.find((r) => `${r.min}-${r.max}` === val);
-                          if (found) {
-                            handleSalaryRange(found.min, found.max);  // ✅ Ek sath set karo
-                          }
-                        }}
-                          className={inputClass(errors.min_salary || errors.max_salary)}
+                            const val = e.target.value;
+                            if (!val) {
+                              handleSalaryRange("", "");
+                              return;
+                            }
+                            const found = SALARY_RANGES.find(
+                              (r) => `${r.min}-${r.max}` === val,
+                            );
+                            if (found) {
+                              handleSalaryRange(found.min, found.max); // ✅ Ek sath set karo
+                            }
+                          }}
+                          className={inputClass(
+                            errors.min_salary || errors.max_salary,
+                          )}
                         >
                           <option value="">Select Salary Range</option>
                           {SALARY_RANGES.map((r) => (
-                            <option key={`${r.min}-${r.max}`} value={`${r.min}-${r.max}`}>
+                            <option
+                              key={`${r.min}-${r.max}`}
+                              value={`${r.min}-${r.max}`}
+                            >
                               {r.label}
                             </option>
                           ))}
                         </select>
-                        <ErrorText error={errors.min_salary || errors.max_salary} />
+                        <ErrorText
+                          error={errors.min_salary || errors.max_salary}
+                        />
                       </div>
                     );
                   })()}
@@ -1223,10 +1331,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
                         <input
                           type="checkbox"
-                          checked={exp.is_currently_working === true}  // Strict equality
+                          checked={exp.is_currently_working === true} // Strict equality
                           onChange={(e) => {
-                            const arr = [...form.additional_info.experience];  // ✅ Pehle array define kar
-                            
+                            const arr = [...form.additional_info.experience]; // ✅ Pehle array define kar
+
                             if (e.target.checked) {
                               // Uncheck all others
                               arr.forEach((expItem, i) => {
@@ -1241,10 +1349,12 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                               // Uncheck current
                               arr[index].is_currently_working = false;
                             }
-                            
-                            handleAdditional("experience", arr);  // ✅ Then pass it
+
+                            handleAdditional("experience", arr); // ✅ Then pass it
                           }}
-                          disabled={isAnyCurrentlyWorking && !exp.is_currently_working}
+                          disabled={
+                            isAnyCurrentlyWorking && !exp.is_currently_working
+                          }
                         />
                         <label>I am currently working here</label>
                       </div>
@@ -1352,7 +1462,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                           <div className="flex items-center gap-2">
                             <span>Degree</span>
                             <span className="text-xs text-gray-500">
-                              (Use standard, official degree format with correct capitalization, e.g., B.Sc, LLB)
+                              (Use standard, official degree format with correct
+                              capitalization, e.g., B.Sc, LLB)
                             </span>
                           </div>
                         }
@@ -1408,7 +1519,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                             "MPEd – Master of Physical Education",
                             "BSW – Bachelor of Social Work",
                           ].map((degree) => (
-                            <option key={degree} value={degree}>{degree}</option>
+                            <option key={degree} value={degree}>
+                              {degree}
+                            </option>
                           ))}
                         </select>
                         <ErrorText error={errors.education} />
