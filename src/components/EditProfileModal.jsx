@@ -283,6 +283,17 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     });
   };
 
+  const handleSalaryRange = (minVal, maxVal) => {
+    setForm((form) => ({
+      ...form,
+      additional_info: {
+        ...form.additional_info,
+        min_salary: minVal,
+        max_salary: maxVal,
+      },
+    }));
+  };
+
   const handleMulti = (e, field, source) => {
     const ids = Array.from(e.target.selectedOptions, (o) => Number(o.value));
     const data = source
@@ -367,13 +378,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
       if (!form.additional_info.max_salary)
         e.max_salary = "Max salary required";
-
-      if (
-        Number(form.additional_info.max_salary) <
-        Number(form.additional_info.min_salary)
-      ) {
-        e.max_salary = "Max salary must be greater than Min salary";
-      }
 
       form.additional_info.experience.forEach((exp, index) => {
         if (!isValidDateRange(exp.from, exp.to)) {
@@ -1047,52 +1051,51 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
                 {/* Min-Max Salary */}
                 <Field label="Expected Salary Range (per year)">
-                  <div className="flex gap-3 items-center">
-                    <div className="flex-1">
-                      {/* Min Salary Input */}
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                          ₹
-                        </span>
-                        <input
-                          type="number"
-                          min={1000}
-                          className={inputClass(errors.min_salary)}
-                          style={{ paddingLeft: "2.5rem" }} // 👈 FIX
-                          value={form.additional_info.min_salary}
-                          onChange={(e) =>
-                            handleAdditional("min_salary", e.target.value)
+                  {(() => {
+                    const SALARY_RANGES = [
+                      { label: "Upto 10,000",          min: "0",       max: "10000"  },
+                      { label: "10,000 - 20,000",      min: "10000",   max: "20000"  },
+                      { label: "20,000 - 30,000",      min: "20000",   max: "30000"  },
+                      { label: "30,000 - 40,000",      min: "30000",   max: "40000"  },
+                      { label: "40,000 - 50,000",      min: "40000",   max: "50000"  },
+                      { label: "50,000 - 75,000",      min: "50000",   max: "75000"  },
+                      { label: "75,000 - 1,00,000",    min: "75000",   max: "100000" },
+                      { label: "1,00,000 - 1,50,000",  min: "100000",  max: "150000" },
+                      { label: "Above 1,50,000",       min: "150000",  max: "0"      },
+                    ];
+
+                    const selectedValue = form.additional_info.min_salary !== undefined && form.additional_info.max_salary !== undefined
+                      ? `${String(form.additional_info.min_salary ?? 0)}-${String(form.additional_info.max_salary ?? 0)}`
+                      : "";
+                      
+                    return (
+                      <div>
+                        <select
+                          value={selectedValue}
+                          onChange={(e) => {
+                          const val = e.target.value;
+                          if (!val) {
+                            handleSalaryRange("", "");
+                            return;
                           }
-                          placeholder="Min"
-                        />
-                      </div>
-
-                      <ErrorText error={errors.min_salary} />
-                    </div>
-
-                    <span className="text-gray-400 font-medium">to</span>
-
-                    {/* Max Salary Input */}
-                    <div className="flex-1">
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                          ₹
-                        </span>
-                        <input
-                          type="number"
-                          min={form.additional_info.min_salary}
-                          className={inputClass(errors.max_salary)}
-                          style={{ paddingLeft: "2.5rem" }} // 👈 FIX
-                          value={form.additional_info.max_salary}
-                          onChange={(e) =>
-                            handleAdditional("max_salary", e.target.value)
+                          const found = SALARY_RANGES.find((r) => `${r.min}-${r.max}` === val);
+                          if (found) {
+                            handleSalaryRange(found.min, found.max);  // ✅ Ek sath set karo
                           }
-                          placeholder="Max"
-                        />
+                        }}
+                          className={inputClass(errors.min_salary || errors.max_salary)}
+                        >
+                          <option value="">Select Salary Range</option>
+                          {SALARY_RANGES.map((r) => (
+                            <option key={`${r.min}-${r.max}`} value={`${r.min}-${r.max}`}>
+                              {r.label}
+                            </option>
+                          ))}
+                        </select>
+                        <ErrorText error={errors.min_salary || errors.max_salary} />
                       </div>
-                      <ErrorText error={errors.max_salary} />
-                    </div>
-                  </div>
+                    );
+                  })()}
                 </Field>
               </>
             )}

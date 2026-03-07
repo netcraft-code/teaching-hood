@@ -89,7 +89,24 @@ const Profile = () => {
 
   const formatExpectedSalary = (min, max) => {
     if (!min && !max) return "--";
-    return `₹${min} - ₹${max}/month`;
+
+    const SALARY_RANGES = [
+      { label: "Upto ₹10,000",         min: 0,      max: 10000  },
+      { label: "₹10,000 - ₹20,000",     min: 10000,  max: 20000  },
+      { label: "₹20,000 - ₹30,000",     min: 20000,  max: 30000  },
+      { label: "₹30,000 - ₹40,000",     min: 30000,  max: 40000  },
+      { label: "₹40,000 - ₹50,000",     min: 40000,  max: 50000  },
+      { label: "₹50,000 - ₹75,000",     min: 50000,  max: 75000  },
+      { label: "₹75,000 - ₹1,00,000",   min: 75000,  max: 100000 },
+      { label: "₹1,00,000 - ₹1,50,000", min: 100000, max: 150000 },
+      { label: "Above ₹1,50,000",      min: 150000, max: 0      },
+    ];
+
+    const found = SALARY_RANGES.find(
+      (r) => r.min === Number(min) && r.max === Number(max)
+    );
+
+    return found ? `${found.label}/month` : `₹${min} - ₹${max}/month`;
   };
 
   const formatDate = (dateStr) => {
