@@ -3,7 +3,7 @@ import React from "react";
 const VacancyCard = ({ job, onEdit, onClose }) => {
   const getJobTitle = (job) => {
     if (job.subject_name && job.grade_name) {
-      return `${job.grade_name} ${job.subject_name} Teacher`;
+      return `${job.grade_name}  ${job.subject_name} Teacher`;
     } else if (job.subject_name) {
       return `${job.position} - ${job.subject_name}`;
     } else if (job.grade_name) {
@@ -14,19 +14,19 @@ const VacancyCard = ({ job, onEdit, onClose }) => {
 
   const formatSalary = (min, max) => {
     const SALARY_RANGES = [
-      { label: "Upto ₹10,000",         min: 0,      max: 10000  },
-      { label: "₹10,000 - ₹20,000",     min: 10000,  max: 20000  },
-      { label: "₹20,000 - ₹30,000",     min: 20000,  max: 30000  },
-      { label: "₹30,000 - ₹40,000",     min: 30000,  max: 40000  },
-      { label: "₹40,000 - ₹50,000",     min: 40000,  max: 50000  },
-      { label: "₹50,000 - ₹75,000",     min: 50000,  max: 75000  },
-      { label: "₹75,000 - ₹1,00,000",   min: 75000,  max: 100000 },
+      { label: "Upto ₹10,000", min: 0, max: 10000 },
+      { label: "₹10,000 - ₹20,000", min: 10000, max: 20000 },
+      { label: "₹20,000 - ₹30,000", min: 20000, max: 30000 },
+      { label: "₹30,000 - ₹40,000", min: 30000, max: 40000 },
+      { label: "₹40,000 - ₹50,000", min: 40000, max: 50000 },
+      { label: "₹50,000 - ₹75,000", min: 50000, max: 75000 },
+      { label: "₹75,000 - ₹1,00,000", min: 75000, max: 100000 },
       { label: "₹1,00,000 - ₹1,50,000", min: 100000, max: 150000 },
-      { label: "Above ₹1,50,000",      min: 150000, max: 0      },
+      { label: "Above ₹1,50,000", min: 150000, max: 0 },
     ];
 
     const found = SALARY_RANGES.find(
-      (r) => r.min === Number(min) && r.max === Number(max)
+      (r) => r.min === Number(min) && r.max === Number(max),
     );
 
     return found ? `${found.label}/month` : `₹${min} - ₹${max}/month`;
@@ -43,12 +43,12 @@ const VacancyCard = ({ job, onEdit, onClose }) => {
           </h3>
 
           {/* Grade & Experience */}
-          <p className="text-sm text-gray-600 flex items-center">
+          <p className="text-sm text-gray-600 flex items-center mb-1">
             {job.grade_name}
             {job.grade_name && (
               <span className="w-1 h-1 bg-gray-400 rounded-full mx-2" />
             )}
-            {job.experience_required} years exp
+            {job.experience_required} years experience
           </p>
 
           {/* Salary & Applicants */}
@@ -64,14 +64,15 @@ const VacancyCard = ({ job, onEdit, onClose }) => {
         {/* RIGHT SIDE - Urgent Badge & Buttons */}
         <div className="flex flex-col items-end gap-3">
           {/* Urgent Badge */}
-          { job.status
-              ? <span className="text-xs font-regular text-green-400 bg-green-100 px-2 py-1 rounded-full">
-                  Active
-                </span>
-              : <span className="text-xs font-regular text-yellow-400 bg-yellow-100 px-2 py-1 rounded-full">
-                  Draft
-                </span>
-          }
+          {job.status ? (
+            <span className="text-xs font-regular text-green-400 bg-green-100 px-2 py-1 rounded-full">
+              Active
+            </span>
+          ) : (
+            <span className="text-xs font-regular text-yellow-400 bg-yellow-100 px-2 py-1 rounded-full">
+              Draft
+            </span>
+          )}
 
           {/* Action Buttons */}
           <div className="flex gap-2">

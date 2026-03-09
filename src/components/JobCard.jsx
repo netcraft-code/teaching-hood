@@ -182,7 +182,7 @@ const JobCard = () => {
       (r) => r.min === Number(min) && r.max === Number(max)
     );
 
-    return found ? `${found.label}/month` : `₹${min} - ₹${max}/month`;
+    return found ? `Salary: ${found.label}/month` : `₹${min} - ₹${max}/month`;
   };
 
   // Get job title
@@ -825,7 +825,11 @@ const JobCard = () => {
                               src={findJobIcons.findJobLocation}
                               className="w-4 h-4 flex-shrink-0"
                             />
-                            <span className="truncate">{job.city_name}</span>
+                            <span className="truncate">{job.city_name}</span>,
+                            {""}
+                            <span className="truncate">
+                              {job.city.state.name}
+                            </span>
                           </div>
                           <div className="flex items-center gap-1">
                             <img
