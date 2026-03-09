@@ -91,7 +91,7 @@ const Profile = () => {
     if (!min && !max) return "--";
 
     const SALARY_RANGES = [
-      { label: "Upto ₹10,000",         min: 0,      max: 10000  },
+      { label: "Upto ₹10,000",          min: 0,      max: 10000  },
       { label: "₹10,000 - ₹20,000",     min: 10000,  max: 20000  },
       { label: "₹20,000 - ₹30,000",     min: 20000,  max: 30000  },
       { label: "₹30,000 - ₹40,000",     min: 30000,  max: 40000  },
@@ -110,9 +110,10 @@ const Profile = () => {
   };
 
   const formatDate = (dateStr) => {
-    console.log(dateStr);
     if (!dateStr || dateStr === "null") return "";
+
     const [year, month] = dateStr.split("-");
+
     const months = [
       "Jan",
       "Feb",
@@ -127,6 +128,7 @@ const Profile = () => {
       "Nov",
       "Dec",
     ];
+
     return `${months[parseInt(month) - 1]} ${year}`;
   };
 
@@ -139,6 +141,7 @@ const Profile = () => {
 
   const getFormattedAddress = (address) => {
     if (!address?.address) return "--";
+
     return `${address?.address}, ${address?.city}, ${address?.state}, ${address?.pincode}, ${address?.country}`;
   };
 
@@ -339,7 +342,7 @@ const Profile = () => {
                     "bannerImage",
                   )}
                   alt="cover"
-                  className="w-full h-32 rounded-t-2xl object-cover"
+                  className="w-full h-auto rounded-t-2xl object-contain"
                 />
                 <button
                   onClick={() => {

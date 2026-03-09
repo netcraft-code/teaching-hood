@@ -164,8 +164,10 @@ const JobCard = () => {
 
   // Format salary to LPA
   const formatSalary = (min, max) => {
+    if (min === null || max === null) return "As per industry standards";
+
     const SALARY_RANGES = [
-      { label: "Upto ₹10,000",         min: 0,      max: 10000  },
+      { label: "Upto ₹10,000",          min: 0,      max: 10000  },
       { label: "₹10,000 - ₹20,000",     min: 10000,  max: 20000  },
       { label: "₹20,000 - ₹30,000",     min: 20000,  max: 30000  },
       { label: "₹30,000 - ₹40,000",     min: 30000,  max: 40000  },
@@ -173,7 +175,7 @@ const JobCard = () => {
       { label: "₹50,000 - ₹75,000",     min: 50000,  max: 75000  },
       { label: "₹75,000 - ₹1,00,000",   min: 75000,  max: 100000 },
       { label: "₹1,00,000 - ₹1,50,000", min: 100000, max: 150000 },
-      { label: "Above ₹1,50,000",      min: 150000, max: 0      },
+      { label: "Above ₹1,50,000",       min: 150000, max: 0      },
     ];
 
     const found = SALARY_RANGES.find(
