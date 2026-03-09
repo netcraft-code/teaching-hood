@@ -20,7 +20,7 @@ class JobPostController extends Controller
         $offset  = (int) request()->get('offset', 0);
 
         $jobs = JobPost::withCount('appliedJobs')
-            ->with('city', 'grade', 'subject', 'like', 'applied')
+            ->with('city.state', 'grade', 'subject', 'like', 'applied')
             ->where('status', true)
             ->where('is_closed', false)
             ->when($request->search, function ($query) use ($request) {
@@ -407,7 +407,9 @@ class JobPostController extends Controller
             'job_post_id' => $id,
         ]);
 
-        Mail::to($job->email)->send(new MailAppliedJob($job));
+        if ($job->contact_email) {
+            Mail::to($job->contact_email)->send(new MailAppliedJob($job));
+        }
 
         // Calculate job age in days
         $jobAgeInDays = Carbon::parse($job->created_at)->diffInDays(now());
