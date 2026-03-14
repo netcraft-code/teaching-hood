@@ -39,11 +39,11 @@ const ImageUploadModal = ({ open, onClose, type, onUpload }) => {
   const imgRef = useRef(null);
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [imgSrc, setImgSrc] = useState(""); // raw image src for cropper
+  const [imgSrc, setImgSrc] = useState("");
   const [crop, setCrop] = useState();
   const [completedCrop, setCompletedCrop] = useState(null);
 
-  // Avatar ke liye 1:1, banner ke liye 3:1
+  // Avatar 1:1, Banner 3:1
   const aspect = type === "avatar_url" ? 1 : 3;
 
   const onSelectFile = (e) => {
@@ -56,11 +56,10 @@ const ImageUploadModal = ({ open, onClose, type, onUpload }) => {
     reader.readAsDataURL(file);
   };
 
-  // Image load hone pe center crop set karo
   const onImageLoad = useCallback((e) => {
     const { width, height } = e.currentTarget;
     const initialCrop = centerCrop(
-      makeAspectCrop({ unit: "%", width: 80 }, aspect, width, height),
+      makeAspectCrop({ unit: "%", width: 90 }, aspect, width, height),
       width,
       height
     );
@@ -92,13 +91,13 @@ const ImageUploadModal = ({ open, onClose, type, onUpload }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-xl w-full max-w-md p-6">
+      <div className="bg-white rounded-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <h2 className="text-lg font-semibold mb-4 capitalize">
-          Update {type}
+          Update {type === "avatar_url" ? "Profile Picture" : "Banner"}
         </h2>
 
-        {/* Upload Area — jab tak image select nahi */}
+        {/* Upload Area */}
         {!imgSrc && (
           <div
             onClick={() => fileInputRef.current.click()}
@@ -108,24 +107,32 @@ const ImageUploadModal = ({ open, onClose, type, onUpload }) => {
           </div>
         )}
 
-        {/* Crop Area */}
+        {/* Crop Area - Banner ke liye exact dimensions */}
         {imgSrc && (
-          <div className="flex justify-center">
-            <ReactCrop
-              crop={crop}
-              onChange={(_, percentCrop) => setCrop(percentCrop)}
-              onComplete={(c) => setCompletedCrop(c)}
-              aspect={aspect}
-              circularCrop={type === "avatar_url"} // avatar ke liye circular crop
+          <div className="flex justify-center bg-gray-100 rounded-lg p-4">
+            <div 
+              className={`w-full ${
+                type === "avatar_url" 
+                  ? "max-w-xs aspect-square" 
+                  : "max-w-lg aspect-video" // 3:1 aspect ratio ke liye
+              }`}
             >
-              <img
-                ref={imgRef}
-                src={imgSrc}
-                alt="Crop me"
-                onLoad={onImageLoad}
-                className="max-h-72 rounded"
-              />
-            </ReactCrop>
+              <ReactCrop
+                crop={crop}
+                onChange={(_, percentCrop) => setCrop(percentCrop)}
+                onComplete={(c) => setCompletedCrop(c)}
+                aspect={aspect}
+                circularCrop={type === "avatar_url"}
+              >
+                <img
+                  ref={imgRef}
+                  src={imgSrc}
+                  alt="Crop me"
+                  onLoad={onImageLoad}
+                  className="w-full h-full object-contain rounded"
+                />
+              </ReactCrop>
+            </div>
           </div>
         )}
 
@@ -139,7 +146,6 @@ const ImageUploadModal = ({ open, onClose, type, onUpload }) => {
 
         {/* Buttons */}
         <div className="flex justify-between items-center mt-6">
-          {/* Image change karne ka option */}
           {imgSrc && (
             <button
               onClick={() => fileInputRef.current.click()}

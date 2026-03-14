@@ -41,7 +41,7 @@ const TiredOfPostingSection = () => {
 
     //         setSubjects(subjectsRes?.data?.data || []);
     //         setGrades(gradesRes?.data?.data || []);
-    //         setCities(citiesRes?.data?.data || []);
+    //         setCities(citiesRes?.data?.data.data || []);
     //     } catch (error) {
     //     console.error("Dropdown API error", error);
     //     }

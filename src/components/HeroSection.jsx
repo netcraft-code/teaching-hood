@@ -31,17 +31,20 @@ const HeroSection = () => {
     fetchDropdowns();
   }, []);
 
-  const fetchDropdowns = async () => {
+  const fetchDropdowns = async (inputValue) => {
     try {
       const [subjectsRes, gradesRes, citiesRes] = await Promise.all([
         getSubjects(),
         getGradeLevels(),
-        getCities(),
+        getCities({
+          search: inputValue,
+          limit: 20,
+        }),
       ]);
-
+      
       setSubjects(subjectsRes?.data?.data || []);
       setGrades(gradesRes?.data?.data || []);
-      setCities(citiesRes?.data?.data || []);
+      setCities(citiesRes?.data?.data.data || []);
     } catch (error) {
       console.error("Dropdown API error", error);
     }
@@ -61,7 +64,7 @@ const HeroSection = () => {
       });
 
       return (
-        res?.data?.data?.map((city) => ({
+        res?.data?.data.data?.map((city) => ({
           value: city.id,
           label: city.name,
         })) || []

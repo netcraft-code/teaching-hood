@@ -168,7 +168,7 @@ const EditJob = () => {
       });
 
       return (
-        res?.data?.data?.map((city) => ({
+        res?.data?.data.data?.map((city) => ({
           value: city.id,
           label: city.name,
         })) || []

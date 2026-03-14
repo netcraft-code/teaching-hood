@@ -342,7 +342,7 @@ const Profile = () => {
                     "bannerImage",
                   )}
                   alt="cover"
-                  className="w-full h-auto rounded-t-2xl object-contain"
+                  className="w-full h-32 rounded-t-2xl object-fill"
                 />
                 <button
                   onClick={() => {

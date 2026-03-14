@@ -76,7 +76,7 @@ const JobCard = () => {
       });
 
       return (
-        res?.data?.data?.map((city) => ({
+        res?.data?.data.data?.map((city) => ({
           value: city.id,
           label: city.name,
         })) || []
@@ -87,13 +87,16 @@ const JobCard = () => {
     }
   };
   
-  const fetchCities = async () => {
+  const fetchCities = async (inputValue) => {
     try {
-      const response = await getCities();
+      const response = await getCities({
+        search: inputValue,
+        limit: 20,
+      });
 
       if (response.data.status) {
         const cityOptions =
-          response.data.data?.map((city) => ({
+          response.data.data.data?.map((city) => ({
             value: city.id,
             label: city.name,
           })) || [];

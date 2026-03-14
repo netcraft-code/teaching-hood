@@ -269,7 +269,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const fetchCities = async (stateId) => {
     const cityRes = await getCities({ state_id: stateId });
 
-    setLocations(cityRes.data.data);
+    setLocations(cityRes.data.data.data);
   };
 
   /* ---------------- HANDLERS ---------------- */
