@@ -46,7 +46,7 @@ const RecruitersSection = () => {
 
   return (
     <section className="py-16 md:py-24">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Side - Image with Stats */}
           <div className="relative mb-8">

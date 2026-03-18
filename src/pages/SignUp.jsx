@@ -12,7 +12,7 @@ const routes = {
   PROFILE: "/profile",
   TERMS: "/term-condition",
   PRIVACY: "/privacy",
-  HELP: "/help",
+  HELP: "/contact-us",
 };
 
 const SignUpPage = () => {
@@ -128,7 +128,7 @@ const SignUpPage = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, phone: phoneNumber }),
-        }
+        },
       );
 
       const data = await res.json();
@@ -174,7 +174,9 @@ const SignUpPage = () => {
       const res = await registerUser(payload);
 
       if (res.data.status) {
-        setSuccess("Account created & Login successfully 🎉 Redirecting to Profile...");
+        setSuccess(
+          "Account created & Login successfully 🎉 Redirecting to Profile...",
+        );
         setTimeout(() => {
           if (res.data?.data?.token) {
             localStorage.setItem("auth_token", res.data.data.token);
@@ -222,11 +224,16 @@ const SignUpPage = () => {
                 onClick={() => navigate(routes.HOME)}
                 className="flex items-center justify-center space-x-2 mb-1"
               >
-                <img src={logo} alt="Teachinghood Logo" className="w-[250px]" />
+                {/* <img src={logo} alt="Teachinghood Logo" className="w-[250px]" /> */}
               </button>
             </div>
             <div className="flex items-center justify-center mx-auto">
-              <p className="text-lg sm:text-xl font-semibold text-center leading-[33px] text-white">
+              <p className="text-2xl font-semibold text-center leading-[33px] text-white" style={{ textShadow: `
+                                0px 0px 0px rgba(0, 0, 0, 0.10),
+                                3px 3px 3px rgba(0, 0, 0, 0.10),
+                                3px 4px 4px rgba(0, 0, 0, 0.10),
+                                3px 4px 4px rgba(0, 0, 0, 0.10)
+                            ` }}>
                 {currentConfig.title}
               </p>
             </div>
@@ -236,7 +243,9 @@ const SignUpPage = () => {
           <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8">
             {/* User Type Selection */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">I am a</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                I am a
+              </label>
               <div className="flex gap-2">
                 {[1, 2, 3].map((type) => (
                   <button
@@ -246,7 +255,11 @@ const SignUpPage = () => {
                     disabled={isFormDisabled}
                     className="flex-1 py-2 px-2 sm:px-4 rounded-lg border-2 transition font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {type === 1 ? "Teacher" : type === 2 ? "School" : "Recruiter"}
+                    {type === 1
+                      ? "Teacher"
+                      : type === 2
+                        ? "School"
+                        : "Recruiter"}
                   </button>
                 ))}
               </div>
@@ -287,22 +300,26 @@ const SignUpPage = () => {
             {/* Position Radio (Teacher only) */}
             {userType === 1 && (
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Position</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Position
+                </label>
                 <div className="flex gap-3">
-                  {["Teacher", "Principal", "Vice Principal / Coordinator"].map((pos) => (
-                    <label key={pos} className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="position"
-                        value={pos}
-                        checked={position === pos}
-                        onChange={(e) => setPosition(e.target.value)}
-                        disabled={isFormDisabled}
-                        className="text-blue-600 disabled:cursor-not-allowed"
-                      />
-                      {pos}
-                    </label>
-                  ))}
+                  {["Teacher", "Principal", "Vice Principal / Coordinator"].map(
+                    (pos) => (
+                      <label key={pos} className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="position"
+                          value={pos}
+                          checked={position === pos}
+                          onChange={(e) => setPosition(e.target.value)}
+                          disabled={isFormDisabled}
+                          className="text-blue-600 disabled:cursor-not-allowed"
+                        />
+                        {pos}
+                      </label>
+                    ),
+                  )}
                 </div>
               </div>
             )}
@@ -338,7 +355,10 @@ const SignUpPage = () => {
                 {currentConfig.emailLabel}
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Mail
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
                 <input
                   type="email"
                   placeholder={currentConfig.emailPlaceholder}
@@ -369,7 +389,9 @@ const SignUpPage = () => {
 
             {/* Password */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -387,12 +409,16 @@ const SignUpPage = () => {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters</p>
+              <p className="text-xs text-gray-500 mt-1">
+                Must be at least 8 characters
+              </p>
             </div>
 
             {/* Confirm Password */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Confirm Password
+              </label>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -407,7 +433,11 @@ const SignUpPage = () => {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                 >
-                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showConfirmPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
                 </button>
               </div>
             </div>
@@ -424,9 +454,13 @@ const SignUpPage = () => {
               />
               <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
                 I agree to the{" "}
-                <a href="#" className="text-blue-500 hover:underline">Terms of Service</a>{" "}
+                <a href="#" className="text-blue-500 hover:underline">
+                  Terms of Service
+                </a>{" "}
                 and{" "}
-                <a href="#" className="text-blue-500 hover:underline">Privacy Policy</a>
+                <a href="#" className="text-blue-500 hover:underline">
+                  Privacy Policy
+                </a>
               </label>
             </div>
 
@@ -508,11 +542,26 @@ const SignUpPage = () => {
 
           {/* Footer Links */}
           <div className="flex flex-wrap justify-center gap-3 mt-6 text-sm text-gray-600">
-            <button onClick={() => navigate(routes.TERMS)} className="hover:text-blue-600">Terms</button>
+            <button
+              onClick={() => navigate(routes.TERMS)}
+              className="hover:text-blue-600"
+            >
+              Terms
+            </button>
             <span>•</span>
-            <button onClick={() => navigate(routes.PRIVACY)} className="hover:text-blue-600">Privacy</button>
+            <button
+              onClick={() => navigate(routes.PRIVACY)}
+              className="hover:text-blue-600"
+            >
+              Privacy
+            </button>
             <span>•</span>
-            <button onClick={() => navigate(routes.HELP)} className="hover:text-blue-600">Help</button>
+            <button
+              onClick={() => navigate(routes.HELP)}
+              className="hover:text-blue-600"
+            >
+              Help
+            </button>
           </div>
         </div>
       </div>

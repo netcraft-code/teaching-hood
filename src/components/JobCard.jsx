@@ -167,25 +167,28 @@ const JobCard = () => {
 
   // Format salary to LPA
   const formatSalary = (min, max) => {
-    if (min === null || max === null) return "As per industry standards";
+    if (min === null || max === null)
+      return "Salary: As per industry standards";
 
     const SALARY_RANGES = [
-      { label: "Upto ₹10,000",          min: 0,      max: 10000  },
-      { label: "₹10,000 - ₹20,000",     min: 10000,  max: 20000  },
-      { label: "₹20,000 - ₹30,000",     min: 20000,  max: 30000  },
-      { label: "₹30,000 - ₹40,000",     min: 30000,  max: 40000  },
-      { label: "₹40,000 - ₹50,000",     min: 40000,  max: 50000  },
-      { label: "₹50,000 - ₹75,000",     min: 50000,  max: 75000  },
-      { label: "₹75,000 - ₹1,00,000",   min: 75000,  max: 100000 },
+      { label: "Upto ₹10,000", min: 0, max: 10000 },
+      { label: "₹10,000 - ₹20,000", min: 10000, max: 20000 },
+      { label: "₹20,000 - ₹30,000", min: 20000, max: 30000 },
+      { label: "₹30,000 - ₹40,000", min: 30000, max: 40000 },
+      { label: "₹40,000 - ₹50,000", min: 40000, max: 50000 },
+      { label: "₹50,000 - ₹75,000", min: 50000, max: 75000 },
+      { label: "₹75,000 - ₹1,00,000", min: 75000, max: 100000 },
       { label: "₹1,00,000 - ₹1,50,000", min: 100000, max: 150000 },
-      { label: "Above ₹1,50,000",       min: 150000, max: 0      },
+      { label: "Above ₹1,50,000", min: 150000, max: 0 },
     ];
 
     const found = SALARY_RANGES.find(
-      (r) => r.min === Number(min) && r.max === Number(max)
+      (r) => r.min === Number(min) && r.max === Number(max),
     );
 
-    return found ? `Salary: ${found.label}/month` : `₹${min} - ₹${max}/month`;
+    return found
+      ? `Salary: ${found.label}/month`
+      : `Salary: ₹${min} - ₹${max}/month`;
   };
 
   // Get job title
@@ -296,7 +299,7 @@ const JobCard = () => {
           onChange={(option) => {
             setSelectedCity(option);
           }}
-          placeholder="Location (e.g, Agra)"
+          placeholder="Location (e.g.,Agra)"
           className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
         />
       </div>
@@ -598,7 +601,7 @@ const JobCard = () => {
         className="py-12 md:py-16 lg:py-24 min-h-[40vh] bg-cover bg-center relative overflow-hidden"
         style={{ backgroundImage: `url(${HeroImages.bg})` }}
       >
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white backdrop-blur-sm px-3 md:px-4 py-2 rounded-full mb-4 md:mb-6">
@@ -828,10 +831,8 @@ const JobCard = () => {
                               src={findJobIcons.findJobLocation}
                               className="w-4 h-4 flex-shrink-0"
                             />
-                            <span className="truncate">{job.city_name}</span>,
-                            {""}
                             <span className="truncate">
-                              {job.city.state.name}
+                              {job.city_name},{job.city.state.name}
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
@@ -874,15 +875,20 @@ const JobCard = () => {
                               Applied
                             </span>
                           ) : (
-                            <button
-                              className="w-full sm:w-auto px-4 md:px-6 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
-                              onClick={() => applyJob(job.id)}
-                            >
-                              {isWithin30Days(job.created_at)
-                                ? "Apply Now"
-                                : "Express Interest"}
-                              <ChevronRight className="w-4 h-4" />
-                            </button>
+                            <div>
+                              <button
+                                className="w-full sm:w-auto px-4 md:px-6 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
+                                onClick={() => applyJob(job.id)}
+                              >
+                                {isWithin30Days(job.created_at)
+                                  ? "Apply Now"
+                                  : "Express Interest"}
+                                <ChevronRight className="w-4 h-4" />
+                              </button>
+                              <p className="text-center text-xs">
+                                Application Gateway
+                              </p>
+                            </div>
                           )}
                         </div>
                       </div>

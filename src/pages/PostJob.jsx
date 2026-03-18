@@ -253,7 +253,7 @@ const PostJob = () => {
       <header className="sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 py-2 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#2563eb]">
               <Briefcase className="w-5 h-5 text-white" />
             </div>
             <h1 className="text-xl sm:text-2xl font-regular">Post a Job</h1>
@@ -927,7 +927,7 @@ const PostJob = () => {
                 <div className="flex space-x-2">
                   <img src={postJobIcons.tipsTick} />
                   <p className="font-normal text-gray-700">
-                    Include salary for better response
+                    Include Food and Accommodation for better response
                   </p>
                 </div>
                 <div className="flex space-x-2">

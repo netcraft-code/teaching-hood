@@ -58,7 +58,7 @@ const QuickLinksSection = () => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8">
+    <div className="w-full mx-auto px-4 py-8">
       {/* Heading Section */}
       <div className="text-center mb-4">
         <h1 className="font-semibold text-[48px] leading-[65px] tracking-[0px] text-gray-900 mb-2">
@@ -84,7 +84,8 @@ const QuickLinksSection = () => {
           <div
             className="
             grid grid-rows-1 grid-flow-col
-            auto-cols-[320px]
+            lg:auto-cols-[320px]
+            auto-cols-[200px]
             gap-6
             w-max
           "
@@ -108,7 +109,7 @@ const QuickLinksSection = () => {
                   }
                 `}
                 >
-                  {link.state_name}
+                  {link.state_name} Jobs
                 </button>
               );
             })}
@@ -118,7 +119,8 @@ const QuickLinksSection = () => {
           <div
             className="
             grid grid-rows-1 grid-flow-col
-            auto-cols-[320px]
+            lg:auto-cols-[320px]
+            auto-cols-[200px]
             gap-6
             w-max
           "
@@ -142,7 +144,7 @@ const QuickLinksSection = () => {
                     }
                   `}
                 >
-                  {link.subject_name}
+                  {link.subject_name} Jobs
                 </button>
               );
             })}
@@ -152,7 +154,8 @@ const QuickLinksSection = () => {
           <div
             className="
             grid grid-rows-1 grid-flow-col
-            auto-cols-[320px]
+            lg:auto-cols-[320px]
+            auto-cols-[200px]
             gap-6
             w-max
           "
@@ -176,7 +179,7 @@ const QuickLinksSection = () => {
                     }
                   `}
                 >
-                  {link.grade_name}
+                  {link.grade_name} Jobs
                 </button>
               );
             })}

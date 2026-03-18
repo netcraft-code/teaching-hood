@@ -86,7 +86,6 @@ const HeroSection = () => {
             relative
             py-20 md:py-28 lg:py-36
             min-h-[20vh]
-            max-w-7xl mx-auto
             px-4 sm:px-6 lg:px-8
           "
         >
@@ -169,7 +168,7 @@ const HeroSection = () => {
 
               {/* Search Form - Better responsive */}
               <div className="bg-white rounded-2xl shadow-xl p-2 md:p-3 w-full">
-                <div className="flex flex-col md:flex-row gap-2">
+                <div className="flex flex-col md:flex-row gap-1">
                   {/* Subject */}
                   <div className="flex-1 relative">
                     {/* Left Icon */}
@@ -289,7 +288,7 @@ const HeroSection = () => {
                       loadOptions={loadCities}
                       value={location}
                       onChange={(option) => setLocation(option)}
-                      placeholder="Location (e.g, Agra)"
+                      placeholder="Location (e.g., Agra)"
                       styles={{
                         control: (provided) => ({
                           ...provided,
@@ -336,7 +335,7 @@ const HeroSection = () => {
                   <button
                     onClick={handleSearch}
                     className="bg-blue-500 hover:bg-blue-700 text-white px-8 py-4 rounded-lg
-                    font-sf font-bold text-[16px] whitespace-nowrap"
+                    font-sf font-bold text-[16px] whitespace-nowrap h-[52px]"
                   >
                     Search Jobs
                   </button>

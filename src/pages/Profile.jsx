@@ -814,14 +814,14 @@ const Profile = () => {
                     href={profile?.additional_info?.resume}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition inline-block text-center"
+                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition inline-block text-center border-black"
                   >
                     Download Latest Resume
                   </a>
 
                   <button
                     onClick={handleLogout}
-                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red-500 font-bold"
+                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red-500 font-bold border-black"
                   >
                     Logout
                   </button>
@@ -870,7 +870,7 @@ const Profile = () => {
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red-500 font-bold"
+                    className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition text-red-500 font-bold border-black"
                   >
                     Logout
                   </button>

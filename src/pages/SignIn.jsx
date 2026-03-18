@@ -12,7 +12,7 @@ const routes = {
   PROFILE: "/profile",
   TERMS: "/term-condition",
   PRIVACY: "/privacy",
-  HELP: "/help",
+  HELP: "/contact-us",
 };
 
 const SignInPage = () => {
@@ -195,16 +195,21 @@ const SignInPage = () => {
                 onClick={() => navigate(routes.HOME)}
                 className="flex items-center justify-center space-x-2 mb-1"
               >
-                <img
+                {/* <img
                   src={logo}
                   alt="Teachinghood Logo"
                   className="w-[250px]"
-                />
+                /> */}
               </button>
             </div>
 
             <div className="flex items-center justify-center mx-auto">
-              <p className="text-lg sm:text-xl font-semibold text-center leading-[33px] text-white">
+              <p className="text-4xl font-semibold text-center leading-[33px] text-white" style={{ textShadow: `
+                                0px 0px 0px rgba(0, 0, 0, 0.10),
+                                3px 3px 3px rgba(0, 0, 0, 0.10),
+                                3px 4px 4px rgba(0, 0, 0, 0.10),
+                                3px 4px 4px rgba(0, 0, 0, 0.10)
+                            ` }}>
                 Log In
               </p>
             </div>

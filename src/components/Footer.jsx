@@ -18,9 +18,9 @@ const Footer = () => {
 
   return (
     <div className="bg-[#0B1828] text-gray-300 mx-auto w-full">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pb-7 pt-12">
+      <div className="mx-auto px-2 sm:px-4 lg:px-6 pb-7 pt-12">
         {/* MAIN FOOTER */}
-        <div className="mx-auto flex flex-col md:flex-row gap-10 xl:gap-36 mb-6">
+        <div className="mx-auto flex flex-col md:flex-row gap-10 xl:gap-36 mb-6 justify-between">
           <div className="flex flex-row items-center justify-start">
             {/* BRAND */}
             <div className="space-y-4">
@@ -113,7 +113,9 @@ const Footer = () => {
                 </li> */}
                 <li
                   onClick={() => {
-                    setPopupMessage("Please call our representative for inquiring about dedicated hiring support: +91-9226224831");
+                    setPopupMessage(
+                      "Please call our representative for inquiring about dedicated hiring support: +91-9226224831",
+                    );
                     setShowPopup(true);
                   }}
                   className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]"
@@ -137,12 +139,14 @@ const Footer = () => {
                 </li> */}
                 <li
                   onClick={() => {
-                    setPopupMessage("Please call our representative for inquiring about dedicated hiring support: +91-9226224831");
+                    setPopupMessage(
+                      "Please call our representative for inquiring about dedicated hiring support: +91-9226224831",
+                    );
                     setShowPopup(true);
                   }}
                   className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]"
                 >
-                  Seek Dedicated Hiring Support
+                  Seek Hiring Support
                 </li>
               </ul>
             </div>
