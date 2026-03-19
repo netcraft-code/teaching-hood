@@ -61,7 +61,7 @@ const ProfileHeader = ({ onEdit, profile }) => {
         <div className="flex items-center gap-3">
           <button
             onClick={handleShare}
-            className="flex items-center whitespace-nowrap gap-2 px-3 sm:px-6 py-1.5 sm:py-2 text-sm border rounded-full hover:bg-gray-50"
+            className="flex items-center whitespace-nowrap gap-2 px-3 sm:px-6 py-1.5 sm:py-2 text-sm border rounded-full hover:bg-gray-50 border-black"
           >
             Share Profile
           </button>

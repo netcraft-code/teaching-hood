@@ -1,79 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import { Book, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Book, MapPin, ChevronDown, ChevronUp } from "lucide-react";
 import { getCities, getGradeLevels, getSubjects } from "../api/auth";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from "react-router-dom";
 
 const TiredOfPostingSection = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    // const [subjects, setSubjects] = useState([]);
-    // const [grades, setGrades] = useState([]);
-    // const [cities, setCities] = useState([]);
+  // const [subjects, setSubjects] = useState([]);
+  // const [grades, setGrades] = useState([]);
+  // const [cities, setCities] = useState([]);
 
-    // const [subject, setSubject] = useState('');
-    // const [grade, setGrade] = useState('');
-    // const [location, setLocation] = useState('');
+  // const [subject, setSubject] = useState('');
+  // const [grade, setGrade] = useState('');
+  // const [location, setLocation] = useState('');
 
-    // const [open, setOpen] = useState({
-    //     subject: false,
-    //     grade: false,
-    //     location: false,
-    // });
+  // const [open, setOpen] = useState({
+  //     subject: false,
+  //     grade: false,
+  //     location: false,
+  // });
 
-    const features = [
-        { icon: "📈", title: 'Better Reach', description: 'Access thousands of verified educators' },
-        { icon: "🎯", title: 'Better Candidates', description: 'Pre-screened and qualified teachers' },
-        { icon: "⚡", title: 'Better Outcomes', description: 'Hire 3x faster than traditional methods' },
-    ];
+  const features = [
+    {
+      icon: "📈",
+      title: "Better Reach",
+      description: "Access thousands of verified educators",
+    },
+    {
+      icon: "🎯",
+      title: "Better Candidates",
+      description: "Pre-screened and qualified teachers",
+    },
+    {
+      icon: "⚡",
+      title: "Better Outcomes",
+      description: "Hire 3x faster than traditional methods",
+    },
+  ];
 
-    // useEffect(() => {
-    //     fetchDropdowns();
-    // }, []);
+  // useEffect(() => {
+  //     fetchDropdowns();
+  // }, []);
 
-    // const fetchDropdowns = async () => {
-    //     try {
-    //         const [subjectsRes, gradesRes, citiesRes] = await Promise.all([
-    //             getSubjects(),
-    //             getGradeLevels(),
-    //             getCities(),
-    //         ]);
+  // const fetchDropdowns = async () => {
+  //     try {
+  //         const [subjectsRes, gradesRes, citiesRes] = await Promise.all([
+  //             getSubjects(),
+  //             getGradeLevels(),
+  //             getCities(),
+  //         ]);
 
-    //         setSubjects(subjectsRes?.data?.data || []);
-    //         setGrades(gradesRes?.data?.data || []);
-    //         setCities(citiesRes?.data?.data.data || []);
-    //     } catch (error) {
-    //     console.error("Dropdown API error", error);
-    //     }
-    // };
+  //         setSubjects(subjectsRes?.data?.data || []);
+  //         setGrades(gradesRes?.data?.data || []);
+  //         setCities(citiesRes?.data?.data.data || []);
+  //     } catch (error) {
+  //     console.error("Dropdown API error", error);
+  //     }
+  // };
 
-    // const handleSearch = () => {
-    //     if (!subject || !grade || !location) {
-    //         alert("Please select Subject, Grade and Location");
-    //         return;
-    //     }
+  // const handleSearch = () => {
+  //     if (!subject || !grade || !location) {
+  //         alert("Please select Subject, Grade and Location");
+  //         return;
+  //     }
 
-    //     alert(
-    //         `Searching profiles for:\nSubject: ${subject}\nGrade: ${grade}\nLocation: ${location}`
-    //     );
-    // };
+  //     alert(
+  //         `Searching profiles for:\nSubject: ${subject}\nGrade: ${grade}\nLocation: ${location}`
+  //     );
+  // };
 
-    return (
+  return (
     <section className="py-16 md:py-24 bg-[linear-gradient(135deg,rgba(239,246,255,0.7)_0%,#FFFFFF_50%,rgba(240,253,244,0.3)_100%)]">
-      <div className="container mx-auto px-4">
-
+      <div className="mx-auto px-4">
         {/* Heading */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
             Tired of posting jobs on Facebook <br /> groups without results?
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Getting the best teachers is now easier and faster with Teachinghood's free plan
+            Getting the best teachers is now easier and faster with
+            Teachinghood's free plan
           </p>
 
           <button
-            className='bg-blue-500 font-regular text-xl mt-8 p-2 rounded-full text-white hover:bg-blue-600'
-            onClick={() => navigate('/post-job')}
+            className="bg-blue-500 font-regular text-xl mt-8 p-2 rounded-full text-white hover:bg-blue-600 px-4"
+            onClick={() => navigate("/post-job")}
           >
             Post a free job today
           </button>
@@ -87,7 +99,9 @@ const TiredOfPostingSection = () => {
               className="bg-white border-2 border-gray-100 rounded-2xl p-8 px-12 shadow-xl transition"
             >
               <div className="text-center text-2xl mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-normal text-center mb-2">{feature.title}</h3>
+              <h3 className="text-xl font-normal text-center mb-2">
+                {feature.title}
+              </h3>
               <p className="text-gray-600 text-center">{feature.description}</p>
             </div>
           ))}

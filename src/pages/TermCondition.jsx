@@ -10,10 +10,10 @@ const AboutUs = () => {
       <section className="relative w-full">
         {/* Background Image Container */}
         <div
-          className="relative w-full bg-cover bg-center overflow-hidden h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px]"
+          className="relative w-full bg-cover bg-center overflow-hidden h-[160px]"
           style={{ backgroundImage: `url(${HeroImages.bg})` }}
         >
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 md:pt-20">
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 md:pt-12">
             {/* Heading */}
             <div className="text-center mb-8 sm:mb-12 md:mb-16">
               <h1

@@ -42,7 +42,7 @@ const TeachersSection = () => {
 
   return (
     <section className="py-16 md:py-24 mx-5">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Side - Images */}
           <div className="relative">

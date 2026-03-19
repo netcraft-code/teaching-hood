@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Star } from 'lucide-react';
+import React, { useState } from "react";
+import { Star } from "lucide-react";
 import { homePageIcons } from "../assets/icons/HomePageIcons";
 
 const TestimonialsSection = () => {
-    const testimonials = [
+  const testimonials = [
     {
-      quote: "Teachinghood helped me find the perfect role in less than two weeks.",
+      quote:
+        "Teachinghood helped me find the perfect role in less than two weeks.",
       name: "Lavanya Srivastava",
       role: "TGT English Teacher",
       avatar: "L",
@@ -13,7 +14,7 @@ const TestimonialsSection = () => {
       bgColor: "bg-blue-500",
       borderColor: "border-blue-400",
       reviewQuote: homePageIcons.reviewBlue,
-      rating: 5
+      rating: 5,
     },
     {
       quote: "We filled most of our vacancies sooner with the free plan",
@@ -24,10 +25,11 @@ const TestimonialsSection = () => {
       bgColor: "bg-green-500",
       borderColor: "border-green-400",
       reviewQuote: homePageIcons.reviewGreen,
-      rating: 4.5
+      rating: 4.5,
     },
     {
-      quote: "I applied for jobs relevant to me and landed in to the school my choice finally. Thank you Teachinghood",
+      quote:
+        "I applied for jobs relevant to me and landed in to the school my choice finally. Thank you Teachinghood",
       name: "Anjali Patel",
       role: "PRT Teacher",
       avatar: "A",
@@ -35,10 +37,11 @@ const TestimonialsSection = () => {
       bgColor: "bg-yellow-500",
       borderColor: "border-yellow-400",
       reviewQuote: homePageIcons.reviewYellow,
-      rating: 5
+      rating: 5,
     },
     {
-      quote: "Uploading jobs is actually simplified and i am happy with the quality of applications we receive.",
+      quote:
+        "Uploading jobs is actually simplified and i am happy with the quality of applications we receive.",
       name: "Rajesh Tokekar",
       role: "HR Manager",
       avatar: "R",
@@ -46,19 +49,21 @@ const TestimonialsSection = () => {
       bgColor: "bg-red-500",
       borderColor: "border-red-400",
       reviewQuote: homePageIcons.reviewRed,
-      rating: 4
-    }
+      rating: 4,
+    },
   ];
 
   return (
     <section className="py-16 md:py-24 bg-blue-50 from-gray-50 to-white">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-yellow-50 px-4 py-2 rounded-full mb-6">
             <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-            <span className="text-sm text-yellow-400 font-semibold">Testimonials</span>
+            <span className="text-sm text-yellow-400 font-semibold">
+              Testimonials
+            </span>
           </div>
 
           {/* Heading */}
@@ -79,12 +84,14 @@ const TestimonialsSection = () => {
             >
               {/* Quote Icon */}
               <div className="mb-4">
-                <div className={`w-10 h-10 ${testimonial.color}-100 rounded-xl flex items-center justify-center`}>
-                    <img
-                        src={testimonial.reviewQuote}
-                        alt=""
-                        className="w-5 h-5 object-contain"
-                    />
+                <div
+                  className={`w-10 h-10 ${testimonial.color}-100 rounded-xl flex items-center justify-center`}
+                >
+                  <img
+                    src={testimonial.reviewQuote}
+                    alt=""
+                    className="w-5 h-5 object-contain"
+                  />
                 </div>
               </div>
 
@@ -123,12 +130,18 @@ const TestimonialsSection = () => {
 
               {/* Author */}
               <div className="flex items-center space-x-3 pt-4 border-t border-gray-100">
-                <div className={`w-12 h-12 ${testimonial.bgColor} rounded-full flex items-center justify-center text-white font-bold text-lg`}>
+                <div
+                  className={`w-12 h-12 ${testimonial.bgColor} rounded-full flex items-center justify-center text-white font-bold text-lg`}
+                >
                   {testimonial.avatar}
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                  <div className="text-sm text-gray-500">{testimonial.role}</div>
+                  <div className="font-semibold text-gray-900">
+                    {testimonial.name}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {testimonial.role}
+                  </div>
                 </div>
               </div>
             </div>

@@ -62,7 +62,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 shadow-md">
-      <nav className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-2">
+      <nav className="mx-auto px-2 sm:px-4 lg:px-6 py-2">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div
@@ -104,7 +104,7 @@ const Header = () => {
               <>
                 <button
                   onClick={() => goTo(routes.SIGNIN)}
-                  className="text-[16px] font-normal leading-none tracking-[0] px-7 py-3 border rounded-full hover:text-blue-600"
+                  className="text-[16px] font-normal leading-none tracking-[0] px-7 py-3 border rounded-full hover:text-blue-600 border-black"
                 >
                   Sign In
                 </button>
@@ -116,12 +116,15 @@ const Header = () => {
                 </button>
               </>
             ) : (
-              <button
-                onClick={() => goTo(routes.PROFILE)}
-                className="hover:text-blue-600"
-              >
-                <UserCircle size={28} />
-              </button>
+              <div className="flex flex-col items-center">
+                <button
+                  onClick={() => goTo(routes.PROFILE)}
+                  className="hover:text-blue-600"
+                >
+                  <UserCircle size={28} />
+                </button>
+                <span>My Profile</span>
+              </div>
             )}
 
             {/* Call Us */}
@@ -171,10 +174,16 @@ const Header = () => {
 
             {!isLoggedIn ? (
               <>
-                <button className="text-[16px] font-normal leading-none tracking-[0] w-full border py-2 rounded-full">
+                <button
+                  onClick={() => goTo(routes.SIGNIN)}
+                  className="text-[16px] font-normal leading-none tracking-[0] w-full border py-2 rounded-full border-black"
+                >
                   Sign In
                 </button>
-                <button className="text-[16px] font-normal leading-none tracking-[0] w-full bg-blue-600 text-white py-2 rounded-full">
+                <button
+                  onClick={() => goTo(routes.SIGNUP)}
+                  className="text-[16px] font-normal leading-none tracking-[0] w-full bg-blue-600 text-white py-2 rounded-full"
+                >
                   Sign Up
                 </button>
               </>

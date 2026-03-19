@@ -313,7 +313,7 @@ const EditJob = () => {
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#2563eb]">
               <Briefcase className="w-5 h-5 text-white" />
             </div>
             <h1 className="text-xl sm:text-2xl font-regular">
@@ -980,7 +980,7 @@ const EditJob = () => {
                 <div className="flex space-x-2">
                   <img src={postJobIcons.tipsTick} />
                   <p className="font-normal text-gray-700">
-                    Include salary for better response
+                    Include Food and Accommodation for better response
                   </p>
                 </div>
                 <div className="flex space-x-2">

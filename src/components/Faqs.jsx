@@ -9,51 +9,82 @@ const Faqs = () => {
 
   const faqs = [
     {
-        question: "What is Teachinghood?",
-        answer: "Teachinghood is a dedicated teacher hiring and professional growth platform for schools and educators in India. It connects verified teachers with schools through structured profiles, targeted jobs, and a transparent hiring process.",
-    }, {
-        question: "Is Teachinghood free for teachers?",
-        answer: "Yes. Creating a profile, applying to jobs, and exploring opportunities on Teachinghood is completely free for teachers. Our goal is to empower teachers, not charge them.",
-    }, {
-        question: "How is Teachinghood different from Facebook or WhatsApp job groups?",
-        answer: "Unlike scattered social media posts, Teachinghood offers organized, filterable job listings and detailed teacher profiles. This saves time, reduces noise, and improves hiring quality for both schools and teachers.",
-    }, {
-        question: "What kind of schools can use Teachinghood?",
-        answer: "Teachinghood is built for private, regional and international accredited schools and recruitment agencies across India. Any institution looking for qualified teachers can use the platform.",
-    }, {
-        question: "Are teacher profiles verified?",
-        answer: "Yes. In the dedicated hiring support programme, teacher profiles go through basic screening and information checks to ensure authenticity. This helps schools engage with genuine candidates and reduces low-quality or irrelevant applications.",
-    }, {
-        question: "Can schools track and manage applications?",
-        answer: "Yes. Schools can view, shortlist, and manage applications in one place. This brings structure and visibility to an otherwise informal hiring process.",
-    }, {
-        question: "What details are included in a teacher profile?",
-        answer: "A teacher profile includes qualifications, subjects, grades, experience, location, preferences, and a personal bio. Teachers can also highlight achievements, certifications, and career goals.",
-    }, {
-        question: "Can teachers specify preferred locations and roles?",
-        answer: "Absolutely. Teachers can set preferred cities, grades, subjects, and job types, helping schools reach the most relevant candidates and improving match quality.",
-    }, {
-        question: "Does Teachinghood support fresher teachers?",
-        answer: "Yes. Teachinghood supports both experienced educators and freshers. Schools can clearly mention experience requirements, and freshers get visibility beyond closed networks.",
-    }, {
-        question: "How does Teachinghood improve hiring quality for schools?",
-        answer: "By combining structured profiles, initial screening, and targeted visibility, Teachinghood reduces random applications. Schools get fewer but more relevant candidates.",
-    }, {
-        question: "Does Teachinghood help teachers grow professionally?",
-        answer: "Yes. Teachinghood goes beyond jobs by promoting skill development, training, best practices, and tech adoption. Our mission is long-term teacher growth, not just placement.",
-    }, {
-        question: "Is Teachinghood only for metro cities?",
-        answer: "No. Teachinghood is designed for India-wide reach, including Tier 2 and Tier 3 cities. Schools and teachers from any location can benefit.",
-    }, {
-        question: "How quickly can schools expect responses?",
-        answer: "As our data engine grows, schools often receive relevant applications within days, not weeks. The platform is designed to reduce long notice cycles and hiring delays.",
-    }, {
-        question: "How do I get started with Teachinghood?",
-        answer: "Simply sign up, create your profile (teacher or school), and start exploring opportunities. No long forms, no middlemen—just a clear, structured hiring journey.",
-    }, {
-      question: "When applying for jobs, what is the difference between ‘Apply’ vs ‘Express Interest’?",
-      answer: "You can ‘Apply’ for jobs that are recently posted by schools, i.e., posted less than 30 days ago. Jobs that are posted by schools more than 30 days ago may have been finalized or schools may not be actively looking for. In that case, you can ‘Express Interest’ to let your profile reach the school for any future opportunities.",
-    }
+      question: "What is Teachinghood?",
+      answer:
+        "Teachinghood is a dedicated teacher hiring and professional growth platform for schools and educators in India. It connects verified teachers with schools through structured profiles, targeted jobs, and a transparent hiring process.",
+    },
+    {
+      question: "Is Teachinghood free for teachers?",
+      answer:
+        "Yes. Creating a profile, applying to jobs, and exploring opportunities on Teachinghood is completely free for teachers. Our goal is to empower teachers, not charge them.",
+    },
+    {
+      question:
+        "How is Teachinghood different from Facebook or WhatsApp job groups?",
+      answer:
+        "Unlike scattered social media posts, Teachinghood offers organized, filterable job listings and detailed teacher profiles. This saves time, reduces noise, and improves hiring quality for both schools and teachers.",
+    },
+    {
+      question: "What kind of schools can use Teachinghood?",
+      answer:
+        "Teachinghood is built for private, regional and international accredited schools and recruitment agencies across India. Any institution looking for qualified teachers can use the platform.",
+    },
+    {
+      question: "Are teacher profiles verified?",
+      answer:
+        "Yes. In the dedicated hiring support programme, teacher profiles go through basic screening and information checks to ensure authenticity. This helps schools engage with genuine candidates and reduces low-quality or irrelevant applications.",
+    },
+    {
+      question: "Can schools track and manage applications?",
+      answer:
+        "Yes. Schools can view, shortlist, and manage applications in one place. This brings structure and visibility to an otherwise informal hiring process.",
+    },
+    {
+      question: "What details are included in a teacher profile?",
+      answer:
+        "A teacher profile includes qualifications, subjects, grades, experience, location, preferences, and a personal bio. Teachers can also highlight achievements, certifications, and career goals.",
+    },
+    {
+      question: "Can teachers specify preferred locations and roles?",
+      answer:
+        "Absolutely. Teachers can set preferred cities, grades, subjects, and job types, helping schools reach the most relevant candidates and improving match quality.",
+    },
+    {
+      question: "Does Teachinghood support fresher teachers?",
+      answer:
+        "Yes. Teachinghood supports both experienced educators and freshers. Schools can clearly mention experience requirements, and freshers get visibility beyond closed networks.",
+    },
+    {
+      question: "How does Teachinghood improve hiring quality for schools?",
+      answer:
+        "By combining structured profiles, initial screening, and targeted visibility, Teachinghood reduces random applications. Schools get fewer but more relevant candidates.",
+    },
+    {
+      question: "Does Teachinghood help teachers grow professionally?",
+      answer:
+        "Yes. Teachinghood goes beyond jobs by promoting skill development, training, best practices, and tech adoption. Our mission is long-term teacher growth, not just placement.",
+    },
+    {
+      question: "Is Teachinghood only for metro cities?",
+      answer:
+        "No. Teachinghood is designed for India-wide reach, including Tier 2 and Tier 3 cities. Schools and teachers from any location can benefit.",
+    },
+    {
+      question: "How quickly can schools expect responses?",
+      answer:
+        "As our data engine grows, schools often receive relevant applications within days, not weeks. The platform is designed to reduce long notice cycles and hiring delays.",
+    },
+    {
+      question: "How do I get started with Teachinghood?",
+      answer:
+        "Simply sign up, create your profile (teacher or school), and start exploring opportunities. No long forms, no middlemen—just a clear, structured hiring journey.",
+    },
+    {
+      question:
+        "When applying for jobs, what is the difference between ‘Apply’ vs ‘Express Interest’?",
+      answer:
+        "You can ‘Apply’ for jobs that are recently posted by schools, i.e., posted less than 30 days ago. Jobs that are posted by schools more than 30 days ago may have been finalized or schools may not be actively looking for. In that case, you can ‘Express Interest’ to let your profile reach the school for any future opportunities.",
+    },
   ];
 
   const toggleFAQ = (index) => {
@@ -62,7 +93,7 @@ const Faqs = () => {
 
   return (
     <section className="py-16 md:py-24 bg-white">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
           {/* Badge */}
@@ -121,7 +152,10 @@ const Faqs = () => {
             <p className="text-gray-600 mb-6">
               Our support team is here to help you get the answers you need.
             </p>
-            <button onClick={() => navigate("/contact-us")} className="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition font-semibold">
+            <button
+              onClick={() => navigate("/contact-us")}
+              className="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition font-semibold"
+            >
               Contact Support
             </button>
           </div>

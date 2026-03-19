@@ -697,6 +697,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </Field>
             </Grid>
 
+            <span className="block text-sm text-gray-500 mt-1">
+              Current Position
+            </span>
+
             {/* Phone Number, Position, Board, Total Experience */}
             <Grid>
               {/* Position */}
@@ -1634,7 +1638,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     setSearch(e.target.value);
                     setShowDropdown(true);
                   }}
-                  placeholder="Location (e.g, Agra)..."
+                  placeholder="Location (e.g.,Agra)..."
                   className={inputClass(errors.preferred_location)}
                 />
 

@@ -63,7 +63,7 @@ const SchoolsSection = () => {
 
   return (
     <section className="py-16 md:py-24 bg-gray-50">
-      <div className="container mx-auto">
+      <div className="mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Side - Content */}
           <div className="mx-8">
@@ -192,7 +192,10 @@ const SchoolsSection = () => {
           </div> */}
 
           <div className="relative w-full px-4">
-            <img src={schoolSectionLeftImage} className="w-full object-cover h-[400px] sm:h-[500px] md:h-[500px] rounded-2xl" />
+            <img
+              src={schoolSectionLeftImage}
+              className="w-full object-cover h-[400px] sm:h-[500px] md:h-[500px] rounded-2xl"
+            />
           </div>
         </div>
       </div>
