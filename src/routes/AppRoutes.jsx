@@ -14,6 +14,7 @@ import EditJob from "../pages/EditJob";
 import ContactUs from "../pages/ContactUs";
 import JobViewPage from "../pages/JobViewPage";
 import Pricing from "../pages/Pricing";
+import Newsletter from "../pages/Newsletter";
 
 const AppRoutes = () => {
   return (
@@ -78,6 +79,8 @@ const AppRoutes = () => {
       
       {/* Pricing Page - subscription plans */}
       <Route path="/pricing" element={<Pricing />} />
+
+      <Route path="/newsletter" element={<Newsletter />} />
     </Routes>
   );
 };

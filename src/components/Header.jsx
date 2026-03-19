@@ -56,6 +56,7 @@ const Header = () => {
     { name: "Find a Job", path: "/find-job" },
     { name: "Post a Job", path: "/post-job" },
     { name: "About Us", path: "/about-us" },
+    { name: "Newsletter", path: "/newsletter" },
     { name: "Pricing", path: "/pricing" },
   ];
 
