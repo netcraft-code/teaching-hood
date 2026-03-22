@@ -26,8 +26,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     last_name: "",
     phone: "",
     email: "",
-    avatar_url: null,
-    banner_image_url: null,
     position: "",
     grade: "",
     subject: "",
@@ -158,8 +156,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             last_name: profile.last_name || "",
             phone: profile.phone || "",
             email: profile.email || "",
-            avatar_url: null,
-            banner_image_url: null,
             position: profile.position || "",
             grade: profile.grade || "",
             subject: profile.subject || "",
@@ -577,11 +573,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       fd.append("about_us", form.additional_info.about_us || "");
 
       // FILES
-      if (form.avatar_url) fd.append("avatar_url", form.avatar_url);
-
-      if (form.banner_image_url)
-        fd.append("banner_image_url", form.banner_image_url);
-
       await updateProfile(fd);
 
       const res = await getProfile();
@@ -869,31 +860,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                   />
                   {/* <span className="text-gray-600 font-medium">years</span> */}
                 </div>
-              </Field>
-            </Grid>
-
-            {/* Avatar Image, Banner Image */}
-            <Grid>
-              {/* Avatar Image */}
-              <Field label={USER_BASE_DETAILS[userType]?.avatarUrl}>
-                <input
-                  type="file"
-                  name="avatar_url"
-                  accept="image/*"
-                  onChange={handleChange}
-                  className="file-input"
-                />
-              </Field>
-
-              {/* Banner Image */}
-              <Field label="Banner Image">
-                <input
-                  type="file"
-                  name="banner_image_url"
-                  accept="image/*"
-                  onChange={handleChange}
-                  className="file-input"
-                />
               </Field>
             </Grid>
           </Section>

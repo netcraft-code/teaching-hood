@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const BASE_PATH = '/src/assets/pdfs/weekly-newsletters/';
+const ITEMS_PER_PAGE = 10;
 
 const pdfFiles = [
   { id: 1,  week: "2025 · W47", name: "Teachinghood Newsletter 2025-W47",                         file: "Teachinghood Newsletter 2025-W47.pdf" },
@@ -39,8 +40,25 @@ const DownloadIcon = () => (
   </svg>
 );
 
+const ChevronLeft = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+
+const ChevronRight = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+
 const NewsletterSection = () => {
   const [downloading, setDownloading] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(pdfFiles.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentItems = pdfFiles.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handleDownload = (pdf) => {
     setDownloading(pdf.id);
@@ -52,6 +70,16 @@ const NewsletterSection = () => {
     document.body.removeChild(link);
     setTimeout(() => setDownloading(null), 1500);
   };
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Build page number array e.g. [1, 2, 3]
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <div className="min-h-screen bg-white">
@@ -94,16 +122,13 @@ const NewsletterSection = () => {
             All Editions
           </h2>
           <span className="text-xs text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
-            17 files
+            Showing {startIndex + 1}–{Math.min(startIndex + ITEMS_PER_PAGE, pdfFiles.length)} of {pdfFiles.length}
           </span>
         </div>
 
-        {/* ── Scrollable PDF List ── */}
-        <div
-          className="flex flex-col gap-2 overflow-y-auto pr-1"
-          style={{ maxHeight: '520px' }}
-        >
-          {pdfFiles.map((pdf) => (
+        {/* ── PDF List ── */}
+        <div className="flex flex-col gap-2 mb-8">
+          {currentItems.map((pdf) => (
             <div
               key={pdf.id}
               className="flex items-center gap-4 px-4 py-3 rounded-lg border border-gray-100 bg-white hover:bg-gray-50 hover:border-gray-200 transition-all duration-150"
@@ -149,10 +174,55 @@ const NewsletterSection = () => {
                   </>
                 )}
               </button>
-
             </div>
           ))}
         </div>
+
+        {/* ── Pagination ── */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-1 pt-4 border-t border-gray-100">
+
+            {/* Prev */}
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="flex items-center gap-1 px-3 py-2 text-xs font-medium text-gray-500 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 cursor-pointer"
+            >
+              <ChevronLeft />
+              <span className="hidden sm:inline">Previous</span>
+            </button>
+
+            {/* Page Numbers */}
+            <div className="flex items-center gap-1 mx-2">
+              {pageNumbers.map((page) => (
+                <button
+                  key={page}
+                  onClick={() => goToPage(page)}
+                  className={`
+                    w-9 h-9 text-xs font-semibold rounded-lg border transition-all duration-150 cursor-pointer
+                    ${currentPage === page
+                      ? 'bg-red-500 border-red-500 text-white'
+                      : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                    }
+                  `}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            {/* Next */}
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="flex items-center gap-1 px-3 py-2 text-xs font-medium text-gray-500 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 cursor-pointer"
+            >
+              <span className="hidden sm:inline">Next</span>
+              <ChevronRight />
+            </button>
+
+          </div>
+        )}
 
       </div>
     </div>
