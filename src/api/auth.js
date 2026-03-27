@@ -139,3 +139,9 @@ export const updateJob = (jobId, payload) => {
 export const viewJob = (id) => {
   return api.get(`/api/job-posts/${id}`);
 };
+
+export const createPayment = (data) => {
+  return api.get("/api/create-payment-link", {
+    params: data,
+  });
+};

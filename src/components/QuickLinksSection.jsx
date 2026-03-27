@@ -54,6 +54,8 @@ const QuickLinksSection = () => {
     } else {
       navigate(path);
     }
+    
+    window.scrollTo(0, 0);
     // setIsMenuOpen(false);
   };
 
