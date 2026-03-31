@@ -7,6 +7,7 @@ import {
   getProfile,
   getStates,
 } from "../api/auth";
+import AsyncSelect from "react-select/async";
 
 const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [subjects, setSubjects] = useState([]);
@@ -21,6 +22,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
   const [userType, setUserType] = useState(0);
+  const [selectedStateId, setSelectedStateId] = useState(0);
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -72,6 +74,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       website: "",
     },
   });
+  const [cityOption, setCityOption] = useState(null);
 
   const selectedLocations = form.additional_info.preferred_location || [];
 
@@ -246,13 +249,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               website: profile?.additional_info?.website || "",
             },
           });
-
-          if (stateValue && stateRes.data.data.length > 0) {
-            const matched = stateRes.data.data.find(
-              (s) => s.name === stateValue,
-            );
-            if (matched) fetchCities(matched.id);
-          }
         }
       } finally {
         setPageLoading(false);
@@ -262,11 +258,11 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     load();
   }, [open, profile]);
 
-  const fetchCities = async (stateId) => {
-    const cityRes = await getCities({ state_id: stateId });
+  // const fetchCities = async (stateId) => {
+  //   const cityRes = await getCities({ state_id: stateId });
 
-    setLocations(cityRes.data.data.data);
-  };
+  //   setLocations(cityRes.data.data.data);
+  // };
 
   /* ---------------- HANDLERS ---------------- */
   const handleChange = (e) => {
@@ -597,6 +593,57 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       setLoading(false);
     }
   };
+
+  const loadCities = async (stateId, inputValue) => {
+    try {
+      const res = await getCities({
+        state_id: stateId,
+        search: inputValue || "",
+        limit: 20,
+      });
+      
+      const cities =
+        res?.data?.data?.data?.map((city) => ({
+          value: city.id,
+          label: city.name,
+        })) || [];
+
+      // ✅ only set locations when no search (initial load)
+      if (!inputValue) {
+        setLocations(res?.data?.data?.data || []);
+      }
+
+      return cities;
+    } catch (error) {
+      console.error("City API error", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      if (!form.state) return;
+
+      if (form.state && states.length > 0) {
+        const matched = states.find(
+          (s) => s.name === form.state,
+        );
+
+        if (matched) {
+          setSelectedStateId(matched.id);
+
+          const cityRes = await getCities({
+            state_id: matched.id,
+            limit: 20,
+          });
+
+          setLocations(cityRes.data.data.data);
+        };
+      }
+    };
+
+    fetchCities();
+  }, [form.state]);
 
   if (!open) return null;
 
@@ -931,7 +978,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               <Field label="State" required>
                 <select
                   className={inputClass(errors.state)}
-                  // name se matching state dhundho, uska JSON stringify karo
                   value={
                     form.state
                       ? JSON.stringify(
@@ -943,7 +989,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     if (!e.target.value) return;
                     const selectedState = JSON.parse(e.target.value);
                     setForm((prev) => ({ ...prev, state: selectedState.name }));
-                    fetchCities(selectedState.id);
                     setErrors((prev) => ({ ...prev, state: "" }));
                   }}
                 >
@@ -959,7 +1004,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
               {/* City */}
               <Field label="City" required>
-                <select
+                {/* <select
                   className={inputClass(errors.city)}
                   value={form.city}
                   onChange={(e) => {
@@ -980,7 +1025,67 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       {c.name}
                     </option>
                   ))}
-                </select>
+                </select> */}
+                <AsyncSelect
+                  cacheOptions
+                  defaultOptions={locations.map((c) => ({ value: c.name, label: c.name }))}
+                  loadOptions={(inputValue) => loadCities(selectedStateId, inputValue)}
+                  value={cityOption}
+                  onChange={(option) => {
+                    setCityOption(option);
+
+                    // form update
+                    setForm((prev) => ({
+                      ...prev,
+                      city: option ? option.value : "",
+                    }));
+
+                    // error clear
+                    setErrors((prev) => ({
+                      ...prev,
+                      city: "",
+                    }));
+                  }}
+                  placeholder="Select City"
+                  isClearable
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      backgroundColor: "white",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "14px",
+                      minHeight: "48px",
+                      paddingLeft: "10px",
+                    }),
+                    menu: (provided) => ({
+                      ...provided,
+                      backgroundColor: "#ffffff",
+                      zIndex: 9999,
+                    }),
+                    input: (provided) => ({
+                      ...provided,
+                      color: "#9ca3af",
+                    }),
+                    singleValue: (provided) => ({
+                      ...provided,
+                      color: "#111827",
+                    }),
+                    placeholder: (provided) => ({
+                      ...provided,
+                      color: "#9ca3af",
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      color: "#111827",
+                      backgroundColor: state.isFocused
+                        ? "#f3f4f6"
+                        : state.isSelected
+                        ? "#e5e7eb"
+                        : "#ffffff",
+                    }),
+                  }}
+                />
+
                 <ErrorText error={errors.city} />
               </Field>
             </Grid>
