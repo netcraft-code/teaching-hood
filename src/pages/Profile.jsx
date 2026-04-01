@@ -91,19 +91,19 @@ const Profile = () => {
     if (!min && !max) return "--";
 
     const SALARY_RANGES = [
-      { label: "Upto ₹10,000",          min: 0,      max: 10000  },
-      { label: "₹10,000 - ₹20,000",     min: 10000,  max: 20000  },
-      { label: "₹20,000 - ₹30,000",     min: 20000,  max: 30000  },
-      { label: "₹30,000 - ₹40,000",     min: 30000,  max: 40000  },
-      { label: "₹40,000 - ₹50,000",     min: 40000,  max: 50000  },
-      { label: "₹50,000 - ₹75,000",     min: 50000,  max: 75000  },
-      { label: "₹75,000 - ₹1,00,000",   min: 75000,  max: 100000 },
+      { label: "Upto ₹10,000", min: 0, max: 10000 },
+      { label: "₹10,000 - ₹20,000", min: 10000, max: 20000 },
+      { label: "₹20,000 - ₹30,000", min: 20000, max: 30000 },
+      { label: "₹30,000 - ₹40,000", min: 30000, max: 40000 },
+      { label: "₹40,000 - ₹50,000", min: 40000, max: 50000 },
+      { label: "₹50,000 - ₹75,000", min: 50000, max: 75000 },
+      { label: "₹75,000 - ₹1,00,000", min: 75000, max: 100000 },
       { label: "₹1,00,000 - ₹1,50,000", min: 100000, max: 150000 },
-      { label: "Above ₹1,50,000",      min: 150000, max: 0      },
+      { label: "Above ₹1,50,000", min: 150000, max: 0 },
     ];
 
     const found = SALARY_RANGES.find(
-      (r) => r.min === Number(min) && r.max === Number(max)
+      (r) => r.min === Number(min) && r.max === Number(max),
     );
 
     return found ? `${found.label}/month` : `₹${min} - ₹${max}/month`;
@@ -296,6 +296,8 @@ const Profile = () => {
 
   // Effects
   useEffect(() => {
+    fetchVacancies(1);
+
     if (hasFetched.current) return;
     hasFetched.current = true;
     fetchProfile();
@@ -342,7 +344,7 @@ const Profile = () => {
                     "bannerImage",
                   )}
                   alt="cover"
-                  className="w-full h-32 rounded-t-2xl object-fill"
+                  className="w-full h-32 rounded-t-2xl object-cover"
                 />
                 <button
                   onClick={() => {
@@ -669,7 +671,9 @@ const Profile = () => {
                             </div>
                           </div>
                           <span className="px-3 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
-                            {exp.is_currently_working === "1" ? "Current" : "Past"}
+                            {exp.is_currently_working === "1"
+                              ? "Current"
+                              : "Past"}
                           </span>
                         </div>
 
@@ -811,9 +815,15 @@ const Profile = () => {
                   </div>
 
                   <a
-                    href={profile?.additional_info?.resume}
+                    href={profile?.additional_info?.resume || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => {
+                      if (!profile?.additional_info?.resume) {
+                        e.preventDefault();
+                        alert("Please upload resume");
+                      }
+                    }}
                     className="w-full mt-4 border rounded-lg py-2 text-sm hover:bg-gray-50 transition inline-block text-center border-black"
                   >
                     Download Latest Resume

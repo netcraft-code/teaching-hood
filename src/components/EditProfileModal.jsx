@@ -735,8 +735,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </Field>
             </Grid>
 
-            <span className="block text-sm text-gray-500 mt-1">
-              Current Position
+            <span className="text-sm font-medium text-gray-700 mb-1.5 block">
+              Current Position<span className="text-red-500 ml-1">*</span>
             </span>
 
             {/* Phone Number, Position, Board, Total Experience */}
@@ -1358,6 +1358,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     key={index}
                     className="border rounded-xl p-4 bg-gray-50 space-y-3 relative"
                   >
+                    <h4>Experience {index + 1}</h4>
                     {/* REMOVE BUTTON */}
                     {form.additional_info.experience.length > 1 && (
                       <button
@@ -1536,10 +1537,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         label={
                           <div className="flex items-center gap-2">
                             <span>Degree</span>
-                            <span className="text-xs text-gray-500">
-                              (Use standard, official degree format with correct
-                              capitalization, e.g., B.Sc, LLB)
-                            </span>
                           </div>
                         }
                       >

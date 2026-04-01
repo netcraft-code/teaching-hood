@@ -97,7 +97,8 @@ const VacancyCard = ({ job, onEdit, onClose }) => {
             </button>
 
             {job.is_closed ? (
-              <span className="font-regular bg-red-100 text-red-500 p-1 rounded-full">
+              <span className="inline-flex items-center gap-1.5 text-sm font-medium bg-red-50 text-red-600 px-3 py-1 rounded-full border border-red-200">
+                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
                 Closed
               </span>
             ) : (

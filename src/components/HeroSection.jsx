@@ -131,7 +131,7 @@ const HeroSection = () => {
               </div>
 
               {/* Main Heading - Better shadow & responsive */}
-              <h1 className="mb-4 flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
+              <h1 className="mb-4 flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-6">
                 <span
                   className="text-white font-extrabold italic text-[50px] sm:text-[70px] md:text-[80px] lg:text-[90px] leading-[1] tracking-[0]"
                   style={{

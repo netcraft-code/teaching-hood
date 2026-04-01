@@ -15,10 +15,10 @@ const PricingSection = () => {
       const { data } = await createPayment({
         plan_id: plan.id,
         name: plan.name,
-        amount: plan.monthlyPrice,
+        amount: plan.yearlyPrice,
         full_plan: plan,
       });
-      
+
       if (data?.payment_link) {
         window.open(data.payment_link, "_blank", "noopener,noreferrer");
       } else {
@@ -30,11 +30,11 @@ const PricingSection = () => {
       setLoadingPlanId(null);
     }
   };
-  
+
   const plans = [
     {
       id: "growth",
-      name: "Growth",
+      name: "Starter",
       icon: "📈",
       subtitle: "Perfect for growing schools",
       monthlyPrice: 899,
@@ -48,20 +48,30 @@ const PricingSection = () => {
       yearlyTextColor: "text-green-600",
       buttonClass: "bg-green-500 hover:bg-green-600",
       bestForColor: "text-green-600",
-      bestFor: "Established schools",
+      bestFor: "Occasional Hiring",
       features: [
-        { text: "2 per month Job Posts", sub: "Create and manage job listings" },
-        { text: "30 days Visibility", sub: "Job post active duration" },
-        { text: "Standard (listed on top of free posting)", sub: "Listing priority level" },
-        { text: "Email Support", sub: null },
-        { text: "Basic Analytics", sub: null },
+        {
+          text: "2 Per Month",
+          sub: "Job Posts",
+        },
+        { text: "30 Days", sub: "Job Post Visibility" },
+        {
+          text: "Standard",
+          sub: "Listing Style",
+        },
+        {
+          text: "Upto 10 Applications",
+          sub: "Application Visibility Per Job Post",
+        },
+        { text: "No Alerts", sub: "Job Alerts For Teachers" },
+        // { text: "Basic Analytics", sub: null },
       ],
-      buttonText: "Get Growth",
+      buttonText: "Get Starter",
       highlighted: false,
     },
     {
       id: "pro",
-      name: "Pro",
+      name: "Growth",
       icon: "👑",
       subtitle: "Most popular for active hiring",
       monthlyPrice: 1299,
@@ -75,17 +85,24 @@ const PricingSection = () => {
       yearlyTextColor: "text-blue-600",
       buttonClass: "bg-blue-500 hover:bg-blue-600",
       bestForColor: "text-blue-600",
-      bestFor: "Established schools",
+      bestFor: "Regular Hiring",
       recommended: true,
       features: [
-        { text: "5 per month Job Posts", sub: "Create and manage job listings" },
-        { text: "45 days Visibility", sub: "Job post active duration" },
-        { text: "Priority (Top of search)", sub: "Listing priority level" },
-        { text: "Priority Email & Chat Support", sub: null },
-        { text: "Advanced Analytics", sub: null },
-        { text: "Profile Boost", sub: null },
+        {
+          text: "5 Per Month",
+          sub: "Job Posts",
+        },
+        { text: "45 Days", sub: "Job Post Visibility" },
+        { text: "Priority", sub: "Listing Style" },
+        {
+          text: "Upto 20 Applications",
+          sub: "Application Visibility Per Job Post",
+        },
+        { text: "Whatsapp Alerts", sub: "Job Alerts For Teachers" },
+        // { text: "Advanced Analytics", sub: null },
+        // { text: "Profile Boost", sub: null },
       ],
-      buttonText: "Choose Pro",
+      buttonText: "Get Growth",
       highlighted: true,
     },
     {
@@ -104,17 +121,27 @@ const PricingSection = () => {
       yearlyTextColor: "text-yellow-600",
       buttonClass: "bg-yellow-500 hover:bg-yellow-600",
       bestForColor: "text-yellow-600",
-      bestFor: "Recruiters & large group schools",
+      bestFor: "Recruiters & High Volume Hiring",
       features: [
-        { text: "10 per month Job Posts", sub: "Create and manage job listings" },
-        { text: "60 days Visibility", sub: "Job post active duration" },
-        { text: "Priority (Top of search)", sub: "Listing priority level" },
-        { text: "Dedicated Account Manager", sub: null },
-        { text: "Custom Analytics Dashboard", sub: null },
-        { text: "Profile Boost", sub: null },
-        { text: "Dedicated Account Manager", sub: null },
+        {
+          text: "10 Per Month ",
+          sub: "Job Posts",
+        },
+        { text: "60 Days", sub: "Job Post Visibility" },
+        { text: "Top Priority", sub: "Listing Style" },
+        {
+          text: "Unlimited Applications",
+          sub: "Application Visibility Per Job Post",
+        },
+        {
+          text: "Whatsapp Alerts & Call Outreach",
+          sub: "Job Alerts For Teachers",
+        },
+        // { text: "Custom Analytics Dashboard", sub: null },
+        // { text: "Profile Boost", sub: null },
+        // { text: "Dedicated Account Manager", sub: null },
       ],
-      buttonText: "Grab Enterprise",
+      buttonText: "Get Enterprise",
       highlighted: false,
     },
   ];
@@ -122,16 +149,23 @@ const PricingSection = () => {
   const faqs = [
     {
       question: "Can I change my plan later?",
-      answer: "Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.",
-    }, {
+      answer:
+        "Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.",
+    },
+    {
       question: "What happens when I exceed my job post limit?",
-      answer: "You can purchase additional job posts à la carte or upgrade to a higher tier plan.",
-    }, {
+      answer:
+        "You can purchase additional job posts à la carte or upgrade to a higher tier plan.",
+    },
+    {
       question: "Do you offer refunds?",
-      answer: "We offer a 14-day money-back guarantee for all annual plans. Contact us for details.",
-    }, {
+      answer:
+        "We offer a 14-day money-back guarantee for all annual plans. Contact us for details.",
+    },
+    {
       question: "Is there a free trial?",
-      answer: "Yes! We offer a 7-day free trial on all plans. No credit card required to start.",
+      answer:
+        "Yes! We offer a 7-day free trial on all plans. No credit card required to start.",
     },
   ];
 
@@ -139,37 +173,40 @@ const PricingSection = () => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const formatPrice = (price) =>
-    price.toLocaleString("en-IN");
+  const formatPrice = (price) => price.toLocaleString("en-IN");
 
   return (
     <>
       {/* Hero CTA Section */}
       <section
-        className="py-16 md:py-24 bg-cover bg-center relative overflow-hidden"
+        className="py-6 md:py-6 bg-cover bg-center relative overflow-hidden"
         style={{ backgroundImage: `url(${HeroImages.bg})` }}
       >
         <div className="mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-full mb-6">
+            {/* <div className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-full mb-6">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
               <span className="text-sm text-gray-600 font-medium">
                 Simple, Transparent Pricing
               </span>
-            </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-                style={{ textShadow: "2px 2px 6px rgba(161, 141, 141, 0.7)" }}>
-              Find the Perfect Plan
+            </div> */}
+            <h2
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-2 sm:mb-4 tracking-tight px-4"
+              style={{ textShadow: "2px 2px 6px rgba(161, 141, 141, 0.7)" }}
+            >
+              Select the perfect plan <br /> that meets your hiring needs
             </h2>
 
-            <p className="text-4xl md:text-5xl lg:text-6xl leading-tight text-white text-center mb-10 max-w-2xl mx-auto"
-              style={{ textShadow: "2px 2px 6px rgba(124, 112, 112, 0.7)" }}>
+            {/* <p
+              className="text-4xl md:text-5xl lg:text-6xl leading-tight text-white text-center mb-10 max-w-2xl mx-auto"
+              style={{ textShadow: "2px 2px 6px rgba(124, 112, 112, 0.7)" }}
+            >
               for Your School
-            </p>
+            </p> */}
             <div className="flex flex-col gap-4 justify-center items-center">
-              <span className="px-8 py-4 text-black font-medium text-xl">
-                Choose the plan that best fits your hiring needs. All plans include access to our <br /> network of 50,000+ qualified teachers.
-              </span>
+              <p className="text-[14px] text-gray-600 leading-relaxed max-w-2xl">
+                Find the right teachers, without the wait
+              </p>
             </div>
           </div>
         </div>
@@ -197,11 +234,17 @@ const PricingSection = () => {
                 <div className="p-6 flex flex-col flex-1">
                   {/* Icon + Name */}
                   <div className="flex flex-col items-center text-center mb-5">
-                    <div className={`w-14 h-14 ${plan.iconBg} rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md`}>
+                    <div
+                      className={`w-14 h-14 ${plan.iconBg} rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md`}
+                    >
                       {plan.icon}
                     </div>
-                    <h3 className="text-2xl font-extrabold text-gray-900">{plan.name}</h3>
-                    <p className="text-sm text-gray-400 mt-1">{plan.subtitle}</p>
+                    <h3 className="text-2xl font-extrabold text-gray-900">
+                      {plan.name}
+                    </h3>
+                    {/* <p className="text-sm text-gray-400 mt-1">
+                      {plan.subtitle}
+                    </p> */}
                   </div>
 
                   {/* Divider */}
@@ -211,42 +254,61 @@ const PricingSection = () => {
                   <ul className="space-y-3 mb-6 flex-1">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-2.5">
-                        <svg className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        <svg
+                          className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         <div>
-                          <p className="text-sm font-semibold text-gray-800">{feature.text}</p>
+                          <p className="text-[15px] font-semibold text-gray-800">
+                            {feature.text}
+                          </p>
                           {feature.sub && (
-                            <p className="text-xs text-gray-400">{feature.sub}</p>
+                            <p className="text-[13px] text-gray-400">
+                              {feature.sub}
+                            </p>
                           )}
                         </div>
                       </li>
                     ))}
                   </ul>
 
-                  {/* Best For */}
-                  <div className={`rounded-xl bg-gray-50 border ${plan.borderColor} px-4 py-3 mb-5`}>
-                    <p className="text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-1">Best For</p>
-                    <p className={`text-sm font-bold ${plan.bestForColor}`}>{plan.bestFor}</p>
-                  </div>
-
                   {/* Yearly Price Box — BEST VALUE */}
-                  <div className={`rounded-xl border ${plan.borderColor} bg-gray-50 p-4 mb-3`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 ${plan.badgeBg} text-white rounded-full`}>
+                  <div
+                    className={`rounded-xl border ${plan.borderColor} bg-gray-50 p-4 mb-3`}
+                  >
+                    <div className="flex items-center justify-end">
+                      {/* <span
+                        className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 ${plan.badgeBg} text-white rounded-full`}
+                      >
                         Best Value
-                      </span>
+                      </span> */}
                       <span className="text-[10px] font-semibold uppercase text-gray-400 tracking-widest">
-                        Monthly
+                        Annually
                       </span>
                     </div>
                     <div className="flex items-end gap-2 flex-wrap">
-                      <div className="flex items-start">
-                        <span className="text-base font-bold text-gray-800 mt-1">₹</span>
-                        <span className="text-3xl font-black text-gray-900">
-                          {formatPrice(plan.monthlyPrice)}
-                        </span>
-                        <span className="text-sm text-gray-400 ml-1 mt-2">/month</span>
+                      <div className="flex items-start gap-3" style={{ flexDirection: "column" }}>
+                        <div>
+                          <span className="text-base font-bold text-gray-800 mt-1">
+                            ₹
+                          </span>
+                          <span className="text-3xl font-black text-gray-900">
+                            {formatPrice(plan.yearlyPrice)}
+                          </span>
+                        </div>
+                        <p className={`text-sm font-bold ${plan.bestForColor}`}>
+                          Best For {plan.bestFor}
+                        </p>
+                        {/* <span className="text-sm text-gray-400 ml-1 mt-2">
+                          /month
+                        </span> */}
                       </div>
                       {/* <span className={`inline-flex items-center gap-0.5 px-2 py-0.5 ${plan.discountBg} text-white text-xs font-bold rounded-full`}>
                         {plan.discount}% SAVE
@@ -254,17 +316,41 @@ const PricingSection = () => {
                     </div>
                   </div>
 
+                  {/* Best For */}
+                  {/* <div
+                    className={`rounded-xl bg-gray-50 border ${plan.borderColor} px-4 py-3 mb-5`}
+                  >
+                    <p className="text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-1">
+                      Best For
+                    </p>
+                    <p className={`text-sm font-bold ${plan.bestForColor}`}>
+                      {plan.bestFor}
+                    </p>
+                  </div> */}
+
                   {/* CTA Button */}
                   <button
                     onClick={() => handlePlanPurchase(plan)}
                     disabled={loadingPlanId === plan.id}
                     className={`w-full py-3 px-6 rounded-xl font-bold text-sm text-white transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 ${plan.buttonClass} ${loadingPlanId === plan.id ? "opacity-70 cursor-not-allowed" : ""}`}
                   >
-                    {loadingPlanId === plan.id ? "Processing..." : plan.buttonText}
-                    
+                    {loadingPlanId === plan.id
+                      ? "Processing..."
+                      : plan.buttonText}
+
                     {loadingPlanId !== plan.id && (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2.5"
+                          d="M13 7l5 5m0 0l-5 5m5-5H6"
+                        />
                       </svg>
                     )}
                   </button>
@@ -274,23 +360,23 @@ const PricingSection = () => {
           </div>
 
           {/* Header */}
-          <div className="text-center py-16">
-            {/* Badge */}
-            <div className="inline-flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full mb-6">
+          {/* <div className="text-center py-16"> */}
+          {/* Badge */}
+          {/* <div className="inline-flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full mb-6">
               <span className="text-sm text-blue-600 font-semibold">FAQ</span>
-            </div>
-  
-            {/* Heading */}
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            </div> */}
+
+          {/* Heading */}
+          {/* <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-gray-600">
               Find answers to common questions about our platform and services
-            </p>
-          </div>
-  
-          {/* FAQ List */}
-          <div className="max-w-3xl mx-auto space-y-4 max-h-[350px] overflow-y-auto pr-2">
+            </p> */}
+        </div>
+
+        {/* FAQ List */}
+        {/* <div className="max-w-3xl mx-auto space-y-4 max-h-[350px] overflow-y-auto pr-2">
             {faqs.map((faq, index) => (
               <div
                 key={index}
@@ -311,13 +397,15 @@ const PricingSection = () => {
                 </button>
                 {openIndex === index && (
                   <div className="px-6 pb-6">
-                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                    <p className="text-gray-600 leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
                 )}
               </div>
             ))}
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
       </div>
     </>
   );

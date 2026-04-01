@@ -80,7 +80,7 @@ export const getStates = () => {
 
 // Cities
 export const getCities = (params = {}) => {
-  return api.get("/api/city",  { params });
+  return api.get("/api/city", { params });
 };
 
 // View profile by ID
@@ -102,19 +102,19 @@ export const getMaxGradeJobs = () => {
 
 export const sendMessage = (data) => {
   return api.post("/api/send-message", data);
-}
+};
 
 export const postJob = (data) => {
   return api.post("/api/job-posts", data);
-}
+};
 
 export const getJobs = (params = {}) => {
-  return api.get("/api/job-posts",  { params });
-}
+  return api.get("/api/job-posts", { params });
+};
 
 export const likeUnlikeJobApi = (data) => {
   return api.post("/api/like", data);
-}
+};
 
 export const applyJobApi = (jobId) => {
   return api.post(`api/job-post/apply/${jobId}`);
@@ -122,11 +122,11 @@ export const applyJobApi = (jobId) => {
 
 export const getVacanies = (page = 1) => {
   return api.get(`api/job-post/current/vacanies?page=${page}`);
-}
+};
 
 export const getAppliedJobs = (params = {}) => {
   return api.get("api/job-post/applied", { params });
-}
+};
 
 export const closeJob = (jobId) => {
   return api.post(`api/job-post/close/${jobId}`);
@@ -140,8 +140,16 @@ export const viewJob = (id) => {
   return api.get(`/api/job-posts/${id}`);
 };
 
+export const profileCompletion = () => {
+  return api.get("/api/profile/completion");
+};
+
 export const createPayment = (data) => {
   return api.get("/api/create-payment-link", {
     params: data,
   });
+};
+
+export const backendURL = () => {
+  return "https://teaching-hood-backend.netcraftglobal.com";
 };

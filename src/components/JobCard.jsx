@@ -31,6 +31,7 @@ const JobCard = () => {
   const subjectParam = searchParams.get("subject");
   const gradeParam = searchParams.get("grade");
   const cityParam = searchParams.get("city");
+  const stateParam = searchParams.get("state_id");
 
   const buildFilters = () => {
     return {
@@ -45,6 +46,7 @@ const JobCard = () => {
       radius: searchRadius > 0 ? searchRadius : 0,
       subject_id: subjectParam || "all",
       grade_id: gradeParam || "all",
+      state_id: stateParam || "all",
     };
   };
 
@@ -299,7 +301,7 @@ const JobCard = () => {
           onChange={(option) => {
             setSelectedCity(option);
           }}
-          placeholder="Location (e.g.,Agra)"
+          placeholder="Location (e.g., Agra)"
           className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
         />
       </div>

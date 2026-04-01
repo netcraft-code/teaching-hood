@@ -22,15 +22,19 @@ function getCroppedImg(image, crop, fileName) {
     0,
     0,
     canvas.width,
-    canvas.height
+    canvas.height,
   );
 
   return new Promise((resolve) => {
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      blob.name = fileName;
-      resolve(blob);
-    }, "image/jpeg", 0.95);
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) return;
+        blob.name = fileName;
+        resolve(blob);
+      },
+      "image/jpeg",
+      0.95,
+    );
   });
 }
 
@@ -56,15 +60,19 @@ const ImageUploadModal = ({ open, onClose, type, onUpload }) => {
     reader.readAsDataURL(file);
   };
 
-  const onImageLoad = useCallback((e) => {
-    const { width, height } = e.currentTarget;
-    const initialCrop = centerCrop(
-      makeAspectCrop({ unit: "%", width: 90 }, aspect, width, height),
-      width,
-      height
-    );
-    setCrop(initialCrop);
-  }, [aspect]);
+  const onImageLoad = useCallback(
+    (e) => {
+      const { width, height } = e.currentTarget;
+
+      const initialCrop = centerCrop(
+        makeAspectCrop({ unit: "%", width: 90 }, aspect, width, 450),
+        width,
+        450,
+      );
+      setCrop(initialCrop);
+    },
+    [aspect],
+  );
 
   if (!open) return null;
 
@@ -74,7 +82,7 @@ const ImageUploadModal = ({ open, onClose, type, onUpload }) => {
     const croppedBlob = await getCroppedImg(
       imgRef.current,
       completedCrop,
-      selectedFile.name
+      selectedFile.name,
     );
 
     onUpload(croppedBlob, type);
@@ -110,10 +118,10 @@ const ImageUploadModal = ({ open, onClose, type, onUpload }) => {
         {/* Crop Area - Banner ke liye exact dimensions */}
         {imgSrc && (
           <div className="flex justify-center bg-gray-100 rounded-lg p-4">
-            <div 
+            <div
               className={`w-full ${
-                type === "avatar_url" 
-                  ? "max-w-xs aspect-square" 
+                type === "avatar_url"
+                  ? "max-w-xs aspect-square"
                   : "max-w-lg aspect-video" // 3:1 aspect ratio ke liye
               }`}
             >

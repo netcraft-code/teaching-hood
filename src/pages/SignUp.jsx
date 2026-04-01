@@ -63,7 +63,7 @@ const SignUpPage = () => {
       cityPlaceholder: "Enter city name",
       showCity: true,
       tabColor: "#28C76F",
-      title: "Sign up today to post free jobs and receive quality applications",
+      title: "Register today to post free jobs and receive quality applications",
     },
     3: {
       firstNameLabel: "Company Name",
@@ -76,7 +76,7 @@ const SignUpPage = () => {
       cityPlaceholder: "Enter city name",
       showCity: true,
       tabColor: "#FFC107",
-      title: "Sign up today to post free jobs and receive quality applications",
+      title: "Register today to post free jobs and receive quality applications",
     },
   };
 

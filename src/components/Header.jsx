@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Menu, X, UserCircle } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
-import { getProfile } from "../api/auth";
+import { getProfile, profileCompletion } from "../api/auth";
+import ProfileMeter from "./ProfileMeter";
 
 const routes = {
   HOME: "/",
@@ -16,6 +17,22 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userType, setUserType] = useState(0);
+  const [completion, setCompletion] = useState(0);
+  const [missing, setMissing] = useState([]);
+
+  useEffect(() => {
+    const fetchcompletion = async () => {
+      try {
+        const res = await profileCompletion();
+        setCompletion(res.data.profile_completion.percentage);
+        setMissing(res.data.missing_fields);
+      } catch (err) {
+        console.error("Error fetching profile completion:", err);
+      }
+    };
+
+    fetchcompletion();
+  }, []);
 
   const isLoggedIn = !!localStorage.getItem("auth_token");
 
@@ -56,7 +73,7 @@ const Header = () => {
     { name: "Find a Job", path: "/find-job" },
     { name: "Post a Job", path: "/post-job" },
     { name: "About Us", path: "/about-us" },
-    { name: "Newsletter", path: "/newsletter" },
+    { name: "Newsletters", path: "/newsletter" },
     { name: "Pricing", path: "/pricing" },
   ];
 
@@ -99,28 +116,33 @@ const Header = () => {
           </div>
 
           {/* Desktop Right Section */}
-          <div className="hidden xl:flex items-center gap-6">
+          <div
+            className="hidden xl:grid items-center gap-6"
+            style={{ gridTemplateColumns: "auto auto auto" }}
+          >
+            {isLoggedIn ? <ProfileMeter percentage={completion} /> : null}
+
             {!isLoggedIn ? (
               <>
                 <button
                   onClick={() => goTo(routes.SIGNIN)}
                   className="text-[16px] font-normal leading-none tracking-[0] px-7 py-3 border rounded-full hover:text-blue-600 border-black"
                 >
-                  Sign In
+                  Login
                 </button>
                 <button
                   onClick={() => goTo(routes.SIGNUP)}
                   className="text-[16px] font-normal leading-none tracking-[0] px-7 py-3 bg-blue-600 text-white rounded-full"
                 >
-                  Sign Up
+                  Register
                 </button>
               </>
             ) : (
-              <div className="flex flex-col items-center">
-                <button
-                  onClick={() => goTo(routes.PROFILE)}
-                  className="hover:text-blue-600"
-                >
+              <div
+                onClick={() => goTo(routes.PROFILE)}
+                className="flex flex-col items-center cursor-pointer"
+              >
+                <button className="hover:text-blue-600">
                   <UserCircle size={28} />
                 </button>
                 <span>My Profile</span>
@@ -178,13 +200,13 @@ const Header = () => {
                   onClick={() => goTo(routes.SIGNIN)}
                   className="text-[16px] font-normal leading-none tracking-[0] w-full border py-2 rounded-full border-black"
                 >
-                  Sign In
+                  Login
                 </button>
                 <button
                   onClick={() => goTo(routes.SIGNUP)}
                   className="text-[16px] font-normal leading-none tracking-[0] w-full bg-blue-600 text-white py-2 rounded-full"
                 >
-                  Sign Up
+                  Register
                 </button>
               </>
             ) : (

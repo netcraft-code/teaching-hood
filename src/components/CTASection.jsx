@@ -35,7 +35,7 @@ const CTASection = () => {
               Find A Job
             </button>
 
-            <button className="px-8 py-4 bg-white border-2 border-black rounded-full hover:bg-white/10 transition font-sf font-normal text-[16px] leading-[100%] backdrop-blur-sm">
+            <button className="px-8 py-4 bg-white border-[1px] border-black rounded-full hover:bg-white/10 transition font-sf font-normal text-[16px] leading-[100%] backdrop-blur-sm">
               Post A Job
             </button>
           </div>

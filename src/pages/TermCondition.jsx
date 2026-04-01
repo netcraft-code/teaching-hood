@@ -404,8 +404,8 @@ const AboutUs = () => {
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>Teachinghood may update these Terms from time to time</li>
               <li>
-                Continued use of the Platform after updates constitutes acceptance
-                of revised Terms
+                Continued use of the Platform after updates constitutes
+                acceptance of revised Terms
               </li>
             </ul>
           </div>
@@ -415,7 +415,9 @@ const AboutUs = () => {
             </h2>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>These Terms are governed by the laws of India.</li>
-              <li>Courts located in India shall have exclusive jurisdiction.</li>
+              <li>
+                Courts located in India shall have exclusive jurisdiction.
+              </li>
             </ul>
           </div>
           <div className="mb-8">
