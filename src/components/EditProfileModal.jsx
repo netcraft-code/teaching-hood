@@ -144,6 +144,15 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
           const stateValue = profile?.addresses?.state || "";
 
+          setCityOption(
+            profile?.addresses?.city
+              ? {
+                  value: profile.addresses.city,
+                  label: profile.addresses.city,
+                }
+              : null
+          );
+
           const knownBoards = [
             "CBSE",
             "ISCE",
@@ -1273,9 +1282,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                             </option>
                           ))}
                         </select>
-                        <ErrorText
-                          error={errors.min_salary || errors.max_salary}
-                        />
+                        <ErrorText error={errors.min_salary} /> <ErrorText error={errors.max_salary} />
                       </div>
                     );
                   })()}

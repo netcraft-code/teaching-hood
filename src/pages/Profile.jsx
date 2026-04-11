@@ -649,61 +649,46 @@ const Profile = () => {
               (profile?.additional_info?.experience ? (
                 <>
                   {profile.additional_info.experience
-                    .slice()
-                    .reverse()
-                    .map((exp, index) => (
-                      <div
-                        key={index}
-                        className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition"
-                      >
-                        <div className="flex justify-between items-start mb-3">
-                          <div className="flex items-center gap-5">
-                            <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
-                              🏫
-                            </div>
-                            <div>
-                              <h3 className="text-xl text-gray-800">
-                                {exp.position}
-                              </h3>
-                              <p className="text-blue-500 font-medium">
-                                {exp.school}
-                              </p>
-                            </div>
+                  .slice()
+                  .sort((a, b) => new Date(a.from) - new Date(b.from))  // latest first
+                  .map((exp, index) => (
+                    <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-5">
+                          <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
+                            🏫
                           </div>
-                          <span className="px-3 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
-                            {exp.is_currently_working === "1"
-                              ? "Current"
-                              : "Past"}
-                          </span>
+                          <div>
+                            <h3 className="text-xl text-gray-800">{exp.position}</h3>
+                            <p className="text-blue-500 font-medium">{exp.school}</p>
+                          </div>
                         </div>
-
-                        <p className="text-sm text-gray-600 mb-3 pl-20">
-                          {formatDate(exp.from)} - {formatDate(exp.to)}
-                        </p>
-
-                        {exp.key_responsibilities && (
-                          <div className="pl-20">
-                            <p className="text-sm font-medium text-gray-700 mb-2">
-                              Key Responsibilities:
-                            </p>
-                            <ul className="space-y-2">
-                              {Array.isArray(exp.key_responsibilities) &&
-                                exp.key_responsibilities.map((resp, idx) => (
-                                  <li
-                                    key={idx}
-                                    className="text-gray-700 text-sm flex items-start"
-                                  >
-                                    <span className="text-blue-500 mr-2">
-                                      •
-                                    </span>
-                                    <span>{resp}</span>
-                                  </li>
-                                ))}
-                            </ul>
-                          </div>
-                        )}
+                        <span className="px-3 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
+                          {exp.is_currently_working === "1" ? "Current" : "Past"}  {/* fix */}
+                        </span>
                       </div>
-                    ))}
+
+                      <p className="text-sm text-gray-600 mb-3 pl-20">
+                        {formatDate(exp.from)} -{" "}
+                        {exp.is_currently_working === "1" ? "Present" : formatDate(exp.to)}
+                      </p>
+
+                      {exp.key_responsibilities && (
+                        <div className="pl-20">
+                          <p className="text-sm font-medium text-gray-700 mb-2">Key Responsibilities:</p>
+                          <ul className="space-y-2">
+                            {Array.isArray(exp.key_responsibilities) &&
+                              exp.key_responsibilities.map((resp, idx) => (
+                                <li key={idx} className="text-gray-700 text-sm flex items-start">
+                                  <span className="text-blue-500 mr-2">•</span>
+                                  <span>{resp}</span>
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </>
               ) : (
                 <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">

@@ -208,7 +208,7 @@ const JobCard = () => {
   const clearAllFilters = () => {
     setSelectedCity("all");
     setSelectedJobType("all");
-    setSelectedExperience("0-1");
+    setSelectedExperience("");
     setSalaryRange([0, 0]);
     setPostedDate("any");
     setSearchQuery("");
