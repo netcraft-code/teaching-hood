@@ -386,7 +386,7 @@ const ProfileView = () => {
               <>
                 {profile.additional_info.experience
                   .slice()
-                  .reverse()
+                  .sort((a, b) => new Date(b.from) - new Date(a.from))  // latest first
                   .map((exp, index) => (
                     <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
                       <div className="flex justify-between items-start mb-3">
@@ -400,7 +400,7 @@ const ProfileView = () => {
                           </div>
                         </div>
                         <span className="px-3 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
-                          {exp.to ? "Past" : "Current"}
+                          {exp.is_currently_working === "1" ? "Current" : "Past"}  {/* fix */}
                         </span>
                       </div>
 
