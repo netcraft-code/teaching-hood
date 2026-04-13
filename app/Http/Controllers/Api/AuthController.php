@@ -124,7 +124,9 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        if (!$user = User::where('email', $request->email)->first()) {
+            return response_formatter(EMAIL_NOT_FOUND_401);
+        }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response_formatter(DEFAULT_INVALID_CREDENTAILS_401);
@@ -156,6 +158,10 @@ class AuthController extends Controller
 
         if ($data['banner_image_url']) {
             $data['banner_image_url'] = url('/') . "/storage/" . $data['banner_image_url'];
+        }
+
+        if ($data['additional_info']['resume']) {
+            $data['additional_info']['resume'] = url('/') . "/storage/" . $data['additional_info']['resume'];
         }
 
         return response_formatter(DEFAULT_200, $data);
@@ -296,7 +302,7 @@ class AuthController extends Controller
 
     public function specificProfile($id)
     {
-        $user = User::with('additional_info.subjects', 'additional_info.grade_level', 'addresses')->find($id);
+        $user = User::with('additional_info.subjects', 'additional_info.grade_levels', 'addresses')->find($id);
 
         if ($user['avatar_url']) {
             $user['avatar_url'] = url('/') . "/storage/" . $user['avatar_url'];
@@ -304,6 +310,10 @@ class AuthController extends Controller
 
         if ($user['banner_image_url']) {
             $user['banner_image_url'] = url('/') . "/storage/" . $user['banner_image_url'];
+        }
+
+        if ($user['additional_info']['resume']) {
+            $user['additional_info']['resume'] = url('/') . "/storage/" . $user['additional_info']['resume'];
         }
 
         return response_formatter(DEFAULT_200, $user);

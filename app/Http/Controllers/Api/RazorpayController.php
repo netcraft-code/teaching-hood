@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 use Razorpay\Api\Api;
 
@@ -124,5 +124,24 @@ class RazorpayController extends Controller
                 'message' => $e->getMessage()
             ], 400);
         }
+    }
+
+    public function getPaymentStatus(Request $request)
+    {
+        $validator = Validator::make(request()->all(), [
+            'razorpay_payment_id' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response_formatter(DEFAULT_VALIDATION_422, $validator->errors());
+        }
+
+        $payment = $this->api->payment->fetch(request()->razorpay_payment_id);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Payment details retrieved',
+            'data' => $payment->toArray()
+        ]);
     }
 }

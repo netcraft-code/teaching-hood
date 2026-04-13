@@ -322,4 +322,16 @@ class ProfileController extends Controller
 
         return response_formatter(DEFAULT_UPDATED_200, $data);
     }
+
+    public function getProfileCompletion(Request $request)
+    {
+        $user = auth()->user();
+
+        $completion = calculateProfileCompletion($user);
+
+        return response()->json([
+            'user' => $user,
+            'profile_completion' => $completion
+        ]);
+    }
 }

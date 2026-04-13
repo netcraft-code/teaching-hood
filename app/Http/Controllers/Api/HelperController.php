@@ -27,13 +27,34 @@ class HelperController extends Controller
 
     public function city()
     {
-        $cities = City::orderBy('name', 'asc');
+        $query = City::query();
 
+        // Filter by state
         if (request()->has('state_id')) {
-            $cities = $cities->where('state_id', request('state_id'));
+            $query->where('state_id', request('state_id'));
         }
 
-        $cities = $cities->get();
+        // Search by city name
+        if (request()->has('search') && request('search') != '') {
+            $search = request('search');
+
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orderByRaw("
+                  CASE 
+                      WHEN name = ? THEN 1
+                      WHEN name LIKE ? THEN 2
+                      ELSE 3
+                  END
+              ", [$search, $search . '%'])
+                ->orderBy('name', 'asc');
+        } else {
+            $query->orderBy('name', 'asc');
+        }
+
+        // Pagination (default 10 per page)
+        $perPage = request()->get('per_page', 20);
+
+        $cities = $query->paginate($perPage);
 
         return response_formatter(DEFAULT_200, $cities);
     }

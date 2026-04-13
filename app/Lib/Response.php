@@ -51,7 +51,13 @@ const DEFAULT_INVALID_401 = [
 const DEFAULT_INVALID_CREDENTAILS_401 = [
     'response_code' => 401,
     'status' => false,
-    'message' => 'Invalid credentials'
+    'message' => 'The password you entered is incorrect'
+];
+
+const EMAIL_NOT_FOUND_401 = [
+    'response_code' => 401,
+    'status' => false,
+    'message' => 'No account found with this email. Please check and try again'
 ];
 
 const DEFAULT_LOGGED_OUT_200 = [
