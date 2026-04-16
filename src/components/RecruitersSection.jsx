@@ -54,7 +54,7 @@ const RecruitersSection = () => {
               <img
                 src={trecruiterSectionLeftImage}
                 alt="Recruiter meeting"
-                className="w-full object-cover h-[400px] sm:h-[500px] md:h-[500px]"
+                className="w-full object-cover h-[400px] sm:h-[500px] md:h-[500px] shadow-2xl"
               />
 
               {/* Stats Overlay */}

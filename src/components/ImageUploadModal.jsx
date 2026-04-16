@@ -65,9 +65,9 @@ const ImageUploadModal = ({ open, onClose, type, onUpload }) => {
       const { width, height } = e.currentTarget;
 
       const initialCrop = centerCrop(
-        makeAspectCrop({ unit: "%", width: 90 }, aspect, width, 450),
+        makeAspectCrop({ unit: "%", width: 90 }, aspect, width, height),
         width,
-        450,
+        height,
       );
       setCrop(initialCrop);
     },

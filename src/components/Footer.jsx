@@ -14,6 +14,7 @@ const Footer = () => {
     ABOUT_US: "/about-us",
     TERM_CONDITION: "/term-condition",
     CONTACT_US: "/contact-us",
+    NEWSLETTER: "/newsletter",
   };
 
   return (
@@ -93,9 +94,15 @@ const Footer = () => {
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   <a href="/profile">Track Application</a>
                 </li>
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                <button
+                    onClick={() => navigate(routes.NEWSLETTER)}
+                    className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]"
+                  >
+                    Learning Resources
+                  </button>
+                {/* <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   Learning Resources
-                </li>
+                </li> */}
               </ul>
             </div>
 

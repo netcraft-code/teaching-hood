@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { HeroImages } from "../assets/images/HeroImages";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { createPayment } from "../api/auth";
+import graph from "./../assets/images/graph.png";
+import starter from "./../assets/images/starter.png";
+import enterprise from "./../assets/images/enterprise.png";
 
 const PricingSection = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -35,7 +38,7 @@ const PricingSection = () => {
     {
       id: "growth",
       name: "Starter",
-      icon: "📈",
+      icon: starter,
       subtitle: "Perfect for growing schools",
       monthlyPrice: 899,
       yearlyPrice: 7999,
@@ -72,7 +75,7 @@ const PricingSection = () => {
     {
       id: "pro",
       name: "Growth",
-      icon: "👑",
+      icon: graph,
       subtitle: "Most popular for active hiring",
       monthlyPrice: 1299,
       yearlyPrice: 11999,
@@ -108,7 +111,7 @@ const PricingSection = () => {
     {
       id: "enterprise",
       name: "Enterprise",
-      icon: "💼",
+      icon: enterprise,
       subtitle: "For recruiters & large institutions",
       monthlyPrice: 1599,
       yearlyPrice: 14999,
@@ -194,7 +197,7 @@ const PricingSection = () => {
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-2 sm:mb-4 tracking-tight px-4"
               style={{ textShadow: "2px 2px 6px rgba(161, 141, 141, 0.7)" }}
             >
-              Select the perfect plan <br /> that meets your hiring needs
+              <span className="font-light">Select the perfect plan</span> <br /> <span>that meets your hiring needs</span>
             </h2>
 
             {/* <p
@@ -237,7 +240,7 @@ const PricingSection = () => {
                     <div
                       className={`w-14 h-14 ${plan.iconBg} rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md`}
                     >
-                      {plan.icon}
+                      <img src={plan.icon} alt={plan.name} />
                     </div>
                     <h3 className="text-2xl font-extrabold text-gray-900">
                       {plan.name}
@@ -294,7 +297,10 @@ const PricingSection = () => {
                       </span>
                     </div>
                     <div className="flex items-end gap-2 flex-wrap">
-                      <div className="flex items-start gap-3" style={{ flexDirection: "column" }}>
+                      <div
+                        className="flex items-start gap-3"
+                        style={{ flexDirection: "column" }}
+                      >
                         <div>
                           <span className="text-base font-bold text-gray-800 mt-1">
                             ₹

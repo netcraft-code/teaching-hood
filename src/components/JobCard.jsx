@@ -554,7 +554,7 @@ const JobCard = () => {
       </div>
 
       {/* Search Radius */}
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-medium flex items-center gap-2">
             <img
@@ -582,7 +582,7 @@ const JobCard = () => {
           <span>0 Km</span>
           <span>100 Km</span>
         </div>
-      </div>
+      </div> */}
 
       {/* Clear All Filters */}
       <button
@@ -618,7 +618,7 @@ const JobCard = () => {
 
             {/* Main Heading */}
             <h2
-              className="text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 md:mb-6 leading-tight"
+              className="font-light text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 md:mb-6 leading-tight"
               style={{
                 textShadow: "0px 4px 4px #00000040",
               }}
@@ -628,7 +628,7 @@ const JobCard = () => {
 
             {/* Subheading */}
             <p
-              className="font-light text-3xl md:text-4xl lg:text-6xl text-white mb-6 md:mb-10 max-w-2xl mx-auto"
+              className="text-3xl md:text-4xl lg:text-6xl text-white mb-6 md:mb-10 max-w-2xl mx-auto"
               style={{
                 textShadow: "0px 4px 4px #00000040",
               }}

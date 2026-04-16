@@ -359,9 +359,9 @@ const Profile = () => {
 
               {/* Profile Info */}
               <div className="flex items-start gap-4 mx-8 pb-8 relative justify-between">
-                <div className="grid grid-cols-1 md:grid-cols-5 justify-start">
+                <div className="grid grid-cols-1 md:grid-cols-5 justify-start gap-2">
                   {/* Avatar */}
-                  <div className="relative col-span-2 flex sm:justify-start">
+                  <div className="relative col-span-1 flex sm:justify-start">
                     <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full -mt-12 border-2 border-white overflow-hidden bg-gray-100">
                       <img
                         src={getBannerAvatar(
@@ -392,8 +392,11 @@ const Profile = () => {
                       {userType === 1 ? profile.last_name : ""}
                     </h2>
                     <p className="text-m text-gray-500">
-                      {userType === 2 ? profile?.board : profile?.position}{" "}
-                      Teacher
+                      {userType === 2
+                        ? profile?.board
+                        : profile?.position
+                          ? profile?.position + " Teacher"
+                          : ""}{" "}
                     </p>
 
                     <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
@@ -463,7 +466,7 @@ const Profile = () => {
                     </span>
                     About
                   </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-base text-gray-600 leading-relaxed">
                     {profile?.additional_info?.about_us ||
                       "No description provided."}
                   </p>
@@ -545,7 +548,9 @@ const Profile = () => {
                                     className="flex items-start gap-2"
                                   >
                                     <span className="text-green-600">✓</span>
-                                    <span>{item.trim()}</span>
+                                    <span className="text-base">
+                                      {item.trim()}
+                                    </span>
                                   </li>
                                 ))
                             : "----"}
@@ -569,7 +574,9 @@ const Profile = () => {
                                     className="flex items-start gap-2"
                                   >
                                     <span className="text-yellow-500">★</span>
-                                    <span>{item.trim()}</span>
+                                    <span className="text-base">
+                                      {item.trim()}
+                                    </span>
                                   </li>
                                 ))
                             : "----"}
@@ -633,7 +640,9 @@ const Profile = () => {
                               .map((item, i) => (
                                 <li key={i} className="flex items-start gap-2">
                                   <span className="text-yellow-500">★</span>
-                                  <span>{item.trim()}</span>
+                                  <span className="text-base">
+                                    {item.trim()}
+                                  </span>
                                 </li>
                               ))
                           : "----"}
@@ -803,6 +812,7 @@ const Profile = () => {
                     href={profile?.additional_info?.resume || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
+                    download={true}
                     onClick={(e) => {
                       if (!profile?.additional_info?.resume) {
                         e.preventDefault();
@@ -827,13 +837,13 @@ const Profile = () => {
                   <div className="space-y-3 text-sm">
                     <div>
                       <p className="text-gray-400">Email</p>
-                      <p className="text-xs break-all">
+                      <p className="text-sm break-all">
                         {profile?.email ?? "--"}
                       </p>
                     </div>
                     <div>
                       <p className="text-gray-400">Phone</p>
-                      <p className="text-xs">{"+91 " + profile.phone}</p>
+                      <p className="text-sm">{"+91 " + profile.phone}</p>
                     </div>
                     {userType === 2 && (
                       <div>
@@ -847,18 +857,18 @@ const Profile = () => {
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-blue-600 hover:underline break-all"
+                            className="text-sm text-blue-600 hover:underline break-all"
                           >
                             {profile.additional_info.website}
                           </a>
                         ) : (
-                          <p className="text-xs text-gray-400">--</p>
+                          <p className="text-sm text-gray-400">--</p>
                         )}
                       </div>
                     )}
                     <div>
                       <p className="text-gray-400">Address</p>
-                      <p className="text-xs">
+                      <p className="text-sm">
                         {getFormattedAddress(profile?.addresses)}
                       </p>
                     </div>

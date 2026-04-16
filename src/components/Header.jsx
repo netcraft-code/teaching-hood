@@ -25,7 +25,7 @@ const Header = () => {
       try {
         const res = await profileCompletion();
         setCompletion(res.data.profile_completion.percentage);
-        setMissing(res.data.missing_fields);
+        setMissing(res.data.profile_completion.missing_fields);
       } catch (err) {
         console.error("Error fetching profile completion:", err);
       }
@@ -120,7 +120,9 @@ const Header = () => {
             className="hidden xl:grid items-center gap-6"
             style={{ gridTemplateColumns: "auto auto auto" }}
           >
-            {isLoggedIn ? <ProfileMeter percentage={completion} /> : null}
+            {isLoggedIn ? (
+              <ProfileMeter percentage={completion} missingFields={missing} />
+            ) : null}
 
             {!isLoggedIn ? (
               <>
@@ -150,7 +152,7 @@ const Header = () => {
             )}
 
             {/* Call Us */}
-            <div className="text-right">
+            <div className="text-right ml-4">
               <p className="text-[16px] font-normal leading-[24px] align-middle">
                 Call Us
               </p>
@@ -158,6 +160,12 @@ const Header = () => {
                 +91-9960750424
               </p>
             </div>
+          </div>
+
+          <div className="xl:hidden">
+            {isLoggedIn ? (
+              <ProfileMeter percentage={completion} missingFields={missing} />
+            ) : null}
           </div>
 
           {/* Mobile Toggle */}

@@ -491,11 +491,11 @@ const ProfileView = () => {
                   <div className="space-y-3 text-sm">
                     <div>
                       <p className="text-gray-400">Email</p>
-                      <p className="text-xs break-all">{profile?.email ?? "--"}</p>
+                      <p className="text-sm break-all">{profile?.email ?? "--"}</p>
                     </div>
                     <div>
                       <p className="text-gray-400">Phone</p>
-                      <p className="text-xs">{"+91 " + profile.phone}</p>
+                      <p className="text-sm">{"+91 " + profile.phone}</p>
                     </div>
                     {userType === 2 && (
                       <div>
@@ -509,18 +509,18 @@ const ProfileView = () => {
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-blue-600 hover:underline break-all"
+                            className="text-sm text-blue-600 hover:underline break-all"
                           >
                             {profile.additional_info.website}
                           </a>
                         ) : (
-                          <p className="text-xs text-gray-400">--</p>
+                          <p className="text-sm text-gray-400">--</p>
                         )}
                       </div>
                     )}
                     <div>
                       <p className="text-gray-400">Address</p>
-                      <p className="text-xs">{getFormattedAddress(profile?.addresses)}</p>
+                      <p className="text-sm">{getFormattedAddress(profile?.addresses)}</p>
                     </div>
                   </div>
                 </>

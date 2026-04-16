@@ -144,14 +144,14 @@ const AboutUsSection = () => {
                     <div className="flex justify-center mb-6 sm:mb-8">
                         <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-md">
                             <span className="bg-green-500 w-2 h-2 rounded-full"></span>
-                            <span className="text-sm font-regular text-gray-700">About Teachinghood</span>
+                            <span className="text-base font-regular text-gray-700">About Teachinghood</span>
                         </div>
                     </div>
                     
                     {/* Heading */}
                     <div className="text-center mb-8 sm:mb-12 md:mb-16">
                         <h1 
-                            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-2 sm:mb-4 tracking-tight px-4"
+                            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white mb-2 sm:mb-4 tracking-tight px-4"
                             style={{ 
                                 textShadow: `
                                     0px 0px 0px rgba(0, 0, 0, 0.10),
@@ -196,7 +196,7 @@ const AboutUsSection = () => {
                                     <div className="text-2xl sm:text-3xl font-bold text-gray-900 my-4 sm:my-4 flex items-center justify-center">
                                         {stat.value}
                                     </div>
-                                    <div className="text-xs sm:text-sm text-gray-600 font-medium flex items-center justify-center">
+                                    <div className="text-xs sm:text-base text-gray-600 font-medium flex items-center justify-center">
                                         {stat.label}
                                     </div>
                                 </div>
@@ -309,7 +309,7 @@ const AboutUsSection = () => {
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 rounded-full px-4 py-2 mb-4">
                         <img src={aboutUsIcons.whatDriveUs} className="w-4 h-4" />
-                        <span className="text-sm font-medium">Our Values</span>
+                        <span className="text-base font-medium">Our Values</span>
                     </div>
                     
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -337,7 +337,7 @@ const AboutUsSection = () => {
                                     {value.title}
                                 </h3>
                             
-                                <p className="text-gray-600 leading-relaxed text-sm">
+                                <p className="text-gray-600 leading-relaxed text-base">
                                     {value.description}
                                 </p>
                             </div>
@@ -352,7 +352,7 @@ const AboutUsSection = () => {
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 rounded-full px-4 py-2 mb-4">
                         <img src={aboutUsIcons.meetTheTeam} className="w-4 h-4" />
-                        <span className="text-sm font-medium">Meet the Team</span>
+                        <span className="text-base font-medium">Meet the Team</span>
                     </div>
                 
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -385,11 +385,11 @@ const AboutUsSection = () => {
                                     {member.name}
                                 </h3>
                                 
-                                <div className="text-sm font-semibold text-blue-600 mb-3">
+                                <div className="text-base font-semibold text-blue-600 mb-3">
                                     {member.role}
                                 </div>
             
-                                <p className="text-gray-600 text-sm leading-relaxed">
+                                <p className="text-gray-600 text-base leading-relaxed">
                                     {member.description}
                                 </p>
                             </div>
@@ -404,7 +404,7 @@ const AboutUsSection = () => {
                 <div className="text-center mb-20">
                     <div className="inline-flex items-center gap-2 bg-white text-green-500 rounded-full px-4 py-2 mb-4">
                         <img src={aboutUsIcons.ourJourney} className="w-4 h-4" />
-                        <span className="text-sm font-regular">Our Journey</span>
+                        <span className="text-base font-regular">Our Journey</span>
                     </div>
                 
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -444,7 +444,7 @@ const AboutUsSection = () => {
                                     >
                                         <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-500 rounded-full px-3 py-2 mb-3">
                                             <img src={aboutUsIcons.calender} className="w-3 h-3" />
-                                            <span className="text-sm font-regular">{milestone.year}</span>
+                                            <span className="text-base font-regular">{milestone.year}</span>
                                         </div>
 
                                         <h3 className="text-xl font-medium text-gray-900 mb-2">

@@ -194,7 +194,7 @@ const SchoolsSection = () => {
           <div className="relative w-full px-4">
             <img
               src={schoolSectionLeftImage}
-              className="w-full object-cover h-[400px] sm:h-[500px] md:h-[500px] rounded-2xl"
+              className="w-full object-cover h-[400px] sm:h-[500px] md:h-[500px] rounded-2xl shadow-2xl"
             />
           </div>
         </div>

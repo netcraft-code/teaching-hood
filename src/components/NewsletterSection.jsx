@@ -227,7 +227,7 @@ const NewsletterSection = () => {
                 <span className="inline-block text-xs font-medium text-[#0077ff] bg-white border border-[#0077ff] rounded px-2 py-0.5 mb-1">
                   {pdf.week}
                 </span>
-                <p className="text-sm font-medium text-gray-800 truncate leading-snug">
+                <p className="text-sm font-medium text-gray-800 leading-snug">
                   {pdf.name}
                 </p>
               </div>

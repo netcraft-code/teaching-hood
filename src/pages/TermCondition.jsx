@@ -319,22 +319,20 @@ const AboutUs = () => {
               11. Data Privacy
             </h2>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
-              <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
-                <li>
-                  Teachinghood handles personal data in accordance with its
-                  Privacy Policy
-                </li>
-                <li>
-                  We implement reasonable security measures but cannot guarantee
-                  absolute security
-                </li>
-                <li>
-                  Users are encouraged to avoid sharing sensitive personal
-                  information outside platform-recommended fields.
-                </li>
-              </ul>
-              {/* <li>Use of the platform is at your own risk.</li> */}
+              <li>
+                Teachinghood handles personal data in accordance with its
+                Privacy Policy
+              </li>
+              <li>
+                We implement reasonable security measures but cannot guarantee
+                absolute security
+              </li>
+              <li>
+                Users are encouraged to avoid sharing sensitive personal
+                information outside platform-recommended fields.
+              </li>
             </ul>
+            {/* <li>Use of the platform is at your own risk.</li> */}
           </div>
 
           {/* Section 12 */}
@@ -429,8 +427,8 @@ const AboutUs = () => {
             </p>
             <strong>Teachinghood</strong>
             <br />
-            Email: contact@teachinghood.com <br />
-            Website: <span>www.teachinghood.com</span>
+            Email: <a href="mailto:contact@teachinghood.com" className="underline">contact@teachinghood.com</a> <br />
+            Website: <span className="underline"><a href="https://www.teachinghood.com" target="_blank" rel="noopener noreferrer">www.teachinghood.com</a></span>
           </div>
           <strong>
             By using Teachinghood, you acknowledge that you have read,

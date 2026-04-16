@@ -14,14 +14,14 @@ const ContactUs = () => {
         {
           icon: <Mail className="w-4 h-4 text-blue-600" />,
           value: 'Email Us',
-          label: 'conatct@teachinghood.com',
+          label: 'contact@teachinghood.com',
           text: 'Send us an email anytime',
           bgColor: 'bg-blue-50'
         },
         {
           icon: <Phone className="w-4 h-4 text-green-600" />,
           value: 'Call Us',
-          label: '+91-9928038204',
+          label: '+91-9960750424',
           text: 'Mon-Fri from 9am to 6pm',
           bgColor: 'bg-green-50'
         },
@@ -89,7 +89,7 @@ const ContactUs = () => {
                 <div className="flex justify-center mb-6 sm:mb-8">
                     <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-md">
                         <span className="bg-green-500 w-2 h-2 rounded-full"></span>
-                        <span className="text-sm font-regular text-gray-700">We're here to help</span>
+                        <span className="text-base font-regular text-gray-700">We're here to help</span>
                     </div>
                 </div>
                 
@@ -109,7 +109,7 @@ const ContactUs = () => {
                         Get in Touch
                     </h1>
                     <h2
-                        className="text-sm sm:text-base md:text-lg font-semibold tracking-tight px-4"
+                        className="text-2xl sm:text-base md:text-lg font-semibold tracking-tight px-4"
                     >
                         Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
                     </h2>
@@ -133,10 +133,10 @@ const ContactUs = () => {
                                 <div className="text-lg sm:text-xl font-regular text-gray-900 my-3 justify-center">
                                     {stat.value}
                                 </div>
-                                <div className="text-sm text-blue-500 font-medium justify-center break-all">
+                                <div className="text-base text-blue-500 font-medium justify-center break-all">
                                     {stat.label}
                                 </div>
-                                <div className="text-sm font-regular text-gray-900 my-4 justify-center">
+                                <div className="text-base font-regular text-gray-900 my-4 justify-center">
                                     {stat.text}
                                 </div>
                             </div>
@@ -154,7 +154,7 @@ const ContactUs = () => {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                 {/* Name */}
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-base font-semibold text-gray-700 mb-2">
                         Full Name
                     </label>
 
@@ -170,7 +170,7 @@ const ContactUs = () => {
                 
                 <div>
                     {/* Email */}
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-base font-semibold text-gray-700 mb-2">
                         Email Address
                     </label>
 
@@ -188,7 +188,7 @@ const ContactUs = () => {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                 {/* Phone Number */}
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-base font-semibold text-gray-700 mb-2">
                         Phone Number
                     </label>
 
@@ -204,7 +204,7 @@ const ContactUs = () => {
                 
                 <div>
                     {/* Inquiry Type */}
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-base font-semibold text-gray-700 mb-2">
                         Inquiry Type
                     </label>
                     
@@ -220,7 +220,7 @@ const ContactUs = () => {
 
               <div>
                 {/* Subject */}
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-base font-semibold text-gray-700 mb-2">
                     Subject
                 </label>
                 
@@ -235,7 +235,7 @@ const ContactUs = () => {
 
               {/* Message */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-base font-semibold text-gray-700 mb-2">
                   Message
                 </label>
                 <textarea
@@ -272,11 +272,11 @@ const ContactUs = () => {
 
                     <img src={contactUsIcons.quickResponse1} className='w-4 h-4' />
 
-                    <h4 className="font-semibold text-sm">Quick Response</h4>
+                    <h4 className="font-semibold text-base">Quick Response</h4>
                 </div>
 
                 {/* Paragraph */}
-                <p className="text-xs text-gray-600 ml-0 sm:ml-12 mt-2 sm:mt-0">
+                <p className="text-base text-gray-600 ml-0 sm:ml-12 mt-2 sm:mt-0">
                     We typically respond within 24 hours during business days. For urgent matters, please call us directly.
                 </p>
               </div>
@@ -290,11 +290,11 @@ const ContactUs = () => {
                         <img src={contactUsIcons.workingHours} alt="" />
                     </div>
 
-                    <h4 className="font-semibold text-sm">Working Hours</h4>
+                    <h4 className="font-semibold text-base">Working Hours</h4>
                 </div>
 
                 {/* Paragraph */}
-                <p className="text-xs text-gray-600 w-full leading-6 mb-4 mt-3">
+                <p className="text-base text-gray-600 w-full leading-6 mb-4 mt-3">
                     <span className="flex justify-between">
                         <span>Monday–Friday</span>
                         <span>9:00 AM – 6:00 PM</span>
@@ -313,7 +313,7 @@ const ContactUs = () => {
 
                 <hr />
                 
-                <p className="flex items-center gap-2 text-xs text-gray-600 w-full leading-6 mt-4">
+                <p className="flex items-center gap-2 text-base text-gray-600 w-full leading-6 mt-4">
                     <span className="h-2 w-2 rounded-full bg-green-500 inline-block"></span>
                     Currently Open
                 </p>
@@ -324,7 +324,7 @@ const ContactUs = () => {
             <div className="flex rounded-2xl p-4 sm:p-6 shadow-md w-full">
               <div className='w-full'>
                 <div className="flex items-center mb-1">
-                    <h4 className="font-semibold text-sm">Connect With Us</h4>
+                    <h4 className="font-semibold text-base">Connect With Us</h4>
                 </div>
 
                 {/* Paragraph */}
@@ -361,11 +361,11 @@ const ContactUs = () => {
             <div className="flex rounded-2xl p-4 sm:p-6 shadow-md w-full">
               <div className='w-full'>
                 <div className="flex items-center space-x-2 mb-1">
-                    <h4 className="font-semibold text-sm">Need Quick Answers?</h4>
+                    <h4 className="font-semibold text-base">Need Quick Answers?</h4>
                 </div>
 
                 {/* Paragraph */}
-                <p className="text-xs text-gray-600 w-full leading-6 my-4">
+                <p className="text-base text-gray-600 w-full leading-6 my-4">
                     Check out our frequently asked questions for instant help.
 
                 </p>
@@ -380,7 +380,7 @@ const ContactUs = () => {
       <div className="my-16 sm:my-20 md:my-28 px-4">
         <div className="h-8 w-16 bg-blue-100 flex mx-auto items-center text-center justify-center rounded-full gap-1">
             <img src={contactUsIcons.faqIcon} alt="" />
-            <span className="text-sm">FAQ</span>
+            <span className="text-base">FAQ</span>
         </div>
 
         <div className="my-4 items-center text-center px-4">
@@ -388,46 +388,46 @@ const ContactUs = () => {
                 Frequently Asked Questions
             </p>
 
-            <p className="text-gray-600 mt-1 text-sm sm:text-base">
+            <p className="text-gray-600 mt-1 text-base sm:text-base">
                 Find answers to common questions about our platform and services
             </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mx-4 sm:mx-8 md:mx-16 lg:mx-28">
             <div className="shadow-lg p-6 sm:p-8 rounded-xl">
-                <span className="font-semibold text-sm mb-2 flex items-center">
+                <span className="font-semibold text-base mb-2 flex items-center">
                     <span className="text-blue-500 mr-3"> Q. </span> What are your support hours?
                 </span>
-                <p className="text-gray-500 text-xs leading-6 flex items-center mt-2">
+                <p className="text-gray-500 text-base leading-6 flex items-center mt-2">
                     Our support team is available Monday to Friday, 9:00 AM to 6:00 PM IST. We typically respond to all queries within 24 hours during business days.
                 </p>
             </div>
 
             <div className="shadow-lg p-6 sm:p-8 rounded-xl">
-                <span className="font-semibold text-sm mb-2 flex items-center">
+                <span className="font-semibold text-base mb-2 flex items-center">
                     <span className="text-blue-500 mr-3"> Q. </span> How quickly will I receive a response?
                 </span>
-                <p className="text-gray-500 text-xs leading-6 flex items-center mt-2">
+                <p className="text-gray-500 text-base leading-6 flex items-center mt-2">
                     We aim to respond to all inquiries within 24 hours during business days. For urgent matters, please call us directly.
                 </p>
             </div>
 
             <div className="shadow-lg p-6 sm:p-8 rounded-xl">
-                <span className="font-semibold text-sm mb-2 flex items-center">
+                <span className="font-semibold text-base mb-2 flex items-center">
                     <span className="text-blue-500 mr-3"> Q. </span> Do you offer phone support?
                 </span>
                 
-                <p className="text-gray-500 text-xs leading-6 flex items-center mt-2">
+                <p className="text-gray-500 text-base leading-6 flex items-center mt-2">
                     Yes! You can reach us at +91-9928038204 during business hours for immediate assistance.
                 </p>
             </div>
 
             <div className="shadow-lg p-6 sm:p-8 rounded-xl">
-                <span className="font-semibold text-sm mb-2 flex items-center">
+                <span className="font-semibold text-base mb-2 flex items-center">
                     <span className="text-blue-500 mr-3"> Q. </span> Can I schedule a demo or consultation?
                 </span>
 
-                <p className="text-gray-500 text-xs leading-6 flex items-center mt-2">
+                <p className="text-gray-500 text-base leading-6 flex items-center mt-2">
                     Absolutely! Please fill out the contact form selecting "Schedule a Demo" and our team will reach out to arrange a convenient time.
                 </p>
             </div>
@@ -453,7 +453,7 @@ const ContactUs = () => {
               </svg>
             </div>
 
-            <p className="text-gray-800 text-sm mb-6">
+            <p className="text-gray-800 text-base mb-6">
               {popupMessage}
             </p>
 

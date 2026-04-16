@@ -316,9 +316,9 @@ const SignInPage = () => {
                     <label className="block text-sm font-medium text-gray-700">
                       Password
                     </label>
-                    <a href="#" className="text-sm text-blue-600 hover:underline">
+                    {/* <a href="#" className="text-sm text-blue-600 hover:underline">
                       Forgot password?
-                    </a>
+                    </a> */}
                   </div>
                   <div className="relative">
                     <input

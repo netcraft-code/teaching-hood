@@ -2,6 +2,7 @@ import React from "react";
 import Pagination from "./Pagination";
 import schoolVacanciesIcon from "./../../assets/icons/about-us.svg";
 import schoolIcon from "./../../assets/icons/school-icon.svg";
+import { Link } from "react-router-dom";
 
 const AppliedTab = ({
   jobs,
@@ -85,7 +86,7 @@ const AppliedTab = ({
           </div>
         ) : jobs.length === 0 ? (
           <div className="text-center py-12 bg-gray-50 rounded-lg">
-            <p className="text-gray-600 text-lg">No applied jobs found</p>
+            <p className="text-gray-600 text-lg">No Applied Jobs Found</p>
           </div>
         ) : (
           jobs.map((job) => (
@@ -93,36 +94,38 @@ const AppliedTab = ({
               key={job.id}
               className="rounded-xl border-2 border-[#E5E7EB] p-6"
             >
-              <div className="flex items-center justify-between gap-4">
-                {/* LEFT SIDE - Job Info */}
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center rounded-xl bg-blue-100 p-2  w-12 h-12">
-                    <img src={schoolIcon} className="w-8 h-8" />
-                  </div>
+              <Link to={`/job/${job.id}`}>
+                <div className="flex items-center justify-between gap-4">
+                  {/* LEFT SIDE - Job Info */}
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center rounded-xl bg-blue-100 p-2  w-12 h-12">
+                      <img src={schoolIcon} className="w-8 h-8" />
+                    </div>
 
-                  <div className="flex-1">
-                    {/* Title */}
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                      {getJobTitle(job.job_posted)}
-                    </h3>
+                    <div className="flex-1">
+                      {/* Title */}
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                        {getJobTitle(job.job_posted)}
+                      </h3>
 
-                    {/* Grade & Experience */}
-                    <p className="text-sm text-gray-600 flex items-center">
-                      {job.job_posted.school_name}{" "}
-                      {job?.job_posted?.city_name
-                        ? ", " + job?.job_posted?.city_name
-                        : ""}
-                    </p>
+                      {/* Grade & Experience */}
+                      <p className="text-sm text-gray-600 flex items-center">
+                        {job.job_posted.school_name}{" "}
+                        {job?.job_posted?.city_name
+                          ? ", " + job?.job_posted?.city_name
+                          : ""}
+                      </p>
 
-                    {/* Salary & Applicants */}
-                    <div className="flex items-center gap-1 text-sm text-gray-600">
-                      <span className="font-regular text-gray-900">
-                        Applied on: {getTimeAgo(job.created_at)}
-                      </span>
+                      {/* Salary & Applicants */}
+                      <div className="flex items-center gap-1 text-sm text-gray-600">
+                        <span className="font-regular text-gray-900">
+                          Applied on: {getTimeAgo(job.created_at)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
           ))
         )}
