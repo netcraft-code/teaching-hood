@@ -6,8 +6,10 @@ import {
   updateProfile,
   getProfile,
   getStates,
+  profileCompletion
 } from "../api/auth";
 import AsyncSelect from "react-select/async";
+import ProfileMeter from "./ProfileMeter";
 
 const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [subjects, setSubjects] = useState([]);
@@ -420,12 +422,13 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     }
 
     if (userType == 1) {
-      form.position =
-        form.grade === "Other"
-          ? form.grade_other
-          : form.grade +
-            " " +
-            (form.subject === "Other" ? form.subject_other : form.subject);
+      form.grade = form.grade === "Others" ? form.grade_other : form.grade;
+
+      if (!form.grade) e.grade = "Grade required";
+
+      form.subject = form.subject === "Others" ? form.subject_other : form.subject;
+
+      if (!form.subject) e.subject = "Subject required";
     }
 
     if (userType == 1 || userType == 3) {
@@ -583,6 +586,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       const res = await getProfile();
 
       onUpdate(res.data.data);
+
+      const profileCompletionRes = await profileCompletion();
+      
+      <ProfileMeter percentage={profileCompletionRes.data.profile_completion.percentage} missingFields={profileCompletionRes.data.profile_completion.missing_fields} />
 
       setPopupMessage("Profile updated successfully ✅");
       setShowPopup(true);

@@ -188,34 +188,45 @@ const HeroSection = () => {
                         .find((option) => option.value === subject)}
                       onChange={(option) => setSubject(option.value)}
                       placeholder="Subject (e.g., Math)"
-                      menuPortalTarget={document.body}
-                      menuPosition="fixed"
                       styles={{
                         menuPortal: (base) => ({ ...base, zIndex: 9999 }),
 
-                        control: (base) => ({
-                          ...base,
-                          minHeight: "52px",
+                        control: (provided) => ({
+                          ...provided,
                           backgroundColor: "#F5F6F7",
-                          borderRadius: "8px",
-                          paddingLeft: "40px", // 🔥 icon ke liye space
                           border: "1px solid #e5e7eb",
+                          borderRadius: "8px",
+                          minHeight: "52px",
+                          paddingLeft: "40px",
                         }),
-
-                        input: (base) => ({
-                          ...base,
+                        menu: (provided) => ({
+                          ...provided,
+                          backgroundColor: "#ffffff",
+                        }),
+                        input: (provided) => ({
+                          ...provided,
                           color: "#111827",
                           textAlign: "left",
                         }),
-                        singleValue: (base) => ({
-                          ...base,
+                        singleValue: (provided) => ({
+                          ...provided,
                           color: "#6b7280",
                           textAlign: "left",
                         }),
-                        placeholder: (base) => ({
-                          ...base,
+                        placeholder: (provided) => ({
+                          ...provided,
                           color: "#9ca3af",
                           textAlign: "left",
+                        }),
+                        option: (provided, state) => ({
+                          ...provided,
+                          textAlign: "left",
+                          color: "#111827",
+                          backgroundColor: state.isFocused
+                            ? "#f3f4f6"
+                            : state.isSelected
+                              ? "#e5e7eb"
+                              : "#ffffff",
                         }),
                       }}
                     />
@@ -240,34 +251,45 @@ const HeroSection = () => {
                         .find((option) => option.value === grade)}
                       onChange={(option) => setGrade(option.value)}
                       placeholder="Grade (e.g., PRT)"
-                      menuPortalTarget={document.body}
-                      menuPosition="fixed"
                       styles={{
                         menuPortal: (base) => ({ ...base, zIndex: 9999 }),
 
-                        control: (base) => ({
-                          ...base,
-                          minHeight: "52px",
+                        control: (provided) => ({
+                          ...provided,
                           backgroundColor: "#F5F6F7",
-                          borderRadius: "8px",
-                          paddingLeft: "40px",
                           border: "1px solid #e5e7eb",
+                          borderRadius: "8px",
+                          minHeight: "52px",
+                          paddingLeft: "40px",
                         }),
-
-                        input: (base) => ({
-                          ...base,
+                        menu: (provided) => ({
+                          ...provided,
+                          backgroundColor: "#ffffff",
+                        }),
+                        input: (provided) => ({
+                          ...provided,
                           color: "#111827",
                           textAlign: "left",
                         }),
-                        singleValue: (base) => ({
-                          ...base,
+                        singleValue: (provided) => ({
+                          ...provided,
                           color: "#6b7280",
                           textAlign: "left",
                         }),
-                        placeholder: (base) => ({
-                          ...base,
+                        placeholder: (provided) => ({
+                          ...provided,
                           color: "#9ca3af",
                           textAlign: "left",
+                        }),
+                        option: (provided, state) => ({
+                          ...provided,
+                          textAlign: "left",
+                          color: "#111827",
+                          backgroundColor: state.isFocused
+                            ? "#f3f4f6"
+                            : state.isSelected
+                              ? "#e5e7eb"
+                              : "#ffffff",
                         }),
                       }}
                     />
