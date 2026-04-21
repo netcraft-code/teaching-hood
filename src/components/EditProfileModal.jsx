@@ -67,6 +67,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           to: "",
           key_responsibilities: [""],
           is_currently_working: false,
+          board: "",
+          board_other: "",
         },
       ],
       preferred_location: "",
@@ -232,6 +234,16 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       exp.is_currently_working === "1"
                         ? true
                         : false,
+                    // ✅ board normalize
+                    board: knownBoards.includes(exp.board)
+                      ? exp.board
+                      : exp.board
+                        ? "Others"
+                        : "",
+                    // ✅ board_other — agar known board nahi hai to original value rakh
+                    board_other: knownBoards.includes(exp.board)
+                      ? ""
+                      : exp.board || "",
                   }))
                 : [
                     {
@@ -241,6 +253,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       to: "",
                       key_responsibilities: [""],
                       is_currently_working: false,
+                      board: "",
+                      board_other: "",
                     },
                   ],
 
@@ -498,6 +512,11 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
           fd.append(
             `experience[${i}][is_currently_working]`,
             exp.is_currently_working ? 1 : 0,
+          );
+
+          fd.append(
+            `experience[${i}][board]`,
+            exp.board === "Others" ? exp.board_other : exp.board
           );
 
           if (exp.is_currently_working) {
@@ -1404,6 +1423,42 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         <ErrorText error={errors.experience} />
                       </Field>
 
+                      <Grid>
+                        <Field label="Board">
+                          <select
+                            className="input"
+                            value={exp.board || ""}
+                            onChange={(e) => {
+                              const arr = [...form.additional_info.experience];
+                              arr[index].board = e.target.value;
+                              arr[index].board_other = "";
+                              handleAdditional("experience", arr);
+                            }}
+                          >
+                            <option value="">Select Board</option>
+                            {["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE"].map((b) => (
+                              <option key={b} value={b}>{b}</option>
+                            ))}
+                            <option value="Others">Others</option>
+                          </select>
+                        </Field>
+
+                        {exp.board === "Others" && (
+                          <Field label="Specify Board">
+                            <input
+                              className="input"
+                              placeholder="Enter board name"
+                              value={exp.board_other || ""}
+                              onChange={(e) => {
+                                const arr = [...form.additional_info.experience];
+                                arr[index].board_other = e.target.value;
+                                handleAdditional("experience", arr);
+                              }}
+                            />
+                          </Field>
+                        )}
+                      </Grid>
+
                       <Field label="School / Organization">
                         <input
                           className="input"
@@ -1456,6 +1511,11 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                           type="month"
                           className="input"
                           value={exp.from}
+                          min={
+                            index > 0
+                              ? form.additional_info.experience[index - 1].to || ""
+                              : ""
+                          }
                           onChange={(e) => {
                             const arr = [...form.additional_info.experience];
                             arr[index].from = e.target.value;
@@ -1501,25 +1561,30 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       placeholder="Responsibility details"
                     />
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleAdditional("experience", [
-                          ...form.additional_info.experience,
-                          {
-                            position: "",
-                            school: "",
-                            from: "",
-                            to: "",
-                            key_responsibilities: [""],
-                            is_currently_working: false,
-                          },
-                        ])
-                      }
-                      className="text-blue-600 text-sm font-medium"
-                    >
-                      + Add Experience
-                    </button>
+                    {index === form.additional_info.experience.length - 1 &&
+                      !isAnyCurrentlyWorking && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleAdditional("experience", [
+                              ...form.additional_info.experience,
+                              {
+                                position: "",
+                                school: "",
+                                board: "",
+                                board_other: "",
+                                from: "",
+                                to: "",
+                                key_responsibilities: [""],
+                                is_currently_working: false,
+                              },
+                            ])
+                          }
+                          className="text-blue-600 text-sm font-medium"
+                        >
+                          + Add Experience
+                        </button>
+                      )}
 
                     <ErrorText error={errors[`experience_${index}`]} />
                   </div>

@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children, notAllowedUserTypes = [] }) => {
   if (!token) {
     return <Navigate to="/signin" replace />;
   }
-console.log(notAllowedUserTypes, (userType));
+  
   // ❌ Logged in but not authorized
   if (notAllowedUserTypes.includes(userType)) {
     return (

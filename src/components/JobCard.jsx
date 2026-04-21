@@ -33,6 +33,49 @@ const JobCard = () => {
   const cityParam = searchParams.get("city");
   const stateParam = searchParams.get("state_id");
 
+  const BOARDS = ["CBSE","ISCE","ISC","NIOS","BSB","IB","CAIE"];
+
+  const [selectedBoard, setSelectedBoard] = useState("all");
+
+  const [selectedSalary, setSelectedSalary] = useState(null);
+
+  const SALARY_RANGES = [
+    { label: "Upto ₹10,000", min: 0, max: 10000 },
+    { label: "₹10,000 - ₹20,000", min: 10000, max: 20000 },
+    { label: "₹20,000 - ₹30,000", min: 20000, max: 30000 },
+    { label: "₹30,000 - ₹40,000", min: 30000, max: 40000 },
+    { label: "₹40,000 - ₹50,000", min: 40000, max: 50000 },
+    { label: "₹50,000 - ₹75,000", min: 50000, max: 75000 },
+    { label: "₹75,000 - ₹1,00,000", min: 75000, max: 100000 },
+    { label: "₹1,00,000 - ₹1,50,000", min: 100000, max: 150000 },
+    { label: "Above ₹1,50,000", min: 150000, max: 0 },
+  ];
+
+  const selectedRange = SALARY_RANGES[selectedSalary];
+
+  const [subjects, setSubjects] = useState([]);
+  const [grades, setGrades] = useState([]);
+
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedGrade, setSelectedGrade] = useState("");
+
+  useEffect(() => {
+    fetchSubjects();
+    fetchGrades();
+  }, []);
+
+  const fetchSubjects = async () => {
+    const res = await fetch("https://teaching-hood-backend.netcraftglobal.com/api/subjects");
+    const data = await res.json();
+    setSubjects(data.data || []);
+  };
+
+  const fetchGrades = async () => {
+    const res = await fetch("https://teaching-hood-backend.netcraftglobal.com/api/gradelevels");
+    const data = await res.json();
+    setGrades(data.data || []);
+  };
+
   const buildFilters = () => {
     return {
       page: currentPage,
@@ -44,9 +87,12 @@ const JobCard = () => {
       posted: postedDate !== "any" ? postedDate : "any",
       search: searchQuery || "",
       radius: searchRadius > 0 ? searchRadius : 0,
-      subject_id: subjectParam || "all",
-      grade_id: gradeParam || "all",
+      subject_id: subjectParam || selectedSubject || "all",
+      grade_id: gradeParam || selectedGrade || "all",
       state_id: stateParam || "all",
+      board: selectedBoard !== "all" ? selectedBoard : "all",
+      min_salary: selectedRange?.min || 0,
+      max_salary: selectedRange?.max || 0,
     };
   };
 
@@ -71,18 +117,35 @@ const JobCard = () => {
 
   // Async load cities for searchable dropdown
   const loadCities = async (inputValue) => {
+    const now = Date.now();
+
+    // 🔥 1 hour cache
+    if (
+      cityCache.current.data.length > 0 &&
+      now - cityCache.current.timestamp < 60 * 60 * 1000
+    ) {
+      return cityCache.current.data;
+    }
+
     try {
       const res = await getCities({
         search: inputValue,
         limit: 20,
       });
 
-      return (
+      const options =
         res?.data?.data.data?.map((city) => ({
           value: city.id,
           label: city.name,
-        })) || []
-      );
+        })) || [];
+
+      // cache store
+      cityCache.current = {
+        data: options,
+        timestamp: now,
+      };
+
+      return options;
     } catch (error) {
       console.error("City API error", error);
       return [];
@@ -143,10 +206,13 @@ const JobCard = () => {
     selectedCity,
     selectedJobType,
     selectedExperience,
-    // salaryRange,
     postedDate,
     searchQuery,
     searchRadius,
+    selectedBoard,
+    selectedSubject,
+    selectedGrade,
+    selectedSalary,
   ]);
 
   // Get human readable time
@@ -214,6 +280,11 @@ const JobCard = () => {
     setSearchQuery("");
     setSearchRadius(0);
     setCurrentPage(1);
+    setSelectedBoard("all");
+    setSelectedSalary(null);
+    setSelectedSubject("");
+    setSelectedGrade("");
+
     fetchJobs();
   };
 
@@ -360,72 +431,94 @@ const JobCard = () => {
         </div>
       </div>
 
-      {/* Experience Filter */}
+      {/* Experience Filter (Same as Job Type UI) */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
-          <img
-            src={findJobIcons.experience}
-            className="w-5 h-5 text-blue-600"
-          />
+          <img src={findJobIcons.experience} className="w-5 h-5" />
           <h3 className="font-medium">Experience</h3>
         </div>
-        <div className="space-y-2">
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="experience"
-              value="fresher"
-              checked={selectedExperience === "0-1"}
-              onChange={(e) => setSelectedExperience(e.target.value)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-700">Fresher</span>
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="experience"
-              value="1-3"
-              checked={selectedExperience === "1-3"}
-              onChange={(e) => setSelectedExperience(e.target.value)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-700">1-3 Years</span>
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="experience"
-              value="3-5"
-              checked={selectedExperience === "3-5"}
-              onChange={(e) => setSelectedExperience(e.target.value)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-700">3-5 Years</span>
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="experience"
-              value="5-10"
-              checked={selectedExperience === "5-10"}
-              onChange={(e) => setSelectedExperience(e.target.value)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-700">5-10 Years</span>
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="experience"
-              value="10+"
-              checked={selectedExperience === "10+"}
-              onChange={(e) => setSelectedExperience(e.target.value)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-700">10+ Years</span>
-          </label>
+
+        <div className="space-y-3">
+          {[
+            { label: "Fresher", value: "0-1" },
+            { label: "1-3 Years", value: "1-3" },
+            { label: "3-5 Years", value: "3-5" },
+            { label: "5-10 Years", value: "5-10" },
+            { label: "10+ Years", value: "10+" },
+          ].map((item) => {
+            const isActive = selectedExperience === item.value;
+
+            return (
+              <label
+                key={item.value}
+                className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition
+                ${
+                  isActive
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 hover:border-blue-300"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`w-5 h-5 flex items-center justify-center rounded-full border
+                    ${isActive ? "border-blue-600" : "border-gray-300"}`}
+                  >
+                    {isActive && (
+                      <span className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
+                    )}
+                  </span>
+
+                  <span className="text-gray-800 font-medium">
+                    {item.label}
+                  </span>
+                </div>
+
+                <input
+                  type="radio"
+                  name="experience"
+                  value={item.value}
+                  checked={isActive}
+                  onChange={(e) => setSelectedExperience(e.target.value)}
+                  className="hidden"
+                />
+              </label>
+            );
+          })}
         </div>
+      </div>
+
+      {/* Subject */}
+      <div className="mb-6">
+        <h3 className="font-medium mb-2">Subject</h3>
+        <select
+          value={selectedSubject}
+          onChange={(e) => setSelectedSubject(e.target.value)}
+          className="w-full px-4 py-3 border rounded-xl bg-gray-50"
+        >
+          <option value="">All Subjects</option>
+          {subjects.map((sub) => (
+            <option key={sub.id} value={sub.id}>
+              {sub.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Grade */}
+      <div className="mb-6">
+        <h3 className="font-medium mb-2">Grade</h3>
+        <select
+          value={selectedGrade}
+          onChange={(e) => setSelectedGrade(e.target.value)}
+          className="w-full px-4 py-3 border rounded-xl bg-gray-50"
+        >
+          <option value="">All Grades</option>
+          {grades.map((g) => (
+            <option key={g.id} value={g.id}>
+              {g.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Salary Range Filter */}
@@ -499,57 +592,93 @@ const JobCard = () => {
         </div>
       </div> */}
 
-      {/* Posted Date Filter */}
+      {/* Salary Filter */}
+      <div className="mb-6">
+        <h3 className="font-medium mb-3">Salary Expectation</h3>
+
+        <div className="space-y-3">
+          {SALARY_RANGES.map((item, index) => {
+            const isActive = selectedSalary === index;
+
+            return (
+              <div
+                key={index}
+                onClick={() => setSelectedSalary(index)}
+                className={`p-3 border rounded-lg cursor-pointer ${
+                  isActive ? "bg-blue-50 border-blue-500" : ""
+                }`}
+              >
+                {item.label}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Posted Date (Same UI) */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
           <img src={findJobIcons.postedDate} className="w-5 h-5" />
           <h3 className="font-medium">Posted Date</h3>
         </div>
-        <div className="space-y-2">
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="postedDate"
-              value="any"
-              checked={postedDate === "any"}
-              onChange={(e) => setPostedDate(e.target.value)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-700">Any Time</span>
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="postedDate"
-              value="24h"
-              checked={postedDate === "24h"}
-              onChange={(e) => setPostedDate(e.target.value)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-700">Past 24 Hours</span>
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="postedDate"
-              value="week"
-              checked={postedDate === "week"}
-              onChange={(e) => setPostedDate(e.target.value)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-700">Past Week</span>
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="postedDate"
-              value="month"
-              checked={postedDate === "month"}
-              onChange={(e) => setPostedDate(e.target.value)}
-              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-700">Past Month</span>
-          </label>
+
+        <div className="space-y-3">
+          {[
+            { label: "Any Time", value: "any" },
+            { label: "Past 24 Hours", value: "24h" },
+            { label: "Past Week", value: "week" },
+            { label: "Past Month", value: "month" },
+          ].map((item) => {
+            const isActive = postedDate === item.value;
+
+            return (
+              <label
+                key={item.value}
+                className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition
+                ${
+                  isActive
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 hover:border-blue-300"
+                }`}
+              >
+                <span className="text-gray-800 font-medium">
+                  {item.label}
+                </span>
+
+                <input
+                  type="radio"
+                  name="postedDate"
+                  value={item.value}
+                  checked={isActive}
+                  onChange={(e) => setPostedDate(e.target.value)}
+                  className="hidden"
+                />
+              </label>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Board Filter */}
+      <div className="mb-6">
+        <h3 className="font-medium mb-3">Board</h3>
+
+        <div className="space-y-3">
+          {BOARDS.map((board) => {
+            const isActive = selectedBoard === board;
+
+            return (
+              <div
+                key={board}
+                onClick={() => setSelectedBoard(board)}
+                className={`p-3 border rounded-lg cursor-pointer ${
+                  isActive ? "bg-blue-50 border-blue-500" : ""
+                }`}
+              >
+                {board}
+              </div>
+            );
+          })}
         </div>
       </div>
 

@@ -1,7 +1,6 @@
 import React from "react";
 
 const ProfileMeter = ({ percentage = 0, missingFields = [] }) => {
-  console.log(missingFields);
   return (
     <div className="relative flex flex-col items-center group">
       <svg height="50" width="90" viewBox="0 0 200 120">

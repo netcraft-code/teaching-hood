@@ -188,6 +188,7 @@ const HeroSection = () => {
                         .find((option) => option.value === subject)}
                       onChange={(option) => setSubject(option.value)}
                       placeholder="Subject (e.g., Math)"
+                      menuPosition="fixed"
                       styles={{
                         menuPortal: (base) => ({ ...base, zIndex: 9999 }),
 
@@ -251,6 +252,7 @@ const HeroSection = () => {
                         .find((option) => option.value === grade)}
                       onChange={(option) => setGrade(option.value)}
                       placeholder="Grade (e.g., PRT)"
+                      menuPosition="fixed"
                       styles={{
                         menuPortal: (base) => ({ ...base, zIndex: 9999 }),
 
@@ -311,6 +313,7 @@ const HeroSection = () => {
                       value={location}
                       onChange={(option) => setLocation(option)}
                       placeholder="Location (e.g., Agra)"
+                      menuPosition="fixed"
                       styles={{
                         control: (provided) => ({
                           ...provided,

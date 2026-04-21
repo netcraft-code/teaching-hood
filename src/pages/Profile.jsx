@@ -240,6 +240,8 @@ const Profile = () => {
             ? res.data.data.banner_image_url
             : prev.banner_image_url,
       }));
+
+      window.dispatchEvent(new Event("profileUpdated"));
     }
   };
 
@@ -658,52 +660,63 @@ const Profile = () => {
               (profile?.additional_info?.experience ? (
                 <>
                   {profile.additional_info.experience
-                  .slice()
-                  .sort((a, b) => new Date(a.from) - new Date(b.from))  // latest first
-                  .map((exp, index) => (
-                    <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
-                      <div className="flex justify-between items-start mb-3">
-                        <div className="flex items-center gap-5">
-                          <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
-                            🏫
-                          </div>
-                          <div>
-                            <h3 className="text-xl text-gray-800">{exp.position}</h3>
-                            <p className="text-blue-500 font-medium">{exp.school}</p>
-                          </div>
-                        </div>
-                        <span className="px-3 py-1 rounded-lg text-sm text-blue-500 bg-blue-50">
-                          {exp.is_currently_working === "1" ? "Current" : "Past"}  {/* fix */}
-                        </span>
-                      </div>
+                    .slice()
+                    .sort((a, b) => new Date(b.from) - new Date(a.from)) // ✅ b-a = latest first
+                    .map((exp, index) => {
+                      // ✅ is_currently_working normalize — "1", 1, true sab handle
+                      const isCurrent = exp.is_currently_working === true || exp.is_currently_working === 1 || exp.is_currently_working === "1";
+                      // ✅ board display
+                      const boardDisplay = exp.board === "Others" ? exp.board_other : exp.board;
 
-                      <p className="text-sm text-gray-600 mb-3 pl-20">
-                        {formatDate(exp.from)} -{" "}
-                        {exp.is_currently_working === "1" ? "Present" : formatDate(exp.to)}
-                      </p>
+                      return (
+                        <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                          <div className="flex justify-between items-start mb-3">
+                            <div className="flex items-center gap-5">
+                              <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
+                                🏫
+                              </div>
+                              <div>
+                                <h3 className="text-xl text-gray-800">{exp.position}</h3>
+                                <p className="text-blue-500 font-medium">{exp.school}</p>
+                                {boardDisplay && (
+                                  <p className="text-xs text-gray-500 mt-0.5">📋 {boardDisplay}</p>
+                                )}
+                              </div>
+                            </div>
+                            <span className={`px-3 py-1 rounded-lg text-sm ${isCurrent ? "text-green-600 bg-green-50" : "text-blue-500 bg-blue-50"}`}>
+                              {isCurrent ? "Current" : "Past"}
+                            </span>
+                          </div>
 
-                      {exp.key_responsibilities && (
-                        <div className="pl-20">
-                          <p className="text-sm font-medium text-gray-700 mb-2">Key Responsibilities:</p>
-                          <ul className="space-y-2">
-                            {Array.isArray(exp.key_responsibilities) &&
-                              exp.key_responsibilities.map((resp, idx) => (
-                                <li key={idx} className="text-gray-700 text-sm flex items-start">
-                                  <span className="text-blue-500 mr-2">•</span>
-                                  <span>{resp}</span>
-                                </li>
-                              ))}
-                          </ul>
+                          <p className="text-sm text-gray-600 mb-3 pl-20">
+                            {formatDate(exp.from)} —{" "}
+                            {isCurrent ? "Present" : formatDate(exp.to)}
+                          </p>
+
+                          {exp.key_responsibilities && (
+                            <div className="pl-20">
+                              <p className="text-sm font-medium text-gray-700 mb-2">Key Responsibilities:</p>
+                              <ul className="space-y-2">
+                                {Array.isArray(exp.key_responsibilities) &&
+                                  exp.key_responsibilities.map((resp, idx) => (
+                                    <li key={idx} className="text-gray-700 text-sm flex items-start">
+                                      <span className="text-blue-500 mr-2">•</span>
+                                      <span>{resp}</span>
+                                    </li>
+                                  ))}
+                              </ul>
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  ))}
+                      );
+                    })}
                 </>
               ) : (
                 <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
                   No record found
                 </div>
-              ))}
+              ))
+            }
 
             {/* Education Tab */}
             {activeTab === "education" &&
@@ -922,7 +935,12 @@ const Profile = () => {
         open={editOpen}
         onClose={() => setEditOpen(false)}
         profile={profile}
-        onUpdate={(updatedProfile) => setProfile(updatedProfile)}
+        onUpdate={(updatedProfile) => {
+          setProfile(updatedProfile);
+
+          // 👇 HEADER KO SIGNAL
+          window.dispatchEvent(new Event("profileUpdated"));
+        }}
       />
 
       <ImageUploadModal

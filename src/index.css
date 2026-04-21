@@ -80,4 +80,8 @@
     transform: translateY(-2px);
   }
 
+  /* global.css ya App.css */
+  .job-carousel-scroll::-webkit-scrollbar {
+    display: none;
+  }
 }

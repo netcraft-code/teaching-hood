@@ -32,6 +32,16 @@ const Header = () => {
     };
 
     fetchcompletion();
+
+    const handleUpdate = () => {
+      fetchcompletion();
+    };
+
+    window.addEventListener("profileUpdated", handleUpdate);
+
+    return () => {
+      window.removeEventListener("profileUpdated", handleUpdate);
+    };
   }, []);
 
   const isLoggedIn = !!localStorage.getItem("auth_token");

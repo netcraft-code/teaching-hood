@@ -12,6 +12,7 @@ import TestimonialsSection from "../components/TestimonialsSection";
 import Faqs from "../components/Faqs";
 import ContactUsSection from "../components/ContactUsSection";
 import CTASection from "../components/CTASection";
+import JobCarousel from "../components/JobCarousel";
 
 const Home = () => {
   return (
@@ -20,6 +21,7 @@ const Home = () => {
       <SimpleBanner />
       <HeroSection />
       <TeachersSection />
+      <JobCarousel />
       <SchoolsSection />
       <RecruitersSection />
       <OurMissionSection />
