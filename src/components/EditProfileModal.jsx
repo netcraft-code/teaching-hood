@@ -25,6 +25,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
   const [popupMessage, setPopupMessage] = useState("");
   const [userType, setUserType] = useState(0);
   const [selectedStateId, setSelectedStateId] = useState(0);
+  const [filteredLocations, setFilteredLocations] = useState([]);
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -358,9 +359,28 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     handleAdditional(field, arr.length ? arr : [""]);
   };
 
-  const filteredLocations = locations.filter((loc) =>
-    loc.name.toLowerCase().includes(search.toLowerCase()),
-  );
+  // filteredLocations = locations.filter((loc) =>
+  //   loc.name.toLowerCase().includes(search.toLowerCase()),
+  // );
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(async () => {
+      if (search) {
+        const res = await getCities({
+          search: search || "",
+          limit: 20,
+        });
+        
+        // API se jo aaya usko set karo
+        setFilteredLocations(res?.data?.data?.data || []);
+      } else {
+        // jab search empty ho → initial locations dikhao
+        setFilteredLocations(locations);
+      }
+    }, 400); // 400ms debounce
+
+    return () => clearTimeout(delayDebounce);
+  }, [search]);
 
   const addLocation = (location) => {
     if (!selectedLocations.includes(location)) {
@@ -1756,7 +1776,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </Section>
 
               <div className="my-8">
-                <label className="label">Preferred Location</label>
+                <Field label="Preferred Location" required>
+                </Field>
 
                 {/* Selected Chips */}
                 <div className="flex flex-wrap gap-2">
@@ -1833,6 +1854,10 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 </Field>
               </Section>
             </>
+          )}
+
+          {Object.keys(errors).length != 0 && (
+            <ErrorText error='There are some missing fields or validation failed, please check.' />
           )}
 
           {/* Action Buttons */}

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronRight, ChevronLeft, MapPin, Briefcase, Clock, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-const API_URL =
-  "https://teaching-hood-backend.netcraftglobal.com/api/job-posts?page=1&city_id=all&job_type=all&posted=any&search=&radius=0&subject_id=all&grade_id=all&state_id=all&board=all&min_salary=0&max_salary=0&limit=25&is_applied=false&sort=updated_at-desc";
+import {
+  getProfile,
+} from "../api/auth";
 
 const SALARY_RANGES = [
   { label: "Upto ₹10,000", min: 0, max: 10000 },
@@ -52,11 +52,55 @@ const JobCarousel = () => {
   const scrollRef = useRef(null);
   const navigate = useNavigate();
 
+  const [profile, setProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await getProfile();
+        setProfile(res.data.data);
+      } catch (e) {
+        console.error("Profile error", e);
+        setProfile(null);
+      } finally {
+        setProfileLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const getCityFromProfile = (profile) => {
+    // 1. preferred_location (priority)
+    const preferred =
+      profile?.additional_info?.preferred_location;
+
+    if (preferred) return preferred;
+
+    // 2. fallback → addresses
+    const addressCity =
+      profile?.addresses?.city;
+
+    if (addressCity) return addressCity;
+
+    return null;
+  };
+  
+  useEffect(() => {
+    if (!profile || profile.user_type != 1) return;
+
+    const city = getCityFromProfile(profile);
+
+    if (!city) return;
+
+    const API_URL = `https://teaching-hood-backend.netcraftglobal.com/api/job-posts?page=1&city_id=all&city_name=${city}&job_type=all&posted=any&search=&radius=0&subject_id=all&grade_id=all&state_id=all&board=all&min_salary=0&max_salary=0&limit=25&is_applied=false&sort=updated_at-desc`;
+
     const fetchJobs = async () => {
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
+
         if (data.status) {
           setJobs(data.data?.data?.slice(0, 25) || []);
         }
@@ -66,8 +110,15 @@ const JobCarousel = () => {
         setLoading(false);
       }
     };
+
     fetchJobs();
-  }, []);
+  }, [profile]);
+
+  if (profileLoading) return null;
+
+  if (!profile) return null;
+
+  if (profile.user_type != 1) return null;
 
   const updateScrollButtons = () => {
     const el = scrollRef.current;
@@ -79,7 +130,7 @@ const JobCarousel = () => {
   const scroll = (dir) => {
     const el = scrollRef.current;
     if (!el) return;
-    el.scrollBy({ left: dir === "left" ? -320 : 320, behavior: "smooth" });
+    el.scrollBy({ left: dir === "left" ? -380 : 380, behavior: "smooth" });
   };
 
   if (loading) {
@@ -173,7 +224,7 @@ const JobCard = ({ job, onClick }) => {
     : "Location N/A";
 
   return (
-    <div style={styles.card} onClick={onClick}>
+    <div style={styles.card}>
       {/* Top: icon + title + like */}
       <div style={styles.cardTop}>
         <div style={styles.iconWrap}>
@@ -196,13 +247,31 @@ const JobCard = ({ job, onClick }) => {
           <MapPin size={12} style={{ flexShrink: 0 }} />
           <span style={styles.metaText}>{location}</span>
         </span>
-        <span style={styles.metaItem}>
-          <Briefcase size={12} style={{ flexShrink: 0 }} />
-          <span style={styles.metaText}>{job.job_type || "Full-Time"}</span>
+
+        {/* Food */}
+        <span
+          style={{
+            ...styles.metaItem,
+            color: job.food == 1 ? "#16a34a" : "#9ca3af", // green / gray
+          }}
+        >
+          <span style={{ opacity: job.food == 1 ? 1 : 0.5 }}>🍽️</span>
+          <span style={styles.metaText}>
+            Food {job.food == 1 ? "Available" : "Not Available"}
+          </span>
         </span>
-        <span style={styles.metaItem}>
-          <Clock size={12} style={{ flexShrink: 0 }} />
-          <span style={styles.metaText}>{getTimeAgo(job.created_at)}</span>
+
+        {/* Accommodation */}
+        <span
+          style={{
+            ...styles.metaItem,
+            color: job.accommodation == 1 ? "#2563eb" : "#9ca3af", // blue / gray
+          }}
+        >
+          <span style={{ opacity: job.accommodation == 1 ? 1 : 0.5 }}>🏠</span>
+          <span style={styles.metaText}>
+            Stay {job.accommodation == 1 ? "Available" : "Not Available"}
+          </span>
         </span>
       </div>
 
@@ -218,9 +287,8 @@ const JobCard = ({ job, onClick }) => {
 
       {/* Applicants */}
       <div style={styles.applicantsRow}>
-        <Star size={11} color="#f59e0b" fill="#f59e0b" />
-        <span style={styles.applicantsText}>
-          {job.total_applicants || 0} applicant{job.total_applicants !== 1 ? "s" : ""}
+        <span style={styles.viewAllBtn} onClick={onClick}>
+          View More
         </span>
         {job.is_applied && (
           <span style={styles.appliedBadge}>Applied</span>
@@ -298,9 +366,9 @@ const styles = {
   },
   scrollContainer: {
     display: "flex",
-    gap: 14,
+    gap: 16,
     overflowX: "auto",
-    paddingBottom: 12,
+    paddingBottom: 16,
     scrollbarWidth: "none",
     msOverflowStyle: "none",
     WebkitOverflowScrolling: "touch",
@@ -308,14 +376,13 @@ const styles = {
 
   /* Card */
   card: {
-    minWidth: 240,
-    maxWidth: 240,
+    minWidth: 280,
+    maxWidth: 280,
     background: "#fff",
     borderRadius: 14,
     borderTop: "4px solid #60a5fa",
     boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
     padding: "14px 14px 12px",
-    cursor: "pointer",
     display: "flex",
     flexDirection: "column",
     gap: 10,
@@ -415,7 +482,7 @@ const styles = {
   applicantsRow: {
     display: "flex",
     alignItems: "center",
-    gap: 5,
+    justifyContent: "space-between",
   },
   applicantsText: {
     fontSize: 11,

@@ -144,7 +144,7 @@ const JobView = ({ jobData }) => {
     <>
       <Header />
 
-      <div className="w-full min-h-screen px-8 py-8">
+      <div className="w-full min-h-screen px-4 sm:px-6 lg:px-8 py-6">
         <div className="">
           {/* Back Button */}
           <button
@@ -155,74 +155,67 @@ const JobView = ({ jobData }) => {
             <span className="text-base font-medium">Back to Jobs</span>
           </button>
 
-          <div className="grid grid-cols-8 justify-between gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-8 justify-between gap-4">
             {/* Left Section */}
-            <div className="col-span-5">
-              <div className="grid grid-cols-8 gap-6 justify-between rounded-3xl shadow-lg p-6 border-t-8 border-blue-500">
-                <div className="col-span-1 w-16 h-16 sm:w-20 sm:h-20 bg-blue-100 rounded-xl flex items-center justify-center">
-                  <img
-                    src={jobViewIcons.school}
-                    alt="School"
-                    className="w-8 h-8 sm:w-10 sm:h-10"
-                  />
-                </div>
-
-                <div className="col-span-7 ml-8">
-                  <div className="flex justify-between">
-                    <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 inline">
-                      {getJobTitle(job)}
-                    </div>
-
-                    <div className="inline text-base text-green-600 bg-green-100 h-6 py-1 px-2 rounded-full">
-                      <img
-                        src={jobViewIcons.verified}
-                        alt="Applicant"
-                        className="w-4 h-4 inline"
-                      />
-                      Verified
-                    </div>
+            <div className="lg:col-span-5">
+              <div className="grid grid-cols-1 sm:grid-cols-8 gap-4 sm:gap-6 justify-between rounded-3xl shadow-lg p-6 border-t-8 border-blue-500">
+                <div className="flex flex-col sm:flex-row gap-4 items-start">
+                  {/* Image */}
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+                    <img
+                      src={jobViewIcons.school}
+                      alt="School"
+                      className="w-8 h-8 sm:w-10 sm:h-10"
+                    />
                   </div>
 
-                  <p className="text-semibold md:text-lg text-gray-600 mb-4">
-                    {job.school_name}
-                  </p>
+                  {/* Content */}
+                  <div className="flex-1">
+                    {/* Title row */}
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 leading-tight flex-1">
+                        {getJobTitle(job)}
+                      </div>
+                      {/* Verified badge — always right, never wraps */}
+                      <div className="flex items-center gap-1 text-xs sm:text-sm text-green-600 bg-green-100 py-1 px-3 rounded-full whitespace-nowrap shrink-0 self-start mt-1">
+                        <img src={jobViewIcons.verified} className="w-3 h-3 sm:w-4 sm:h-4" />
+                        Verified
+                      </div>
+                    </div>
 
-                  <div className="flex items-center flex-wrap gap-4 md:gap-6 mb-4">
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={jobViewIcons.applicant}
-                        alt="Applicant"
-                        className="w-4 h-4 md:w-5 md:h-5"
-                      />
-                      <span className="text-base text-gray-700">
-                        {job.total_applicants} Applicant
-                        {job.total_applicants > 1 ? "s" : ""}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2 bg-gray-400 h-1.5 w-1.5 rounded-full mx-1"></div>
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={jobViewIcons.createdAt}
-                        alt="Posted At"
-                        className="w-4 h-4 md:w-5 md:h-5"
-                      />
-                      <span className="text-base text-gray-700">
-                        {humanReadableTime(job.created_at)}
-                      </span>
-                    </div>
-                  </div>
+                    {/* School name */}
+                    <p className="text-base md:text-lg text-gray-600 mb-1">
+                      {job.school_name}
+                    </p>
 
-                  <div className="flex flex-wrap gap-4 md:gap-6 mb-4">
-                    <div className="flex items-center gap-2 bg-red-100 py-1 px-3 rounded-full">
-                      <img
-                        src={jobViewIcons.expired}
-                        alt="Experience"
-                        className="w-3 h-3 md:w-4 md:h-4"
-                      />
-                      <span className="text-base font-regular text-red-600">
-                        Apply Before {formatDate(job.application_deadline)}
-                      </span>
+                    <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-4">
+                      <div className="flex items-center gap-2">
+                        <img src={jobViewIcons.applicant} className="w-4 h-4 md:w-5 md:h-5" />
+                        <span className="text-sm md:text-base text-gray-700">
+                          {job.total_applicants} Applicant
+                          {job.total_applicants > 1 ? "s" : ""}
+                        </span>
+                      </div>
+
+                      <div className="hidden sm:block h-1 w-1 bg-gray-400 rounded-full"></div>
+
+                      <div className="flex items-center gap-2">
+                        <img src={jobViewIcons.createdAt} className="w-4 h-4 md:w-5 md:h-5" />
+                        <span className="text-sm md:text-base text-gray-700">
+                          {humanReadableTime(job.created_at)}
+                        </span>
+                      </div>
                     </div>
+
+                    <div className="flex flex-wrap gap-4">
+                      <div className="flex items-center gap-2 bg-red-100 py-1 px-3 rounded-full">
+                        <img src={jobViewIcons.expired} className="w-3 h-3 md:w-4 md:h-4" />
+                        <span className="text-sm md:text-base text-red-600">
+                          Apply Before {formatDate(job.application_deadline)}
+                        </span>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
 
@@ -231,7 +224,7 @@ const JobView = ({ jobData }) => {
                 </div>
 
                 <div className="col-span-8 flex items-center w-full whitespace-nowrap">
-                  <div className="grid grid-cols-4 gap-2 w-full">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
                     <div className="flex items-center gap-2">
                       <div className="h-8 w-8 flex items-center justify-center bg-blue-100 rounded-xl">
                         <img src={jobViewIcons.location} className="w-4 h-4" />
@@ -285,6 +278,34 @@ const JobView = ({ jobData }) => {
                       </span>
                     </div>
                   </div>
+                </div>
+
+                <div style={styles.metaRow}>
+                  {/* Food */}
+                  <span
+                    style={{
+                      ...styles.metaItem,
+                      color: job.food == 1 ? "#16a34a" : "#9ca3af", // green / gray
+                    }}
+                  >
+                    <span style={{ opacity: job.food == 1 ? 1 : 0.5 }}>🍽️</span>
+                    <span style={styles.metaText}>
+                      Food {job.food == 1 ? "Available" : "Not Available"}
+                    </span>
+                  </span>
+
+                  {/* Accommodation */}
+                  <span
+                    style={{
+                      ...styles.metaItem,
+                      color: job.accommodation == 1 ? "#2563eb" : "#9ca3af", // blue / gray
+                    }}
+                  >
+                    <span style={{ opacity: job.accommodation == 1 ? 1 : 0.5 }}>🏠</span>
+                    <span style={styles.metaText}>
+                      Stay {job.accommodation == 1 ? "Available" : "Not Available"}
+                    </span>
+                  </span>
                 </div>
               </div>
 
@@ -349,7 +370,7 @@ const JobView = ({ jobData }) => {
             </div>
 
             {/* Right Section */}
-            <div className="col-span-3">
+            <div className="lg:col-span-3">
               {/* Salary Card */}
               <div className="gap-4 w-full">
                 <div className="shadow-lg p-6 rounded-xl rounded-xl">
@@ -534,6 +555,26 @@ const JobView = ({ jobData }) => {
       <Footer />
     </>
   );
+};
+
+const styles = {
+  metaRow: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 20,
+  },
+  metaItem: {
+    display: "flex",
+    alignItems: "center",
+    gap: 5,
+    color: "#6b7280",
+  },
+  metaText: {
+    fontSize: 14,
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
 };
 
 export default JobView;
