@@ -94,7 +94,7 @@ const AppliedTab = ({
               key={job.id}
               className="rounded-xl border-2 border-[#E5E7EB] p-6"
             >
-              <Link to={`/job/${job.id}`}>
+              <Link to={`/job/${job.job_post_id}`}>
                 <div className="flex items-center justify-between gap-4">
                   {/* LEFT SIDE - Job Info */}
                   <div className="flex items-center gap-4">

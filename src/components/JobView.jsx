@@ -19,6 +19,9 @@ const JobView = ({ jobData }) => {
   const userProfile = jobData.user;
 
   const formatSalary = (min, max) => {
+    if (min === null || max === null)
+      return "Salary: As per industry standards";
+
     const SALARY_RANGES = [
       { label: "Upto ₹10,000", min: 0, max: 10000 },
       { label: "₹10,000 - ₹20,000", min: 10000, max: 20000 },
@@ -115,7 +118,7 @@ const JobView = ({ jobData }) => {
 
   const getJobTitle = (job) => {
     if (job.subject_name && job.grade_name) {
-      return `${job.subject_name} (${job.grade_name})`;
+      return `${job.grade_name} ${job.subject_name} Teacher`;
     } else if (job.subject_name) {
       return `${job.position} - ${job.subject_name}`;
     } else if (job.grade_name) {
@@ -157,16 +160,30 @@ const JobView = ({ jobData }) => {
 
           <div className="grid grid-cols-1 lg:grid-cols-8 justify-between gap-4">
             {/* Left Section */}
-            <div className="lg:col-span-5">
-              <div className="grid grid-cols-1 sm:grid-cols-8 gap-4 sm:gap-6 justify-between rounded-3xl shadow-lg p-6 border-t-8 border-blue-500">
-                <div className="flex flex-col sm:flex-row gap-4 items-start">
-                  {/* Image */}
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
-                    <img
-                      src={jobViewIcons.school}
-                      alt="School"
-                      className="w-8 h-8 sm:w-10 sm:h-10"
-                    />
+            <div className="col-span-5">
+              <div className="grid grid-cols-8 gap-6 justify-between rounded-3xl shadow-lg p-6 border-t-8 border-blue-500">
+                <div className="col-span-1 w-16 h-16 sm:w-20 sm:h-20 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <img
+                    src={jobViewIcons.school}
+                    alt="School"
+                    className="w-8 h-8 sm:w-10 sm:h-10"
+                  />
+                </div>
+
+                <div className="col-span-7 ml-8">
+                  <div className="flex justify-between">
+                    <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 inline">
+                      {getJobTitle(job)}
+                    </div>
+
+                    {/* <div className="inline text-base text-green-600 bg-green-100 h-6 px-2 rounded-full">
+                      <img
+                        src={jobViewIcons.verified}
+                        alt="Applicant"
+                        className="w-4 h-4 inline"
+                      />
+                      Verified
+                    </div> */}
                   </div>
 
                   {/* Content */}
@@ -178,7 +195,10 @@ const JobView = ({ jobData }) => {
                       </div>
                       {/* Verified badge — always right, never wraps */}
                       <div className="flex items-center gap-1 text-xs sm:text-sm text-green-600 bg-green-100 py-1 px-3 rounded-full whitespace-nowrap shrink-0 self-start mt-1">
-                        <img src={jobViewIcons.verified} className="w-3 h-3 sm:w-4 sm:h-4" />
+                        <img
+                          src={jobViewIcons.verified}
+                          className="w-3 h-3 sm:w-4 sm:h-4"
+                        />
                         Verified
                       </div>
                     </div>
@@ -190,7 +210,10 @@ const JobView = ({ jobData }) => {
 
                     <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-4">
                       <div className="flex items-center gap-2">
-                        <img src={jobViewIcons.applicant} className="w-4 h-4 md:w-5 md:h-5" />
+                        <img
+                          src={jobViewIcons.applicant}
+                          className="w-4 h-4 md:w-5 md:h-5"
+                        />
                         <span className="text-sm md:text-base text-gray-700">
                           {job.total_applicants} Applicant
                           {job.total_applicants > 1 ? "s" : ""}
@@ -200,7 +223,10 @@ const JobView = ({ jobData }) => {
                       <div className="hidden sm:block h-1 w-1 bg-gray-400 rounded-full"></div>
 
                       <div className="flex items-center gap-2">
-                        <img src={jobViewIcons.createdAt} className="w-4 h-4 md:w-5 md:h-5" />
+                        <img
+                          src={jobViewIcons.createdAt}
+                          className="w-4 h-4 md:w-5 md:h-5"
+                        />
                         <span className="text-sm md:text-base text-gray-700">
                           {humanReadableTime(job.created_at)}
                         </span>
@@ -209,13 +235,15 @@ const JobView = ({ jobData }) => {
 
                     <div className="flex flex-wrap gap-4">
                       <div className="flex items-center gap-2 bg-red-100 py-1 px-3 rounded-full">
-                        <img src={jobViewIcons.expired} className="w-3 h-3 md:w-4 md:h-4" />
+                        <img
+                          src={jobViewIcons.expired}
+                          className="w-3 h-3 md:w-4 md:h-4"
+                        />
                         <span className="text-sm md:text-base text-red-600">
                           Apply Before {formatDate(job.application_deadline)}
                         </span>
                       </div>
                     </div>
-
                   </div>
                 </div>
 
@@ -301,9 +329,12 @@ const JobView = ({ jobData }) => {
                       color: job.accommodation == 1 ? "#2563eb" : "#9ca3af", // blue / gray
                     }}
                   >
-                    <span style={{ opacity: job.accommodation == 1 ? 1 : 0.5 }}>🏠</span>
+                    <span style={{ opacity: job.accommodation == 1 ? 1 : 0.5 }}>
+                      🏠
+                    </span>
                     <span style={styles.metaText}>
-                      Stay {job.accommodation == 1 ? "Available" : "Not Available"}
+                      Stay{" "}
+                      {job.accommodation == 1 ? "Available" : "Not Available"}
                     </span>
                   </span>
                 </div>
@@ -440,22 +471,22 @@ const JobView = ({ jobData }) => {
                   <hr />
 
                   <div className="mt-4 rounded-lg">
-                    <div className="flex justify-between items-center py-3">
+                    {/* <div className="flex justify-between items-center py-3">
                       <span className="text-base text-gray-600">
                         Application Deadline
                       </span>
                       <span className="text-base font-semibold text-gray-900">
                         {formatDate(job.application_deadline)}
                       </span>
-                    </div>
-                    <div className="flex justify-between items-center py-3">
+                    </div> */}
+                    {/* <div className="flex justify-between items-center py-3">
                       <span className="text-base text-gray-600">
                         Applicants
                       </span>
                       <span className="text-base font-semibold text-gray-900">
                         {job.total_applicants} applied
                       </span>
-                    </div>
+                    </div> */}
                     <div className="flex justify-between items-center py-3">
                       <span className="text-base text-gray-600">Posted</span>
                       <span className="text-base font-semibold text-gray-900">

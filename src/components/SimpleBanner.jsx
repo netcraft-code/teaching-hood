@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const message =
-  "⭐ Get Enterprise Plan worth INR 14,999 for FREE until 31st August, 2026! ⭐";
+  "⭐ Schools & Recruiters get Enterprise Hiring Plan worth INR 14999 for FREE until 30 Novemver, 2026! ⭐";
 
 const SimpleBanner = () => {
   const navigate = useNavigate();

@@ -197,7 +197,8 @@ const PricingSection = () => {
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-2 sm:mb-4 tracking-tight px-4"
               style={{ textShadow: "2px 2px 6px rgba(161, 141, 141, 0.7)" }}
             >
-              <span className="font-light">Select the perfect plan</span> <br /> <span>that meets your hiring needs</span>
+              <span className="font-light">Select the perfect plan</span> <br />{" "}
+              <span>that meets your hiring needs</span>
             </h2>
 
             {/* <p
@@ -207,9 +208,9 @@ const PricingSection = () => {
               for Your School
             </p> */}
             <div className="flex flex-col gap-4 justify-center items-center">
-              <p className="text-[14px] text-gray-600 leading-relaxed max-w-2xl">
+              {/* <p className="text-[14px] text-gray-600 leading-relaxed max-w-2xl">
                 Find the right teachers, without the wait
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
