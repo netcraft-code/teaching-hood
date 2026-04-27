@@ -1855,10 +1855,17 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </Section>
             </>
           )}
-
-          {Object.keys(errors).length != 0 && (
-            <ErrorText error='There are some missing fields or validation failed, please check.' />
-          )}
+          
+          {
+            Object.keys(errors).length > 0 &&
+            Object.values(errors).some(
+              (val) =>
+                val &&
+                (typeof val === "string" ? val.trim().length > 0 : true)
+            ) && (
+              <ErrorText error="There are some missing fields or validation failed, please check." />
+            )
+          }
 
           {/* Action Buttons */}
           <div className="flex gap-3 mt-8 pt-6 border-t border-gray-200">
