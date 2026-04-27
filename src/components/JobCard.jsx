@@ -17,7 +17,7 @@ const JobCard = () => {
   // Filter states
   const [selectedCity, setSelectedCity] = useState([]);
   const [selectedJobType, setSelectedJobType] = useState("all");
-  const [selectedExperience, setSelectedExperience] = useState();
+  const [selectedExperience, setSelectedExperience] = useState("all");
   const [salaryRange, setSalaryRange] = useState([0, 0]);
   const [postedDate, setPostedDate] = useState("any");
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,7 +33,7 @@ const JobCard = () => {
   const cityParam = searchParams.get("city");
   const stateParam = searchParams.get("state_id");
 
-  const BOARDS = ["CBSE","ISCE","ISC","NIOS","BSB","IB","CAIE"];
+  const BOARDS = ["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE"];
 
   const [selectedBoard, setSelectedBoard] = useState("all");
 
@@ -65,13 +65,17 @@ const JobCard = () => {
   }, []);
 
   const fetchSubjects = async () => {
-    const res = await fetch("https://teaching-hood-backend.netcraftglobal.com/api/subjects");
+    const res = await fetch(
+      "https://teaching-hood-backend.netcraftglobal.com/api/subjects",
+    );
     const data = await res.json();
     setSubjects(data.data || []);
   };
 
   const fetchGrades = async () => {
-    const res = await fetch("https://teaching-hood-backend.netcraftglobal.com/api/gradelevels");
+    const res = await fetch(
+      "https://teaching-hood-backend.netcraftglobal.com/api/gradelevels",
+    );
     const data = await res.json();
     setGrades(data.data || []);
   };
@@ -81,7 +85,7 @@ const JobCard = () => {
       page: currentPage,
       city_id: selectedCity?.value || "all",
       job_type: selectedJobType !== "all" ? selectedJobType : "all",
-      experience: selectedExperience !== "0-1" ? selectedExperience : "0-1",
+      experience: selectedExperience !== "all" ? selectedExperience : "all",
       // min_salary: salaryRange[0] > 0 ? salaryRange[0] * 100000 : 0,
       // max_salary: salaryRange[1] > 0 ? salaryRange[1] * 100000 : 5000000,
       posted: postedDate !== "any" ? postedDate : "any",
@@ -151,7 +155,7 @@ const JobCard = () => {
       return [];
     }
   };
-  
+
   const fetchCities = async (inputValue) => {
     try {
       const response = await getCities({
@@ -274,7 +278,7 @@ const JobCard = () => {
   const clearAllFilters = () => {
     setSelectedCity("all");
     setSelectedJobType("all");
-    setSelectedExperience("");
+    setSelectedExperience("all");
     setSalaryRange([0, 0]);
     setPostedDate("any");
     setSearchQuery("");
@@ -377,6 +381,40 @@ const JobCard = () => {
         />
       </div>
 
+      {/* Subject */}
+      <div className="mb-6">
+        <h3 className="font-medium mb-2">Subject</h3>
+        <select
+          value={selectedSubject}
+          onChange={(e) => setSelectedSubject(e.target.value)}
+          className="w-full px-4 py-3 border rounded-xl bg-gray-50"
+        >
+          <option value="">All Subjects</option>
+          {subjects.map((sub) => (
+            <option key={sub.id} value={sub.id}>
+              {sub.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Grade */}
+      <div className="mb-6">
+        <h3 className="font-medium mb-2">Grade</h3>
+        <select
+          value={selectedGrade}
+          onChange={(e) => setSelectedGrade(e.target.value)}
+          className="w-full px-4 py-3 border rounded-xl bg-gray-50"
+        >
+          <option value="">All Grades</option>
+          {grades.map((g) => (
+            <option key={g.id} value={g.id}>
+              {g.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Job Type Filter */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
@@ -391,7 +429,6 @@ const JobCard = () => {
             { label: "Contract", value: "Contract" },
           ].map((item) => {
             const isActive = selectedJobType === item.value;
-
             return (
               <label
                 key={item.value}
@@ -440,6 +477,7 @@ const JobCard = () => {
 
         <div className="space-y-3">
           {[
+            { label: "Any", value: "all" },
             { label: "Fresher", value: "0-1" },
             { label: "1-3 Years", value: "1-3" },
             { label: "3-5 Years", value: "3-5" },
@@ -485,40 +523,6 @@ const JobCard = () => {
             );
           })}
         </div>
-      </div>
-
-      {/* Subject */}
-      <div className="mb-6">
-        <h3 className="font-medium mb-2">Subject</h3>
-        <select
-          value={selectedSubject}
-          onChange={(e) => setSelectedSubject(e.target.value)}
-          className="w-full px-4 py-3 border rounded-xl bg-gray-50"
-        >
-          <option value="">All Subjects</option>
-          {subjects.map((sub) => (
-            <option key={sub.id} value={sub.id}>
-              {sub.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Grade */}
-      <div className="mb-6">
-        <h3 className="font-medium mb-2">Grade</h3>
-        <select
-          value={selectedGrade}
-          onChange={(e) => setSelectedGrade(e.target.value)}
-          className="w-full px-4 py-3 border rounded-xl bg-gray-50"
-        >
-          <option value="">All Grades</option>
-          {grades.map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.name}
-            </option>
-          ))}
-        </select>
       </div>
 
       {/* Salary Range Filter */}
@@ -641,9 +645,7 @@ const JobCard = () => {
                     : "border-gray-200 hover:border-blue-300"
                 }`}
               >
-                <span className="text-gray-800 font-medium">
-                  {item.label}
-                </span>
+                <span className="text-gray-800 font-medium">{item.label}</span>
 
                 <input
                   type="radio"
@@ -963,7 +965,7 @@ const JobCard = () => {
                               className="w-4 h-4 flex-shrink-0"
                             />
                             <span className="truncate">
-                              {job.city_name},{job.city.state.name}
+                              {job.city_name}, {job.city.state.name}
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
@@ -1017,7 +1019,9 @@ const JobCard = () => {
                                 <ChevronRight className="w-4 h-4" />
                               </button>
                               <p className="text-center text-xs">
-                                Application Gateway
+                                {isWithin30Days(job.created_at)
+                                  ? "Apply Now"
+                                  : "Express Interest"}
                               </p>
                             </div>
                           )}

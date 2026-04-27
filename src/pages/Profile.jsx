@@ -346,7 +346,7 @@ const Profile = () => {
                     "bannerImage",
                   )}
                   alt="cover"
-                  className="w-full h-32 rounded-t-2xl object-cover"
+                  className="w-full md:h-[15rem] h-[9rem] rounded-t-2xl md:object-cover object-contain"
                 />
                 <button
                   onClick={() => {
@@ -408,19 +408,20 @@ const Profile = () => {
                           ? `${profile.addresses.city}, ${profile.addresses.state}`
                           : "Location not specified"}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <img src={durationIcon} alt="Duration" />
-                        {profile?.total_experience
-                          ? userType === 1
+                      {profile?.total_experience && (
+                        <span className="flex items-center gap-1">
+                          <img src={durationIcon} alt="Duration" />
+                          {userType === 1
                             ? `${profile.total_experience} years experience`
-                            : `Est. ${getTotalDurationCount(profile.total_experience)}`
-                          : "----"}
-                      </span>
+                            : `Est. ${getTotalDurationCount(profile.total_experience)}`}
+                        </span>
+                      )}
                     </div>
                   </div>
+
+                  
                 </div>
 
-                {/* Status Badge (Teacher only) */}
                 {userType === 1 && (
                   <span
                     className={`flex items-center gap-2 px-4 py-2 mt-2 text-sm rounded-full ${
@@ -664,26 +665,41 @@ const Profile = () => {
                     .sort((a, b) => new Date(b.from) - new Date(a.from)) // ✅ b-a = latest first
                     .map((exp, index) => {
                       // ✅ is_currently_working normalize — "1", 1, true sab handle
-                      const isCurrent = exp.is_currently_working === true || exp.is_currently_working === 1 || exp.is_currently_working === "1";
+                      const isCurrent =
+                        exp.is_currently_working === true ||
+                        exp.is_currently_working === 1 ||
+                        exp.is_currently_working === "1";
                       // ✅ board display
-                      const boardDisplay = exp.board === "Others" ? exp.board_other : exp.board;
+                      const boardDisplay =
+                        exp.board === "Others" ? exp.board_other : exp.board;
 
                       return (
-                        <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                        <div
+                          key={index}
+                          className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition"
+                        >
                           <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center gap-5">
                               <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
                                 🏫
                               </div>
                               <div>
-                                <h3 className="text-xl text-gray-800">{exp.position}</h3>
-                                <p className="text-blue-500 font-medium">{exp.school}</p>
+                                <h3 className="text-xl text-gray-800">
+                                  {exp.position}
+                                </h3>
+                                <p className="text-blue-500 font-medium">
+                                  {exp.school}
+                                </p>
                                 {boardDisplay && (
-                                  <p className="text-xs text-gray-500 mt-0.5">📋 {boardDisplay}</p>
+                                  <p className="text-xs text-gray-500 mt-0.5">
+                                    📋 {boardDisplay}
+                                  </p>
                                 )}
                               </div>
                             </div>
-                            <span className={`px-3 py-1 rounded-lg text-sm ${isCurrent ? "text-green-600 bg-green-50" : "text-blue-500 bg-blue-50"}`}>
+                            <span
+                              className={`px-3 py-1 rounded-lg text-sm ${isCurrent ? "text-green-600 bg-green-50" : "text-blue-500 bg-blue-50"}`}
+                            >
                               {isCurrent ? "Current" : "Past"}
                             </span>
                           </div>
@@ -695,12 +711,19 @@ const Profile = () => {
 
                           {exp.key_responsibilities && (
                             <div className="pl-20">
-                              <p className="text-sm font-medium text-gray-700 mb-2">Key Responsibilities:</p>
+                              <p className="text-sm font-medium text-gray-700 mb-2">
+                                Key Responsibilities:
+                              </p>
                               <ul className="space-y-2">
                                 {Array.isArray(exp.key_responsibilities) &&
                                   exp.key_responsibilities.map((resp, idx) => (
-                                    <li key={idx} className="text-gray-700 text-sm flex items-start">
-                                      <span className="text-blue-500 mr-2">•</span>
+                                    <li
+                                      key={idx}
+                                      className="text-gray-700 text-sm flex items-start"
+                                    >
+                                      <span className="text-blue-500 mr-2">
+                                        •
+                                      </span>
                                       <span>{resp}</span>
                                     </li>
                                   ))}
@@ -715,8 +738,7 @@ const Profile = () => {
                 <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
                   No record found
                 </div>
-              ))
-            }
+              ))}
 
             {/* Education Tab */}
             {activeTab === "education" &&

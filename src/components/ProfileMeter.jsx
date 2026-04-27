@@ -51,10 +51,10 @@ const ProfileMeter = ({ percentage = 0, missingFields = [] }) => {
       {/* Percentage */}
       <div className="text-xs font-semibold">{percentage}%</div>
 
-      <div className="text-xs font-semibold">Profile Completion Meter</div>
+      <div className="text-xs font-semibold">Profile Completion</div>
 
       {/* Tooltip */}
-      {missingFields.length > 0 && (
+      {/* {missingFields.length > 0 && (
         <div className="absolute mb-2 hidden group-hover:block bg-black text-white text-xs rounded px-3 py-2 w-max max-w-[200px] z-10 shadow-lg">
           <div className="font-semibold mb-1">Complete your profile:</div>
           <ul className="list-disc list-inside">
@@ -65,7 +65,7 @@ const ProfileMeter = ({ percentage = 0, missingFields = [] }) => {
             ))}
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
