@@ -121,16 +121,6 @@ const JobCard = () => {
 
   // Async load cities for searchable dropdown
   const loadCities = async (inputValue) => {
-    const now = Date.now();
-
-    // 🔥 1 hour cache
-    if (
-      cityCache.current.data.length > 0 &&
-      now - cityCache.current.timestamp < 60 * 60 * 1000
-    ) {
-      return cityCache.current.data;
-    }
-
     try {
       const res = await getCities({
         search: inputValue,
@@ -142,13 +132,7 @@ const JobCard = () => {
           value: city.id,
           label: city.name,
         })) || [];
-
-      // cache store
-      cityCache.current = {
-        data: options,
-        timestamp: now,
-      };
-
+        
       return options;
     } catch (error) {
       console.error("City API error", error);
