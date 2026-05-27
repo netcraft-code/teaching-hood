@@ -38,6 +38,9 @@ const SignUpPage = () => {
   const [otp, setOtp] = useState("");
   const [otpLoading, setOtpLoading] = useState(false);
 
+  const [resendTimer, setResendTimer] = useState(30);
+  const [canResendOtp, setCanResendOtp] = useState(false);
+
   const USER_FORM_CONFIG = {
     1: {
       firstNameLabel: "First Name",
@@ -121,6 +124,7 @@ const SignUpPage = () => {
     if (!validateForm()) return;
 
     setOtpLoading(true);
+
     try {
       const res = await fetch(
         "https://teaching-hood-backend.netcraftglobal.com/api/send-otp-register",
@@ -132,10 +136,26 @@ const SignUpPage = () => {
       );
 
       const data = await res.json();
-      
+
       if (data.success) {
         setOtpSent(true);
         setSuccess("OTP sent! Please check your email/phone.");
+
+        // Timer Start
+        setCanResendOtp(false);
+        setResendTimer(30);
+
+        const timer = setInterval(() => {
+          setResendTimer((prev) => {
+            if (prev <= 1) {
+              clearInterval(timer);
+              setCanResendOtp(true);
+              return 0;
+            }
+
+            return prev - 1;
+          });
+        }, 1000);
       } else {
         setError(data.message || "Failed to send OTP. Please try again.");
       }
@@ -493,6 +513,26 @@ const SignUpPage = () => {
                     Edit details?
                   </button>
                 </p>
+
+                <div className="flex items-center justify-center mt-3">
+                  {!canResendOtp ? (
+                    <p className="text-sm text-gray-500">
+                      Resend OTP in{" "}
+                      <span className="font-semibold text-blue-600">
+                        {resendTimer}s
+                      </span>
+                    </p>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleSendOtp}
+                      disabled={otpLoading}
+                      className="text-sm font-semibold text-blue-600 hover:underline disabled:opacity-50"
+                    >
+                      {otpLoading ? "Resending..." : "Resend OTP"}
+                    </button>
+                  )}
+                </div>
               </div>
             )}
 
