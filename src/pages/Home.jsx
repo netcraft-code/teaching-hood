@@ -20,8 +20,8 @@ const Home = () => {
       <Header />
       <SimpleBanner />
       <HeroSection />
-      <TeachersSection />
       <JobCarousel />
+      <TeachersSection />
       <SchoolsSection />
       <RecruitersSection />
       <OurMissionSection />

@@ -47,7 +47,7 @@ const AppliedTab = ({
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="grid grid-cols-2 items-center mb-8">
+      <div className="flex flex-wrap justify-between gap-4 mb-8">
         {/* LEFT - Title with Icon */}
         <div className="flex items-center gap-4">
           <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100">
@@ -92,40 +92,83 @@ const AppliedTab = ({
           jobs.map((job) => (
             <div
               key={job.id}
-              className="rounded-xl border-2 border-[#E5E7EB] p-6"
+              className="rounded-xl border-2 border-[#E5E7EB] overflow-hidden"
             >
-              <Link to={`/job/${job.job_post_id}`}>
-                <div className="flex items-center justify-between gap-4">
-                  {/* LEFT SIDE - Job Info */}
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center rounded-xl bg-blue-100 p-2  w-12 h-12">
-                      <img src={schoolIcon} className="w-8 h-8" />
-                    </div>
+              {/* HEADER */}
+              <div className="p-6">
+                <Link to={`/job/${job.job_post_id}`}>
+                  <div className="flex items-center justify-between gap-4">
+                    {/* LEFT SIDE - Job Info */}
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center justify-center rounded-xl bg-blue-100 w-12 h-12">
+                        <img src={schoolIcon} className="w-8 h-8" />
+                      </div>
 
-                    <div className="flex-1">
-                      {/* Title */}
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {getJobTitle(job.job_posted)}
-                      </h3>
+                      <div className="flex-1">
+                        {/* Title */}
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                          {getJobTitle(job.job_posted)}
+                        </h3>
 
-                      {/* Grade & Experience */}
-                      <p className="text-sm text-gray-600 flex items-center">
-                        {job.job_posted.school_name}{" "}
-                        {job?.job_posted?.city_name
-                          ? ", " + job?.job_posted?.city_name
-                          : ""}
-                      </p>
+                        {/* School */}
+                        <p className="text-sm text-gray-600">
+                          {job.job_posted.school_name}
+                          {job?.job_posted?.city_name
+                            ? ", " + job?.job_posted?.city_name
+                            : ""}
+                        </p>
 
-                      {/* Salary & Applicants */}
-                      <div className="flex items-center gap-1 text-sm text-gray-600">
-                        <span className="font-regular text-gray-900">
-                          Applied on: {getTimeAgo(job.created_at)}
-                        </span>
+                        {/* Applied Date */}
+                        <div className="flex items-center gap-1 text-sm text-gray-600 mt-1">
+                          <span className="text-gray-900">
+                            Applied on: {getTimeAgo(job.created_at)}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
+                </Link>
+              </div>
+
+              {/* ACCORDION */}
+              {/* <details className="border-t border-gray-200">
+                <summary className="cursor-pointer list-none px-6 py-4 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition">
+                  <span className="font-medium text-gray-800">
+                    View Candidate Details
+                  </span>
+
+                  <span className="text-sm text-blue-600">Open</span>
+                </summary>
+
+                <div className="px-6 py-5 bg-white">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-gray-500 mb-1">
+                        Candidate Name
+                      </p>
+                      <h4 className="font-semibold text-gray-900">
+                        {job?.user?.name || "N/A"}
+                      </h4>
+                    </div>
+
+                    <div>
+                      <p className="text-sm text-gray-500 mb-1">Experience</p>
+                      <h4 className="font-semibold text-gray-900">
+                        {job?.user?.experience || "0"} Years
+                      </h4>
+                    </div>
+                  </div>
+
+                  <div className="mt-5">
+                    <Link
+                      to={`/view-profile/${job?.user?.id}`}
+                      className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition"
+                    >
+                      View Profile
+                    </Link>
+                  </div>
                 </div>
-              </Link>
+              </details> */}
             </div>
           ))
         )}

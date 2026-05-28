@@ -81,7 +81,7 @@ const Footer = () => {
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 xl:gap-[5rem]">
             {/* CANDIDATES */}
             <div>
-              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">
+              <h4 className="text-white font-semibold md:mb-4 mb-2 mt-0 text-[18px] leading-[27px] tracking-[0]">
                 Candidates
               </h4>
               <ul className="space-y-3 text-xs">
@@ -91,9 +91,9 @@ const Footer = () => {
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   <a href="/signup">Create Profile</a>
                 </li>
-                <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
+                {/* <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">
                   <a href="/profile">Track Application</a>
-                </li>
+                </li> */}
                 <button
                     onClick={() => navigate(routes.NEWSLETTER)}
                     className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]"
@@ -108,7 +108,7 @@ const Footer = () => {
 
             {/* SCHOOLS */}
             <div>
-              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">
+              <h4 className="text-white font-semibold md:mb-4 mb-2 mt-0 text-[18px] leading-[27px] tracking-[0]">
                 Schools
               </h4>
               <ul className="space-y-3 text-xs">
@@ -134,8 +134,8 @@ const Footer = () => {
 
             {/* RECRUITER */}
             <div>
-              <h4 className="text-white font-semibold mb-4 text-[18px] leading-[27px] tracking-[0]">
-                Recruiter
+              <h4 className="text-white font-semibold md:mb-4 md:mt-0 mt-2 mb-2 text-[18px] leading-[27px] tracking-[0]">
+                Recruiters
               </h4>
               <ul className="space-y-3 text-xs">
                 <li className="hover:text-white cursor-pointer font-normal whitespace-nowrap text-[16px] leading-[24px] tracking-[0] text-[#D1D5DC]">

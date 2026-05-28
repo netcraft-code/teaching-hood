@@ -9,7 +9,7 @@ import {
 } from "../api/auth";
 import AsyncSelect from "react-select/async";
 import Select from "react-select";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { postJobIcons } from "../assets/icons/postJobIcons";
 import Header from "../components/Header";
 
@@ -200,7 +200,8 @@ const PostJob = () => {
         status, // 0 = draft, 1 = publish
       };
 
-      formData.board = formData.board === "Others" ? formData.board_other : formData.board;
+      formData.board =
+        formData.board === "Others" ? formData.board_other : formData.board;
 
       const response = await postJob(payload);
 
@@ -325,13 +326,35 @@ const PostJob = () => {
 
                       <select
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
-                        value={formData.board === "CBSE" || formData.board === "ISCE" || formData.board === "ISC" || formData.board === "NIOS" || formData.board === "BSB" || formData.board === "IB" || formData.board === "CAIE" ? formData.board : (formData.board ? "Others" : "")}
+                        value={
+                          formData.board === "CBSE" ||
+                          formData.board === "ISCE" ||
+                          formData.board === "ISC" ||
+                          formData.board === "NIOS" ||
+                          formData.board === "BSB" ||
+                          formData.board === "IB" ||
+                          formData.board === "CAIE"
+                            ? formData.board
+                            : formData.board
+                              ? "Others"
+                              : ""
+                        }
                         onChange={handleInputChange}
                         name="board"
                       >
                         <option value="">Select Board</option>
-                        {["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE"].map((b) => (
-                          <option key={b} value={b}>{b}</option>
+                        {[
+                          "CBSE",
+                          "ISCE",
+                          "ISC",
+                          "NIOS",
+                          "BSB",
+                          "IB",
+                          "CAIE",
+                        ].map((b) => (
+                          <option key={b} value={b}>
+                            {b}
+                          </option>
                         ))}
                         <option value="Others">Others</option>
                       </select>
@@ -414,15 +437,23 @@ const PostJob = () => {
 
                       <Select
                         options={[
-                          ...subjects.map((s) => ({ value: s.id, label: s.name })),
+                          ...subjects.map((s) => ({
+                            value: s.id,
+                            label: s.name,
+                          })),
                           { value: "other", label: "Other" },
                         ]}
                         value={
                           formData.subject_id === "other"
                             ? { value: "other", label: "Other" }
                             : subjects.find((s) => s.id === formData.subject_id)
-                            ? { value: formData.subject_id, label: subjects.find((s) => s.id === formData.subject_id).name }
-                            : null
+                              ? {
+                                  value: formData.subject_id,
+                                  label: subjects.find(
+                                    (s) => s.id === formData.subject_id,
+                                  ).name,
+                                }
+                              : null
                         }
                         onChange={(selected) => {
                           setFormData((prev) => ({
@@ -442,7 +473,10 @@ const PostJob = () => {
                           type="text"
                           value={formData.subject_id_other || ""}
                           onChange={(e) =>
-                            setFormData((prev) => ({ ...prev, subject_id_other: e.target.value }))
+                            setFormData((prev) => ({
+                              ...prev,
+                              subject_id_other: e.target.value,
+                            }))
                           }
                           placeholder="Enter subject name"
                           className="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
@@ -450,7 +484,9 @@ const PostJob = () => {
                       )}
 
                       {errors.subject_id && (
-                        <p className="text-sm text-red-500 mt-1">{errors.subject_id}</p>
+                        <p className="text-sm text-red-500 mt-1">
+                          {errors.subject_id}
+                        </p>
                       )}
                     </div>
                   )}
@@ -572,9 +608,7 @@ const PostJob = () => {
                     className="w-5 h-5 text-green-600"
                   />
                 </div>
-                <h2 className="text-xl font-bold text-gray-800">
-                  Job Details
-                </h2>
+                <h2 className="text-xl font-bold text-gray-800">Job Details</h2>
               </div>
 
               <div className="space-y-5">
@@ -591,20 +625,29 @@ const PostJob = () => {
 
                   {(() => {
                     const SALARY_RANGES = [
-                      { label: "Upto 10,000",          min: "0",       max: "10000"  },
-                      { label: "10,000 - 20,000",      min: "10000",   max: "20000"  },
-                      { label: "20,000 - 30,000",      min: "20000",   max: "30000"  },
-                      { label: "30,000 - 40,000",      min: "30000",   max: "40000"  },
-                      { label: "40,000 - 50,000",      min: "40000",   max: "50000"  },
-                      { label: "50,000 - 75,000",      min: "50000",   max: "75000"  },
-                      { label: "75,000 - 1,00,000",    min: "75000",   max: "100000" },
-                      { label: "1,00,000 - 1,50,000",  min: "100000",  max: "150000" },
-                      { label: "Above 1,50,000",       min: "150000",  max: "0"      },
+                      { label: "Upto 10,000", min: "0", max: "10000" },
+                      { label: "10,000 - 20,000", min: "10000", max: "20000" },
+                      { label: "20,000 - 30,000", min: "20000", max: "30000" },
+                      { label: "30,000 - 40,000", min: "30000", max: "40000" },
+                      { label: "40,000 - 50,000", min: "40000", max: "50000" },
+                      { label: "50,000 - 75,000", min: "50000", max: "75000" },
+                      {
+                        label: "75,000 - 1,00,000",
+                        min: "75000",
+                        max: "100000",
+                      },
+                      {
+                        label: "1,00,000 - 1,50,000",
+                        min: "100000",
+                        max: "150000",
+                      },
+                      { label: "Above 1,50,000", min: "150000", max: "0" },
                     ];
 
-                    const selectedValue = formData.min_salary && formData.max_salary
-                      ? `${formData.min_salary}-${formData.max_salary}`
-                      : "";
+                    const selectedValue =
+                      formData.min_salary && formData.max_salary
+                        ? `${formData.min_salary}-${formData.max_salary}`
+                        : "";
 
                     return (
                       <div className="w-full">
@@ -613,21 +656,40 @@ const PostJob = () => {
                           onChange={(e) => {
                             const val = e.target.value;
                             if (!val) {
-                              handleInputChange({ target: { name: "min_salary", value: "" } });
-                              handleInputChange({ target: { name: "max_salary", value: "" } });
+                              handleInputChange({
+                                target: { name: "min_salary", value: "" },
+                              });
+                              handleInputChange({
+                                target: { name: "max_salary", value: "" },
+                              });
                               return;
                             }
-                            const found = SALARY_RANGES.find((r) => `${r.min}-${r.max}` === val);
+                            const found = SALARY_RANGES.find(
+                              (r) => `${r.min}-${r.max}` === val,
+                            );
                             if (found) {
-                              handleInputChange({ target: { name: "min_salary", value: found.min } });
-                              handleInputChange({ target: { name: "max_salary", value: found.max } });
+                              handleInputChange({
+                                target: {
+                                  name: "min_salary",
+                                  value: found.min,
+                                },
+                              });
+                              handleInputChange({
+                                target: {
+                                  name: "max_salary",
+                                  value: found.max,
+                                },
+                              });
                             }
                           }}
                           className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                         >
                           <option value="">Select Salary Range</option>
                           {SALARY_RANGES.map((r) => (
-                            <option key={`${r.min}-${r.max}`} value={`${r.min}-${r.max}`}>
+                            <option
+                              key={`${r.min}-${r.max}`}
+                              value={`${r.min}-${r.max}`}
+                            >
                               {r.label}
                             </option>
                           ))}
@@ -683,10 +745,7 @@ const PostJob = () => {
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
                           <div className="bg-orange-50 flex items-center justify-center w-10 h-10 rounded-full">
-                            <img
-                              src={postJobIcons.food}
-                              className="w-5 h-5"
-                            />
+                            <img src={postJobIcons.food} className="w-5 h-5" />
                           </div>
                           <span className="font-medium text-gray-800">
                             Food Provided
@@ -909,10 +968,7 @@ const PostJob = () => {
             <div className="bg-blue-50 rounded-3xl p-6 top-24">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-10 h-10 bg-white backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <img
-                    src={postJobIcons.tipsForSuccess}
-                    className="w-5 h-5"
-                  />
+                  <img src={postJobIcons.tipsForSuccess} className="w-5 h-5" />
                 </div>
                 <h3 className="font-medium">Tips for Success</h3>
               </div>
@@ -996,10 +1052,11 @@ const PostJob = () => {
               <p className="text-sm font-normal text-gray-600 mb-4">
                 Our team is here to help you find the perfect candidate.
               </p>
-
-              <button className="w-full px-4 py-3 bg-green-100 text-green-400 rounded-xl hover:bg-green-500 hover:text-white transition-all duration-200 font-medium">
-                Contact Support
-              </button>
+              <Link to="/contact-us">
+                <button className="w-full px-4 py-3 bg-green-100 text-green-400 rounded-xl hover:bg-green-500 hover:text-white transition-all duration-200 font-medium">
+                  Contact Support
+                </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -84,7 +84,7 @@ const OurMissionSection = () => {
               </div>
 
               {/* Community Badge */}
-              <div className="absolute bottom-1 -left-2 md:-left-6 transform -translate-y-1/2 -translate-x-1/4 bg-white rounded-xl shadow-lg p-4 flex items-center space-x-3 z-10">
+              <div className="absolute bottom-1 left-9 md:-left-6 transform -translate-y-1/2 -translate-x-1/4 bg-white rounded-xl shadow-lg p-4 flex items-center space-x-3 z-10">
                 <div
                   className={`flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg shadow-sm flex items-center justify-center border border-gray-100`}
                 >

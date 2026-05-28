@@ -20,7 +20,7 @@ const JobView = ({ jobData }) => {
 
   const formatSalary = (min, max) => {
     if (min === null || max === null)
-      return "Salary: As per industry standards";
+      return "As per industry standards";
 
     const SALARY_RANGES = [
       { label: "Upto ₹10,000", min: 0, max: 10000 },
@@ -172,9 +172,9 @@ const JobView = ({ jobData }) => {
 
                 <div className="col-span-7 ml-8">
                   <div className="flex justify-between">
-                    <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 inline">
+                    {/* <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 inline">
                       {getJobTitle(job)}
-                    </div>
+                    </div> */}
 
                     {/* <div className="inline text-base text-green-600 bg-green-100 h-6 px-2 rounded-full">
                       <img
@@ -193,14 +193,13 @@ const JobView = ({ jobData }) => {
                       <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 leading-tight flex-1">
                         {getJobTitle(job)}
                       </div>
-                      {/* Verified badge — always right, never wraps */}
-                      <div className="flex items-center gap-1 text-xs sm:text-sm text-green-600 bg-green-100 py-1 px-3 rounded-full whitespace-nowrap shrink-0 self-start mt-1">
+                      {/* <div className="flex items-center gap-1 text-xs sm:text-sm text-green-600 bg-green-100 py-1 px-3 rounded-full whitespace-nowrap shrink-0 self-start mt-1">
                         <img
                           src={jobViewIcons.verified}
                           className="w-3 h-3 sm:w-4 sm:h-4"
                         />
                         Verified
-                      </div>
+                      </div> */}
                     </div>
 
                     {/* School name */}
@@ -252,7 +251,7 @@ const JobView = ({ jobData }) => {
                 </div>
 
                 <div className="col-span-8 flex items-center w-full whitespace-nowrap">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
+                  <div className="flex gap-8 flex-wrap w-full">
                     <div className="flex items-center gap-2">
                       <div className="h-8 w-8 flex items-center justify-center bg-blue-100 rounded-xl">
                         <img src={jobViewIcons.location} className="w-4 h-4" />
@@ -261,18 +260,6 @@ const JobView = ({ jobData }) => {
                         <div className="text-base text-gray-400">Location</div>
                         <div className="text-base text-gray-700">
                           {job.city_name}
-                        </div>
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <div className="h-8 w-8 flex items-center justify-center bg-green-100 rounded-xl">
-                        <img src={jobViewIcons.jobtype} className="w-4 h-4" />
-                      </div>
-                      <span>
-                        <div className="text-base text-gray-400">Job type</div>
-                        <div className="text-base text-gray-700">
-                          {job.job_type}
                         </div>
                       </span>
                     </div>
@@ -305,50 +292,126 @@ const JobView = ({ jobData }) => {
                         </div>
                       </span>
                     </div>
+
+                    {/* <div style={styles.metaRow}> */}
+                    {/* Food */}
+                    <div className="flex items-center gap-2">
+                      <span
+                        style={{
+                          ...styles.metaItem,
+                          color: job.food == 1 ? "#16a34a" : "#9ca3af", // green / gray
+                        }}
+                      >
+                        <div className="h-8 w-8 flex items-center justify-center bg-yellow-100 rounded-xl">
+                          <span style={{ opacity: job.food == 1 ? 1 : 0.5 }}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="grey"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M6 2v8"></path>
+                              <path d="M4 2v4"></path>
+                              <path d="M8 2v4"></path>
+                              <path d="M6 10v12"></path>
+
+                              <path d="M16 2a3 3 0 0 1 3 3c0 2-1.5 3.5-3 4v13"></path>
+                            </svg>
+                          </span>
+                        </div>
+                        <span>
+                          <div className="text-base text-gray-400">Food</div>
+                          <div className="text-base text-gray-700">
+                            {job.food == 1 ? "Available" : "N/A"}
+                          </div>
+                        </span>
+                        {/* <span style={styles.metaText}>
+                            Food {job.food == 1 ? "Available" : "not available"}
+                          </span> */}
+                      </span>
+                    </div>
+
+                    {/* Accommodation */}
+                    <div className="flex items-center gap-2">
+                      <span
+                        style={{
+                          ...styles.metaItem,
+                          color: job.accommodation == 1 ? "#2563eb" : "#9ca3af", // blue / gray
+                        }}
+                      >
+                        <div className="h-8 w-8 flex items-center justify-center bg-yellow-100 rounded-xl">
+                          <span
+                            style={{
+                              opacity: job.accommodation == 1 ? 1 : 0.5,
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="grey"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M3 11V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"></path>
+                              <path d="M13 9h4a4 4 0 0 1 4 4v2H3v-2a4 4 0 0 1 4-4h6z"></path>
+                              <path d="M3 15v4"></path>
+                              <path d="M21 15v4"></path>
+                            </svg>
+                          </span>
+                        </div>
+                        <span>
+                          <div className="text-base text-gray-400">
+                            Accommodation
+                          </div>
+                          <div className="text-base text-gray-700">
+                            {job.accommodation == 1 ? "Available" : "N/A"}
+                          </div>
+                        </span>
+                        {/* <span style={styles.metaText}>
+                          Accommodation{" "}
+                          {job.accommodation == 1
+                            ? "Available"
+                            : "not available"}
+                        </span> */}
+                      </span>
+                    </div>
+                    {/* </div> */}
                   </div>
-                </div>
-
-                <div style={styles.metaRow}>
-                  {/* Food */}
-                  <span
-                    style={{
-                      ...styles.metaItem,
-                      color: job.food == 1 ? "#16a34a" : "#9ca3af", // green / gray
-                    }}
-                  >
-                    <span style={{ opacity: job.food == 1 ? 1 : 0.5 }}>🍽️</span>
-                    <span style={styles.metaText}>
-                      Food {job.food == 1 ? "Available" : "Not Available"}
-                    </span>
-                  </span>
-
-                  {/* Accommodation */}
-                  <span
-                    style={{
-                      ...styles.metaItem,
-                      color: job.accommodation == 1 ? "#2563eb" : "#9ca3af", // blue / gray
-                    }}
-                  >
-                    <span style={{ opacity: job.accommodation == 1 ? 1 : 0.5 }}>
-                      🏠
-                    </span>
-                    <span style={styles.metaText}>
-                      Stay{" "}
-                      {job.accommodation == 1 ? "Available" : "Not Available"}
-                    </span>
-                  </span>
                 </div>
               </div>
 
               {/* Job Description */}
               <div className="rounded-3xl shadow-lg p-6 mt-8">
                 <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 bg-gradient-to-b from-[#1A73E8] to-[#34A853] rounded-lg flex items-center justify-center">
-                    <img
-                      src={jobViewIcons.jobDescription}
-                      alt="Description"
-                      className="w-6 h-6"
-                    />
+                  <div className="p-[6px] rounded-xl bg-green-500 text-white h-8 w-8">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      class="w-5 h-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5 
+                          5.015 5 3 6.567 3 8.5v10C3 16.567 5.015 15 
+                          7.5 15c1.746 0 3.332.477 4.5 1.253m0-10.506
+                          C13.168 5.477 14.754 5 16.5 5c2.485 0 4.5 
+                          1.567 4.5 3.5v10c0-1.933-2.015-3.5-4.5-3.5
+                          -1.746 0-3.332.477-4.5 1.253"
+                      />
+                    </svg>
                   </div>
                   <h2 className="text-xl font-medium text-gray-900">
                     Job Description
@@ -364,11 +427,11 @@ const JobView = ({ jobData }) => {
               {/* Job Requirement */}
               <div className="rounded-3xl shadow-lg p-6 mt-8">
                 <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 bg-gradient-to-b from-[#F6C23E] to-[#EA4335] rounded-lg flex items-center justify-center">
+                  <div className="p-[6px] rounded-xl bg-green-500 text-white h-8 w-8">
                     <img
                       src={jobViewIcons.requirement}
                       alt="Description"
-                      className="w-6 h-6"
+                      className="w-5 h-5"
                     />
                   </div>
                   <h2 className="text-xl font-medium text-gray-900">
@@ -401,7 +464,7 @@ const JobView = ({ jobData }) => {
             </div>
 
             {/* Right Section */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3 col-span-5">
               {/* Salary Card */}
               <div className="gap-4 w-full">
                 <div className="shadow-lg p-6 rounded-xl rounded-xl">
@@ -592,7 +655,9 @@ const styles = {
   metaRow: {
     display: "flex",
     flexDirection: "row",
-    gap: 20,
+    gap: 10,
+    flexWrap: "wrap",
+    marginLeft: "5px",
   },
   metaItem: {
     display: "flex",

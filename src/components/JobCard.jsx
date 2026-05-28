@@ -33,7 +33,7 @@ const JobCard = () => {
   const cityParam = searchParams.get("city");
   const stateParam = searchParams.get("state_id");
 
-  const BOARDS = ["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE"];
+  const BOARDS = ["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE", "State Board"];
 
   const [selectedBoard, setSelectedBoard] = useState("all");
 
@@ -887,13 +887,13 @@ const JobCard = () => {
                                   {getJobTitle(job)}
                                 </h3>
 
-                                <span className="px-2 py-1 bg-green-50 text-green-700 text-xs flex items-center gap-1 font-medium rounded-full">
+                                {/* <span className="px-2 py-1 bg-green-50 text-green-700 text-xs flex items-center gap-1 font-medium rounded-full">
                                   <img
                                     src={findJobIcons.verified}
                                     className="w-4 h-4"
                                   />
                                   Verified
-                                </span>
+                                </span> */}
                               </div>
 
                               {/* School Name */}

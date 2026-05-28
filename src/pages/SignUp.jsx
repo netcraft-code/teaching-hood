@@ -63,7 +63,8 @@ const SignUpPage = () => {
       cityPlaceholder: "Enter city name",
       showCity: true,
       tabColor: "#28C76F",
-      title: "Register today to post free jobs and receive quality applications",
+      title:
+        "Register today to post free jobs and receive quality applications",
     },
     3: {
       firstNameLabel: "Company Name",
@@ -76,7 +77,8 @@ const SignUpPage = () => {
       cityPlaceholder: "Enter city name",
       showCity: true,
       tabColor: "#FFC107",
-      title: "Register today to post free jobs and receive quality applications",
+      title:
+        "Register today to post free jobs and receive quality applications",
     },
   };
 
@@ -132,7 +134,7 @@ const SignUpPage = () => {
       );
 
       const data = await res.json();
-      
+
       if (data.success) {
         setOtpSent(true);
         setSuccess("OTP sent! Please check your email/phone.");
@@ -228,12 +230,17 @@ const SignUpPage = () => {
               </button>
             </div>
             <div className="flex items-center justify-center mx-auto">
-              <p className="text-2xl font-semibold text-center leading-[33px] text-white" style={{ textShadow: `
+              <p
+                className="text-2xl font-semibold text-center leading-[33px] text-white"
+                style={{
+                  textShadow: `
                                 0px 0px 0px rgba(0, 0, 0, 0.10),
                                 3px 3px 3px rgba(0, 0, 0, 0.10),
                                 3px 4px 4px rgba(0, 0, 0, 0.10),
                                 3px 4px 4px rgba(0, 0, 0, 0.10)
-                            ` }}>
+                            `,
+                }}
+              >
                 {currentConfig.title}
               </p>
             </div>
@@ -454,13 +461,17 @@ const SignUpPage = () => {
               />
               <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
                 I agree to the{" "}
-                <a href="#" className="text-blue-500 hover:underline">
+                <a
+                  onClick={() => navigate(routes.TERMS)}
+                  href="#"
+                  className="text-blue-500 hover:underline"
+                >
                   Terms of Service
                 </a>{" "}
-                and{" "}
+                {/* and{" "}
                 <a href="#" className="text-blue-500 hover:underline">
                   Privacy Policy
-                </a>
+                </a> */}
               </label>
             </div>
 
@@ -549,13 +560,13 @@ const SignUpPage = () => {
               Terms
             </button>
             <span>•</span>
-            <button
+            {/* <button
               onClick={() => navigate(routes.PRIVACY)}
               className="hover:text-blue-600"
             >
               Privacy
             </button>
-            <span>•</span>
+            <span>•</span> */}
             <button
               onClick={() => navigate(routes.HELP)}
               className="hover:text-blue-600"

@@ -307,12 +307,13 @@ const HeroSection = () => {
                     />
 
                     <AsyncSelect
-                      cacheOptions
-                      defaultOptions
+                      // cacheOptions
+                      // defaultOptions
                       loadOptions={loadCities}
                       value={location}
                       onChange={(option) => setLocation(option)}
-                      placeholder="Location (e.g., Agra)"
+                      // placeholder="Location (e.g., Agra)"
+                      placeholder="Type your city here"
                       menuPosition="fixed"
                       styles={{
                         control: (provided) => ({

@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronRight, ChevronLeft, MapPin, Briefcase, Clock, Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import {
-  getProfile,
-} from "../api/auth";
+  ChevronRight,
+  ChevronLeft,
+  MapPin,
+  Briefcase,
+  Clock,
+  Star,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { getProfile } from "../api/auth";
+import { findJobIcons } from "./../assets/icons/findJobIcons";
 
 const SALARY_RANGES = [
   { label: "Upto ₹10,000", min: 0, max: 10000 },
@@ -18,16 +24,16 @@ const SALARY_RANGES = [
 ];
 
 const formatSalary = (min, max) => {
-  if (min === null || max === null) return "As per industry standards";
+  if (min === null || max === null) return "₹ Salary as per industry standards";
   const found = SALARY_RANGES.find(
-    (r) => r.min === Number(min) && r.max === Number(max)
+    (r) => r.min === Number(min) && r.max === Number(max),
   );
   return found ? found.label : `₹${min} - ₹${max}`;
 };
 
 const getTimeAgo = (dateString) => {
   const diffDays = Math.ceil(
-    Math.abs(new Date() - new Date(dateString)) / (1000 * 60 * 60 * 24)
+    Math.abs(new Date() - new Date(dateString)) / (1000 * 60 * 60 * 24),
   );
   if (diffDays === 0) return "Today";
   if (diffDays === 1) return "1d ago";
@@ -73,20 +79,18 @@ const JobCarousel = () => {
 
   const getCityFromProfile = (profile) => {
     // 1. preferred_location (priority)
-    const preferred =
-      profile?.additional_info?.preferred_location;
+    const preferred = profile?.additional_info?.preferred_location;
 
     if (preferred) return preferred;
 
     // 2. fallback → addresses
-    const addressCity =
-      profile?.addresses?.city;
+    const addressCity = profile?.addresses?.city;
 
     if (addressCity) return addressCity;
 
     return null;
   };
-  
+
   useEffect(() => {
     if (!profile || profile.user_type != 1) return;
 
@@ -227,9 +231,7 @@ const JobCard = ({ job, onClick }) => {
     <div style={styles.card}>
       {/* Top: icon + title + like */}
       <div style={styles.cardTop}>
-        <div style={styles.iconWrap}>
-          🏫
-        </div>
+        <div style={styles.iconWrap}>🏫</div>
         <div style={styles.cardTitleBlock}>
           <p style={styles.cardTitle}>{getJobTitle(job)}</p>
           <p style={styles.cardSchool}>{job.school_name}</p>
@@ -237,14 +239,26 @@ const JobCard = ({ job, onClick }) => {
       </div>
 
       {/* Board tag */}
-      {job.board && (
-        <span style={styles.boardBadge}>{job.board}</span>
-      )}
+      {job.board ? <span style={styles.boardBadge}>{job.board}</span> : <span>&nbsp;</span>}
 
       {/* Meta row */}
       <div style={styles.metaRow}>
         <span style={styles.metaItem}>
-          <MapPin size={12} style={{ flexShrink: 0 }} />
+          <img
+            src={findJobIcons.findJobLocation}
+            className="w-4 h-4 flex-shrink-0"
+          />
+          {/* <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="grey"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M12 2C8.13401 2 5 5.13401 5 9C5 13.25 12 22 12 22C12 22 19 13.25 19 9C19 5.13401 15.866 2 12 2Z" />
+            <circle cx="12" cy="9" r="3" fill="white" />
+          </svg> */}
           <span style={styles.metaText}>{location}</span>
         </span>
 
@@ -255,9 +269,28 @@ const JobCard = ({ job, onClick }) => {
             color: job.food == 1 ? "#16a34a" : "#9ca3af", // green / gray
           }}
         >
-          <span style={{ opacity: job.food == 1 ? 1 : 0.5 }}>🍽️</span>
+          <span style={{ opacity: job.food == 1 ? 1 : 0.5 }}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="grey"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M6 2v8"></path>
+              <path d="M4 2v4"></path>
+              <path d="M8 2v4"></path>
+              <path d="M6 10v12"></path>
+
+              <path d="M16 2a3 3 0 0 1 3 3c0 2-1.5 3.5-3 4v13"></path>
+            </svg>
+          </span>
           <span style={styles.metaText}>
-            Food {job.food == 1 ? "Available" : "Not Available"}
+            Food {job.food == 1 ? "Available" : "not available"}
           </span>
         </span>
 
@@ -268,9 +301,59 @@ const JobCard = ({ job, onClick }) => {
             color: job.accommodation == 1 ? "#2563eb" : "#9ca3af", // blue / gray
           }}
         >
-          <span style={{ opacity: job.accommodation == 1 ? 1 : 0.5 }}>🏠</span>
+          <span style={{ opacity: job.accommodation == 1 ? 1 : 0.5 }}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="grey"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 11V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"></path>
+              <path d="M13 9h4a4 4 0 0 1 4 4v2H3v-2a4 4 0 0 1 4-4h6z"></path>
+              <path d="M3 15v4"></path>
+              <path d="M21 15v4"></path>
+            </svg>
+          </span>
           <span style={styles.metaText}>
-            Stay {job.accommodation == 1 ? "Available" : "Not Available"}
+            Accommodation{" "}
+            {job.accommodation == 1 ? "Available" : "not available"}
+          </span>
+        </span>
+
+        <span
+          style={{
+            ...styles.metaItem,
+          }}
+        >
+          <span style={{ opacity: job.accommodation == 1 ? 1 : 0.5 }}>
+            <img
+              src={findJobIcons.totalExperience}
+              className="w-4 h-4 flex-shrink-0"
+            />
+            {/* <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="grey"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2H10a2 2 0 0 0-2 2v16"></path>
+            </svg> */}
+          </span>
+          <span style={styles.metaText}>
+            {/* <span style={styles.expTag}> */}
+            {job.experience_required || 0} yr Experience
+            {/* </span> */}
           </span>
         </span>
       </div>
@@ -280,19 +363,14 @@ const JobCard = ({ job, onClick }) => {
         <span style={styles.salary}>
           {formatSalary(job.min_salary, job.max_salary)}
         </span>
-        <span style={styles.expTag}>
-          {job.experience_required || 0} yr exp
-        </span>
       </div>
 
       {/* Applicants */}
       <div style={styles.applicantsRow}>
         <span style={styles.viewAllBtn} onClick={onClick}>
-          View More
+          Know More
         </span>
-        {job.is_applied && (
-          <span style={styles.appliedBadge}>Applied</span>
-        )}
+        {job.is_applied && <span style={styles.appliedBadge}>Applied</span>}
       </div>
     </div>
   );
@@ -300,7 +378,7 @@ const JobCard = ({ job, onClick }) => {
 
 const styles = {
   wrapper: {
-    padding: "20px 16px 8px",
+    padding: "20px 30px 8px",
     background: "transparent",
   },
   header: {
@@ -461,12 +539,12 @@ const styles = {
     alignItems: "center",
     justifyContent: "space-between",
     gap: 6,
-    borderTop: "1px solid #f3f4f6",
-    paddingTop: 8,
+    borderBottom: "1px solid #f3f4f6",
+    paddingBottom: 8,
   },
   salary: {
-    fontSize: 12,
-    fontWeight: 700,
+    fontSize: 14,
+    // fontWeight: 700,
     color: "#111827",
     lineHeight: 1.2,
   },

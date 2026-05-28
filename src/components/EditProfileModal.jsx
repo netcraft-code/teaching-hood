@@ -166,6 +166,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
             "BSB",
             "IB",
             "CAIE",
+            "State Board",
           ];
 
           setForm({
@@ -467,9 +468,9 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
       if (!form.subject) e.subject = "Subject required";
     }
 
-    if (userType == 1 || userType == 3) {
-      if (!form.position) e.position = "Position is required";
-    }
+    // if (userType == 1 || userType == 3) {
+    //   if (!form.position) e.position = "Position is required";
+    // }
 
     // Address
     if (!form.address) e.address = "Address required";
@@ -477,7 +478,6 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
     if (!form.state) e.state = "State required";
     if (!form.pincode) e.pincode = "Pincode required";
     if (!form.country) e.country = "Country required";
-
     setErrors(e);
 
     return Object.keys(e).length === 0;
@@ -916,7 +916,8 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                         form.board === "NIOS" ||
                         form.board === "BSB" ||
                         form.board === "IB" ||
-                        form.board === "CAIE"
+                        form.board === "CAIE" ||
+                        form.board === "State Board"
                           ? form.board
                           : form.board
                             ? "Others"
@@ -933,13 +934,20 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                       }}
                     >
                       <option value="">Select Board</option>
-                      {["CBSE", "ISCE", "ISC", "NIOS", "BSB", "IB", "CAIE"].map(
-                        (b) => (
-                          <option key={b} value={b}>
-                            {b}
-                          </option>
-                        ),
-                      )}
+                      {[
+                        "CBSE",
+                        "ISCE",
+                        "ISC",
+                        "NIOS",
+                        "BSB",
+                        "IB",
+                        "CAIE",
+                        "State Board",
+                      ].map((b) => (
+                        <option key={b} value={b}>
+                          {b}
+                        </option>
+                      ))}
                       <option value="Others">Others</option>
                     </select>
 
@@ -1287,7 +1295,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 </Grid>
 
                 {/* Min-Max Salary */}
-                <Field label="Expected Salary Range (per year)" required>
+                <Field label="Expected Salary Range (per month)" required>
                   {(() => {
                     const SALARY_RANGES = [
                       { label: "Upto 10,000", min: "0", max: "10000" },
@@ -1424,7 +1432,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
 
           {userType == 1 && (
             <>
-              <Section title="Experience" icon="">
+              <Section title="Experience" icon="" required="true">
                 {form.additional_info.experience.map((exp, index) => (
                   <div
                     key={index}
@@ -1483,6 +1491,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                               "BSB",
                               "IB",
                               "CAIE",
+                              "State Board",
                             ].map((b) => (
                               <option key={b} value={b}>
                                 {b}
@@ -1643,7 +1652,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                 ))}
               </Section>
 
-              <Section title="Education" icon="">
+              <Section title="Education" icon="" required={true}>
                 {form.additional_info.education.map((edu, index) => (
                   <div
                     key={index}
@@ -1808,7 +1817,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </Section>
 
               <div className="my-8">
-                <Field label="Preferred Location" required></Field>
+                <Field label="Preferred Location"></Field>
 
                 {/* Selected Chips */}
                 <div className="flex flex-wrap gap-2">
@@ -1886,20 +1895,17 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </Section>
             </>
           )}
-          
-          {
-            Object.keys(errors).length > 0 &&
+
+          {Object.keys(errors).length > 0 &&
             Object.values(errors).some(
               (val) =>
-                val &&
-                (typeof val === "string" ? val.trim().length > 0 : true)
+                val && (typeof val === "string" ? val.trim().length > 0 : true),
             ) && (
               <ErrorText error="There are some missing fields or validation failed, please check." />
-            )
-          }
+            )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3 mt-8 pt-6 border-t border-gray-200">
+          <div className="flex gap-3 mt-2 pt-6 border-t border-gray-200">
             <button
               type="button"
               onClick={onClose}
@@ -2021,11 +2027,14 @@ const Header = ({ title, onClose }) => (
   </div>
 );
 
-const Section = ({ title, icon, children }) => (
+const Section = ({ title, icon, children, required }) => (
   <div className="mb-8">
     <div className="flex items-center gap-2 mb-4 pb-2 border-b-2 border-gray-100">
       {icon && <span className="text-xl">{icon}</span>}
-      <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+      <h3 className="text-lg font-semibold text-gray-800">
+        {title}
+        {required && <span className="text-red-500">*</span>}
+      </h3>
     </div>
     <div className="space-y-4">{children}</div>
   </div>

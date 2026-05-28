@@ -6,6 +6,7 @@ import quickResponse1 from "./quick-response1.svg";
 import sendMessage from "./send-message.svg";
 import twitter from "./twitter.svg";
 import workingHours from "./working-hours.svg";
+import linkedIn from "./linkedin.svg";
 
 export const contactUsIcons = {
     faqIcon,
@@ -15,5 +16,6 @@ export const contactUsIcons = {
     quickResponse1,
     sendMessage,
     twitter,
-    workingHours
+    workingHours,
+    linkedIn
 };
