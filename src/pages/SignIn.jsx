@@ -17,7 +17,7 @@ const routes = {
 
 const SignInPage = () => {
   const OTP_VALIDITY = 600; // 10 minutes in seconds
-  const RESEND_DELAY = 120; // 2 minutes in seconds
+  const RESEND_DELAY = 30; // 30 seconds in seconds
 
   const navigate = useNavigate();
 

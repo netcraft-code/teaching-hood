@@ -105,7 +105,7 @@ const Header = () => {
               if (item.path === "/post-job" && userType === 1) {
                 return null;
               }
-
+              
               if (
                 item.path === "/find-job" &&
                 (userType === 2 || userType === 3)
@@ -198,6 +198,13 @@ const Header = () => {
           <div className="flex flex-col gap-4">
             {menuItems.map((item) => {
               if (item.path === "/post-job" && userType === 1) {
+                return null;
+              }
+              
+              if (
+                item.path === "/find-job" &&
+                (userType === 2 || userType === 3)
+              ) {
                 return null;
               }
 

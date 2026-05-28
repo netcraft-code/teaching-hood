@@ -695,9 +695,9 @@ const PostJob = () => {
                           ))}
                         </select>
 
-                        {(errors.min_salary || errors.max_salary) && (
+                        {(errors.salary) && (
                           <p className="text-sm text-red-500 mt-1">
-                            {errors.min_salary || errors.max_salary}
+                            {errors.salary}
                           </p>
                         )}
                       </div>
