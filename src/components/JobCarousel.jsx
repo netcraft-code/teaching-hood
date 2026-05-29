@@ -8,7 +8,7 @@ import {
   Star,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { getProfile } from "../api/auth";
+import { getProfile, homepageJobs } from "../api/auth";
 import { findJobIcons } from "./../assets/icons/findJobIcons";
 
 const SALARY_RANGES = [
@@ -98,15 +98,11 @@ const JobCarousel = () => {
 
     if (!city) return;
 
-    const API_URL = `https://teaching-hood-backend.netcraftglobal.com/api/job-posts?page=1&city_id=all&city_name=${city}&job_type=all&posted=any&search=&radius=0&subject_id=all&grade_id=all&state_id=all&board=all&min_salary=0&max_salary=0&limit=25&is_applied=false&sort=updated_at-desc`;
-
     const fetchJobs = async () => {
       try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-
-        if (data.status) {
-          setJobs(data.data?.data?.slice(0, 25) || []);
+        const res = await homepageJobs(city);
+        if (res.data.status) {
+          setJobs(res.data.data?.data?.slice(0, 25) || []);
         }
       } catch (e) {
         console.error("Job fetch error:", e);
@@ -239,7 +235,11 @@ const JobCard = ({ job, onClick }) => {
       </div>
 
       {/* Board tag */}
-      {job.board ? <span style={styles.boardBadge}>{job.board}</span> : <span>&nbsp;</span>}
+      {job.board ? (
+        <span style={styles.boardBadge}>{job.board}</span>
+      ) : (
+        <span>&nbsp;</span>
+      )}
 
       {/* Meta row */}
       <div style={styles.metaRow}>
