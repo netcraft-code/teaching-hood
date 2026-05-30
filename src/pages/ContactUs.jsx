@@ -9,6 +9,8 @@ import { sendMessage } from "../api/auth";
 const ContactUs = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const stats = [
     {
@@ -37,13 +39,69 @@ const ContactUs = () => {
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+  };
+
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+    ) {
+      newErrors.email = "Invalid email address";
+    }
+
+    if (!formData.phone_number.trim()) {
+      newErrors.phone_number = "Phone number is required";
+    } else if (!/^[6-9]\d{9}$/.test(formData.phone_number)) {
+      newErrors.phone_number = "Enter valid 10 digit mobile number";
+    }
+
+    if (!formData.inquiry_type.trim()) {
+      newErrors.inquiry_type = "Inquiry type is required";
+    }
+
+    if (!formData.subject.trim()) {
+      newErrors.subject = "Subject is required";
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required";
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
+
     try {
+      setLoading(true);
+
       const payload = new FormData();
       payload.append("name", formData.name);
       payload.append("email", formData.email);
@@ -65,11 +123,15 @@ const ContactUs = () => {
         subject: "",
         message: "",
       });
+
+      setErrors({});
     } catch (error) {
       console.error("Contact form error:", error);
 
       setPopupMessage("Something went wrong. Please try again.");
       setShowPopup(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -168,6 +230,10 @@ const ContactUs = () => {
                   placeholder="Your full name"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                 />
+
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                )}
               </div>
 
               <div>
@@ -184,6 +250,10 @@ const ContactUs = () => {
                   placeholder="email@example.com"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                 />
+
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                )}
               </div>
             </div>
 
@@ -202,6 +272,12 @@ const ContactUs = () => {
                   placeholder="9876543210"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                 />
+
+                {errors.phone_number && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.phone_number}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -217,6 +293,12 @@ const ContactUs = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                 />
+
+                {errors.inquiry_type && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.inquiry_type}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -233,6 +315,12 @@ const ContactUs = () => {
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
               />
+
+              {errors.subject && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.subject}
+                </p>
+              )}
             </div>
 
             {/* Message */}
@@ -248,15 +336,22 @@ const ContactUs = () => {
                 rows="4"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 resize-none"
               ></textarea>
+
+              {errors.message && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.message}
+                </p>
+              )}
             </div>
 
             {/* Submit Button */}
             <button
               onClick={handleSubmit}
-              className="w-full bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition font-semibold flex items-center justify-center space-x-2"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition font-semibold flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Send size={20} />
-              <span>Send Message</span>
+              <span>{loading ? "Sending..." : "Send Message"}</span>
             </button>
           </div>
         </div>

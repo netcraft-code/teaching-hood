@@ -244,21 +244,24 @@ const JobCard = ({ job, onClick }) => {
       {/* Meta row */}
       <div style={styles.metaRow}>
         <span style={styles.metaItem}>
-          <img
+          {/* <img
             src={findJobIcons.findJobLocation}
             className="w-4 h-4 flex-shrink-0"
-          />
-          {/* <svg
+          /> */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="grey"
-            xmlns="http://www.w3.org/2000/svg"
+            stroke="#2563eb"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
             <path d="M12 2C8.13401 2 5 5.13401 5 9C5 13.25 12 22 12 22C12 22 19 13.25 19 9C19 5.13401 15.866 2 12 2Z" />
             <circle cx="12" cy="9" r="3" fill="white" />
-          </svg> */}
+          </svg>
           <span style={styles.metaText}>{location}</span>
         </span>
 
@@ -266,17 +269,16 @@ const JobCard = ({ job, onClick }) => {
         <span
           style={{
             ...styles.metaItem,
-            color: job.food == 1 ? "#16a34a" : "#9ca3af", // green / gray
           }}
         >
-          <span style={{ opacity: job.food == 1 ? 1 : 0.5 }}>
+          <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
               height="20"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="grey"
+              stroke="#2563eb"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -298,17 +300,16 @@ const JobCard = ({ job, onClick }) => {
         <span
           style={{
             ...styles.metaItem,
-            color: job.accommodation == 1 ? "#2563eb" : "#9ca3af", // blue / gray
           }}
         >
-          <span style={{ opacity: job.accommodation == 1 ? 1 : 0.5 }}>
+          <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
               height="20"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="grey"
+              stroke="#2563eb"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -330,25 +331,25 @@ const JobCard = ({ job, onClick }) => {
             ...styles.metaItem,
           }}
         >
-          <span style={{ opacity: job.accommodation == 1 ? 1 : 0.5 }}>
-            <img
+          <span>
+            {/* <img
               src={findJobIcons.totalExperience}
               className="w-4 h-4 flex-shrink-0"
-            />
-            {/* <svg
+            /> */}
+            <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
               height="20"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="grey"
+              stroke="#2563eb"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
             >
               <rect x="2" y="7" width="20" height="14" rx="2"></rect>
               <path d="M16 21V5a2 2 0 0 0-2-2H10a2 2 0 0 0-2 2v16"></path>
-            </svg> */}
+            </svg>
           </span>
           <span style={styles.metaText}>
             {/* <span style={styles.expTag}> */}
@@ -533,6 +534,7 @@ const styles = {
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
+    color: "#6b7280",
   },
   salaryRow: {
     display: "flex",

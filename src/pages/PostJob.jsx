@@ -12,6 +12,7 @@ import Select from "react-select";
 import { useNavigate, Link } from "react-router-dom";
 import { postJobIcons } from "../assets/icons/postJobIcons";
 import Header from "../components/Header";
+import { AlertCircle } from "lucide-react";
 
 const PostJob = () => {
   const [subjects, setSubjects] = useState([]);
@@ -188,7 +189,6 @@ const PostJob = () => {
 
   const handleSubmit = async (status) => {
     if (!validateForm()) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -227,7 +227,6 @@ const PostJob = () => {
       // ✅ Backend validation handling (Laravel)
       if (error.response?.status === 422) {
         setErrors(error.response.data.data || {});
-        window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         setPopupMessage("Something went wrong. Please try again.");
 
@@ -237,6 +236,8 @@ const PostJob = () => {
       setSubmitting(false);
     }
   };
+
+  const errorCount = Object.values(errors).filter(Boolean).length;
 
   if (loading) {
     return (
@@ -262,17 +263,43 @@ const PostJob = () => {
           <div className="flex space-x-2 sm:space-x-3">
             <button
               onClick={() => handleSubmit(0)}
-              disabled={submitting}
+              disabled={submitting || errorCount > 0}
+              title={
+                errorCount > 0
+                  ? "Some errors exist. Please check and fix them."
+                  : ""
+              }
               className="px-4 py-2 text-gray-700 rounded-lg font-medium disabled:opacity-50"
             >
               {submitting ? "Saving..." : "Save Draft"}
             </button>
 
-            <button
+            {/* <button
               onClick={() => handleSubmit(1)}
               disabled={submitting}
               className="px-4 px-6 py-2 text-white rounded-lg disabled:opacity-50 rounded-[1000px] w-[117px] bg-[rgba(0,_127,_255,_1)]"
             >
+              {submitting ? "Publishing..." : "Publish"}
+            </button> */}
+
+            <button
+              onClick={() => handleSubmit(1)}
+              disabled={submitting || errorCount > 0}
+              title={
+                errorCount > 0
+                  ? "Some errors exist. Please check and fix them."
+                  : ""
+              }
+              className={`px-6 py-2 text-white rounded-[1000px] w-[117px]
+              flex items-center justify-center gap-2
+              ${
+                errorCount > 0
+                  ? "bg-red-500 cursor-not-allowed"
+                  : "bg-[rgba(0,_127,_255,_1)]"
+              }`}
+            >
+              {errorCount > 0 && <AlertCircle size={16} />}
+
               {submitting ? "Publishing..." : "Publish"}
             </button>
           </div>
@@ -472,12 +499,17 @@ const PostJob = () => {
                         <input
                           type="text"
                           value={formData.subject_id_other || ""}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setFormData((prev) => ({
                               ...prev,
                               subject_id_other: e.target.value,
-                            }))
-                          }
+                            }));
+
+                            setErrors((prev) => ({
+                              ...prev,
+                              subject_id_other: "",
+                            }));
+                          }}
                           placeholder="Enter subject name"
                           className="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                         />
@@ -946,6 +978,12 @@ const PostJob = () => {
             </div>
 
             {/* Action Buttons - Mobile */}
+            {errorCount > 0 && (
+              <p className="text-red-500 text-sm mt-2">
+                Some errors exist. Please check the form and fix them.
+              </p>
+            )}
+
             <div className="grid grid-cols-2 gap-12">
               <button
                 onClick={() => navigate("/")}
@@ -955,6 +993,7 @@ const PostJob = () => {
               </button>
               <button
                 onClick={() => handleSubmit(1)}
+                disabled={errorCount > 0 || submitting}
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg shadow-blue-500/30"
               >
                 {submitting ? "Publishing..." : "Publish Job Post"}

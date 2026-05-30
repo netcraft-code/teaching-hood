@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import contactUsEmailIcon from "./../assets/icons/contact-us-email.svg";
 import { sendMessage } from "../api/auth";
@@ -8,6 +8,7 @@ const ContactUsSection = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -121,8 +122,12 @@ const ContactUsSection = () => {
         name: "",
         email: "",
         message: "",
-        attachment: null,
+        attachment: "",
       });
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
 
       setErrors({});
     } catch (error) {
@@ -246,6 +251,7 @@ const ContactUsSection = () => {
                 </label>
 
                 <input
+                  ref={fileInputRef}
                   type="file"
                   onChange={handleFileChange}
                   accept=".pdf,.doc,.docx,.jpg,.png"
