@@ -32,6 +32,10 @@ class User extends Authenticatable
         'banner_image_url',
         'position',
         'total_experience',
+        'grade_id',
+        'subject_id',
+        'grade',
+        'subject',
     ];
 
     /**
@@ -70,5 +74,10 @@ class User extends Authenticatable
     public function job_posts()
     {
         return $this->hasMany(JobPost::class);
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
     }
 }

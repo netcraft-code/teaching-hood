@@ -30,23 +30,39 @@ function calculateProfileCompletion($user)
             'email' => 10,
             'phone' => 10,
             'avatar_url' => 10,
-            'banner_image_url' => 10,
             'experience' => 10,
             'education' => 10,
             'achievement' => 10,
             'certification' => 10,
-            'resume' => 10
+            'resume' => 10,
+            'about_us' => 10,
+            'availability' => 10,
+            'notice_period' => 10,
+            'min_salary' => 10,
+            'max_salary' => 10,
+            'preferred_location' => 10,
         ],
         '2' => [
             'first_name' => 10,
-            'last_name' => 10,
             'email' => 10,
             'phone' => 10,
             'avatar_url' => 10,
-            'banner_image_url' => 10,
             'about_us' => 10,
             'website' => 10,
             'why_join_us' => 10,
+            'students' => 10,
+            'teachers' => 10
+        ],
+        '3' => [
+            'first_name' => 10,
+            'email' => 10,
+            'phone' => 10,
+            'avatar_url' => 10,
+            'about_us' => 10,
+            'website' => 10,
+            'why_join_us' => 10,
+            'students' => 10,
+            'teachers' => 10
         ]
     ];
 
@@ -64,34 +80,36 @@ function calculateProfileCompletion($user)
     $missingFields = [];
 
     foreach ($selectedFields as $field => $weight) {
-
-        // ✅ Relation fields
+        $info = $user->additional_info;
         if ($field === 'education') {
-            if ($user->additional_info->education) {
-                $completedWeight += $weight;
-            } else {
-                $missingFields[] = $field;
-            }
+            if ($info?->education) $completedWeight += $weight;
+            else $missingFields[] = $field;
         } elseif ($field === 'experience') {
-            if ($user->additional_info->experience) {
-                $completedWeight += $weight;
-            } else {
-                $missingFields[] = $field;
-            }
+            if ($info?->experience) $completedWeight += $weight;
+            else $missingFields[] = $field;
         } elseif ($field === 'achievement') {
-            if ($user->additional_info->achievement) {
-                $completedWeight += $weight;
-            } else {
-                $missingFields[] = $field;
-            }
+            if ($info?->achievement) $completedWeight += $weight;
+            else $missingFields[] = $field;
         } elseif ($field === 'certification') {
-            if ($user->additional_info->certification) {
-                $completedWeight += $weight;
-            } else {
-                $missingFields[] = $field;
-            }
-        } elseif ($field === 'about_us' || $field === 'website' || $field === 'why_join_us') {
-            if ($user->additional_info->about_us || $user->additional_info->website || $user->additional_info->why_join_us) {
+            if ($info?->certification) $completedWeight += $weight;
+            else $missingFields[] = $field;
+        } elseif ($field === 'resume') {
+            if ($info?->resume) $completedWeight += $weight;
+            else $missingFields[] = $field;
+        } elseif ($field === 'min_salary') {
+            if (isset($info?->min_salary)) $completedWeight += $weight;
+            else $missingFields[] = $field;
+        } elseif ($field === 'max_salary') {
+            if ($info?->max_salary) $completedWeight += $weight;
+            else $missingFields[] = $field;
+        } elseif ($field === 'students') {
+            if ($info?->students) $completedWeight += $weight;
+            else $missingFields[] = $field;
+        } elseif ($field === 'teachers') {
+            if ($info?->teachers) $completedWeight += $weight;
+            else $missingFields[] = $field;
+        } elseif (in_array($field, ['about_us', 'website', 'why_join_us', 'availability', 'notice_period', 'preferred_location'])) {
+            if (!empty($info?->$field)) {
                 $completedWeight += $weight;
             } else {
                 $missingFields[] = $field;

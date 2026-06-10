@@ -7,6 +7,7 @@ use App\Mail\AppliedJob as MailAppliedJob;
 use App\Models\JobPost;
 use App\Models\LikedJob;
 use App\Models\AppliedJob;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -31,6 +32,7 @@ class JobPostController extends Controller
                             $sub->where('school_name', 'like', "%{$word}%")
                                 ->orWhere('job_description', 'like', "%{$word}%")
                                 ->orWhere('position', 'like', "%{$word}%")
+                                ->orWhere('board', 'like', "%{$word}%")
 
                                 ->orWhereHas('city', function ($city) use ($word) {
                                     $city->where('name', 'like', "%{$word}%");
@@ -59,29 +61,46 @@ class JobPostController extends Controller
             ->when($request->city_id != 'all', function ($query) use ($request) {
                 $query->where('city_id', $request->city_id);
             })
-            // ->when($request->state_id != 'all', function ($query) use ($request) {
-            //     $query->whereHas('city', function ($q) use ($request) {
-            //         $q->where('state_id', $request->state_id);
-            //     });
-            // })
+            ->when($request->city_name, function ($query) use ($request) {
+                $cities = array_map('trim', explode(',', $request->city_name));
+
+                $query->whereHas('city', function ($q) use ($cities) {
+                    $q->where(function ($sub) use ($cities) {
+                        foreach ($cities as $city) {
+                            $sub->orWhere('name', $city);
+                        }
+                    });
+                });
+            })
+            ->when($request->state_id != 'all', function ($query) use ($request) {
+                $query->whereHas('city', function ($q) use ($request) {
+                    $q->where('state_id', $request->state_id);
+                });
+            })
             ->when($request->job_type != 'all', function ($query) use ($request) {
                 $query->where('job_type', 'like', '%' . $request->job_type . '%');
             })
-            ->when($request->experience_required, function ($query) use ($request) {
-                $query->where('experience_required', 'like', '%' . $request->experience_required . '%');
+            ->when($request->experience != 'all', function ($query) use ($request) {
+                $query->where('experience_required', 'like', '%' . $request->experience . '%');
+            })
+            ->when($request->board != 'all', function ($query) use ($request) {
+                $query->where('board', 'like', $request->board);
             })
             ->when($request->min_salary && $request->max_salary, function ($query) use ($request) {
                 $query->where(function ($q) use ($request) {
-                    $q->whereBetween('min_salary', [$request->min_salary, $request->max_salary])
-                        ->orWhereBetween('max_salary', [$request->min_salary, $request->max_salary]);
+                    $q->where('min_salary', $request->min_salary)
+                        ->orWhere('max_salary', $request->max_salary);
                 });
             })
-            ->when($request->posted_date != 'any', function ($query) use ($request) {
-                match ($request->posted_date) {
-                    '24h'      => $query->where('created_at', '>=', Carbon::now()->subHours(24)),
-                    'week'     => $query->where('created_at', '>=', Carbon::now()->subWeek()),
-                    'month'    => $query->where('created_at', '>=', Carbon::now()->subMonth()),
-                    default    => null,
+            ->when($request->posted != 'any', function ($query) use ($request) {
+                match ($request->posted) {
+                    '24h'   => $query->where('created_at', '>=', now()->subHours(24)),
+                    'week'  => $query->where('created_at', '>=', now()->subWeek()),
+                    'month' => $query->whereBetween('created_at', [
+                        now()->subMonth()->startOfMonth(),
+                        now()->subMonth()->endOfMonth(),
+                    ]),
+                    default => null,
                 };
             })
             ->latest()
@@ -126,7 +145,7 @@ class JobPostController extends Controller
             // Job info
             'job_type'            => 'required|string|max:100',
             'min_salary'          => 'required|integer|min:0',
-            'max_salary'          => 'required|integer|gte:min_salary',
+            'max_salary'          => 'required|integer',
             'experience_required' => 'required|string|max:100',
 
             // Descriptions
@@ -142,6 +161,26 @@ class JobPostController extends Controller
 
         if ($validator->fails()) {
             return response_formatter(DEFAULT_VALIDATION_422, $validator->errors());
+        }
+
+        if (auth()->check()) {
+            $user = User::with('plan')
+                ->find(auth()->user()->id);
+
+            if (!$user->plan) {
+                return response_formatter(DEFAULT_BAD_REQUEST_400, ['message' => 'Please Purchase a plan to post jobs']);
+            }
+
+            $maxPosts = (int) ($user->plan->features['posts'] ?? 0);
+
+            $currentMonthPosts = JobPost::where('user_id', $user->id)
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->count();
+
+            if ($currentMonthPosts >= $maxPosts) {
+                return response_formatter(DEFAULT_BAD_REQUEST_400, ['message' => "have reached your monthly posting limit of {$maxPosts} posts."]);
+            }
         }
 
         $job = JobPost::create([
@@ -172,11 +211,15 @@ class JobPostController extends Controller
     // 📌 JOB POST DETAIL
     public function show($id)
     {
-        $job = JobPost::with('city', 'grade', 'subject', 'user.addresses', 'user.additional_info')->findOrFail($id);
+        $job = JobPost::withCount('appliedJobs')
+            ->with('city', 'grade', 'subject', 'user.addresses', 'user.additional_info', 'like', 'applied')->findOrFail($id);
 
         $job->city_name = $job->city->name;
         $job->subject_name = $job->subject?->name;
         $job->grade_name = $job->grade?->name;
+        $job->total_applicants = $job->applied_jobs_count;
+        $job->is_applied = $job->applied ? true : false;
+        $job->is_liked = $job->like ? true : false;
 
         return response_formatter(DEFAULT_200, $job);
     }
@@ -204,7 +247,7 @@ class JobPostController extends Controller
             // Job info
             'job_type'            => 'required|string|max:100',
             'min_salary'          => 'required|integer|min:0',
-            'max_salary'          => 'required|integer|gte:min_salary',
+            'max_salary'          => 'required|integer',
             'experience_required' => 'required|string|max:100',
 
             // Descriptions
@@ -357,12 +400,11 @@ class JobPostController extends Controller
 
     public function currentVacanies()
     {
-
         if (in_array(auth()->user()->user_type, [3, 2])) {
             $perPage = (int) request()->get('perPage', 10);
             $offset  = (int) request()->get('offset', 0);
 
-            $jobs = JobPost::with('city', 'grade', 'subject')
+            $jobs = JobPost::with('city', 'grade', 'subject', 'appliedJobs.user.additional_info')
                 ->where('user_id', auth()->user()->id)
                 ->latest()
                 ->skip($offset)
@@ -374,7 +416,7 @@ class JobPostController extends Controller
                 $job->grade_name = $job->grade?->name;
                 $job->is_liked = $job->like ? true : false;
 
-                $job->total_applicants = 0;
+                $job->total_applicants = $job->appliedJobs->count();
             });
 
             return response_formatter(DEFAULT_200, $jobs);
@@ -384,10 +426,6 @@ class JobPostController extends Controller
     public function applyJob($id)
     {
         $userId = auth()->id();
-
-        // ✅ Check job exists
-        $job = JobPost::findOrFail($id);
-
         // ✅ Prevent duplicate application
         $alreadyApplied = AppliedJob::where([
             'user_id'     => $userId,
@@ -407,8 +445,12 @@ class JobPostController extends Controller
             'job_post_id' => $id,
         ]);
 
+        $job = JobPost::with('applied.user.addresses', 'applied.user.additional_info')->findOrFail($id);
+        // dd($job);
+
         if ($job->contact_email) {
-            Mail::to($job->contact_email)->send(new MailAppliedJob($job));
+            // Mail::to($job->contact_email)->send(new MailAppliedJob($job));
+            Mail::to('akathuria289@gmail.com')->send(new MailAppliedJob($job));
         }
 
         // Calculate job age in days
@@ -444,6 +486,16 @@ class JobPostController extends Controller
             ->latest()
             ->skip($offset)
             ->paginate($perPage);
+
+        $appliedJobs->map(function ($job) {
+            $job->position = $job->position;
+            $posted_job = $job->job_posted;
+
+            $posted_job->subject_name = $job->subject?->name;
+            $posted_job->grade_name = $job->grade?->name;
+            // $job->is_liked = $job->like ? true : false;
+            // $job->total_applicants = 0;
+        });
 
         return response_formatter(DEFAULT_200, $appliedJobs);
     }

@@ -107,3 +107,9 @@ const DEFAULT_DELETED_200 = [
     'status' => true,
     'message' => 'Resource deleted successfully'
 ];
+
+const DEFAULT_BAD_REQUEST_400 = [
+    'response_code' => 400,
+    'status' => false,
+    'message' => 'Bad Request'
+];

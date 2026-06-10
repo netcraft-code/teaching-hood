@@ -3,24 +3,21 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class AppliedJob extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $jobs = [];
+    public $job;
 
     /**
      * Create a new message instance.
      */
     public function __construct($jobs)
     {
-        $this->jobs = $jobs;
+        $this->job = $jobs;
     }
 
     public function build()

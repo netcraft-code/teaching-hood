@@ -26,6 +26,7 @@ class AdditionalInfo extends Model
         'teachers',
         'why_join_us',
         'website',
+        'preferred_location'
     ];
 
     protected function casts(): array

@@ -160,8 +160,10 @@ class AuthController extends Controller
             $data['banner_image_url'] = url('/') . "/storage/" . $data['banner_image_url'];
         }
 
-        if ($data['additional_info']['resume']) {
-            $data['additional_info']['resume'] = url('/') . "/storage/" . $data['additional_info']['resume'];
+        if (isset($data['additional_info'])) {
+            if ($data['additional_info']['resume']) {
+                $data['additional_info']['resume'] = url('/') . "/storage/" . $data['additional_info']['resume'];
+            }
         }
 
         return response_formatter(DEFAULT_200, $data);
@@ -277,7 +279,7 @@ class AuthController extends Controller
             QueryMessage::create($validated);
 
             // ✅ SEND EMAIL TO ADMIN (recommended)
-            Mail::to(config('mail.from.address'))
+            Mail::to('akathuria289@gmail.com')
                 ->send(new QueryMessageMail($validated));
 
             $attachmentPath = null;
@@ -312,8 +314,10 @@ class AuthController extends Controller
             $user['banner_image_url'] = url('/') . "/storage/" . $user['banner_image_url'];
         }
 
-        if ($user['additional_info']['resume']) {
-            $user['additional_info']['resume'] = url('/') . "/storage/" . $user['additional_info']['resume'];
+        if (isset($data['additional_info'])) {
+            if ($user['additional_info']['resume']) {
+                $user['additional_info']['resume'] = url('/') . "/storage/" . $user['additional_info']['resume'];
+            }
         }
 
         return response_formatter(DEFAULT_200, $user);

@@ -9,7 +9,8 @@ use App\Models\AdditionalInfoGradeLevel;
 use App\Models\AdditionalInfoSubject;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Address;
-use App\Models\PreferredLocationCity;
+use App\Models\GradeLevel;
+use App\Models\Subject;
 
 class ProfileController extends Controller
 {
@@ -51,9 +52,9 @@ class ProfileController extends Controller
             'position'            => 'nullable|string|max:255',
             'total_experience'    => 'nullable|string|max:255',
 
-            'availability'        => 'required|string',
+            'availability'        => 'nullable|string',
             'notice_period'       => 'nullable|string',
-            'preferred_location'  => 'required|string',
+            'preferred_location'  => 'nullable|string',
             'min_salary'          => 'required|integer',
             'max_salary'          => 'required|integer',
 
@@ -72,17 +73,16 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         $this->data = $this->updateUserData();
+        $this->data['position'] = request()->grade . " " . request()->subject;
 
-        if (request()->hasFile('resume')) {
-            // delete old resume if exists
-            $old = AdditionalInfo::where('user_id', auth()->id())->value('resume');
-            if ($old && Storage::disk('public')->exists($old)) {
-                Storage::disk('public')->delete($old);
-            }
+        $this->data['subject'] = request()->subject;
+        $this->data['grade'] = request()->grade;
 
-            $this->data['resume'] = request()->file('resume')
-                ->store('resumes', 'public'); // storage/app/public/resumes
-        }
+        $gradeLevel = GradeLevel::where('name', request()->grade)->first();
+        $subject = Subject::where('name', request()->subject)->first();
+
+        $this->data['grade_id'] = $gradeLevel->id;
+        $this->data['subject_id'] = $subject->id;
 
         $this->updateBanners($user);
 
@@ -99,8 +99,19 @@ class ProfileController extends Controller
             'notice_period',
             'preferred_location',
             'min_salary',
-            'max_salary'
+            'max_salary',
         ]);
+
+        if (request()->hasFile('resume')) {
+            // delete old resume if exists
+            $old = AdditionalInfo::where('user_id', auth()->id())->value('resume');
+            if ($old && Storage::disk('public')->exists($old)) {
+                Storage::disk('public')->delete($old);
+            }
+
+            $data['resume'] = request()->file('resume')
+                ->store('resumes', 'public'); // storage/app/public/resumes
+        }
 
         $additional_info_id = AdditionalInfo::updateOrCreate(
             ['user_id' => auth()->id()],
@@ -149,8 +160,8 @@ class ProfileController extends Controller
             'about_us'          => 'required|string',
             'why_join_us'       => 'nullable|string',
             'website'       => 'nullable|string',
-            'students'       => 'required|string',
-            'teachers'       => 'required|string',
+            'students'       => 'nullable|string',
+            'teachers'       => 'nullable|string',
 
             'first_name'                => 'required|string|max:255',
             'last_name'                 => 'nullable|string|max:255',

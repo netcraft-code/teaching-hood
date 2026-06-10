@@ -40,10 +40,14 @@ class QueryMessageMail extends Mailable
         $mail = $this->subject('New Query Message')
             ->view('emails.query-message');
 
-        if (isset($this->data['attachment'])) {
-            if ($this->data['attachment']) {
-                $this->data['attachment']->store('attachment', 'public');
-            }
+        if (!empty($this->data['attachment'])) {
+            $mail->attach(
+                $this->data['attachment']->getRealPath(),
+                [
+                    'as' => $this->data['attachment']->getClientOriginalName(),
+                    'mime' => $this->data['attachment']->getMimeType(),
+                ]
+            );
         }
 
         return $mail;
