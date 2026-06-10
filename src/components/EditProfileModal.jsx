@@ -793,6 +793,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     name="phone"
                     className={`col-span-4 ${inputClass(errors.phone)}`}
                     value={form.phone}
+                    disabled
                     onChange={handleChange}
                     placeholder="9876543210"
                     maxLength={10}
@@ -1817,7 +1818,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
               </Section>
 
               <div className="my-8">
-                <Field label="Preferred Location"></Field>
+                <Field label="Preferred City"></Field>
 
                 {/* Selected Chips */}
                 <div className="flex flex-wrap gap-2">
@@ -1846,7 +1847,7 @@ const EditProfileModal = ({ open, onClose, profile, onUpdate }) => {
                     setSearch(e.target.value);
                     setShowDropdown(true);
                   }}
-                  placeholder="Location (e.g.,Agra)..."
+                  placeholder="City (e.g.,Agra)..."
                   className={inputClass(errors.preferred_location)}
                 />
 

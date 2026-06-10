@@ -22,6 +22,8 @@ import teacherBannerImage from "../assets/images/teacher-banner.png";
 import schoolBannerImage from "../assets/images/school-banner.png";
 import recruiterBannerImage from "../assets/images/recruiter-banner.png";
 import defaultAvatarImage from "../assets/images/default-avatar.png";
+import schoolCertificateIcon from "../assets/icons/certificate.svg";
+import schoolAchivements from "../assets/icons/achivements.svg";
 import Header from "../components/Header";
 
 // Constants
@@ -403,10 +405,10 @@ const Profile = () => {
 
                     <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
                       <span className="flex items-center gap-1">
-                        <img src={locationIcon} alt="Location" />
+                        <img src={locationIcon} alt="City" />
                         {profile?.addresses
                           ? `${profile.addresses.city}, ${profile.addresses.state}`
-                          : "Location not specified"}
+                          : "City not specified"}
                       </span>
                       {profile?.total_experience && (
                         <span className="flex items-center gap-1">
@@ -418,8 +420,6 @@ const Profile = () => {
                       )}
                     </div>
                   </div>
-
-                  
                 </div>
 
                 {userType === 1 && (
@@ -485,7 +485,7 @@ const Profile = () => {
                           <img
                             src={teachingExpertiseIcon}
                             alt="Expertise"
-                            className="w-6 h-6"
+                            className="w-6 h-6 mt-[6px] ml-[4px]"
                           />
                         </span>
                         Teaching Expertise
@@ -537,7 +537,14 @@ const Profile = () => {
                       {/* Certifications */}
                       <div className="bg-white rounded-xl shadow p-6">
                         <h3 className="flex items-center font-semibold mb-5">
-                          <span className="text-2xl mr-2">📜</span>
+                          <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100 mr-2">
+                            <img
+                              src={schoolCertificateIcon}
+                              alt="Statistics"
+                              className="w-6 h-6"
+                            />
+                          </span>
+                          {/* <span className="text-2xl mr-2">📜</span> */}
                           Certifications
                         </h3>
                         <ul className="text-sm text-gray-600 space-y-2">
@@ -563,7 +570,14 @@ const Profile = () => {
                       {/* Achievements */}
                       <div className="bg-white rounded-xl shadow p-6">
                         <h3 className="flex items-center font-semibold mb-5">
-                          <span className="text-2xl mr-2">🏆</span>
+                          <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100 mr-2">
+                            <img
+                              src={schoolAchivements}
+                              alt="Achievements"
+                              className="w-6 h-6"
+                            />
+                          </span>
+                          {/* <span className="text-2xl mr-2">🏆</span> */}
                           Achievements
                         </h3>
                         <ul className="text-sm text-gray-600 space-y-2">
@@ -608,13 +622,13 @@ const Profile = () => {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="border p-6 bg-blue-50 rounded-xl">
                           <div className="text-blue-500 text-2xl font-semibold">
-                            {profile?.additional_info?.students || 0}+
+                            {profile?.additional_info?.students + profile?.additional_info?.students > 0 ? "+" : "" || 0}
                           </div>
                           <p className="text-sm text-gray-600 mt-1">Students</p>
                         </div>
                         <div className="border p-6 bg-green-50 rounded-xl">
                           <div className="text-green-500 text-2xl font-semibold">
-                            {profile?.additional_info?.teachers || 0}+
+                            {profile?.additional_info?.teachers + profile?.additional_info?.teachers > 0 ? "+" : "" || 0}
                           </div>
                           <p className="text-sm text-gray-600 mt-1">Teachers</p>
                         </div>
@@ -836,7 +850,7 @@ const Profile = () => {
                       <p>{profile?.additional_info?.notice_period ?? "--"}</p>
                     </div>
                     <div>
-                      <p className="text-gray-400">Preferred Location</p>
+                      <p className="text-gray-400">Preferred City</p>
                       <p>
                         {profile?.additional_info?.preferred_location ?? "--"}
                       </p>

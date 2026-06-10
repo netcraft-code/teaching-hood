@@ -11,6 +11,10 @@ import searchRadius from "./search-radius.svg";
 import timeDuration from "./time-duration.svg";
 import totalExperience from "./total-experience.svg";
 import verified from "./verified.svg";
+import subject from "./subject-blue-icon.svg";
+import grade from "./grade-blue-icon.svg";
+import salary from "./salary-blue-icon.svg";
+import board from "./board-icon.svg";
 
 export const findJobIcons = {
     applicant,
@@ -25,5 +29,9 @@ export const findJobIcons = {
     searchRadius,
     timeDuration,
     totalExperience,
-    verified
+    verified,
+    subject,
+    grade,
+    salary,
+    board,
 };

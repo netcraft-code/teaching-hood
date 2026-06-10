@@ -186,9 +186,7 @@ const ContactUsSection = () => {
                 />
 
                 {errors.name && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.name}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{errors.name}</p>
                 )}
               </div>
 
@@ -212,9 +210,7 @@ const ContactUsSection = () => {
                 />
 
                 {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.email}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
                 )}
               </div>
 
@@ -238,9 +234,7 @@ const ContactUsSection = () => {
                 ></textarea>
 
                 {errors.message && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.message}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{errors.message}</p>
                 )}
               </div>
 
@@ -256,9 +250,7 @@ const ContactUsSection = () => {
                   onChange={handleFileChange}
                   accept=".pdf,.doc,.docx,.jpg,.png"
                   className={`w-full px-4 py-2 border rounded-lg bg-gray-50 cursor-pointer ${
-                    errors.attachment
-                      ? "border-red-500"
-                      : "border-gray-300"
+                    errors.attachment ? "border-red-500" : "border-gray-300"
                   }`}
                 />
 
@@ -333,7 +325,7 @@ const ContactUsSection = () => {
                   </div>
 
                   <div>
-                    <div className="text-sm text-gray-500 mb-1">Location</div>
+                    <div className="text-sm text-gray-500 mb-1">City</div>
 
                     <div className="font-normal text-gray-900">
                       Gurgaon, India

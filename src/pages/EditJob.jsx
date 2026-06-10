@@ -195,7 +195,7 @@ const EditJob = () => {
       if (!formData.board) newErrors.board = "Board is required";
     }
 
-    if (!formData.city_id) newErrors.city_id = "Location is required";
+    if (!formData.city_id) newErrors.city_id = "City is required";
     if (!formData.job_type) newErrors.job_type = "Job type is required";
 
     if (!formData.min_salary || !formData.max_salary) {
@@ -494,7 +494,7 @@ const EditJob = () => {
                           }));
                           setErrors((prev) => ({ ...prev, subject_id: "" }));
                         }}
-                        placeholder="Select subject"
+                        placeholder="Select Subject"
                         className="w-full"
                       />
 
@@ -545,7 +545,7 @@ const EditJob = () => {
                           }));
                           setErrors((prev) => ({ ...prev, grade_id: "" }));
                         }}
-                        placeholder="Select grade"
+                        placeholder="Select Grade"
                         className="w-full"
                       />
 
@@ -560,7 +560,7 @@ const EditJob = () => {
                   {/* Location */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Location <span className="text-red-500">*</span>
+                      City <span className="text-red-500">*</span>
                     </label>
 
                     <AsyncSelect
@@ -576,7 +576,7 @@ const EditJob = () => {
                         }));
                         setErrors((prev) => ({ ...prev, city_id: "" }));
                       }}
-                      placeholder="Search Location"
+                      placeholder="Search City"
                       className="w-full"
                     />
 

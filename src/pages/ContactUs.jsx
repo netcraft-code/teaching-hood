@@ -5,8 +5,10 @@ import { HeroImages } from "../assets/images/HeroImages";
 import { contactUsIcons } from "../assets/icons/contact-us/ContactUs";
 import { Mail, Phone, Send } from "lucide-react";
 import { sendMessage } from "../api/auth";
+import { useNavigate } from "react-router-dom";
 
 const ContactUs = () => {
+  const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
   const [errors, setErrors] = useState({});
@@ -317,9 +319,7 @@ const ContactUs = () => {
               />
 
               {errors.subject && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.subject}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.subject}</p>
               )}
             </div>
 
@@ -338,9 +338,7 @@ const ContactUs = () => {
               ></textarea>
 
               {errors.message && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.message}</p>
               )}
             </div>
 
@@ -456,21 +454,23 @@ const ContactUs = () => {
           </div>
 
           {/*  */}
-          <div className="flex rounded-2xl p-4 sm:p-6 shadow-md w-full">
+          {/* <div className="flex rounded-2xl p-4 sm:p-6 shadow-md w-full">
             <div className="w-full">
               <div className="flex items-center space-x-2 mb-1">
                 <h4 className="font-semibold text-base">Need Quick Answers?</h4>
               </div>
 
-              {/* Paragraph */}
               <p className="text-base text-gray-600 w-full leading-6 my-4">
                 Check out our frequently asked questions for instant help.
               </p>
-              <button className="text-yellow-500 bg-[#FEFCE8] hover:bg-red-100 w-full p-2 rounded">
+              <button
+                onClick={() => navigate("#faqs")}
+                className="text-yellow-500 bg-[#FEFCE8] hover:bg-red-100 w-full p-2 rounded"
+              >
                 View All FAQs
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -480,7 +480,7 @@ const ContactUs = () => {
           <span className="text-base">FAQ</span>
         </div>
 
-        <div className="my-4 items-center text-center px-4">
+        <div className="my-4 items-center text-center px-4" id='faqs'>
           <p className="font-semibold text-2xl sm:text-3xl">
             Frequently Asked Questions
           </p>

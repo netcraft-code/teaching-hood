@@ -25,6 +25,7 @@ const PostJob = () => {
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
+  const [popupErrorMessage, setPopupErrorMessage] = useState("");
 
   useEffect(() => {
     fetchDropdowns();
@@ -157,7 +158,7 @@ const PostJob = () => {
       if (!formData.board) newErrors.board = "Board is required";
     }
 
-    if (!formData.city_id) newErrors.city_id = "Location is required";
+    if (!formData.city_id) newErrors.city_id = "City is required";
     if (!formData.job_type) newErrors.job_type = "Job type is required";
 
     if (!formData.min_salary || !formData.max_salary) {
@@ -228,7 +229,11 @@ const PostJob = () => {
       if (error.response?.status === 422) {
         setErrors(error.response.data.data || {});
       } else {
-        setPopupMessage("Something went wrong. Please try again.");
+        setPopupMessage(
+          error.response.data.data.message ||
+            "An error occurred while saving the job.",
+        );
+        setPopupErrorMessage(error.response.data.response_code);
 
         setShowPopup(true);
       }
@@ -490,7 +495,7 @@ const PostJob = () => {
                           }));
                           setErrors((prev) => ({ ...prev, subject_id: "" }));
                         }}
-                        placeholder="Select subject"
+                        placeholder="Select Subject"
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                       />
 
@@ -552,7 +557,7 @@ const PostJob = () => {
                           }));
                           setErrors((prev) => ({ ...prev, grade_id: "" }));
                         }}
-                        placeholder="Select grade"
+                        placeholder="Select Grade"
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                       />
 
@@ -567,7 +572,7 @@ const PostJob = () => {
                   {/* Location */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Location <span className="text-red-500">*</span>
+                      City <span className="text-red-500">*</span>
                     </label>
 
                     <AsyncSelect
@@ -583,7 +588,7 @@ const PostJob = () => {
                         }));
                         setErrors((prev) => ({ ...prev, city_id: "" }));
                       }}
-                      placeholder="Search Location"
+                      placeholder="Search City"
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
                     />
 
@@ -727,7 +732,7 @@ const PostJob = () => {
                           ))}
                         </select>
 
-                        {(errors.salary) && (
+                        {errors.salary && (
                           <p className="text-sm text-red-500 mt-1">
                             {errors.salary}
                           </p>
@@ -955,7 +960,7 @@ const PostJob = () => {
                 </div>
 
                 {/* Contact Phone */}
-                <div>
+                <div className="hidden">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Contact Phone
                   </label>
@@ -1104,20 +1109,40 @@ const PostJob = () => {
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-md p-6 text-center">
-            <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
-              <svg
-                className="w-6 h-6 text-green-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+            <div
+              className={`w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                popupErrorMessage === 400 ? "bg-red-100" : "bg-green-100"
+              }`}
+            >
+              {popupErrorMessage === 400 ? (
+                <svg
+                  className="w-6 h-6 text-red-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-6 h-6 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              )}
             </div>
 
             <p className="text-gray-800 text-sm mb-6">{popupMessage}</p>

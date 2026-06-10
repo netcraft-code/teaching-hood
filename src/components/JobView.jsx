@@ -257,7 +257,7 @@ const JobView = ({ jobData }) => {
                         <img src={jobViewIcons.location} className="w-4 h-4" />
                       </div>
                       <span>
-                        <div className="text-base text-gray-400">Location</div>
+                        <div className="text-base text-gray-400">City</div>
                         <div className="text-base text-gray-700">
                           {job.city_name}
                         </div>

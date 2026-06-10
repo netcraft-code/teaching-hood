@@ -11,6 +11,8 @@ import recruiterBannerImage from "../assets/images/recruiter-banner.png";
 import defaultAvatarImage from "../assets/images/default-avatar.png";
 import Header from "../components/Header";
 import { useParams } from "react-router-dom";
+import schoolCertificateIcon from "../assets/icons/certificate.svg";
+import schoolAchivements from "../assets/icons/achivements.svg";
 
 // Constants
 const ROUTES = {
@@ -151,13 +153,12 @@ const ProfileView = () => {
                     "bannerImage",
                   )}
                   alt="cover"
-                  className="w-full h-32 rounded-t-2xl object-cover"
+                  className="w-full md:h-[15rem] h-[9rem] rounded-t-2xl md:object-cover object-contain"
                 />
               </div>
 
               {/* Profile Info */}
-              <div className="flex items-start gap-4 mx-8 pb-8 relative">
-                {/* Avatar */}
+              {/* <div className="flex items-start gap-4 mx-8 pb-8 relative">
                 <div className="relative">
                   <img
                     src={getBannerAvatar(
@@ -170,14 +171,15 @@ const ProfileView = () => {
                   />
                 </div>
 
-                {/* Name & Details */}
                 <div className="flex-1 mt-6">
                   <h2 className="text-xl sm:text-3xl font-semibold mb-3">
                     {profile.first_name}{" "}
                     {userType === 1 ? profile.last_name : ""}
                   </h2>
                   <p className="text-m text-gray-500">
-                    {userType === 2 ? profile?.board : profile?.position}
+                    {userType === 2
+                      ? profile?.board
+                      : profile?.position + " Teacher"}
                   </p>
 
                   <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
@@ -198,7 +200,83 @@ const ProfileView = () => {
                   </div>
                 </div>
 
-                {/* Status Badge (Teacher only) */}
+                {userType === 1 && (
+                  <span
+                    className={`flex items-center gap-2 px-4 py-2 mt-2 text-sm rounded-full ${
+                      profile.status
+                        ? "bg-green-100 text-green-600"
+                        : "bg-red-100 text-red-600"
+                    }`}
+                  >
+                    <span
+                      className={`w-2 h-2 rounded-full ${
+                        profile.status ? "bg-green-600" : "bg-red-600"
+                      }`}
+                    ></span>
+                    {currentUser?.status[profile.status] ?? ""}
+                  </span>
+                )}
+              </div> */}
+
+              <div className="flex items-start gap-4 mx-8 pb-8 relative justify-between">
+                <div className="grid grid-cols-1 md:grid-cols-5 justify-start gap-2">
+                  {/* Avatar */}
+                  <div className="relative col-span-1 flex sm:justify-start">
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full -mt-12 border-2 border-white overflow-hidden bg-gray-100">
+                      <img
+                        src={getBannerAvatar(
+                          profile.avatar_url,
+                          userType,
+                          "avatarImage",
+                        )}
+                        alt="profile"
+                        className="w-full h-full object-cover"
+                      />
+
+                      <button
+                        onClick={() => {
+                          setImageType("avatar_url");
+                          setImageModalOpen(true);
+                        }}
+                        className="absolute top-6 left-24 md:top-8 md:left-20 bg-white p-1 rounded-full shadow hover:bg-gray-100 w-[30px] h-[30px]"
+                      >
+                        ✏️
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Name & Details */}
+                  <div className="col-span-3 justify-start mt-6">
+                    <h2 className="text-xl sm:text-3xl font-semibold mb-3">
+                      {profile.first_name}{" "}
+                      {userType === 1 ? profile.last_name : ""}
+                    </h2>
+                    <p className="text-m text-gray-500">
+                      {userType === 2
+                        ? profile?.board
+                        : profile?.position
+                          ? profile?.position + " Teacher"
+                          : ""}{" "}
+                    </p>
+
+                    <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
+                      <span className="flex items-center gap-1">
+                        <img src={locationIcon} alt="City" />
+                        {profile?.addresses
+                          ? `${profile.addresses.city}, ${profile.addresses.state}`
+                          : "City not specified"}
+                      </span>
+                      {profile?.total_experience && (
+                        <span className="flex items-center gap-1">
+                          <img src={durationIcon} alt="Duration" />
+                          {userType === 1
+                            ? `${profile.total_experience} years experience`
+                            : `Est. ${getTotalDurationCount(profile.total_experience)}`}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
                 {userType === 1 && (
                   <span
                     className={`flex items-center gap-2 px-4 py-2 mt-2 text-sm rounded-full ${
@@ -262,7 +340,7 @@ const ProfileView = () => {
                           <img
                             src={teachingExpertiseIcon}
                             alt="Expertise"
-                            className="w-6 h-6"
+                            className="w-6 h-6 mt-[6px] ml-[4px]"
                           />
                         </span>
                         Teaching Expertise
@@ -314,7 +392,13 @@ const ProfileView = () => {
                       {/* Certifications */}
                       <div className="bg-white rounded-xl shadow p-6">
                         <h3 className="flex items-center font-semibold mb-5">
-                          <span className="text-2xl mr-2">📜</span>
+                          <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100 mr-2">
+                            <img
+                              src={schoolCertificateIcon}
+                              alt="Statistics"
+                              className="w-6 h-6"
+                            />
+                          </span>
                           Certifications
                         </h3>
                         <ul className="text-sm text-gray-600 space-y-2">
@@ -338,7 +422,14 @@ const ProfileView = () => {
                       {/* Achievements */}
                       <div className="bg-white rounded-xl shadow p-6">
                         <h3 className="flex items-center font-semibold mb-5">
-                          <span className="text-2xl mr-2">🏆</span>
+                          <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100 mr-2">
+                            <img
+                              src={schoolAchivements}
+                              alt="Achievements"
+                              className="w-6 h-6"
+                            />
+                          </span>
+                          {/* <span className="text-2xl mr-2">🏆</span> */}
                           Achievements
                         </h3>
                         <ul className="text-sm text-gray-600 space-y-2">
@@ -381,13 +472,13 @@ const ProfileView = () => {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="border p-6 bg-blue-50 rounded-xl">
                           <div className="text-blue-500 text-2xl font-semibold">
-                            {profile?.additional_info?.students || 0}+
+                            {profile?.additional_info?.students + profile?.additional_info?.students > 0 ? "+" : "" || 0}
                           </div>
                           <p className="text-sm text-gray-600 mt-1">Students</p>
                         </div>
                         <div className="border p-6 bg-green-50 rounded-xl">
                           <div className="text-green-500 text-2xl font-semibold">
-                            {profile?.additional_info?.teachers || 0}+
+                            {profile?.additional_info?.teachers + profile?.additional_info?.teachers > 0 ? "+" : "" || 0}
                           </div>
                           <p className="text-sm text-gray-600 mt-1">Teachers</p>
                         </div>
@@ -552,9 +643,15 @@ const ProfileView = () => {
                       <p>{profile?.additional_info?.notice_period ?? "--"}</p>
                     </div>
                     <div>
-                      <p className="text-gray-400">Preferred Location</p>
+                      <p className="text-gray-400">Preferred City</p>
                       <p>
                         {profile?.additional_info?.preferred_location ?? "--"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">Mobile/Email</p>
+                      <p>
+                        {profile?.phone} / {profile?.email}
                       </p>
                     </div>
                   </div>
@@ -563,7 +660,7 @@ const ProfileView = () => {
                 <>
                   <h3 className="font-semibold mb-4">Contact Information</h3>
                   <div className="space-y-3 text-sm">
-                    <div>
+                    {/* <div>
                       <p className="text-gray-400">Email</p>
                       <p className="text-sm break-all">
                         {profile?.email ?? "--"}
@@ -572,7 +669,7 @@ const ProfileView = () => {
                     <div>
                       <p className="text-gray-400">Phone</p>
                       <p className="text-sm">{"+91 " + profile.phone}</p>
-                    </div>
+                    </div> */}
                     {userType === 2 && (
                       <div>
                         <p className="text-gray-400">Website</p>

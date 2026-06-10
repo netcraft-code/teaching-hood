@@ -88,16 +88,16 @@ const AboutUs = () => {
             </p>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
               <li>
-                A plaƞorm for teachers to create profiles, explore opportuniƟes,
+                A plaƞorm for teachers to create profiles, explore opportunities,
                 and apply for teaching-related roles.
               </li>
               <li>
                 A plaƞorm for schools and recruiters to post teaching jobs and
-                receive applicaƟons
+                receive applications
               </li>
               <li>
-                CommunicaƟon tools (including email, WhatsApp, or plaƞorm
-                messaging) to facilitate hiring conversaƟons.
+                Communication tools (including email, WhatsApp, or plaƞorm
+                messaging) to facilitate hiring conversations.
               </li>
             </ul>
             <p className="text-sm text-gray-800 leading-relaxed">
@@ -121,7 +121,7 @@ const AboutUs = () => {
               </li>
               <li>
                 You agree to provide accurate, complete, and up-to-date
-                informaƟon
+                information
               </li>
               <li>
                 You are responsible for maintaining the confidentiality of your
@@ -147,7 +147,7 @@ const AboutUs = () => {
               You agree not to:
             </p>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-800">
-              <li>Provide false, misleading, or fraudulent informaƟon.</li>
+              <li>Provide false, misleading, or fraudulent information.</li>
               <li>
                 Post discriminatory, abusive, misleading, or unlawful job
                 listings or profiles

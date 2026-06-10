@@ -150,9 +150,10 @@ export const createPayment = (data) => {
   });
 };
 
-export const homepageJobs = (city) => {
+export const homepageJobs = (city, subjectGrade) => {
+  const [subjectId, gradeId] = subjectGrade;
   return api.get(
-    `/api/job-posts?page=1&city_id=all&city_name=${city}&job_type=all&posted=any&search=&radius=0&subject_id=all&grade_id=all&state_id=all&board=all&min_salary=0&max_salary=0&limit=25&is_applied=false&sort=updated_at-desc`,
+    `/api/job-posts?page=1&city_id=all&city_name=${city}&job_type=all&posted=any&search=&radius=0&subject_id=${subjectId}&grade_id=${gradeId}&state_id=all&board=all&min_salary=0&max_salary=0&limit=25&is_applied=false&sort=updated_at-desc`,
   );
 };
 

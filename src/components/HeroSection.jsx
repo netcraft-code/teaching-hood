@@ -41,7 +41,7 @@ const HeroSection = () => {
           limit: 20,
         }),
       ]);
-      
+
       setSubjects(subjectsRes?.data?.data || []);
       setGrades(gradesRes?.data?.data || []);
       setCities(citiesRes?.data?.data.data || []);
@@ -163,7 +163,7 @@ const HeroSection = () => {
               {/* Subheading */}
               <p className="text-[16px] sm:text-[18px] md:text-[20px] font-medium font-sf leading-[28px] text-center text-[#404145] mb-8 md:mb-12 px-4">
                 Find your next teaching job by simply entering Subject, Grade
-                and Location below
+                and City below
               </p>
 
               {/* Search Form - Better responsive */}
@@ -313,8 +313,13 @@ const HeroSection = () => {
                       value={location}
                       onChange={(option) => setLocation(option)}
                       // placeholder="Location (e.g., Agra)"
-                      placeholder="Type your city here"
+                      placeholder="City (e.g., Delhi)"
                       menuPosition="fixed"
+                      noOptionsMessage={({ inputValue }) =>
+                        inputValue.length < 2
+                          ? "Type your city here"
+                          : "No cities found"
+                      }
                       styles={{
                         control: (provided) => ({
                           ...provided,
@@ -370,7 +375,7 @@ const HeroSection = () => {
             </div>
             <p className="mt-4 text-[16px] sm:text-[18px] md:text-[18px] font-medium font-sf leading-[28px] text-center text-[#404145] mb-8 md:mb-12 px-4">
               If you are looking for a Principal / Vice Principal / Co-ordinator
-              role, search in the Grade and Location sections
+              role, search in the Grade and City sections
             </p>
           </div>
         </div>

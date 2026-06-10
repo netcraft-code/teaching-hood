@@ -91,6 +91,10 @@ const JobCarousel = () => {
     return null;
   };
 
+  const getSubjectGradeFromProfile = (profile) => {
+    return [profile.subject_id, profile.grade_id];
+  };
+
   useEffect(() => {
     if (!profile || profile.user_type != 1) return;
 
@@ -98,9 +102,11 @@ const JobCarousel = () => {
 
     if (!city) return;
 
+    const subjectGrade = getSubjectGradeFromProfile(profile);
+
     const fetchJobs = async () => {
       try {
-        const res = await homepageJobs(city);
+        const res = await homepageJobs(city, subjectGrade);
         if (res.data.status) {
           setJobs(res.data.data?.data?.slice(0, 25) || []);
         }
@@ -192,7 +198,16 @@ const JobCarousel = () => {
 
           <button
             style={styles.viewAllBtn}
-            onClick={() => navigate("/find-job")}
+            onClick={() =>
+              navigate(
+                "/find-job?city_name=" +
+                  getCityFromProfile(profile) +
+                  "&subject=" +
+                  profile.subject_id +
+                  "&grade=" +
+                  profile.grade_id,
+              )
+            }
           >
             View All <ChevronRight size={15} strokeWidth={2.5} />
           </button>
@@ -221,7 +236,7 @@ const JobCarousel = () => {
 const JobCard = ({ job, onClick }) => {
   const location = job.city_name
     ? `${job.city_name}${job.city?.state?.name ? `, ${job.city.state.name}` : ""}`
-    : "Location N/A";
+    : "City N/A";
 
   return (
     <div style={styles.card}>

@@ -539,14 +539,14 @@ const SignInPage = () => {
               Terms
             </button>
 
-            <span>•</span>
+            {/* <span>•</span>
 
             <button
               onClick={() => navigate(routes.PRIVACY)}
               className="hover:text-blue-600"
             >
               Privacy
-            </button>
+            </button> */}
 
             <span>•</span>
 

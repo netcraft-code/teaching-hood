@@ -129,83 +129,68 @@ const VacancyCard = ({ job, onEdit, onClose }) => {
         </div>
       </div>
 
-      {/* {job?.applied_jobs?.map((appliedJob, index) => {
-        const candidate = appliedJob?.user;
-
-        const candidateDetails = [
-          {
-            label: "Candidate Name",
-            value: candidate?.first_name || "N/A",
-          },
-          {
-            label: "Experience",
-            value: `${candidate?.total_experience || 0} Years`,
-          },
-        ];
-
-        return ( */}
-      <details className="border-t border-gray-200">
-        {/* HEADER */}
-        <summary className="cursor-pointer list-none px-6 py-4 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition">
-          <div>
-            <h3 className="font-semibold text-gray-800">Candidates Names</h3>
-          </div>
-
-          <span className="text-sm text-blue-600">View Details</span>
-        </summary>
-
-        {job?.applied_jobs?.map((appliedJob, index) => {
-          const candidate = appliedJob?.user;
-
-          const candidateDetails = [
-            {
-              label: "Candidate Name",
-              value: candidate?.first_name || "N/A",
-            },
-            {
-              label: "Experience",
-              value: `${candidate?.total_experience || 0} Years`,
-            },
-          ];
-          
-          return (
-            <div className="px-6 py-5 bg-white">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {candidateDetails.map((item, idx) => (
-                  <div key={idx}>
-                    <p className="text-sm text-gray-500 mb-1">{item.label}</p>
-
-                    <h4 className="font-semibold text-gray-900 break-words">
-                      {item.value}
-                    </h4>
-                  </div>
-                ))}
-              </div>
-
-              {/* ACTION BUTTONS */}
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  to={`/view-profile/${candidate?.id}`}
-                  className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition"
-                >
-                  View Profile
-                </Link>
-
-                {candidate?.resume && (
-                  <a
-                    href={candidate.resume}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
-                  >
-                    View Resume
-                  </a>
-                )}
-              </div>
+      {job?.applied_jobs?.length > 0 && (
+        <details className="border-t border-gray-200">
+          {/* HEADER */}
+          <summary className="cursor-pointer list-none px-6 py-4 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition">
+            <div>
+              <h3 className="font-semibold text-gray-800">Candidates Names</h3>
             </div>
-          );
-        })}
-      </details>
+
+            <span className="text-sm text-blue-600">View Details</span>
+          </summary>
+
+          {job.applied_jobs.map((appliedJob, index) => {
+            const candidate = appliedJob?.user;
+
+            const candidateDetails = [
+              {
+                label: "Candidate Name",
+                value: candidate?.first_name || "N/A",
+              },
+              {
+                label: "Experience",
+                value: `${candidate?.total_experience || 0} Years`,
+              },
+            ];
+
+            return (
+              <div key={appliedJob?.id || index} className="px-6 py-5 bg-white">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {candidateDetails.map((item, idx) => (
+                    <div key={idx}>
+                      <p className="text-sm text-gray-500 mb-1">{item.label}</p>
+
+                      <h4 className="font-semibold text-gray-900 break-words">
+                        {item.value}
+                      </h4>
+                    </div>
+                  ))}
+                  <div className="flex flex-wrap gap-3">
+                    <Link
+                      to={`/view-profile/${candidate?.id}`}
+                      className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition"
+                    >
+                      View Profile
+                    </Link>
+
+                    {candidate?.resume && (
+                      <a
+                        href={candidate.resume}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
+                      >
+                        View Resume
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </details>
+      )}
     </div>
   );
 };
